@@ -7,8 +7,11 @@ import com.example.gaijinsmash.transitapp.model.Station;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +21,16 @@ import java.util.List;
 
 public class StationXMLParser {
 
+    // True: turns on debug logging, False: off
+    private static final boolean DEBUG = true;
+
     private static final String API_KEY = "Q7Z9-PZ53-9QXT-DWE9";
-
     private static final String BASE_URI = "http://api.bart.gov/api/";
-
     private static final String ns = null;
+
+    public void getCall(String call) throws IOException, XmlPullParserException {
+
+    }
 
     public List parse(InputStream in) throws XmlPullParserException, IOException {
         try {
@@ -56,7 +64,6 @@ public class StationXMLParser {
         return entries;
     }
 
-
     private Station readStation(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "entry");
         String mName = null;
@@ -83,6 +90,8 @@ public class StationXMLParser {
         // TODO: add more data to Station Object after parsing
         return new Station(mName);
     }
+
+    //----------------------------------------------------------------------------------------------
 
     // Processes name tags in the StationInfo feed
     private String readName(XmlPullParser parser) throws IOException, XmlPullParserException {
