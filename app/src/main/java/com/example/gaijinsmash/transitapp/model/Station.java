@@ -6,7 +6,7 @@ package com.example.gaijinsmash.transitapp.model;
 
 public class Station extends Place {
 
-    private String abbreviation;
+    private String mAbbreviation;
 
     // Constructor
     public Station(String name) {
@@ -14,8 +14,8 @@ public class Station extends Place {
     }
 
     public void setAbbreviation(String abbreviation) {
-        this.abbreviation = abbreviation;
+        mAbbreviation = abbreviation;
     }
 
-    public String getAbbreviation() { return abbreviation; }
+    public String getAbbreviation() { return mAbbreviation; }
 }

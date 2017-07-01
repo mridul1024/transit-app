@@ -74,6 +74,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_schedule -> {
                 // TODO: add logic
             }
+            R.id.nav_station -> {
+                // TODO: add Logic
+            }
             R.id.nav_share -> {
                 // TODO: add logic
             }

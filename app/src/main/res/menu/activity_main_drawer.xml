@@ -8,6 +8,10 @@
             android:id="@+id/nav_schedule"
             android:icon="@drawable/ic_menu_schedule"
             android:title="Train Schedule" />
+        <item
+            android:id="@+id/nav_station"
+            android:icon="@drawable/ic_menu_station"
+            android:title="Station Info" />
     </group>
 
     <item android:title="Communicate">
