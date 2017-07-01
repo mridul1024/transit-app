@@ -8,77 +8,77 @@ import android.util.Log;
 
 public abstract class Place {
 
-    private String name;
-    private int zipcode;
-    private String city;
-    private String county;
-    private String state;
-    private String address;
-    private double latitude;
-    private double longitude;
+    private String mName;
+    private int mZipcode;
+    private String mCity;
+    private String mCounty;
+    private String mState;
+    private String mAddress;
+    private double mLatitude;
+    private double mLongitude;
 
     // Constructor
     public Place(String name) {
         Log.i("Creating Place object", name);
-        this.name = name;
+        mName = name;
     }
 
     // Setters
     public void setName(String name) {
-        this.name = name;
+        mName = name;
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        mAddress = address;
     }
 
     public void setLatitude(double latitude) {
-        this.latitude = latitude;
+        mLatitude = latitude;
     }
 
     public void setLongitude(double longitude) {
-        this.longitude = longitude;
+        mLongitude = longitude;
     }
     private void setZipcode(int zipcode) {
-        this.zipcode = zipcode;
+        mZipcode = zipcode;
     }
 
     private void setCity(String city) {
-        this.city = city;
+        mCity = city;
     }
 
     private void setCounty(String county) {
-        this.county = county;
+        mCounty = county;
     }
 
     private void setState(String state) {
-        this.state = state;
+        mState = state;
     }
 
     // Getters
     public String getName() {
-        return name;
+        return mName;
     }
 
     public String getAddress() {
-        return address;
+        return mAddress;
     }
 
     public double getLatitude() {
-        return latitude;
+        return mLatitude;
     }
 
     public double getLongitude() {
-        return longitude;
+        return mLongitude;
     }
 
-    public int getZipcode() { return zipcode; }
+    public int getZipcode() { return mZipcode; }
 
-    public String getCity() { return city; }
+    public String getCity() { return mCity; }
 
-    public String getCounty() { return county; }
+    public String getCounty() { return mCounty; }
 
-    public String getState() { return state; }
+    public String getState() { return mState; }
 
 
 }

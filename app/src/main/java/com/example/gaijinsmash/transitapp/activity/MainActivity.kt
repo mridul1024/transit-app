@@ -72,13 +72,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_schedule -> {
-
+                // TODO: add logic
             }
             R.id.nav_share -> {
-
+                // TODO: add logic
             }
             R.id.nav_send -> {
-
+                // TODO: add logic
             }
         }
 
