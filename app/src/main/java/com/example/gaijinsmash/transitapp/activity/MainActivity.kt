@@ -1,5 +1,6 @@
 package com.example.gaijinsmash.transitapp.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -14,6 +15,8 @@ import android.view.Menu
 import android.view.MenuItem
 
 import com.example.gaijinsmash.transitapp.R
+import com.example.gaijinsmash.transitapp.fragment.HomeFragment
+import com.example.gaijinsmash.transitapp.fragment.StationFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -69,13 +72,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
+
         when (item.itemId) {
             R.id.nav_schedule -> {
-                // TODO: add logic
+                startActivity(Intent(this, HomeFragment::class.java))
+                return true
             }
             R.id.nav_station -> {
-                // TODO: add Logic
+                startActivity(Intent(this, StationFragment::class.java))
+                return true
             }
             R.id.nav_share -> {
                 // TODO: add logic

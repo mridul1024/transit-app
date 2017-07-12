@@ -18,7 +18,7 @@ import java.net.URLConnection;
 public class InternetOperations {
 
     // Check for internet Connection, will return NULL if no network is currently available.
-    public boolean checkInternetConnection(Context context) {
+    public static boolean checkInternetConnection(Context context) {
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -29,7 +29,7 @@ public class InternetOperations {
     }
 
     // Attempt a URL connection and return an InputStream
-    public InputStream connectToApi(String url) throws IOException {
+    public static InputStream connectToApi(String url) throws IOException {
         URL apiURL = new URL(url);
         URLConnection connection = apiURL.openConnection();
 

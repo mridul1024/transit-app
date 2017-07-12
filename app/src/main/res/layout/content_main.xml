@@ -8,4 +8,6 @@
     tools:context="com.example.gaijinsmash.transitapp.activity.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+    <include layout="@layout/home_view" />
+
 </android.support.constraint.ConstraintLayout>

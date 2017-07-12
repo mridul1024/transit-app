@@ -2,6 +2,7 @@ package com.example.gaijinsmash.transitapp.xmlparser;
 
 import android.util.Xml;
 
+import com.example.gaijinsmash.transitapp.internet.InternetOperations;
 import com.example.gaijinsmash.transitapp.model.Station;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -19,20 +20,49 @@ import java.util.List;
  * Created by ryanj on 6/30/2017.
  */
 
+
 public class StationXMLParser {
 
     // True: turns on debug logging, False: off
     private static final boolean DEBUG = true;
-
     private static final String API_KEY = "Q7Z9-PZ53-9QXT-DWE9";
     private static final String BASE_URI = "http://api.bart.gov/api/";
+    private static final String TEST_URI = "http://api.bart.gov/api/stn.aspx?cmd=stninfo&orig=ssan";
+
+    // TODO: What is ns for?
     private static final String ns = null;
 
-    public void getCall(String call) throws IOException, XmlPullParserException {
+    // Constructor
+    public StationXMLParser() {
 
     }
 
+    public String getTestUri() {
+        return TEST_URI;
+    }
+
+    public String getApiString() {
+            // TODO: need to add ability to customize calls
+            return BASE_URI;
+    }
+
+    // Insert the API URL in "call"
+    public List makeCall(String call) throws IOException, XmlPullParserException {
+        if(DEBUG) {
+            // TODO: Finish debug logic
+        }
+
+        InputStream is = InternetOperations.connectToApi(call);
+        List results = parse(is);
+
+        return results;
+    }
+
     public List parse(InputStream in) throws XmlPullParserException, IOException {
+        if(DEBUG) {
+            // TODO: Finish debug logic
+        }
+
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -46,6 +76,11 @@ public class StationXMLParser {
     }
 
     private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+        if(DEBUG) {
+            // TODO: Finish debug logic
+        }
+
+
         List entries = new ArrayList();
 
         parser.require(XmlPullParser.START_TAG, ns, "feed");
@@ -65,6 +100,10 @@ public class StationXMLParser {
     }
 
     private Station readStation(XmlPullParser parser) throws XmlPullParserException, IOException {
+        if(DEBUG) {
+            // TODO: Finish debug logic
+        }
+
         parser.require(XmlPullParser.START_TAG, ns, "entry");
         String mName = null;
         String mAddress = null;
@@ -95,6 +134,10 @@ public class StationXMLParser {
 
     // Processes name tags in the StationInfo feed
     private String readName(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG) {
+            // TODO: Finish debug logic
+        }
+
         parser.require(XmlPullParser.START_TAG, ns, "name");
         String name = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "name");
@@ -102,6 +145,10 @@ public class StationXMLParser {
     }
 
     private String readAddress(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG) {
+            // TODO: Finish debug logic
+        }
+
         parser.require(XmlPullParser.START_TAG, ns, "abbreviation");
         String abbr = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "abbreviation");
@@ -109,6 +156,10 @@ public class StationXMLParser {
     }
 
     private String readAbbr(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG) {
+            // TODO: Finish debug logic
+        }
+
         parser.require(XmlPullParser.START_TAG, ns, "name");
         String name = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "name");
@@ -116,6 +167,10 @@ public class StationXMLParser {
     }
 
     private String readCity(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG) {
+            // TODO: Finish debug logic
+        }
+
         parser.require(XmlPullParser.START_TAG, ns, "city");
         String city = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "city");
@@ -124,6 +179,10 @@ public class StationXMLParser {
 
     // Extract text values of tags:
     private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG) {
+            // TODO: Finish debug logic
+        }
+
         String result = "";
         if (parser.next() == XmlPullParser.TEXT) {
             result = parser.getText();
@@ -134,6 +193,10 @@ public class StationXMLParser {
 
     // Skip tags that it's not interested in
     private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
+        if(DEBUG) {
+            // TODO: Finish debug logic
+        }
+
         if (parser.getEventType() != XmlPullParser.START_TAG) {
             throw new IllegalStateException();
         }
