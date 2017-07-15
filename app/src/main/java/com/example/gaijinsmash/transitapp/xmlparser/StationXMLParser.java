@@ -1,5 +1,6 @@
 package com.example.gaijinsmash.transitapp.xmlparser;
 
+import android.util.Log;
 import android.util.Xml;
 
 import com.example.gaijinsmash.transitapp.internet.InternetOperations;
@@ -20,11 +21,9 @@ import java.util.List;
  * Created by ryanj on 6/30/2017.
  */
 
-
 public class StationXMLParser {
 
-    // True: turns on debug logging, False: off
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = true; // True: turns on debug logging, False: off
     private static final String API_KEY = "Q7Z9-PZ53-9QXT-DWE9";
     private static final String BASE_URI = "http://api.bart.gov/api/";
     private static final String TEST_URI = "http://api.bart.gov/api/stn.aspx?cmd=stninfo&orig=ssan";
@@ -32,13 +31,9 @@ public class StationXMLParser {
     // TODO: What is ns for?
     private static final String ns = null;
 
-    // Constructor
-    public StationXMLParser() {
-
-    }
-
-    public String getTestUri() {
-        return TEST_URI;
+    // For testing purposes only
+    public List testCall() throws IOException, XmlPullParserException {
+        return makeCall(TEST_URI);
     }
 
     public String getApiString() {
@@ -49,7 +44,7 @@ public class StationXMLParser {
     // Insert the API URL in "call"
     public List makeCall(String call) throws IOException, XmlPullParserException {
         if(DEBUG) {
-            // TODO: Finish debug logic
+            Log.i("makeCall()", "with " + call);
         }
 
         InputStream is = InternetOperations.connectToApi(call);
@@ -60,7 +55,7 @@ public class StationXMLParser {
 
     public List parse(InputStream in) throws XmlPullParserException, IOException {
         if(DEBUG) {
-            // TODO: Finish debug logic
+            Log.i("begin parse()", "with " + in.toString());
         }
 
         try {
@@ -79,10 +74,7 @@ public class StationXMLParser {
         if(DEBUG) {
             // TODO: Finish debug logic
         }
-
-
         List entries = new ArrayList();
-
         parser.require(XmlPullParser.START_TAG, ns, "feed");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {

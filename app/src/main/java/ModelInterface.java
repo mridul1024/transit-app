@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface ModelInterface {
 
+    // Return a list of objects
     public List getList();
+
 
 
 }

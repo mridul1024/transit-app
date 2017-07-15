@@ -8,6 +8,11 @@
     tools:context="com.example.gaijinsmash.transitapp.activity.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <include layout="@layout/home_view" />
+
+    <FrameLayout
+        android:id="@+id/fragmentContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"/>
 
 </android.support.constraint.ConstraintLayout>

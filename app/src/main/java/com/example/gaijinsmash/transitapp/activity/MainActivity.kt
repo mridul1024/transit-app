@@ -6,16 +6,21 @@ import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.view.View
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 
 import com.example.gaijinsmash.transitapp.R
 import com.example.gaijinsmash.transitapp.fragment.HomeFragment
+import com.example.gaijinsmash.transitapp.fragment.ScheduleFragment
 import com.example.gaijinsmash.transitapp.fragment.StationFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +45,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
+
+        // Loads HomeFragment by default
+        val tx = getSupportFragmentManager().beginTransaction()
+        tx.replace(R.id.fragmentContent, HomeFragment())
+        tx.commit()
     }
 
     override fun onBackPressed() {
@@ -75,11 +85,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         when (item.itemId) {
             R.id.nav_schedule -> {
-                startActivity(Intent(this, HomeFragment::class.java))
+                fragmentFactory(ScheduleFragment())
                 return true
             }
             R.id.nav_station -> {
-                startActivity(Intent(this, StationFragment::class.java))
+                fragmentFactory(StationFragment())
                 return true
             }
             R.id.nav_share -> {
@@ -93,5 +103,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun fragmentFactory(fragment: Fragment) {
+        // Changes the fragment view
+        val fragmentManager = getSupportFragmentManager()
+        fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit()
+        // Closes the Navigation Drawer
+        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        drawer.closeDrawer(GravityCompat.START)
     }
 }

@@ -25,18 +25,7 @@ public class StationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         List stations = null;
-
-        //Create an instance of XML Parser
-        StationXMLParser stationXMLParser = new StationXMLParser();
-        try {
-           stations = stationXMLParser.makeCall(stationXMLParser.getTestUri());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        }
 
         //Inflate the layout for this fragment
         return inflater.inflate(R.layout.station_view, container, false);
