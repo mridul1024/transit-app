@@ -2,11 +2,9 @@ package com.example.gaijinsmash.transitapp.fragment;
 
 
 // TODO: is android.Fragment different?
-import android.content.Context;
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.internet.InternetOperations;
-import com.example.gaijinsmash.transitapp.xmlparser.StationXMLParser;
 
-import org.w3c.dom.Text;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.util.List;
 
 

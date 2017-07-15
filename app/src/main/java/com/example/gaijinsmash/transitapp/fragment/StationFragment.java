@@ -7,12 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.model.Station;
-import com.example.gaijinsmash.transitapp.xmlparser.StationXMLParser;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.util.List;
 
 /**
