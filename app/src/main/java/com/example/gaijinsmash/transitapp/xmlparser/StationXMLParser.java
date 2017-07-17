@@ -82,7 +82,7 @@ public class StationXMLParser {
                 if(DEBUG) {
                     Log.i("STATIONS tag: ", "MATCHED");
                 }
-                stationList = readStation(parser);
+                stationList = readStations(parser);
             } else {
                 skip(parser);
             }
@@ -90,16 +90,12 @@ public class StationXMLParser {
         return stationList;
     }
 
-    private List readStation(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private List readStations(XmlPullParser parser) throws XmlPullParserException, IOException {
         if(DEBUG) {
-            Log.i("readStation()", "***BEGINNING***");
+            Log.i("readStations()", "***BEGINNING***");
         }
         parser.require(XmlPullParser.START_TAG, ns, "stations");
         List<Station> stationList = new ArrayList<Station>();
-        String mName = null;
-        String mAddress = null;
-        String mAbbreviation = null;
-        String mCity = null;
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if(parser.getEventType() != XmlPullParser.START_TAG) {
@@ -110,31 +106,6 @@ public class StationXMLParser {
             if(name.equals("station")) {
                 stationList.add(readStationObject(parser));
             }
-            /*
-            if(name.equals("name")) {
-                mName = readName(parser);
-                if(DEBUG) {
-                    Log.i("mName", mName);
-                }
-            }
-
-            else if (name.equals("address")) {
-                mAddress = readAddress(parser);
-                if(DEBUG) {
-                    Log.i("address", mAddress);
-                }
-            } else if (name.equals("abbr")) {
-                mAbbreviation = readAbbr(parser);
-                if(DEBUG) {
-                    Log.i("abbreviation", mAbbreviation);
-                }
-            } else if (name.equals("city")) {
-                mCity = readCity(parser);
-                if(DEBUG) {
-                    Log.i("city", mCity);
-                }
-            }
-            */
         }
         return stationList;
     }
