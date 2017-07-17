@@ -1,6 +1,7 @@
 package com.example.gaijinsmash.transitapp.internet;
 
 import android.content.Context;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -45,4 +46,10 @@ public class InternetOperations {
         InputStream in = httpURLConnection.getInputStream();
         return in;
     }
+
+    // TODO : Get GPS location of user
+
+    // TODO: Find nearest Station relative to user
+
+
 }

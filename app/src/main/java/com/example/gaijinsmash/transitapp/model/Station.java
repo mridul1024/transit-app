@@ -9,6 +9,9 @@ public class Station extends Place {
     private String mAbbreviation;
 
     // Constructor
+    public Station() {
+
+    }
     public Station(String name) {
         super(name);
     }

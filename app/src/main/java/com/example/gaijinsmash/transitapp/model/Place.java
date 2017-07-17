@@ -18,6 +18,10 @@ public abstract class Place {
     private double mLongitude;
 
     // Constructor
+    public Place() {
+
+    }
+
     public Place(String name) {
         Log.i("Creating Place object", name);
         mName = name;
