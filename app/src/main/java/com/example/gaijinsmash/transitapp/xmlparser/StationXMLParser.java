@@ -183,6 +183,7 @@ public class StationXMLParser {
                 }
             }
         }
+        // TODO: Create object dynamically
         return new Station(mName);
     }
 

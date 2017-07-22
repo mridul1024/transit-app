@@ -18,6 +18,11 @@ import java.net.URLConnection;
 
 public class InternetOperations {
 
+    private static final boolean DEBUG = true; // True: turns on debug logging, False: off
+    private static final String API_KEY = "Q7Z9-PZ53-9QXT-DWE9";
+    private static final String BASE_URI = "http://api.bart.gov/api/";
+    private static final String TEST_URI = "http://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V";
+
     // Check for internet Connection, will return NULL if no network is currently available.
     public static boolean checkInternetConnection(Context context) {
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);

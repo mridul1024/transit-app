@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
+import com.example.gaijinsmash.transitapp.model.Station;
 import com.example.gaijinsmash.transitapp.xmlparser.StationXMLParser;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -64,15 +65,21 @@ public class HomeFragment extends Fragment {
         return mInflatedView;
     }
 
+    // TODO: Warn user if there's no internet connection
+    // TODO: Display up-to-date news on BART
+    // TODO: Display weather in local area - requires location
+    // TODO: Keep our trains clean!
+    // TODO: Report suspicious activity and keep your belongings safe
+
+    // TODO: IF Holiday - show button
 
     private class TestInternetTask extends AsyncTask<Void, Void, Boolean> {
 
         private StationXMLParser parser = new StationXMLParser();
-        private List results = null;
+        private List<Station> results = null;
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
-
                 results = parser.testCall();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -88,7 +95,10 @@ public class HomeFragment extends Fragment {
 
         protected void onPostExecute(Boolean result) {
             if(result) {
-                textView.setText(results.toString());
+                for(Station station : results) {
+                    textView.setText(station.getName());
+                }
+
             } else {
                 textView.setText("Error");
             }

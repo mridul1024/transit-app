@@ -10,20 +10,37 @@
         android:text="TextView" />
 
     <AutoCompleteTextView
-        android:id="@+id/autoCompleteTextView"
+        android:id="@+id/schedule_autoCompleteTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="AutoCompleteTextView" />
+        android:ems="10"
+        android:text="@string/departure_station" />
 
     <AutoCompleteTextView
-        android:id="@+id/autoCompleteTextView2"
+        android:id="@+id/schedule_autoCompleteTextView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="AutoCompleteTextView" />
+        android:ems="10"
+        android:text="@string/arrival_station" />
+
+    <EditText
+        android:id="@+id/time_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="time" />
+
+    <EditText
+        android:id="@+id/date_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="date" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/schedule_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="@string/schedule_button" />
+
 </LinearLayout>
