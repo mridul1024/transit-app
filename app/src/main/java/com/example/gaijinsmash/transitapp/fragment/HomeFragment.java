@@ -3,6 +3,7 @@ package com.example.gaijinsmash.transitapp.fragment;
 
 // TODO: is android.Fragment different?
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,14 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     TextView textView = null;
+    //private ItemFragment.OnListFragmentInteractionListener mListener;
+
+    // Is this necessary?
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,6 +74,24 @@ public class HomeFragment extends Fragment {
         return mInflatedView;
     }
 
+    /*
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ItemFragment.OnListFragmentInteractionListener) {
+            mListener = (ItemFragment.OnListFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+    */
     // TODO: Warn user if there's no internet connection
     // TODO: Display up-to-date news on BART
     // TODO: Display weather in local area - requires location
@@ -75,18 +102,19 @@ public class HomeFragment extends Fragment {
 
     private class TestInternetTask extends AsyncTask<Void, Void, Boolean> {
 
-        private StationXMLParser parser = new StationXMLParser();
-        private List<Station> results = null;
+        private StationXMLParser stationXMLParser = new StationXMLParser();
+        private List<Station> stationList = null;
+
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
-                results = parser.testCall();
+                stationList = stationXMLParser.testCall();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
             }
-            if (results != null) {
+            if (stationList != null) {
                 return true;
             } else {
                 return false;
@@ -95,7 +123,8 @@ public class HomeFragment extends Fragment {
 
         protected void onPostExecute(Boolean result) {
             if(result) {
-                for(Station station : results) {
+
+                for(Station station : stationList) {
                     textView.setText(station.getName());
                 }
 

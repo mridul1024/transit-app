@@ -3,6 +3,8 @@ package com.example.gaijinsmash.transitapp.xmlparser;
 import android.util.Log;
 import android.util.Xml;
 
+import com.example.gaijinsmash.transitapp.internet.InternetOperations;
+import com.example.gaijinsmash.transitapp.model.Route;
 import com.example.gaijinsmash.transitapp.model.Station;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -23,6 +25,16 @@ public class RouteXMLParser {
 
     // require(int type, String namespace, String name) if namespace is null, will pass when matched against any name
     private static final String ns = null;
+
+    public List makeCall(String url) throws IOException, XmlPullParserException {
+        if(DEBUG) {
+            Log.i("makeCall()", "with " + url);
+        }
+
+        InputStream is = InternetOperations.connectToApi(url);
+        List results = parse(is);
+        return results;
+    }
 
     public List parse(InputStream in) throws XmlPullParserException, IOException {
         if(DEBUG) {
@@ -45,7 +57,9 @@ public class RouteXMLParser {
         if(DEBUG) {
             Log.i("readFeed():", "***BEGINNING***");
         }
-        List<Station> stationList = new ArrayList<Station>();
+
+        List<Route> routeList = new ArrayList<Route>();
+
         parser.require(XmlPullParser.START_TAG, ns, "root");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -53,15 +67,107 @@ public class RouteXMLParser {
             }
             String name = parser.getName();
             // Starts by looking for the first tag
-            if (name.equals("stations")) {
+            if (name.equals("schedule")) {
                 if(DEBUG) {
-                    Log.i("STATIONS tag: ", "MATCHED");
+                    Log.i("SCHEDULE tag: ", "MATCHED");
                 }
-                stationList = readStations(parser);
-            } else {
+                routeList = readSchedule(parser);
+            }
+            else if (name.equals("message")) {
+                if(DEBUG) {
+                    Log.i("MESSAGE tag: ", "MATCHED");
+                }
+                // TODO: create message object and display to screen
+            }
+            else {
                 skip(parser);
             }
         }
-        return stationList;
+        return routeList;
+    }
+
+    private List readSchedule(XmlPullParser parser) throws XmlPullParserException, IOException {
+        if(DEBUG) {
+            Log.i("readSchedule()", "***BEGINNING***");
+        }
+        parser.require(XmlPullParser.START_TAG, ns, "schedule");
+        List<Route> routeList = new ArrayList<Route>();
+
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if(parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String name = parser.getName();
+            if(name.equals("request")) {
+                routeList.add(readRouteObject(parser));
+            }
+        }
+        return routeList;
+    }
+
+
+    //TODO: Refactor this
+    private Route readRouteObject(XmlPullParser parser)  throws XmlPullParserException, IOException {
+
+        parser.require(XmlPullParser.START_TAG, ns, "trip");
+        String origin = null;
+        String destination = null;
+        String fare = null;
+        String origTimeMin = null;
+        String origTimeDate = null;
+        String destTimeMin = null;
+        String destTimeDate = null;
+        String clipper = null;
+        String tripTime = null;
+
+        while(parser.next() != XmlPullParser.END_TAG) {
+            if(parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String name = parser.getName();
+            String relType = parser.getAttributeValue(null, "");
+            if(name.equals("trip")) {
+                origin = parser.getAttributeValue(null, "origin");
+                destination = parser.getAttributeValue(null, "destination");
+                fare = parser.getAttributeValue(null, "fare");
+                origTimeMin = parser.getAttributeValue(null, "origTimeMin");
+                origTimeDate = parser.getAttributeValue(null, "origTimeDate");
+                destTimeMin = parser.getAttributeValue(null, "destTimeMin");
+                destTimeDate = parser.getAttributeValue(null, "destTimeDate");
+                clipper = parser.getAttributeValue(null, "clipper");
+                tripTime = parser.getAttributeValue(null, "tripTime");
+            }
+            if(name.equals("leg")) {
+                // do something
+            }
+        }
+
+        Route route = new Route();
+        route.setDestination(destination);
+        route.setOrigin(origin);
+        route.setFare(fare);
+        return route;
+    }
+
+    // Skip tags that it's not interested in
+    private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
+        if(DEBUG) {
+            Log.i("skip()", "***SKIPPING***");
+        }
+
+        if (parser.getEventType() != XmlPullParser.START_TAG) {
+            throw new IllegalStateException();
+        }
+        int depth = 1;
+        while (depth != 0) {
+            switch (parser.next()) {
+                case XmlPullParser.END_TAG:
+                    depth--;
+                    break;
+                case XmlPullParser.START_TAG:
+                    depth++;
+                    break;
+            }
+        }
     }
 }

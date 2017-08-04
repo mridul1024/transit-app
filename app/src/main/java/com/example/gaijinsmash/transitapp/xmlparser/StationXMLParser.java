@@ -134,49 +134,49 @@ public class StationXMLParser {
                     Log.i("mName", mName);
                 }
             }
-            if (name.equals("abbr")) {
+            else if (name.equals("abbr")) {
                 mAbbreviation = readAbbr(parser);
                 if(DEBUG) {
                     Log.i("abbreviation", mAbbreviation);
                 }
             }
-            if (name.equals("gtfs_latitude")) {
+            else if (name.equals("gtfs_latitude")) {
                 mLatitude = readLatitude(parser);
                 if(DEBUG) {
                     Log.i("latitude", mLatitude);
                 }
             }
-            if (name.equals("gtfs_longitude")) {
+            else if (name.equals("gtfs_longitude")) {
                 mLongitude = readLongitude(parser);
                 if(DEBUG) {
                     Log.i("longitude", mLongitude);
                 }
             }
-            if (name.equals("address")) {
+            else if (name.equals("address")) {
                 mAddress = readAddress(parser);
                 if(DEBUG) {
                     Log.i("address", mAddress);
                 }
             }
-            if (name.equals("city")) {
+            else if (name.equals("city")) {
                 mCity = readCity(parser);
                 if(DEBUG) {
                     Log.i("city", mCity);
                 }
             }
-            if (name.equals("county")) {
+            else if (name.equals("county")) {
                 mCounty = readCounty(parser);
                 if(DEBUG) {
                     Log.i("county", mCounty);
                 }
             }
-            if (name.equals("state")) {
+            else if (name.equals("state")) {
                 mState = readState(parser);
                 if(DEBUG) {
                     Log.i("state", mState);
                 }
             }
-            if (name.equals("zipcode")) {
+            else if (name.equals("zipcode")) {
                 mZipcode = readZipcode(parser);
                 if(DEBUG) {
                     Log.i("zipcode", mZipcode);

@@ -11,10 +11,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.internet.ApiBuilder;
+import com.example.gaijinsmash.transitapp.internet.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.internet.InternetOperations;
+import com.example.gaijinsmash.transitapp.model.Route;
+import com.example.gaijinsmash.transitapp.xmlparser.RouteXMLParser;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * Created by ryanj on 6/30/2017.
@@ -39,6 +45,7 @@ public class ScheduleFragment extends Fragment {
         time = (AutoCompleteTextView) mInflatedView.findViewById(R.id.time_editText);
         date = (AutoCompleteTextView) mInflatedView.findViewById(R.id.date_editText);
         searchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
+
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,6 +54,8 @@ public class ScheduleFragment extends Fragment {
                 String departingTime = time.getText().toString();
                 String departingDate = date.getText().toString();
 
+                // get all input values and submit api call
+                // return a list of routes
                 new InternetTask().execute();
             }
         });
@@ -55,26 +64,39 @@ public class ScheduleFragment extends Fragment {
         return mInflatedView;
     }
 
-    //TODO: show info on working Heater and A/C units
-
     //TODO: AsyncTask
     private class InternetTask extends AsyncTask<String[], Void, Boolean> {
+        private RouteXMLParser routeXMLParser = new RouteXMLParser();
+        private List<Route> routeList = null;
 
         @Override
         protected Boolean doInBackground(String[]...stations) {
 
-            // send GET request to API
-            ApiBuilder api = new ApiBuilder();
-            String uri = api.getRoute(stations., stations[1]);
-            InternetOperations ops = new InternetOperations();
-            InputStream is = ops.connectToApi(uri);
-
-            return null;
+            // Create the API Call
+            ApiStringBuilder apiBuilder = new ApiStringBuilder();
+            String uri = apiBuilder.getRoute(stations[0].toString(), stations[1].toString());
+            try {
+                routeList = routeXMLParser.makeCall(uri);
+            } catch (IOException e){
+                e.printStackTrace();
+                // TODO: Gracefully handle error for user
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            }
+            if (routeList != null) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
+            if (result) {
+                // change fragment view to Results
+                // display results in a custom list view
 
+            }
         }
     }
 }
