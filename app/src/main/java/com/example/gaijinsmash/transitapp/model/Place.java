@@ -9,13 +9,13 @@ import android.util.Log;
 public abstract class Place {
 
     private String mName;
-    private int mZipcode;
+    private String mZipcode;
     private String mCity;
     private String mCounty;
     private String mState;
     private String mAddress;
-    private double mLatitude;
-    private double mLongitude;
+    private String mLatitude;
+    private String mLongitude;
 
     // Constructor
     public Place() {
@@ -36,26 +36,27 @@ public abstract class Place {
         mAddress = address;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(String latitude) {
         mLatitude = latitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(String longitude) {
         mLongitude = longitude;
     }
-    private void setZipcode(int zipcode) {
+
+    public void setZipcode(String zipcode) {
         mZipcode = zipcode;
     }
 
-    private void setCity(String city) {
+    public void setCity(String city) {
         mCity = city;
     }
 
-    private void setCounty(String county) {
+    public void setCounty(String county) {
         mCounty = county;
     }
 
-    private void setState(String state) {
+    public void setState(String state) {
         mState = state;
     }
 
@@ -68,15 +69,15 @@ public abstract class Place {
         return mAddress;
     }
 
-    public double getLatitude() {
+    public String getLatitude() {
         return mLatitude;
     }
 
-    public double getLongitude() {
+    public String getLongitude() {
         return mLongitude;
     }
 
-    public int getZipcode() { return mZipcode; }
+    public String getZipcode() { return mZipcode; }
 
     public String getCity() { return mCity; }
 

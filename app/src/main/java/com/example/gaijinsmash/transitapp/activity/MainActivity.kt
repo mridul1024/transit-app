@@ -14,9 +14,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.example.gaijinsmash.transitapp.R
-import com.example.gaijinsmash.transitapp.fragment.HomeFragment
-import com.example.gaijinsmash.transitapp.fragment.ScheduleFragment
-import com.example.gaijinsmash.transitapp.fragment.StationFragment
+import com.example.gaijinsmash.transitapp.activity.fragment.HomeFragment
+import com.example.gaijinsmash.transitapp.activity.fragment.ScheduleFragment
+import com.example.gaijinsmash.transitapp.activity.fragment.StationFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 

@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.fragment;
+package com.example.gaijinsmash.transitapp.activity.fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,18 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.internet.ApiStringBuilder;
-import com.example.gaijinsmash.transitapp.internet.InternetOperations;
-import com.example.gaijinsmash.transitapp.model.Route;
+import com.example.gaijinsmash.transitapp.model.bart.Route;
 import com.example.gaijinsmash.transitapp.xmlparser.RouteXMLParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -28,12 +27,11 @@ import java.util.List;
 
 public class ScheduleFragment extends Fragment {
 
-    private Button searchBtn;
-    private TextView textView;
     private AutoCompleteTextView departure;
     private AutoCompleteTextView arrival;
-    private AutoCompleteTextView time;
-    private AutoCompleteTextView date;
+    private EditText time;
+    private EditText date;
+    private Button searchBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,10 +40,11 @@ public class ScheduleFragment extends Fragment {
 
         departure = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView);
         arrival = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView2);
-        time = (AutoCompleteTextView) mInflatedView.findViewById(R.id.time_editText);
-        date = (AutoCompleteTextView) mInflatedView.findViewById(R.id.date_editText);
+        time = (EditText) mInflatedView.findViewById(R.id.time_editText);
+        date = (EditText) mInflatedView.findViewById(R.id.date_editText);
         searchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
 
+        // onClick, grab users input
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,16 +52,14 @@ public class ScheduleFragment extends Fragment {
                 String arrivingStation = arrival.getText().toString();
                 String departingTime = time.getText().toString();
                 String departingDate = date.getText().toString();
-
-                // get all input values and submit api call
-                // return a list of routes
-                new InternetTask().execute();
+                String[] array = {departingStation, arrivingStation, departingTime, departingDate};
+                new InternetTask().execute(array);
             }
         });
 
-        //Inflate the layout for this fragment
         return mInflatedView;
     }
+
 
     //TODO: AsyncTask
     private class InternetTask extends AsyncTask<String[], Void, Boolean> {
@@ -75,6 +72,8 @@ public class ScheduleFragment extends Fragment {
             // Create the API Call
             ApiStringBuilder apiBuilder = new ApiStringBuilder();
             String uri = apiBuilder.getRoute(stations[0].toString(), stations[1].toString());
+
+            //TODO: add date and time specs
             try {
                 routeList = routeXMLParser.makeCall(uri);
             } catch (IOException e){

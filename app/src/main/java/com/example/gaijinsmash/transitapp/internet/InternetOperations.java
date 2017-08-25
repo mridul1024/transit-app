@@ -56,5 +56,6 @@ public class InternetOperations {
 
     // TODO: Find nearest Station relative to user
 
+    // TODO: Make sure to always close() connections.
 
 }

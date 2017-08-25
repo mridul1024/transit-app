@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.fragment;
+package com.example.gaijinsmash.transitapp.activity.fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.model.Station;
+import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.xmlparser.StationXMLParser;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -25,11 +25,10 @@ public class StationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View mInflatedView = inflater.inflate(R.layout.home_view, container, false);
+        View mInflatedView = inflater.inflate(R.layout.station_view, container, false);
 
         return mInflatedView;
     }
-
 
     private class TestInternetTask extends AsyncTask<Void, Void, Boolean> {
 

@@ -25,23 +25,31 @@ public class ApiStringBuilder {
         return BASE_URI + "sched.aspx?cmd=depart&orig=" + origin + "&dest=" + dest + API_KEY;
      }
 
-     public String getFare(String stationA, String stationB) {
+    public String getFare(String stationA, String stationB) {
         return BASE_URI;
      }
 
-     public String getStationInfo(String station) {
+    public String getStationInfo(String station) {
         return BASE_URI;
      }
 
-     public String getHolidayInfo(){
+    public String getHolidayInfo(){
         return BASE_URI;
      }
 
-     public String getRouteInfo() {
-         return BASE_URI;
-     }
+    //stations are in capital Abbr
+    //date=<mm/dd/yyyy>
+    //time=h:mm+am/pm or now
+    //b=<number> how many trips to show before specified time(0,4)
+    //a=<number> how many trips to show after specified time (0,4)
+    public String getDetailedRoute(String origin, String arrival, String date, String time) {
+         String cmd = "sched.aspx?cmd=depart&orig=" + origin + "&dest=" + arrival + "&date=" + date + "&time=" + time;
 
-     public String getBSA() {
+         return BASE_URI + cmd + API_KEY;
+    }
+
+
+    public String getBSA() {
          return BASE_URI;
      }
 }

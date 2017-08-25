@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp
+package com.example.gaijinsmash.transitapp.model
 
 import org.junit.Test
 

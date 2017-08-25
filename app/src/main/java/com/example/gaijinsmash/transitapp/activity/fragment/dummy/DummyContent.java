@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.fragment.dummy;
+package com.example.gaijinsmash.transitapp.activity.fragment.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

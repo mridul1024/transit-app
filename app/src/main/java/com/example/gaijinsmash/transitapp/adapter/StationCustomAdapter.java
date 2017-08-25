@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.model.Station;
+import com.example.gaijinsmash.transitapp.model.bart.Station;
 
 import java.util.List;
 

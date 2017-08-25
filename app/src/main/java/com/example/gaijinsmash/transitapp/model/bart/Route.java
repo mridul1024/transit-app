@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.model;
+package com.example.gaijinsmash.transitapp.model.bart;
 
 /**
  * Created by ryanj on 7/26/2017.

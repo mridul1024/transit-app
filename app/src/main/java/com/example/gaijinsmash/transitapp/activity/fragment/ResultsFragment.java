@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.fragment;
+package com.example.gaijinsmash.transitapp.activity.fragment;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.adapter.StationCustomAdapter;
-import com.example.gaijinsmash.transitapp.model.Station;
+import com.example.gaijinsmash.transitapp.model.bart.Station;
 
 import java.util.List;
 

@@ -1,9 +1,8 @@
-package com.example.gaijinsmash.transitapp.fragment;
+package com.example.gaijinsmash.transitapp.activity.fragment;
 
 
 // TODO: is android.Fragment different?
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.model.Station;
+import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.xmlparser.StationXMLParser;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -31,15 +30,8 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    TextView textView = null;
+    private TextView textView = null;
     //private ItemFragment.OnListFragmentInteractionListener mListener;
-
-    // Is this necessary?
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,6 +106,7 @@ public class HomeFragment extends Fragment {
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
             }
+
             if (stationList != null) {
                 return true;
             } else {

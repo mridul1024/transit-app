@@ -3,8 +3,9 @@ package com.example.gaijinsmash.transitapp.xmlparser;
 import android.util.Log;
 import android.util.Xml;
 
+import com.example.gaijinsmash.transitapp.internet.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.internet.InternetOperations;
-import com.example.gaijinsmash.transitapp.model.Station;
+import com.example.gaijinsmash.transitapp.model.bart.Station;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -20,9 +21,7 @@ import java.util.List;
 
 public class StationXMLParser {
 
-    private static final boolean DEBUG = true; // True: turns on debug logging, False: off
-    private static final String API_KEY = "Q7Z9-PZ53-9QXT-DWE9";
-    private static final String BASE_URI = "http://api.bart.gov/api/";
+    private static final boolean DEBUG = true;
     private static final String TEST_URI = "http://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V";
 
     // require(int type, String namespace, String name) if namespace is null, will pass when matched against any name
@@ -33,11 +32,6 @@ public class StationXMLParser {
         return makeCall(TEST_URI);
     }
 
-    public String getApiString() {
-            // TODO: need to add ability to customize calls
-            return BASE_URI;
-    }
-
     // Insert the API URL in "call"
     public List makeCall(String call) throws IOException, XmlPullParserException {
         if(DEBUG) {
@@ -45,6 +39,14 @@ public class StationXMLParser {
         }
 
         InputStream is = InternetOperations.connectToApi(call);
+        List results = parse(is);
+        return results;
+    }
+
+    public List getStations() throws IOException, XmlPullParserException {
+        ApiStringBuilder sb = new ApiStringBuilder();
+        String uri = sb.getAllStations();
+        InputStream is = InternetOperations.connectToApi(uri);
         List results = parse(is);
         return results;
     }
@@ -183,8 +185,17 @@ public class StationXMLParser {
                 }
             }
         }
-        // TODO: Create object dynamically
-        return new Station(mName);
+
+        Station mStation = new Station(mName);
+        mStation.setAbbreviation(mAbbreviation);
+        mStation.setLatitude(mLatitude);
+        mStation.setLongitude(mLongitude);
+        mStation.setAddress(mAddress);
+        mStation.setCity(mCity);
+        mStation.setCounty(mCounty);
+        mStation.setState(mState);
+        mStation.setZipcode(mZipcode);
+        return mStation;
     }
 
     //----------------------------------------------------------------------------------------------
