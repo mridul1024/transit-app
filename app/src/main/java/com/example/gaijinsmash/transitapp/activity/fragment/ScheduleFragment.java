@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,10 +28,10 @@ import java.util.List;
 
 public class ScheduleFragment extends Fragment {
 
-    private AutoCompleteTextView departure;
-    private AutoCompleteTextView arrival;
-    private EditText time;
-    private EditText date;
+    private AutoCompleteTextView departureActv;
+    private AutoCompleteTextView arrivalActv;
+    private EditText timeEt;
+    private EditText dateEt;
     private Button searchBtn;
 
     @Override
@@ -38,20 +39,30 @@ public class ScheduleFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View mInflatedView = inflater.inflate(R.layout.schedule_view, container, false);
 
-        departure = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView);
-        arrival = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView2);
-        time = (EditText) mInflatedView.findViewById(R.id.time_editText);
-        date = (EditText) mInflatedView.findViewById(R.id.date_editText);
+        //TODO: fetch a list of Stations for dropdown into "example"
+        String[] example = {"one","two","three"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.select_dialog_item, example);
+
+        departureActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView);
+        departureActv.setThreshold(1); // will start working from first character
+        departureActv.setAdapter(adapter);
+        arrivalActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView2);
+        arrivalActv.setThreshold(1);
+        arrivalActv.setAdapter(adapter);
+        timeEt = (EditText) mInflatedView.findViewById(R.id.time_editText);
+        dateEt = (EditText) mInflatedView.findViewById(R.id.date_editText);
         searchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
+
+
 
         // onClick, grab users input
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String departingStation = departure.getText().toString();
-                String arrivingStation = arrival.getText().toString();
-                String departingTime = time.getText().toString();
-                String departingDate = date.getText().toString();
+                String departingStation = departureActv.getText().toString();
+                String arrivingStation = arrivalActv.getText().toString();
+                String departingTime = timeEt.getText().toString();
+                String departingDate = dateEt.getText().toString();
                 String[] array = {departingStation, arrivingStation, departingTime, departingDate};
                 new InternetTask().execute(array);
             }

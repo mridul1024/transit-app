@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:text="@string/departure_station" />
+        android:hint="@string/departure_station" />
 
     <AutoCompleteTextView
         android:id="@+id/schedule_autoCompleteTextView2"
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:text="@string/arrival_station" />
+        android:hint="@string/arrival_station" />
 
     <EditText
         android:id="@+id/time_editText"
