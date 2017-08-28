@@ -5,6 +5,9 @@ import com.example.gaijinsmash.transitapp.internet.validator.EmailValidator;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -13,9 +16,21 @@ import org.junit.Test;
 
 public class EmailValidatorTest {
 
+    private EmailValidator validator;
+
+    @Before
+    public void setupTest() throws Exception {
+        validator = new EmailValidator();
+    }
+
     @Test
-    public void emailValidator_IfCorrect_ReturnsTrue() {
-        EmailValidator validator = new EmailValidator();
+    public void testEmailValidatorAcceptsValidEmails() {
         assertTrue(validator.isEmailValid("example@gmail.com"));
+    }
+
+    @Test
+    public void testEmailValidatorDeniesInvalidEmails() {
+        assertFalse(validator.isEmailValid("example@something"));
+        assertFalse(validator.isEmailValid("ex%4!@gmail.com"));
     }
 }
