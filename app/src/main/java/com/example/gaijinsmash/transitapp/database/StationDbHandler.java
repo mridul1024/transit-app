@@ -21,12 +21,13 @@ import java.util.List;
 
 public class StationDbHandler extends SQLiteOpenHelper {
 
-    public static final boolean DEBUG = true;
-    public static final String DBNAME = "stations.sqlite";
-    public static final int VERSION = 1;
-    public static final String TABLE_NAME = "stations";
-    public static final String ID = "id";
-    public static final String NAME = "name";
+    private static final boolean DEBUG = true;
+    private static final String DBNAME = "stations.sqlite";
+    private static final int VERSION = 1;
+    private static final String TABLE_NAME = "stations";
+    private static final String ID = "id";
+    private static final String NAME = "name";
+    private List<Station> mStations;
 
     public StationDbHandler(Context context) {
         super(context, DBNAME, null, VERSION);
@@ -51,6 +52,11 @@ public class StationDbHandler extends SQLiteOpenHelper {
             Log.i("createDatabase:", CREATE_STATIONS_TABLE);
         }
         db.execSQL(CREATE_STATIONS_TABLE);
+    }
+
+    public List<Station> getStations() {
+        new GetStationsTask().execute();
+        return mStations;
     }
 
     private class GetStationsTask extends AsyncTask<Void, Void, Boolean> {

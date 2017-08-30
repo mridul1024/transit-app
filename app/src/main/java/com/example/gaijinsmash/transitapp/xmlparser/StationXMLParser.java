@@ -40,6 +40,7 @@ public class StationXMLParser {
 
         InputStream is = InternetOperations.connectToApi(call);
         List results = parse(is);
+        is.close();
         return results;
     }
 
@@ -48,6 +49,7 @@ public class StationXMLParser {
         String uri = sb.getAllStations();
         InputStream is = InternetOperations.connectToApi(uri);
         List results = parse(is);
+        is.close();
         return results;
     }
 
@@ -61,7 +63,6 @@ public class StationXMLParser {
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(in, null);
             parser.nextTag();
-
             return readFeed(parser);
         } finally {
             in.close();

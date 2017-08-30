@@ -18,17 +18,18 @@ import java.util.List;
 
 public class StationCustomAdapter extends ArrayAdapter<Station> implements View.OnClickListener {
 
-    private List<Station> stationList;
+    private List<Station> stationList = null;
     Context mContext;
-
-    private static class ViewHolder {
-        TextView stationName;
-    }
 
     public StationCustomAdapter(List<Station> data, Context context) {
         super(context, R.layout.station_list_row, data);
         this.stationList = data;
         this.mContext = context;
+    }
+
+    private static class ViewHolder {
+        TextView stationName;
+        TextView stationAdrress;
     }
 
     @Override
@@ -48,19 +49,19 @@ public class StationCustomAdapter extends ArrayAdapter<Station> implements View.
     public View getView(int position, View convertView, ViewGroup parent) {
         Station station = getItem(position);
         ViewHolder viewHolder;
-        final View result;
+        final View view;
 
         if(convertView == null) {
             viewHolder = new ViewHolder();
-            LayoutInflater inflater = LayoutInflater.from(getContext());
+            LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(R.layout.station_list_row, parent, false);
-            viewHolder.stationName = (TextView) convertView.findViewById(R.id.name);
-
-            result = convertView;
+            viewHolder.stationName = (TextView) convertView.findViewById(R.id.stationName_textView);
+            viewHolder.stationAdrress = (TextView) convertView.findViewById(R.id.stationAddress_textView);
+            view = convertView;
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
-            result = convertView;
+            view = convertView;
         }
 
         viewHolder.stationName.setText(station.getName());
