@@ -27,7 +27,16 @@ public class StationDbHandler extends SQLiteOpenHelper {
     private static final String TABLE_NAME = "stations";
     private static final String ID = "id";
     private static final String NAME = "name";
-    private List<Station> mStations;
+    private static final String ABBR = "abbr";
+    private static final String CITY = "city";
+    private static final String ADDRESS = "address";
+    private static final String COUNTY = "county";
+    private static final String STATE = "state";
+    private static final String ZIPCODE = "zipcode";
+    private static final String LATITUDE = "latitude";
+    private static final String LONGITUDE = "longitude";
+
+    private List<Station> mStations = null;
 
     public StationDbHandler(Context context) {
         super(context, DBNAME, null, VERSION);
@@ -36,6 +45,7 @@ public class StationDbHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         createDatabase(db);
+
     }
 
     @Override
@@ -46,35 +56,88 @@ public class StationDbHandler extends SQLiteOpenHelper {
     private void createDatabase(SQLiteDatabase db) {
         String CREATE_STATIONS_TABLE = "create table " + TABLE_NAME + "(" +
                 ID + " integer primary key autoincrement not null, " +
-                NAME + " text "
-                + ");";
+                NAME + " text, " +
+                ABBR + " text, " +
+                ADDRESS + " text, " +
+                CITY + " text, " +
+                COUNTY + " text, " +
+                STATE + " text, " +
+                ZIPCODE + " text, " +
+                LATITUDE + " text, " +
+                LONGITUDE + " text" + ");";
         if(DEBUG) {
             Log.i("createDatabase:", CREATE_STATIONS_TABLE);
         }
         db.execSQL(CREATE_STATIONS_TABLE);
     }
 
-    public List<Station> getStations() {
+    public List<Station> getAllStations() {
         new GetStationsTask().execute();
         return mStations;
     }
 
+    public Station getStation(SQLiteDatabase db, String abbr) {
+        Station station = new Station();
+        if(db != null) {
+            String sql = "select * from " + TABLE_NAME + "where abbr='" + abbr +"';";
+            db.execSQL(sql);
+        }
+        return station;
+    }
+
+    public void saveStationsList(SQLiteDatabase db, List<Station> list) {
+        for(int i = 0; i < list.size(); i++) {
+            Station temp = list.get(i);
+            prepStationObject(db, temp);
+        }
+    }
+
+    public void prepStationObject(SQLiteDatabase db, Station station) {
+        String abbr = station.getAbbreviation();
+        addStationValue(db, ABBR, abbr);
+        String name = station.getName();
+        addStationValue(db, NAME, name);
+        String address = station.getAddress();
+        addStationValue(db, ADDRESS, address);
+        String city = station.getCity();
+        addStationValue(db, CITY, city);
+        String county = station.getCounty();
+        addStationValue(db, COUNTY, county);
+        String state = station.getState();
+        addStationValue(db, STATE, state);
+        String zipcode = station.getZipcode();
+        addStationValue(db, ZIPCODE, zipcode);
+        String longitude = station.getLongitude();
+        addStationValue(db, LONGITUDE, longitude);
+        String latitude = station.getLatitude();
+        addStationValue(db, LATITUDE, latitude);
+    }
+
+    public void addStationValue(SQLiteDatabase db, String column, String value) {
+        String sql = "INSERT into " + TABLE_NAME + " (" + column + ") values (" + value + ");";
+        db.execSQL(sql);
+    }
+
+    //TODO: should i use a thread or handler instead?
     private class GetStationsTask extends AsyncTask<Void, Void, Boolean> {
-        private List stations = new ArrayList<Station>();
+        private List stations = null;
 
         @Override
         protected Boolean doInBackground(Void... voids) {
             StationXMLParser xmlParser = new StationXMLParser();
             Boolean result = null;
-            try {
-                stations = xmlParser.getStations();
-                result = true;
-            } catch (IOException e) {
-                result = false;
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
-                result = false;
-                e.printStackTrace();
+
+            if(stations == null) {
+                try {
+                    stations = xmlParser.getStations();
+                    result = true;
+                } catch (IOException e) {
+                    result = false;
+                    e.printStackTrace();
+                } catch (XmlPullParserException e) {
+                    result = false;
+                    e.printStackTrace();
+                }
             }
             return result;
         }
@@ -87,7 +150,8 @@ public class StationDbHandler extends SQLiteOpenHelper {
 
                 }
             } else {
-                // handle error gracefully
+                // TODO: handle error gracefully
+                Log.e("onPostExecute()", "stations is NULL");
             }
         }
     }
