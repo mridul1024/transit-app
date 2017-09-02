@@ -8,6 +8,7 @@ import com.example.gaijinsmash.transitapp.internet.InternetOperations;
 
 public class InternetException extends Exception {
 
+    //TODO: Need to expand on Exception methods
     public InternetException() {}
 
     public InternetException(String message) {

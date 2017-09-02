@@ -105,7 +105,6 @@ public class ScheduleFragment extends Fragment {
             if (result) {
                 // change fragment view to Results
                 // display results in a custom list view
-
             }
         }
     }

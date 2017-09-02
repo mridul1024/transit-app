@@ -18,9 +18,7 @@ public abstract class Place {
     private String mLongitude;
 
     // Constructor
-    public Place() {
-
-    }
+    public Place() {}
 
     public Place(String name) {
         Log.i("Creating Place object", name);
