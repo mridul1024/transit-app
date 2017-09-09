@@ -8,6 +8,11 @@
     <string name="action_settings">Settings</string>
     <string name="home_btn_find">Find Nearest Station</string>
 
+    <!-- GENERAL -->
+
+    <!-- Home Fragment -->
+    <string name="home_title">Welcome to the BART App!</string>
+    <string name="home_alerts">Everything is great. Nothing to see here.</string>
 
     <!-- Schedule Fragment -->
     <string name="departure_station">Departing Station</string>
@@ -15,5 +20,8 @@
     <string name="departing_time">Time of Departure</string>
     <string name="departing_date">Date of Departure</string>
     <string name="schedule_button">Search</string>
+
+    <!-- Station Fragment -->
+
 
 </resources>

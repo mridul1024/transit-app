@@ -16,6 +16,10 @@
             android:id="@+id/nav_station"
             android:icon="@drawable/ic_menu_station"
             android:title="Station Info" />
+        <item
+            android:id="@+id/nav_map"
+            android:icon="@drawable/ic_menu_map"
+            android:title="Map of BART" />
     </group>
 
     <item android:title="Communicate">

@@ -7,37 +7,29 @@
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:gravity="center_horizontal"
+        android:text="@string/home_title" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/home_banner"
+        android:src="@drawable/home_banner"
+        android:gravity="center_horizontal"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/ButtonAppTheme"
         android:id="@+id/home_view_btn"
         android:text="@string/home_btn_find"/>
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/home_view_testBtn"
-        android:text="test station info"/>
-
     <TextView
-        android:id="@+id/home_view_textView"
+        android:id="@+id/home_view_alertsTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="This is to show data"
+        android:gravity="center_horizontal"
+        android:text="@string/home_alerts"
         android:onClick="tryTest"/>
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
 
 </LinearLayout>

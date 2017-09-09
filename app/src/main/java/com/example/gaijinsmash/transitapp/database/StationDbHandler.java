@@ -45,7 +45,6 @@ public class StationDbHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         createDatabase(db);
-
     }
 
     @Override

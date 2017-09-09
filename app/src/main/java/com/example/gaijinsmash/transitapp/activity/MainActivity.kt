@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import com.example.gaijinsmash.transitapp.R
 import com.example.gaijinsmash.transitapp.activity.fragment.HomeFragment
+import com.example.gaijinsmash.transitapp.activity.fragment.MapFragment
 import com.example.gaijinsmash.transitapp.activity.fragment.ScheduleFragment
 import com.example.gaijinsmash.transitapp.activity.fragment.StationFragment
 
@@ -25,6 +26,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
+
+        //TODO: Change actionbar logo and title
 
         val fab = findViewById<View>(R.id.fab) as FloatingActionButton
         fab.setOnClickListener { view ->
@@ -85,6 +88,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_station -> {
                 fragmentFactory(StationFragment())
+                return true
+            }
+            R.id.nav_map -> {
+                fragmentFactory(MapFragment())
                 return true
             }
             R.id.nav_share -> {
