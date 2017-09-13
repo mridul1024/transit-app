@@ -48,21 +48,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // TEST ------------------------------------------------------------------------------------
-        Button testButton = (Button) mInflatedView.findViewById(R.id.home_view_testBtn);
-        textView = (TextView) mInflatedView.findViewById(R.id.home_view_textView);
-
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast toast = Toast.makeText(getContext(), "Test", Toast.LENGTH_LONG);
-                toast.show();
-
-                new TestInternetTask().execute();
-            }
-        });
-        // TEST ------------------------------------------------------------------------------------
-
         return mInflatedView;
     }
 
@@ -87,9 +72,7 @@ public class HomeFragment extends Fragment {
     // TODO: Warn user if there's no internet connection
     // TODO: Display up-to-date news on BART
     // TODO: Display weather in local area - requires location
-    // TODO: Keep our trains clean!
     // TODO: Report suspicious activity and keep your belongings safe
-
     // TODO: IF Holiday - show button
 
     private class TestInternetTask extends AsyncTask<Void, Void, Boolean> {

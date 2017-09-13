@@ -19,7 +19,7 @@ import java.util.List;
  * Created by ryanj on 7/31/2017.
  */
 
-public class StationDbHandler extends SQLiteOpenHelper {
+public class BartStationDbHandler extends SQLiteOpenHelper {
 
     private static final boolean DEBUG = true;
     private static final String DBNAME = "stations.sqlite";
@@ -38,7 +38,7 @@ public class StationDbHandler extends SQLiteOpenHelper {
 
     private List<Station> mStations = null;
 
-    public StationDbHandler(Context context) {
+    public BartStationDbHandler(Context context) {
         super(context, DBNAME, null, VERSION);
     }
 

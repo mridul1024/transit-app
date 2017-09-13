@@ -6,6 +6,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="top"
         android:id="@+id/map_view_iv"
         android:src="@drawable/bart_map" />
 </LinearLayout>
