@@ -3,7 +3,7 @@ package com.example.gaijinsmash.transitapp.xmlparser;
 import android.util.Log;
 import android.util.Xml;
 
-import com.example.gaijinsmash.transitapp.internet.InternetOperations;
+import com.example.gaijinsmash.transitapp.internet.FetchInputStream;
 import com.example.gaijinsmash.transitapp.model.bart.Route;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -31,7 +31,7 @@ public class RouteXMLParser {
             Log.i("makeCall()", "with " + url);
         }
 
-        InputStream is = InternetOperations.connectToApi(url);
+        InputStream is = FetchInputStream.connectToApi(url);
         List results = parse(is);
         return results;
     }

@@ -4,7 +4,7 @@ import android.util.Log;
 import android.util.Xml;
 
 import com.example.gaijinsmash.transitapp.internet.ApiStringBuilder;
-import com.example.gaijinsmash.transitapp.internet.InternetOperations;
+import com.example.gaijinsmash.transitapp.internet.FetchInputStream;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -38,7 +38,7 @@ public class StationXMLParser {
             Log.i("makeCall()", "with " + call);
         }
 
-        InputStream is = InternetOperations.connectToApi(call);
+        InputStream is = FetchInputStream.connectToApi(call);
         List results = parse(is);
         is.close();
         return results;
@@ -47,7 +47,7 @@ public class StationXMLParser {
     public List getStations() throws IOException, XmlPullParserException {
         ApiStringBuilder sb = new ApiStringBuilder();
         String uri = sb.getAllStations();
-        InputStream is = InternetOperations.connectToApi(uri);
+        InputStream is = FetchInputStream.connectToApi(uri);
         List results = parse(is);
         is.close();
         return results;

@@ -1,13 +1,12 @@
-package com.example.gaijinsmash.transitapp.internet;
+package com.example.gaijinsmash.transitapp.validator;
 
-import com.example.gaijinsmash.transitapp.internet.validator.EmailValidator;
+import com.example.gaijinsmash.transitapp.validator.EmailValidator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**

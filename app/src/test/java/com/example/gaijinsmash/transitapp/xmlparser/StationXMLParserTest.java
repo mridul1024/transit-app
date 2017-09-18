@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.xml;
+package com.example.gaijinsmash.transitapp.xmlparser;
 
 import org.junit.Before;
 import org.junit.Test;
