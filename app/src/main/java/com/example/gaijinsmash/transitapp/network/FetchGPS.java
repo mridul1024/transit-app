@@ -1,25 +1,13 @@
-package com.example.gaijinsmash.transitapp.internet;
+package com.example.gaijinsmash.transitapp.network;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Bundle;
-import android.os.IBinder;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
-
-import com.example.gaijinsmash.transitapp.error.ErrorToast;
 
 
 public class FetchGPS extends Activity {
@@ -28,7 +16,6 @@ public class FetchGPS extends Activity {
     private final Context mContext;
     boolean isGPSEnabled = false;     // flag for GPS status
     boolean isNetworkEnabled = false;    // flag for network status
-    boolean canIGetLocation = false;
     Location location;
     double mLatitude;
     double mLongitude;
@@ -39,7 +26,7 @@ public class FetchGPS extends Activity {
 
     public FetchGPS(Context context) {
         this.mContext = context;
-        getLocation();
+        //getLocation();
     }
 
     public Context getContext() {

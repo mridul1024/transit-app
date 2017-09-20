@@ -8,11 +8,7 @@ import org.junit.Test;
  * Created by ryanj on 7/16/2017.
  */
 
-public class StationUnitTest extends AbstractModelTest<Station> {
-
-    public StationUnitTest() {
-        super(Station.class);
-    }
+public class StationUnitTest {
 
     @Test
     public void stationModel_IfValid_ReturnsTrue() {

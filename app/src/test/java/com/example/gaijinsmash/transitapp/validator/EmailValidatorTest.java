@@ -1,6 +1,6 @@
 package com.example.gaijinsmash.transitapp.validator;
 
-import com.example.gaijinsmash.transitapp.validator.EmailValidator;
+import com.example.gaijinsmash.transitapp.utils.validator.EmailValidator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;

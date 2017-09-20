@@ -13,7 +13,8 @@ import com.example.gaijinsmash.transitapp.model.bart.Station;
 import java.util.List;
 
 /**
- * Created by ryanj on 7/31/2017.
+ * Custom adapters create special layouts for data. Check a corresponding "~list_row.xml" to view
+ * the design.
  */
 
 public class StationCustomAdapter extends ArrayAdapter<Station> implements View.OnClickListener {

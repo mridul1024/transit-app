@@ -12,6 +12,17 @@ import org.junit.Assert.*
  * Instrumented test, which will execute on an Android device.
  *
  * See [testing documentation](http://d.android.com/tools/testing).
+ *
+ 1. Find the UI component you want to test in an Activity (for example, a sign-in button in the app)
+by calling the onView() method, or the onData() method for AdapterView controls.
+
+ 2. Simulate a specific user interaction to perform on that UI component, by calling the ViewInteraction.perform() or DataInteraction.perform() method and passing in the user action (for example, click on the sign-in button).
+To sequence multiple actions on the same UI component, chain them using a comma-separated list in your method argument.
+
+ 3. Repeat the steps above as necessary, to simulate a user flow across multiple activities in the target app.
+
+ 4. Use the ViewAssertions methods to check that the UI reflects the expected state or behavior, after these user interactions are performed.
+
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {

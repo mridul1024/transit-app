@@ -1,5 +1,7 @@
 package com.example.gaijinsmash.transitapp.xmlparser;
 
+import com.example.gaijinsmash.transitapp.network.xmlparser.RouteXMLParser;
+
 import org.junit.Before;
 import org.junit.Test;
 

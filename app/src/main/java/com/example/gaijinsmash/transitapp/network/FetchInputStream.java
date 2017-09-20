@@ -1,10 +1,8 @@
-package com.example.gaijinsmash.transitapp.internet;
+package com.example.gaijinsmash.transitapp.network;
 
 import android.content.Context;
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.util.Log;
+
+import com.example.gaijinsmash.transitapp.error.ErrorToast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,9 +15,18 @@ import java.net.URLConnection;
  */
 
 public class FetchInputStream {
+    private Context mContext;
+
+    public FetchInputStream(Context mContext) {
+        this.mContext = mContext;
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
 
     // Attempt a URL connection and return an InputStream
-    public static InputStream connectToApi(String url) throws IOException {
+    public InputStream connectToApi(String url) throws IOException {
         URL apiURL = new URL(url);
         URLConnection connection = apiURL.openConnection();
 
@@ -27,9 +34,8 @@ public class FetchInputStream {
         int responseCode = httpURLConnection.getResponseCode();
 
         if(responseCode != HttpURLConnection.HTTP_OK) {
-            // TODO: Handle the error gracefully
-
-            Log.e("HTTP Connection", "Error Code: " + responseCode);
+            ErrorToast toast = new ErrorToast();
+            toast.networkConnectionErrorToast(getContext(), responseCode);
         }
 
         InputStream in = httpURLConnection.getInputStream();

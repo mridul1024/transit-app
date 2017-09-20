@@ -10,12 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.internet.ApiStringBuilder;
+import com.example.gaijinsmash.transitapp.network.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.model.bart.Route;
-import com.example.gaijinsmash.transitapp.xmlparser.RouteXMLParser;
+import com.example.gaijinsmash.transitapp.network.xmlparser.RouteXMLParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 

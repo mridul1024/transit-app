@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.internet;
+package com.example.gaijinsmash.transitapp.network;
 
 import android.location.Location;
 import android.location.LocationListener;

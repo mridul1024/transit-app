@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.internet;
+package com.example.gaijinsmash.transitapp.network;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

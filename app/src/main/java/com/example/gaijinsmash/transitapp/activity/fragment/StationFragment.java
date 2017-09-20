@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.adapter.StationCustomAdapter;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
-import com.example.gaijinsmash.transitapp.xmlparser.StationXMLParser;
+import com.example.gaijinsmash.transitapp.network.xmlparser.StationXMLParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 

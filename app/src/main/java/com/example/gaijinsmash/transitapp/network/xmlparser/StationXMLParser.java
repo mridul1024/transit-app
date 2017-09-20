@@ -1,10 +1,10 @@
-package com.example.gaijinsmash.transitapp.xmlparser;
+package com.example.gaijinsmash.transitapp.network.xmlparser;
 
 import android.util.Log;
 import android.util.Xml;
 
-import com.example.gaijinsmash.transitapp.internet.ApiStringBuilder;
-import com.example.gaijinsmash.transitapp.internet.FetchInputStream;
+import com.example.gaijinsmash.transitapp.network.ApiStringBuilder;
+import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 
 import org.xmlpull.v1.XmlPullParser;

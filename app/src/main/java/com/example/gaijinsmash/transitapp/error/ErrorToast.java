@@ -20,4 +20,8 @@ public class ErrorToast {
     public void noGPSErrorToast(Context context) {
         Toast.makeText(context, "GPS is currently unavailable", Toast.LENGTH_LONG).show();
     }
+
+    public void networkConnectionErrorToast(Context context, int responseCode) {
+        Toast.makeText(context, "There was a problem with the network (code: " + responseCode + "). Please try again", Toast.LENGTH_LONG).show();
+    }
 }

@@ -7,19 +7,18 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.gaijinsmash.transitapp.model.bart.Station;
-import com.example.gaijinsmash.transitapp.xmlparser.StationXMLParser;
+import com.example.gaijinsmash.transitapp.network.xmlparser.StationXMLParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by ryanj on 7/31/2017.
  */
 
-public class BartStationDbHandler extends SQLiteOpenHelper {
+public class BartStationDAO extends SQLiteOpenHelper {
 
     private static final boolean DEBUG = true;
     private static final String DBNAME = "stations.sqlite";
@@ -35,10 +34,9 @@ public class BartStationDbHandler extends SQLiteOpenHelper {
     private static final String ZIPCODE = "zipcode";
     private static final String LATITUDE = "latitude";
     private static final String LONGITUDE = "longitude";
-
     private List<Station> mStations = null;
 
-    public BartStationDbHandler(Context context) {
+    public BartStationDAO(Context context) {
         super(context, DBNAME, null, VERSION);
     }
 

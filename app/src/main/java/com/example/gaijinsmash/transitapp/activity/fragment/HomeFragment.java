@@ -11,11 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
-import com.example.gaijinsmash.transitapp.xmlparser.StationXMLParser;
+import com.example.gaijinsmash.transitapp.network.xmlparser.StationXMLParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 

@@ -8,20 +8,22 @@ import android.content.Intent;
 import android.provider.Settings;
 
 /**
- * Created by ryanj on 9/17/2017.
+ * Prompt Alert messages to the User for common scenarios - i.e. Enabling GPS or Network Settings.
  */
 
 public class AlertUser {
-    private Context mContext = null;
+    public static Context mContext = null;
 
     protected AlertUser(Context mContext) {
-        this.mContext = mContext;
+        if(mContext == null) {
+            this.mContext = mContext;
+        }
     }
 
     public Context getContext() { return mContext; }
 
-    public void NoGPSAlert() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    public void noGPSAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setMessage("Your GPS is not on. Would you like to enable it now?")
                 .setCancelable(false)
                 .setPositiveButton("Enable GPS", new DialogInterface.OnClickListener() {
@@ -31,15 +33,34 @@ public class AlertUser {
                         mContext.startActivity(intent); // is this right?
                     }
                 });
-                builder.setNegativeButton("Do Nothing", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
+        builder.setNegativeButton("Do Nothing", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
-
+    public void noInternetAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("You do not have internet connection. Would you like to enable it now?")
+                .setCancelable(false)
+                .setPositiveButton("Check Network Settings", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+                        mContext.startActivity(intent);
+                    }
+                });
+        builder.setNegativeButton("Do Nothing", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 }

@@ -1,9 +1,10 @@
-package com.example.gaijinsmash.transitapp.xmlparser;
+package com.example.gaijinsmash.transitapp.network.xmlparser;
 
+import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
-import com.example.gaijinsmash.transitapp.internet.FetchInputStream;
+import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 import com.example.gaijinsmash.transitapp.model.bart.Route;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -20,18 +21,26 @@ import java.util.List;
 
 public class RouteXMLParser {
 
+    private Context mContext = null;
     private static final boolean DEBUG = true;
-    private static final String TEST_URI = "http://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V";
 
     // require(int type, String namespace, String name) if namespace is null, will pass when matched against any name
     private static final String ns = null;
+
+    public RouteXMLParser(Context mContext) {
+        if(mContext == null) {
+            this.mContext = mContext;
+        }
+    }
+
+    public Context getContext() { return mContext; }
 
     public List makeCall(String url) throws IOException, XmlPullParserException {
         if(DEBUG) {
             Log.i("makeCall()", "with " + url);
         }
 
-        InputStream is = FetchInputStream.connectToApi(url);
+        InputStream is = new FetchInputStream(getContext()).connectToApi(url);
         List results = parse(is);
         return results;
     }
