@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.error;
+package com.example.gaijinsmash.transitapp.utils;
 
 /**
  * Created by ryanj on 8/23/2017.

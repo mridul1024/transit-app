@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.utils.validator;
+package com.example.gaijinsmash.transitapp.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

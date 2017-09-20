@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.error;
+package com.example.gaijinsmash.transitapp.utils;
 
 import android.content.Context;
 import android.widget.Toast;

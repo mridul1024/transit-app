@@ -2,7 +2,7 @@ package com.example.gaijinsmash.transitapp.network;
 
 import android.content.Context;
 
-import com.example.gaijinsmash.transitapp.error.ErrorToast;
+import com.example.gaijinsmash.transitapp.utils.ErrorToast;
 
 import java.io.IOException;
 import java.io.InputStream;
