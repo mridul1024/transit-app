@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.model;
+package com.example.gaijinsmash.transitapp.model.abstractClass;
 
 import android.util.Log;
 
@@ -21,41 +21,40 @@ public abstract class Place {
     public Place() {}
 
     public Place(String name) {
-        Log.i("Creating Place object", name);
-        mName = name;
+        this.mName = name;
     }
 
     // Setters
     public void setName(String name) {
-        mName = name;
+        this.mName = name;
     }
 
     public void setAddress(String address) {
-        mAddress = address;
+        this.mAddress = address;
     }
 
     public void setLatitude(String latitude) {
-        mLatitude = latitude;
+        this.mLatitude = latitude;
     }
 
     public void setLongitude(String longitude) {
-        mLongitude = longitude;
+        this.mLongitude = longitude;
     }
 
     public void setZipcode(String zipcode) {
-        mZipcode = zipcode;
+        this.mZipcode = zipcode;
     }
 
     public void setCity(String city) {
-        mCity = city;
+        this.mCity = city;
     }
 
     public void setCounty(String county) {
-        mCounty = county;
+        this.mCounty = county;
     }
 
     public void setState(String state) {
-        mState = state;
+        this.mState = state;
     }
 
     // Getters
@@ -82,6 +81,4 @@ public abstract class Place {
     public String getCounty() { return mCounty; }
 
     public String getState() { return mState; }
-
-
 }

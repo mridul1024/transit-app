@@ -1,6 +1,6 @@
 package com.example.gaijinsmash.transitapp.model.bart;
 
-import com.example.gaijinsmash.transitapp.model.Place;
+import com.example.gaijinsmash.transitapp.model.abstractClass.Place;
 
 /**
  * Created by ryanj on 6/29/2017.
@@ -10,10 +10,7 @@ public class Station extends Place {
 
     private String mAbbreviation;
 
-    // Constructor
-    public Station() {
-
-    }
+    public Station() {}
 
     public Station(String name) {
         super(name);

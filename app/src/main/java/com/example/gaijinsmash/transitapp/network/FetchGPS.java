@@ -4,25 +4,28 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 
 
-public class FetchGPS extends Activity {
+public class FetchGPS extends Activity implements LocationListener{
 
-    private static final boolean DEBUG = true;
     private final Context mContext;
     boolean isGPSEnabled = false;     // flag for GPS status
     boolean isNetworkEnabled = false;    // flag for network status
-    Location location;
+    protected LocationManager locationManager;
+    private Location mLocation;
     double mLatitude;
     double mLongitude;
+    private String provider;
     private static final long LOCATION_REFRESH_DIST = 10; // 10 meters
     private static final long LOCATION_REFRESH_TIME = 1000 * 60 * 1; // 1 minute
-    protected LocationManager locationManager;
-    protected LocationListener locationListener;
+
 
     public FetchGPS(Context context) {
         this.mContext = context;
@@ -32,9 +35,16 @@ public class FetchGPS extends Activity {
     public Context getContext() {
         return mContext;
     }
+    public Double getLatitude() {
+        return mLatitude;
+    }
+    public Double getLongitude() {
+        return mLongitude;
+    }
 
     @SuppressLint("MissingPermission")
     public Location getLocation() {
+        // Get the location manager
         locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
         // get the GPS status
         isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -51,21 +61,43 @@ public class FetchGPS extends Activity {
             Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
             startActivity(intent);
         }
-
         if(isGPSEnabled && isNetworkEnabled) {
-            FetchLocationListener locationListener = new FetchLocationListener();
+            // Define the criteria for how to select the location provider
+            Criteria criteria = new Criteria();
+            provider = locationManager.getBestProvider(criteria, false);
+            mLocation = locationManager.getLastKnownLocation(provider);
 
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME,
-                    LOCATION_REFRESH_DIST, locationListener);
+            // Initialize the location fields
+            if(mLocation != null) {
+                Log.i("GPS:", "Provider " + provider + " has been selected");
+                onLocationChanged(mLocation);
+            } else {
+                Log.i("GPS:", "Location is not available");
+            }
         }
-        return location;
+        return mLocation;
     }
 
-    public Double getLatitude() {
-        return mLatitude;
+    @Override
+    public void onLocationChanged(Location location) {
+        mLatitude = (int) (mLocation.getLatitude());
+        mLongitude = (int) (mLocation.getLongitude());
+        Log.i("Latitude", (String.valueOf(mLatitude)));
+        Log.i("Longitude", (String.valueOf(mLongitude)));
     }
 
-    public Double getLongitude() {
-        return mLongitude;
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+        Log.i("New Provider:", "ENABLED");
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+        Log.i("Provider:", "DISABLED");
     }
 } // End of Class

@@ -1,5 +1,6 @@
 package com.example.gaijinsmash.transitapp.activity.fragment;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.network.ApiStringBuilder;
+import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.model.bart.Route;
 import com.example.gaijinsmash.transitapp.network.xmlparser.RouteXMLParser;
 
@@ -63,7 +64,7 @@ public class ScheduleFragment extends Fragment {
                 String departingTime = timeEt.getText().toString();
                 String departingDate = dateEt.getText().toString();
                 String[] array = {departingStation, arrivingStation, departingTime, departingDate};
-                new InternetTask().execute(array);
+                new InternetTask(getContext()).execute(array);
             }
         });
 
@@ -73,8 +74,15 @@ public class ScheduleFragment extends Fragment {
 
     //TODO: AsyncTask
     private class InternetTask extends AsyncTask<String[], Void, Boolean> {
-        private RouteXMLParser routeXMLParser = new RouteXMLParser();
+        private RouteXMLParser routeXMLParser = null;
         private List<Route> routeList = null;
+        private Context mContext;
+
+        public InternetTask(Context mContext) {
+            if(this.mContext == null) {
+                this.mContext = mContext;
+            }
+        }
 
         @Override
         protected Boolean doInBackground(String[]...stations) {
@@ -85,6 +93,7 @@ public class ScheduleFragment extends Fragment {
 
             //TODO: add date and time specs
             try {
+                routeXMLParser = new RouteXMLParser(mContext);
                 routeList = routeXMLParser.makeCall(uri);
             } catch (IOException e){
                 e.printStackTrace();

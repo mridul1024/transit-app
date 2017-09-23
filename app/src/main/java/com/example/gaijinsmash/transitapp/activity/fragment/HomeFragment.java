@@ -3,6 +3,7 @@ package com.example.gaijinsmash.transitapp.activity.fragment;
 
 // TODO: is android.Fragment different?
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,9 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
+    private Button findNearestBtn;
+    private Button mapBtn;
+    private Button routeBtn;
     private TextView textView = null;
     //private ItemFragment.OnListFragmentInteractionListener mListener;
 
@@ -39,11 +43,27 @@ public class HomeFragment extends Fragment {
         //Inflate the layout for this fragment
         View mInflatedView = inflater.inflate(R.layout.home_view, container, false);
 
-        Button findNearestBtn = (Button) mInflatedView.findViewById(R.id.home_view_btn);
+        findNearestBtn = (Button) mInflatedView.findViewById(R.id.home_view_btn1);
         findNearestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: get gps location and find nearest station
+                new GetGPSTask(getContext()).execute();
+            }
+        });
+
+        mapBtn   = (Button) mInflatedView.findViewById(R.id.home_view_btn2);
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        routeBtn = (Button) mInflatedView.findViewById(R.id.home_view_btn3);
+        routeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // do something
             }
         });
 
@@ -68,43 +88,34 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
     */
+
     // TODO: Warn user if there's no internet connection
     // TODO: Display up-to-date news on BART
     // TODO: Display weather in local area - requires location
     // TODO: Report suspicious activity and keep your belongings safe
     // TODO: IF Holiday - show button
 
-    private class TestInternetTask extends AsyncTask<Void, Void, Boolean> {
+    private class GetGPSTask extends AsyncTask<Void, Void, Boolean> {
 
-        private StationXMLParser stationXMLParser = new StationXMLParser();
-        private List<Station> stationList = null;
+        private Context mContext;
+
+        public GetGPSTask(Context mContext) {
+            if(this.mContext == null) {
+                this.mContext = mContext;
+            }
+        }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            try {
-                stationList = stationXMLParser.testCall();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            }
-
-            if (stationList != null) {
-                return true;
-            } else {
-                return false;
-            }
+            // TODO: insert GPS logic here
+            return null;
         }
 
         protected void onPostExecute(Boolean result) {
             if(result) {
-
-                for(Station station : stationList) {
-                    textView.setText(station.getName());
-                }
-
+                // Do something
             } else {
-                textView.setText("Error");
+                // Do something
             }
         }
     }

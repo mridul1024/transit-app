@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.validator;
+package com.example.gaijinsmash.transitapp.utils;
 
 import com.example.gaijinsmash.transitapp.utils.EmailValidator;
 

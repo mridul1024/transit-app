@@ -20,6 +20,7 @@ import java.util.List;
 
 public class BartStationDAO extends SQLiteOpenHelper {
 
+    private Context mContext;
     private static final boolean DEBUG = true;
     private static final String DBNAME = "stations.sqlite";
     private static final int VERSION = 1;
@@ -38,6 +39,9 @@ public class BartStationDAO extends SQLiteOpenHelper {
 
     public BartStationDAO(Context context) {
         super(context, DBNAME, null, VERSION);
+        if(this.mContext == null) {
+            this.mContext = context;
+        }
     }
 
     @Override
@@ -69,7 +73,7 @@ public class BartStationDAO extends SQLiteOpenHelper {
     }
 
     public List<Station> getAllStations() {
-        new GetStationsTask().execute();
+        new GetStationsTask(mContext).execute();
         return mStations;
     }
 
@@ -118,10 +122,17 @@ public class BartStationDAO extends SQLiteOpenHelper {
     //TODO: should i use a thread or handler instead?
     private class GetStationsTask extends AsyncTask<Void, Void, Boolean> {
         private List stations = null;
+        private Context mContext;
+
+        public GetStationsTask(Context mContext) {
+            if(this.mContext == null) {
+                this.mContext = mContext;
+            }
+        }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            StationXMLParser xmlParser = new StationXMLParser();
+            StationXMLParser xmlParser = new StationXMLParser(mContext);
             Boolean result = null;
 
             if(stations == null) {

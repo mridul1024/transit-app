@@ -1,9 +1,10 @@
 package com.example.gaijinsmash.transitapp.network.xmlparser;
 
+import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
-import com.example.gaijinsmash.transitapp.network.ApiStringBuilder;
+import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 
@@ -21,15 +22,16 @@ import java.util.List;
 
 public class StationXMLParser {
 
+    private Context mContext = null;
     private static final boolean DEBUG = true;
-    private static final String TEST_URI = "http://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V";
 
     // require(int type, String namespace, String name) if namespace is null, will pass when matched against any name
     private static final String ns = null;
 
-    // For testing purposes only
-    public List testCall() throws IOException, XmlPullParserException {
-        return makeCall(TEST_URI);
+    public StationXMLParser(Context mContext) {
+        if(this.mContext == null) {
+            this.mContext = mContext;
+        }
     }
 
     // Insert the API URL in "call"
@@ -37,17 +39,19 @@ public class StationXMLParser {
         if(DEBUG) {
             Log.i("makeCall()", "with " + call);
         }
-
-        InputStream is = FetchInputStream.connectToApi(call);
+        InputStream is = new FetchInputStream(mContext).connectToApi(call);
         List results = parse(is);
         is.close();
         return results;
     }
 
     public List getStations() throws IOException, XmlPullParserException {
+        if(DEBUG) {
+            Log.i("getStations()", "Fetching all stations from xml");
+        }
         ApiStringBuilder sb = new ApiStringBuilder();
         String uri = sb.getAllStations();
-        InputStream is = FetchInputStream.connectToApi(uri);
+        InputStream is = new FetchInputStream(mContext).connectToApi(uri);
         List results = parse(is);
         is.close();
         return results;

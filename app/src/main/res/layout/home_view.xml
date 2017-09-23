@@ -1,59 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView4"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="@string/home_title" />
+        android:orientation="vertical">
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/home_banner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/home_banner"
+            android:gravity="center_horizontal"/>
 
-    <android.support.v7.widget.AppCompatImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/home_banner"
-        android:src="@drawable/home_banner"
-        android:gravity="center_horizontal"/>
+        <TextView
+            android:id="@+id/home_view_dateTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:onClick="tryTest"
+            android:text="July 8th, 2017" />
 
-    <Button
+        <TextView
+            android:id="@+id/home_view_alertsTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:onClick="tryTest"
+            android:text="@string/home_alerts" />
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/ButtonAppTheme"
-        android:id="@+id/home_view_btn"
-        android:text="@string/home_btn_find"/>
-
-    <TextView
-        android:id="@+id/home_view_alertsTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="@string/home_alerts"
-        android:onClick="tryTest"/>
-
-
-    <!-- Bottom Nav Menu -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
-
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/home_view_btn1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/ButtonAppTheme"
+            android:layout_margin="@dimen/home_btn_margin"
+            android:text="@string/home_btn_find"/>
         <Button
             android:id="@+id/home_view_btn2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"/>
+            android:layout_weight="1"
+            style="@style/ButtonAppTheme"
+            android:layout_margin="@dimen/home_btn_margin"
+            android:text="@string/home_btn_map"/>
         <Button
             android:id="@+id/home_view_btn3"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"/>
-        <Button
-            android:id="@+id/home_view_btn4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"/>
-    </RelativeLayout>
-
-</LinearLayout>
+            android:layout_weight="1"
+            style="@style/ButtonAppTheme"
+            android:layout_margin="@dimen/home_btn_margin"
+            android:text="@string/home_btn_route"/>
+    </LinearLayout>
+</RelativeLayout>

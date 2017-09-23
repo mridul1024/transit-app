@@ -15,10 +15,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by ryanj on 7/19/2017.
- */
-
 public class RouteXMLParser {
 
     private Context mContext = null;
@@ -28,19 +24,16 @@ public class RouteXMLParser {
     private static final String ns = null;
 
     public RouteXMLParser(Context mContext) {
-        if(mContext == null) {
+        if(this.mContext == null) {
             this.mContext = mContext;
         }
     }
-
-    public Context getContext() { return mContext; }
 
     public List makeCall(String url) throws IOException, XmlPullParserException {
         if(DEBUG) {
             Log.i("makeCall()", "with " + url);
         }
-
-        InputStream is = new FetchInputStream(getContext()).connectToApi(url);
+        InputStream is = new FetchInputStream(mContext).connectToApi(url);
         List results = parse(is);
         return results;
     }
@@ -49,7 +42,6 @@ public class RouteXMLParser {
         if(DEBUG) {
             Log.i("parse()", "***BEGINNING***");
         }
-
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);

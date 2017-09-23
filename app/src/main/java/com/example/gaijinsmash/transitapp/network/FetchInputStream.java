@@ -10,10 +10,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-/**
- * Created by ryanj on 7/1/2017.
- */
-
 public class FetchInputStream {
     private Context mContext;
 

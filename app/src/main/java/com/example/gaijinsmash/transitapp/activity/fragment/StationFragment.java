@@ -61,8 +61,8 @@ public class StationFragment extends Fragment {
         protected List<Station> doInBackground(Void... voids) {
             try {
                 if(stationList == null && stationXMLParser == null) {
-                    stationXMLParser = new StationXMLParser();
-                    stationList = stationXMLParser.testCall();
+                    stationXMLParser = new StationXMLParser(mContext);
+                    stationList = stationXMLParser.getStations();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
