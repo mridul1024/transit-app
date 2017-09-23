@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.gaijinsmash.transitapp.R;
+import com.example.gaijinsmash.transitapp.database.BartStationDAO;
+import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.model.bart.Route;
 import com.example.gaijinsmash.transitapp.network.xmlparser.RouteXMLParser;
@@ -41,6 +43,12 @@ public class ScheduleFragment extends Fragment {
 
         //TODO: fetch a list of Stations for dropdown into "example"
         String[] example = {"one","two","three"};
+
+        // Store the list of Station objects
+        BartStationDAO database = new BartStationDAO(getContext());
+        List<Station> stationList = database.getAllStations();
+        // Convert list to string array
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.select_dialog_item, example);
 
         departureActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView);
@@ -52,8 +60,6 @@ public class ScheduleFragment extends Fragment {
         timeEt = (EditText) mInflatedView.findViewById(R.id.time_editText);
         dateEt = (EditText) mInflatedView.findViewById(R.id.date_editText);
         searchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
-
-
 
         // onClick, grab users input
         searchBtn.setOnClickListener(new View.OnClickListener() {

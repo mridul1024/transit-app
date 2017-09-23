@@ -24,11 +24,6 @@ import java.io.IOException;
 import java.util.List;
 
 
-/**
- * Created by ryanj on 6/30/2017.
- */
-
-
 public class HomeFragment extends Fragment {
 
     private Button findNearestBtn;
