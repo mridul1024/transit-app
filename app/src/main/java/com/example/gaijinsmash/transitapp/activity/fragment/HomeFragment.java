@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
@@ -47,7 +48,8 @@ public class HomeFragment extends Fragment {
         findNearestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new GetGPSTask(getContext()).execute();
+                Toast.makeText(getContext(), "example", Toast.LENGTH_SHORT).show();
+                //new GetGPSTask(getContext()).execute();
             }
         });
 
@@ -55,7 +57,8 @@ public class HomeFragment extends Fragment {
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // Do something
+                Toast.makeText(getContext(), "example", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -64,6 +67,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // do something
+                Toast.makeText(getContext(), "example", Toast.LENGTH_SHORT).show();
             }
         });
 
