@@ -23,9 +23,20 @@
     <string name="departing_time">Time of Departure</string>
     <string name="departing_date">Date of Departure</string>
     <string name="schedule_button">Search</string>
+    <string name="date_hint">Date</string>
+    <string name="time_hint">Time</string>
+    <string name="time_title">Select Time</string>
 
     <!-- Station Fragment -->
-
+    <string-array name="stations_list">
+        <item>12th St. Oakland City Center</item>
+        <item>16th St. Mission SF</item>
+        <item>19th St. Oakland</item>
+        <item>24th St. Mission SF</item>
+        <item>Ashby (Berkeley)</item>
+        <item>Balboa Park SF</item>
+        <item>Bay Fair (San Leandro)</item>
+    </string-array>
 
 
     <!--  -->

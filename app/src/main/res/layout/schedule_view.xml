@@ -20,20 +20,20 @@
         android:hint="@string/arrival_station" />
 
     <EditText
-        android:id="@+id/time_editText"
-        android:labelFor="@id/time_editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="time" />
-
-    <EditText
         android:id="@+id/date_editText"
         android:labelFor="@id/date_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="date" />
+        android:hint="@string/date_hint"/>
+
+    <EditText
+        android:id="@+id/time_editText"
+        android:labelFor="@id/time_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/time_hint"/>
 
     <Button
         android:id="@+id/schedule_button"

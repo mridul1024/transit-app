@@ -73,7 +73,7 @@ public class BartStationDAO extends SQLiteOpenHelper {
     }
 
     public List<Station> getAllStations() {
-        new GetStationsTask(mContext).execute();
+
         return mStations;
     }
 
@@ -121,7 +121,7 @@ public class BartStationDAO extends SQLiteOpenHelper {
 
     //TODO: should i use a thread or handler instead?
     private class GetStationsTask extends AsyncTask<Void, Void, Boolean> {
-        private List stations = null;
+        private List<Station> stations = null;
         private Context mContext;
 
         public GetStationsTask(Context mContext) {
@@ -154,9 +154,7 @@ public class BartStationDAO extends SQLiteOpenHelper {
         protected void onPostExecute(Boolean result) {
             if(result) {
                 // save stations to sqlitedb
-                for(int i = 0; i < stations.size(); i++) {
 
-                }
             } else {
                 // TODO: handle error gracefully
                 Log.e("onPostExecute()", "stations is NULL");
