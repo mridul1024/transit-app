@@ -62,7 +62,10 @@ public class ScheduleFragment extends Fragment {
 
         //TODO: fetch a list of Stations for dropdown into "example"
         final String[] example = {"one","two","three"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.select_dialog_item, example);
+        Resources res = getResources();
+        String[] stations = res.getStringArray(R.array.stations_list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.select_dialog_item, stations);
+
 
         // Departure UI
         departureActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView);
