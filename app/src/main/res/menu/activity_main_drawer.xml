@@ -6,23 +6,23 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_schedule"
-            android:title="Home" />
+            android:icon="@drawable/ic_menu_home"
+            android:title="@string/navigation_drawer_home" />
         <item
             android:id="@+id/nav_schedule"
             android:icon="@drawable/ic_menu_schedule"
-            android:title="Train Schedule" />
+            android:title="@string/navigation_drawer_schedule" />
         <item
             android:id="@+id/nav_station"
             android:icon="@drawable/ic_menu_station"
-            android:title="Station Info" />
+            android:title="@string/navigation_drawer_stations" />
         <item
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_menu_map"
-            android:title="Map of BART" />
+            android:title="@string/navigation_drawer_bart_map" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/navigation_drawer_help">
         <menu>
             <item
                 android:id="@+id/nav_share"
