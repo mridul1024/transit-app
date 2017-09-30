@@ -15,13 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.model.bart.Station;
-import com.example.gaijinsmash.transitapp.network.xmlparser.StationXMLParser;
-
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.util.List;
 
 
 public class HomeFragment extends Fragment {
@@ -52,8 +45,11 @@ public class HomeFragment extends Fragment {
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Do something
-                Toast.makeText(getContext(), "example", Toast.LENGTH_SHORT).show();
+                Fragment frag = new MapFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_home_container, frag, "map frag")
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
@@ -61,14 +57,20 @@ public class HomeFragment extends Fragment {
         routeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // do something
-                Toast.makeText(getContext(), "example", Toast.LENGTH_SHORT).show();
+                Fragment frag = new ScheduleFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_home_container, frag, "schedule frag")
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
         return mInflatedView;
     }
 
+    // TODO: Warn user if there's no internet connection
+    // TODO: Display up-to-date news on BART
+    // TODO: Display weather in local area - requires location
     /*
     @Override
     public void onAttach(Context context) {
@@ -87,12 +89,6 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
     */
-
-    // TODO: Warn user if there's no internet connection
-    // TODO: Display up-to-date news on BART
-    // TODO: Display weather in local area - requires location
-    // TODO: Report suspicious activity and keep your belongings safe
-    // TODO: IF Holiday - show button
 
     private class GetGPSTask extends AsyncTask<Void, Void, Boolean> {
 

@@ -42,14 +42,21 @@ public class ApiStringBuilder {
     //time=h:mm+am/pm or now
     //b=<number> how many trips to show before specified time(0,4)
     //a=<number> how many trips to show after specified time (0,4)
+
     public String getDetailedRoute(String origin, String arrival, String date, String time) {
          String cmd = "sched.aspx?cmd=depart&orig=" + origin + "&dest=" + arrival + "&date=" + date + "&time=" + time;
-
          return BASE_URI + cmd + API_KEY;
     }
 
-
     public String getBSA() {
-         return BASE_URI;
-     }
+        return BASE_URI;
+    }
+
+    public String getSchedule(String orig, String dest, String time, String date) {
+        // stations use abbreviations
+        // time=h:mm+am/pm
+        // date=<mm/dd/yyyy>
+        String cmd = "sched.aspx?cmd=depart&orig=" + orig + "&dest=" + dest + "&time=" + time + "&date=" + date + API_KEY;
+        return BASE_URI + cmd;
+    }
 }

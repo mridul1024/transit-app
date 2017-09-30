@@ -88,7 +88,7 @@ public class ScheduleFragment extends Fragment {
                     public void onDateSet(DatePicker view, int year, int month, int day) {
                         Calendar newDate = Calendar.getInstance();
                         newDate.set(year, month, day);
-                        simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                        simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy");
                         dateEt.setText(simpleDateFormat.format(newDate.getTime()));
                     }
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -130,22 +130,24 @@ public class ScheduleFragment extends Fragment {
             public void onClick(View view) {
                 String departingStation = departureActv.getText().toString();
                 String arrivingStation = arrivalActv.getText().toString();
+                // time=h:mm+am/pm
+                // date=<mm/dd/yyyy>
                 String departingTime = timeEt.getText().toString();
                 String departingDate = dateEt.getText().toString();
                 String[] array = {departingStation, arrivingStation, departingTime, departingDate};
-                new InternetTask(getContext()).execute(array);
+                new GetScheduleTask(getActivity()).execute(array);
             }
         });
 
         return mInflatedView;
     }
 
-    private class InternetTask extends AsyncTask<String[], Void, Boolean> {
+    private class GetScheduleTask extends AsyncTask<String[], Void, Boolean> {
         private RouteXMLParser routeXMLParser = null;
         private List<Route> routeList = null;
         private Context mContext;
 
-        public InternetTask(Context mContext) {
+        public GetScheduleTask(Context mContext) {
             if(this.mContext == null) {
                 this.mContext = mContext;
             }
@@ -156,9 +158,7 @@ public class ScheduleFragment extends Fragment {
 
             // Create the API Call
             ApiStringBuilder apiBuilder = new ApiStringBuilder();
-            String uri = apiBuilder.getRoute(stations[0].toString(), stations[1].toString());
-
-            //TODO: add date and time specs
+            String uri = apiBuilder.getSchedule(stations[0].toString(), stations[1].toString(), stations[2].toString(), stations[3].toString());
             try {
                 routeXMLParser = new RouteXMLParser(mContext);
                 routeList = routeXMLParser.makeCall(uri);
