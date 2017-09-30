@@ -140,7 +140,6 @@ public class ScheduleFragment extends Fragment {
         return mInflatedView;
     }
 
-    //TODO: AsyncTask
     private class InternetTask extends AsyncTask<String[], Void, Boolean> {
         private RouteXMLParser routeXMLParser = null;
         private List<Route> routeList = null;
