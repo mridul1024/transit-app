@@ -61,11 +61,9 @@ public class ScheduleFragment extends Fragment {
         final View mInflatedView = inflater.inflate(R.layout.schedule_view, container, false);
 
         //TODO: fetch a list of Stations for dropdown into "example"
-        final String[] example = {"one","two","three"};
         Resources res = getResources();
         String[] stations = res.getStringArray(R.array.stations_list);
         ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.select_dialog_item, stations);
-
 
         // Departure UI
         departureActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView);
@@ -81,7 +79,6 @@ public class ScheduleFragment extends Fragment {
         dateEt = (EditText) mInflatedView.findViewById(R.id.date_editText);
         dateEt.setInputType(InputType.TYPE_NULL);
         dateEt.requestFocus();
-
         dateEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,6 +130,7 @@ public class ScheduleFragment extends Fragment {
             public void onClick(View view) {
                 String departingStation = departureActv.getText().toString();
                 String arrivingStation = arrivalActv.getText().toString();
+                // TODO: Convert Stations to abbreviated names, access DAO --> get abbr value with matching station name, return abbr string
                 // time=h:mm+am/pm
                 // date=<mm/dd/yyyy>
                 String departingTime = timeEt.getText().toString();
@@ -161,6 +159,9 @@ public class ScheduleFragment extends Fragment {
 
             // Create the API Call
             ApiStringBuilder apiBuilder = new ApiStringBuilder();
+
+
+
             String uri = apiBuilder.getSchedule(stations[0].toString(), stations[1].toString(), stations[2].toString(), stations[3].toString());
             try {
                 routeXMLParser = new RouteXMLParser(mContext);
