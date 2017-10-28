@@ -24,9 +24,8 @@ public class RouteXMLParser {
     private static final String ns = null;
 
     public RouteXMLParser(Context mContext) {
-        if(this.mContext == null) {
+        if(this.mContext == null)
             this.mContext = mContext;
-        }
     }
 
     public List makeCall(String url) throws IOException, XmlPullParserException {

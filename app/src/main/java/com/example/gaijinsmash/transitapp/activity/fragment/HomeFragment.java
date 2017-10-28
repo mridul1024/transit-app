@@ -1,7 +1,6 @@
 package com.example.gaijinsmash.transitapp.activity.fragment;
 
 
-// TODO: is android.Fragment different?
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -69,6 +68,7 @@ public class HomeFragment extends Fragment {
     }
 
     // TODO: Warn user if there's no internet connection
+
     // TODO: Display up-to-date news on BART
     // TODO: Display weather in local area - requires location
     /*
