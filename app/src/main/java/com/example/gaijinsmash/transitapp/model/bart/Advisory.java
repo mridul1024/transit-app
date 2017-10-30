@@ -22,4 +22,8 @@ public class Advisory {
     public void setType(String type) { this.type = type; }
     public void setDescription(String description) { this.description = description; }
 
+    public String getDate() { return date; }
+    public String getTime() { return time; }
+    public String getType() { return type; }
+    public String getDescription() { return description; }
 }

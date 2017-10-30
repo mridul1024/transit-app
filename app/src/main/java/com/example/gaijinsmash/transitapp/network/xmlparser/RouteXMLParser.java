@@ -29,18 +29,16 @@ public class RouteXMLParser {
     }
 
     public List makeCall(String url) throws IOException, XmlPullParserException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("makeCall()", "with " + url);
-        }
         InputStream is = new FetchInputStream(mContext).connectToApi(url);
         List results = parse(is);
         return results;
     }
 
     public List parse(InputStream in) throws XmlPullParserException, IOException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("parse()", "***BEGINNING***");
-        }
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -54,9 +52,8 @@ public class RouteXMLParser {
     }
 
     private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("readFeed():", "***BEGINNING***");
-        }
 
         List<Route> routeList = new ArrayList<Route>();
 
@@ -80,16 +77,16 @@ public class RouteXMLParser {
                 // TODO: create message object and display to screen
             }
             else {
-                skip(parser);
+                XmlParserAbstract.skip(parser);
             }
         }
         return routeList;
     }
 
     private List readSchedule(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("readSchedule()", "***BEGINNING***");
-        }
+
         parser.require(XmlPullParser.START_TAG, ns, "schedule");
         List<Route> routeList = new ArrayList<Route>();
 
@@ -130,6 +127,8 @@ public class RouteXMLParser {
                 origin = parser.getAttributeValue(null, "origin");
                 destination = parser.getAttributeValue(null, "destination");
                 fare = parser.getAttributeValue(null, "fare");
+
+                //TODO: continue
                 origTimeMin = parser.getAttributeValue(null, "origTimeMin");
                 origTimeDate = parser.getAttributeValue(null, "origTimeDate");
                 destTimeMin = parser.getAttributeValue(null, "destTimeMin");
@@ -147,27 +146,5 @@ public class RouteXMLParser {
         route.setOrigin(origin);
         route.setFare(fare);
         return route;
-    }
-
-    // Skip tags that it's not interested in
-    private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(DEBUG) {
-            Log.i("skip()", "***SKIPPING***");
-        }
-
-        if (parser.getEventType() != XmlPullParser.START_TAG) {
-            throw new IllegalStateException();
-        }
-        int depth = 1;
-        while (depth != 0) {
-            switch (parser.next()) {
-                case XmlPullParser.END_TAG:
-                    depth--;
-                    break;
-                case XmlPullParser.START_TAG:
-                    depth++;
-                    break;
-            }
-        }
     }
 }

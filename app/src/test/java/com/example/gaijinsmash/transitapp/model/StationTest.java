@@ -1,10 +1,10 @@
 package com.example.gaijinsmash.transitapp.model;
 
+import com.example.gaijinsmash.transitapp.model.abstractClass.AbstractModelTest;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
-import org.junit.Test;
 
 public class StationTest extends AbstractModelTest<Station> {
 

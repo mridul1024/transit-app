@@ -15,7 +15,7 @@
 
     <!-- Home Fragment -->
     <string name="home_title">Welcome to the BART App!</string>
-    <string name="home_alerts">Updates and Service announcements go here.</string>
+    <string name="home_alerts">Updates and Advisories</string>
     <string name="home_btn_find">Nearby Station</string>
     <string name="home_btn_map">Map</string>
     <string name="home_btn_route">Find Route</string>

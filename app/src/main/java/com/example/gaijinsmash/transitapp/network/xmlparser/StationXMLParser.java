@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
-import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
-import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
+import com.example.gaijinsmash.transitapp.network.FetchInputStream;
+import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -91,7 +91,7 @@ public class StationXMLParser {
                 }
                 stationList = readStations(parser);
             } else {
-                skip(parser);
+                XmlParserAbstract.skip(parser);
             }
         }
         return stationList;
@@ -134,60 +134,50 @@ public class StationXMLParser {
                 continue;
             }
             String name = parser.getName();
-
             if(name.equals("name")) {
                 mName = readName(parser);
-                if(DEBUG) {
+                if(DEBUG)
                     Log.i("mName", mName);
-                }
             }
             else if (name.equals("abbr")) {
                 mAbbreviation = readAbbr(parser);
-                if(DEBUG) {
+                if(DEBUG)
                     Log.i("abbreviation", mAbbreviation);
-                }
             }
             else if (name.equals("gtfs_latitude")) {
                 mLatitude = readLatitude(parser);
-                if(DEBUG) {
+                if(DEBUG)
                     Log.i("latitude", mLatitude);
-                }
             }
             else if (name.equals("gtfs_longitude")) {
                 mLongitude = readLongitude(parser);
-                if(DEBUG) {
+                if(DEBUG)
                     Log.i("longitude", mLongitude);
-                }
             }
             else if (name.equals("address")) {
                 mAddress = readAddress(parser);
-                if(DEBUG) {
+                if(DEBUG)
                     Log.i("address", mAddress);
-                }
             }
             else if (name.equals("city")) {
                 mCity = readCity(parser);
-                if(DEBUG) {
+                if(DEBUG)
                     Log.i("city", mCity);
-                }
             }
             else if (name.equals("county")) {
                 mCounty = readCounty(parser);
-                if(DEBUG) {
+                if(DEBUG)
                     Log.i("county", mCounty);
-                }
             }
             else if (name.equals("state")) {
                 mState = readState(parser);
-                if(DEBUG) {
+                if(DEBUG)
                     Log.i("state", mState);
-                }
             }
             else if (name.equals("zipcode")) {
                 mZipcode = readZipcode(parser);
-                if(DEBUG) {
+                if(DEBUG)
                     Log.i("zipcode", mZipcode);
-                }
             }
         }
 
@@ -202,9 +192,7 @@ public class StationXMLParser {
         mStation.setZipcode(mZipcode);
         return mStation;
     }
-
     //----------------------------------------------------------------------------------------------
-
     // Processes name tags in the StationInfo feed
     private String readName(XmlPullParser parser) throws IOException, XmlPullParserException {
         if(DEBUG) {
@@ -212,7 +200,7 @@ public class StationXMLParser {
         }
 
         parser.require(XmlPullParser.START_TAG, ns, "name");
-        String name = readText(parser);
+        String name = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "name");
         return name;
     }
@@ -223,7 +211,7 @@ public class StationXMLParser {
         }
 
         parser.require(XmlPullParser.START_TAG, ns, "address");
-        String address = readText(parser);
+        String address = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "address");
         return address;
     }
@@ -234,7 +222,7 @@ public class StationXMLParser {
         }
 
         parser.require(XmlPullParser.START_TAG, ns, "gtfs_latitude");
-        String latitude = readText(parser);
+        String latitude = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "gtfs_latitude");
         return latitude;
     }
@@ -245,7 +233,7 @@ public class StationXMLParser {
         }
 
         parser.require(XmlPullParser.START_TAG, ns, "gtfs_longitude");
-        String longitude = readText(parser);
+        String longitude = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "gtfs_longitude");
         return longitude;
     }
@@ -256,7 +244,7 @@ public class StationXMLParser {
         }
 
         parser.require(XmlPullParser.START_TAG, ns, "abbr");
-        String abbr = readText(parser);
+        String abbr = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "abbr");
         return abbr;
     }
@@ -267,7 +255,7 @@ public class StationXMLParser {
         }
 
         parser.require(XmlPullParser.START_TAG, ns, "city");
-        String city = readText(parser);
+        String city = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "city");
         return city;
     }
@@ -278,7 +266,7 @@ public class StationXMLParser {
         }
 
         parser.require(XmlPullParser.START_TAG, ns, "county");
-        String county = readText(parser);
+        String county = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "county");
         return county;
     }
@@ -289,7 +277,7 @@ public class StationXMLParser {
         }
 
         parser.require(XmlPullParser.START_TAG, ns, "state");
-        String state = readText(parser);
+        String state = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "state");
         return state;
     }
@@ -300,43 +288,8 @@ public class StationXMLParser {
         }
 
         parser.require(XmlPullParser.START_TAG, ns, "zipcode");
-        String zipcode = readText(parser);
+        String zipcode = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "zipcode");
         return zipcode;
-    }
-
-    // Extract text values of tags:
-    private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DEBUG) {
-            Log.i("readText()", "***CONVERTING***");
-        }
-        String result = "";
-        if (parser.next() == XmlPullParser.TEXT) {
-            result = parser.getText();
-            parser.nextTag();
-        }
-        return result;
-    }
-
-    // Skip tags that it's not interested in
-    private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(DEBUG) {
-            Log.i("skip()", "***SKIPPING***");
-        }
-
-        if (parser.getEventType() != XmlPullParser.START_TAG) {
-            throw new IllegalStateException();
-        }
-        int depth = 1;
-        while (depth != 0) {
-            switch (parser.next()) {
-                case XmlPullParser.END_TAG:
-                    depth--;
-                    break;
-                case XmlPullParser.START_TAG:
-                    depth++;
-                    break;
-            }
-        }
     }
 }

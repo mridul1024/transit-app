@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.xmlparser;
+package com.example.gaijinsmash.transitapp.network.xmlparser;
 
 import android.content.Context;
 
@@ -10,10 +10,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import java.io.InputStream;
-
-/**
- * Created by ryanj on 10/28/2017.
- */
 
 public class AdvisoryXMLParserTest {
     static final String TEST_URI = "http://api.bart.gov/api/bsa.aspx?cmd=bsa&key=Q7Z9-PZ53-9QXT-DWE9";

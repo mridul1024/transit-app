@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.network;
+package com.example.gaijinsmash.transitapp.utils;
 
 /**
  * Created by ryanj on 9/17/2017.

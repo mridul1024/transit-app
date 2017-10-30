@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.xmlparser;
+package com.example.gaijinsmash.transitapp.network.xmlparser;
 
 import android.content.Context;
 

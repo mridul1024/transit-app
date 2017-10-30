@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.model;
+package com.example.gaijinsmash.transitapp.model.abstractClass;
 
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 

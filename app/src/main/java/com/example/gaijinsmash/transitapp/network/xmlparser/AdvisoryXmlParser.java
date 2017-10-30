@@ -5,27 +5,22 @@ import android.util.Log;
 import android.util.Xml;
 
 import com.example.gaijinsmash.transitapp.model.bart.Advisory;
-import com.example.gaijinsmash.transitapp.model.bart.Route;
 
+import org.w3c.dom.Document;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.XMLFormatter;
-
-/**
- * Created by ryanj on 10/27/2017.
- */
 
 public class AdvisoryXmlParser extends XmlParserAbstract {
 
     private XmlParserAbstract xmlParserAbstract;
     private Context mContext = null;
     private static final boolean DEBUG = true;
+    private Advisory advisory = null;
 
     // require(int type, String namespace, String name) if namespace is null, will pass when matched against any name
     private static final String ns = null;
@@ -68,42 +63,63 @@ public class AdvisoryXmlParser extends XmlParserAbstract {
             // Starts by looking for the first tag
             if(name.equals("date")) {
                 mDate = readDate(parser);
+                advisory.setDate(mDate);
                 if(DEBUG)
                     Log.i("mDate", mDate);
             }
             else if(name.equals("time")) {
                 mTime = readTime(parser);
+                advisory.setTime(mTime);
                 if(DEBUG)
                     Log.i("mTime", mTime);
             }
             else if (name.equals("bsa")) {
-                if(DEBUG) {
+                if(DEBUG)
                     Log.i("BSA tag: ", "MATCHED");
-                }
-                list = readBSA(parser);
-            }
-            else if (name.equals("message")) {
-                if(DEBUG) {
-                    Log.i("MESSAGE tag: ", "MATCHED");
-                }
-                // TODO: create message object and display to screen
+                list.add(readAdvisoryObject(parser));
             }
             else {
-                skip(parser);
+                XmlParserAbstract.skip(parser);
             }
         }
+        Advisory mAdvisory = new Advisory();
+        mAdvisory.setDate(mDate);
+        mAdvisory.setTime(mTime);
+        list.add(mAdvisory);
         return list;
     }
 
-    public List readBSA(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(DEBUG) {
-            Log.i("readBSA();", "***BEGINNING");
+    private Advisory readAdvisoryObject(XmlPullParser parser) throws XmlPullParserException, IOException {
+        parser.require(XmlPullParser.START_TAG, ns, "bsa");
+        String mStation = null;
+        String mType = null;
+        String mDescription = null;
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if(parser.getEventType() != XmlPullParser.START_TAG)
+                continue;
+            String name = parser.getName();
+            if(name.equals("station")) {
+                mStation = readStation(parser);
+                if(DEBUG)
+                    Log.i("station", mStation);
+            }
+            else if(name.equals("type")) {
+                mType = readType(parser);
+                if(DEBUG)
+                    Log.i("type", mType);
+            }
+            else if(name.equals("description")) {
+                mDescription = readDescription(parser);
+                if(DEBUG)
+                    Log.i("description", mDescription);
+            }
         }
-        List<Advisory> list = new ArrayList<Advisory>();
-
-        return list;
+        Advisory mAdvisory = new Advisory();
+        mAdvisory.setStation(mStation);
+        mAdvisory.setType(mType);
+        mAdvisory.setDescription(mDescription);
+        return mAdvisory;
     }
-
     //----------------------------------------------------------------------------------------------
     // Processes name tags in the BSA feed
     private String readDate(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -111,7 +127,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract {
             Log.i("readDate():", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "date");
-        String date = readText(parser);
+        String date = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "date");
         return date;
     }
@@ -121,23 +137,38 @@ public class AdvisoryXmlParser extends XmlParserAbstract {
             Log.i("readTime():", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "time");
-        String time = readText(parser);
+        String time = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "time");
         return time;
     }
 
-    private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
+    private String readStation(XmlPullParser parser) throws IOException, XmlPullParserException {
         if(DEBUG)
-            Log.i("readText():", "***CONVERTING***");
-        String result = "";
-        if(parser.next() == XmlPullParser.TEXT) {
-            result = parser.getText();
-            parser.next();
-        }
-        return result;
+            Log.i("readStation():", "***BEGINNING***");
+
+        parser.require(XmlPullParser.START_TAG, ns, "station");
+        String station = XmlParserAbstract.readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "station");
+        return station;
     }
 
-    // From XmlParaserAbstract.java
-    public void skip(XmlPullParser parser) throws XmlPullParserException, IOException {}
+    private String readType(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG)
+            Log.i("readType():", "***BEGINNING***");
 
-}
+        parser.require(XmlPullParser.START_TAG, ns, "type");
+        String type = readType(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "type");
+        return type;
+    }
+
+    private String readDescription(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG)
+            Log.i("readDescription():", "***BEGINNING***");
+
+        parser.require(XmlPullParser.START_TAG, ns, "description");
+        String description = readDescription(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "description");
+        return description;
+    }
+} // End of Class
