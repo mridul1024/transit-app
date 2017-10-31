@@ -46,15 +46,10 @@ public class HomeFragment extends Fragment {
         //Inflate the layout for this fragment
         View mInflatedView = inflater.inflate(R.layout.home_view, container, false);
 
-        // Check if internet is active
-        boolean isActive = false;
-        isActive = CheckInternet.isNetworkActive(getActivity());
-        if(!isActive) {
-            // Send message to User
+        // TODO: Warn user if there's no internet connection
 
-        }
-
-
+        // TODO: Display up-to-date news on BART - Change this to a background service.
+        new GetAdvisoryTask(getActivity()).execute();
 
         bsaDateTv = (TextView) mInflatedView.findViewById(R.id.home_view_dateTv);
         bsaTimeTv = (TextView) mInflatedView.findViewById(R.id.home_view_timeTv);
@@ -65,7 +60,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "example", Toast.LENGTH_SHORT).show();
-                //new GetGPSTask(getContext()).execute();
             }
         });
 
@@ -96,8 +90,6 @@ public class HomeFragment extends Fragment {
         return mInflatedView;
     }
 
-    // TODO: Warn user if there's no internet connection
-    // TODO: Display up-to-date news on BART
     /*
     @Override
     public void onAttach(Context context) {
@@ -124,7 +116,6 @@ public class HomeFragment extends Fragment {
         public GetAdvisoryTask(Context mContext) {
             if(this.mContext == null)
                 this.mContext = mContext;
-            // TODO: will eventually need to create a background service to handle consistent updates
             mList = new ArrayList<Advisory>();
         }
 
