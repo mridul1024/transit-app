@@ -29,16 +29,14 @@ public class StationXMLParser {
     private static final String ns = null;
 
     public StationXMLParser(Context mContext) {
-        if(this.mContext == null) {
+        if(this.mContext == null)
             this.mContext = mContext;
-        }
     }
 
     // Insert the API URL in "call"
     public List makeCall(String call) throws IOException, XmlPullParserException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("makeCall()", "with " + call);
-        }
         InputStream is = new FetchInputStream(mContext).connectToApi(call);
         List results = parse(is);
         is.close();
@@ -46,9 +44,8 @@ public class StationXMLParser {
     }
 
     public List getStations() throws IOException, XmlPullParserException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("getStations()", "Fetching all stations from xml");
-        }
         ApiStringBuilder sb = new ApiStringBuilder();
         String uri = sb.getAllStations();
         InputStream is = new FetchInputStream(mContext).connectToApi(uri);
@@ -58,9 +55,8 @@ public class StationXMLParser {
     }
 
     public List parse(InputStream in) throws XmlPullParserException, IOException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("parse()", "***BEGINNING***");
-        }
 
         try {
             XmlPullParser parser = Xml.newPullParser();
@@ -74,9 +70,9 @@ public class StationXMLParser {
     }
 
     private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("readFeed():", "***BEGINNING***");
-        }
+
         List<Station> stationList = new ArrayList<Station>();
         parser.require(XmlPullParser.START_TAG, ns, "root");
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -98,9 +94,8 @@ public class StationXMLParser {
     }
 
     private List readStations(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("readStations()", "***BEGINNING***");
-        }
         parser.require(XmlPullParser.START_TAG, ns, "stations");
         List<Station> stationList = new ArrayList<Station>();
 
@@ -195,9 +190,8 @@ public class StationXMLParser {
     //----------------------------------------------------------------------------------------------
     // Processes name tags in the StationInfo feed
     private String readName(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("readName()", "***BEGINNING***");
-        }
 
         parser.require(XmlPullParser.START_TAG, ns, "name");
         String name = XmlParserAbstract.readText(parser);
@@ -206,9 +200,9 @@ public class StationXMLParser {
     }
 
     private String readAddress(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("readAddress()", "***BEGINNING***");
-        }
+
 
         parser.require(XmlPullParser.START_TAG, ns, "address");
         String address = XmlParserAbstract.readText(parser);
@@ -217,9 +211,8 @@ public class StationXMLParser {
     }
 
     private String readLatitude(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("readLatitude()", "***BEGINNING***");
-        }
 
         parser.require(XmlPullParser.START_TAG, ns, "gtfs_latitude");
         String latitude = XmlParserAbstract.readText(parser);
@@ -228,9 +221,8 @@ public class StationXMLParser {
     }
 
     private String readLongitude(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("readLongitude()", "***BEGINNING***");
-        }
 
         parser.require(XmlPullParser.START_TAG, ns, "gtfs_longitude");
         String longitude = XmlParserAbstract.readText(parser);
@@ -239,9 +231,9 @@ public class StationXMLParser {
     }
 
     private String readAbbr(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("readAbbr()", "***BEGINNING***");
-        }
+
 
         parser.require(XmlPullParser.START_TAG, ns, "abbr");
         String abbr = XmlParserAbstract.readText(parser);
@@ -250,9 +242,9 @@ public class StationXMLParser {
     }
 
     private String readCity(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("readCity()", "***BEGINNING***");
-        }
+
 
         parser.require(XmlPullParser.START_TAG, ns, "city");
         String city = XmlParserAbstract.readText(parser);
@@ -261,9 +253,8 @@ public class StationXMLParser {
     }
 
     private String readCounty(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("readCounty()", "***BEGINNING***");
-        }
 
         parser.require(XmlPullParser.START_TAG, ns, "county");
         String county = XmlParserAbstract.readText(parser);
@@ -272,9 +263,8 @@ public class StationXMLParser {
     }
 
     private String readState(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("readState()", "***BEGINNING***");
-        }
 
         parser.require(XmlPullParser.START_TAG, ns, "state");
         String state = XmlParserAbstract.readText(parser);
@@ -283,9 +273,8 @@ public class StationXMLParser {
     }
 
     private String readZipcode(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DEBUG) {
+        if(DEBUG)
             Log.i("readZipcode()", "***BEGINNING***");
-        }
 
         parser.require(XmlPullParser.START_TAG, ns, "zipcode");
         String zipcode = XmlParserAbstract.readText(parser);

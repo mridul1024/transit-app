@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.adapter.AdvisoryCustomAdapter;
 import com.example.gaijinsmash.transitapp.model.bart.Advisory;
+import com.example.gaijinsmash.transitapp.network.CheckInternet;
 import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 import com.example.gaijinsmash.transitapp.network.xmlparser.AdvisoryXmlParser;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
@@ -45,6 +46,16 @@ public class HomeFragment extends Fragment {
         //Inflate the layout for this fragment
         View mInflatedView = inflater.inflate(R.layout.home_view, container, false);
 
+        // Check if internet is active
+        boolean isActive = false;
+        isActive = CheckInternet.isNetworkActive(getActivity());
+        if(!isActive) {
+            // Send message to User
+
+        }
+
+
+
         bsaDateTv = (TextView) mInflatedView.findViewById(R.id.home_view_dateTv);
         bsaTimeTv = (TextView) mInflatedView.findViewById(R.id.home_view_timeTv);
         bsaListView = mInflatedView.findViewById(R.id.advisory_listView);
@@ -53,7 +64,7 @@ public class HomeFragment extends Fragment {
         findNearestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "example", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "example", Toast.LENGTH_SHORT).show();
                 //new GetGPSTask(getContext()).execute();
             }
         });

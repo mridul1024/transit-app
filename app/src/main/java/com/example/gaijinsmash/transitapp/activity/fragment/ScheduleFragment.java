@@ -160,7 +160,7 @@ public class ScheduleFragment extends Fragment {
             // Create the API Call
             ApiStringBuilder apiBuilder = new ApiStringBuilder();
 
-            String uri = apiBuilder.getSchedule(stations[0].toString(), stations[1].toString(), stations[2].toString(), stations[3].toString());
+            String uri = apiBuilder.getDetailedRoute(stations[0].toString(), stations[1].toString(), stations[2].toString(), stations[3].toString());
             try {
                 routeXMLParser = new RouteXMLParser(mContext);
                 routeList = routeXMLParser.makeCall(uri);

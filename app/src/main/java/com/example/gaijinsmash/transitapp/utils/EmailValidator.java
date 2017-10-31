@@ -3,10 +3,6 @@ package com.example.gaijinsmash.transitapp.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by ryanj on 8/10/2017.
- */
-
 public class EmailValidator {
     private Pattern pattern;
     private Matcher matcher;

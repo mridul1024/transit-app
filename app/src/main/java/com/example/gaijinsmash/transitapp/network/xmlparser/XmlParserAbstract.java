@@ -31,7 +31,7 @@ public class XmlParserAbstract {
         return result;
     }
 
-    // Skip tags that it's not interested in
+    // Skip tags that the parser is not interested in
     public static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
         if (parser.getEventType() != XmlPullParser.START_TAG) {
             throw new IllegalStateException();

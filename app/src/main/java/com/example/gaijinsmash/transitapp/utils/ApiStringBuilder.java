@@ -25,10 +25,6 @@ public class ApiStringBuilder {
         return BASE_URI + "sched.aspx?cmd=depart&orig=" + origin + "&dest=" + dest + API_KEY;
      }
 
-    public String getFare(String stationA, String stationB) {
-        return BASE_URI;
-     }
-
     public String getStationInfo(String station) {
         return BASE_URI;
      }
@@ -49,14 +45,7 @@ public class ApiStringBuilder {
     }
 
     public String getBSA() {
-        return BASE_URI;
-    }
-
-    public String getSchedule(String orig, String dest, String time, String date) {
-        // stations use abbreviations
-        // time=h:mm+am/pm
-        // date=<mm/dd/yyyy>
-        String cmd = "sched.aspx?cmd=depart&orig=" + orig + "&dest=" + dest + "&time=" + time + "&date=" + date + API_KEY;
-        return BASE_URI + cmd;
+        String cmd = "bsa.aspx?cmd=bsa";
+        return BASE_URI + cmd + API_KEY;
     }
 }

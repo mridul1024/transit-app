@@ -11,7 +11,7 @@ import android.provider.Settings;
  */
 
 public class AlertUser {
-    public static Context mContext = null;
+    private Context mContext = null;
 
     protected AlertUser(Context mContext) {
         if(mContext == null) {

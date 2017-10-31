@@ -10,14 +10,20 @@ import android.net.NetworkInfo;
 
 public class CheckInternet {
 
-    // Check for internet Connection, will return NULL if no network is currently available.
-    public static boolean checkInternetConnection(Context context) {
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
+    // Check for network Connection, will return NULL if no network is currently available
+    public static boolean isNetworkActive(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         return isConnected;
+    }
+
+    // Check if wifi is active
+    public static boolean isWifiActive(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+        return isWiFi;
     }
 }
