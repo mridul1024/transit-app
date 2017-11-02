@@ -19,6 +19,7 @@ import com.example.gaijinsmash.transitapp.network.CheckInternet;
 import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 import com.example.gaijinsmash.transitapp.network.xmlparser.AdvisoryXmlParser;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
+import com.example.gaijinsmash.transitapp.utils.ErrorToast;
 
 import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParserException;
@@ -37,7 +38,8 @@ public class HomeFragment extends Fragment {
     private TextView bsaDateTv = null;
     private TextView bsaTimeTv = null;
     private ListView bsaListView;
-    //private ItemFragment.OnListFragmentInteractionListener mListener;
+
+    private Context mContext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,11 +47,18 @@ public class HomeFragment extends Fragment {
 
         //Inflate the layout for this fragment
         View mInflatedView = inflater.inflate(R.layout.home_view, container, false);
+        mContext = getActivity();
 
         // TODO: Warn user if there's no internet connection
+        boolean networkActive = CheckInternet.isNetworkActive(mContext);
+        if(networkActive == false) { new ErrorToast().noInternetErrorToast(mContext); }
 
         // TODO: Display up-to-date news on BART - Change this to a background service.
-        new GetAdvisoryTask(getActivity()).execute();
+        if(networkActive) {
+            //new GetAdvisoryTask(mContext).execute();
+        }
+        new GetAdvisoryTask(mContext).execute();
+
 
         bsaDateTv = (TextView) mInflatedView.findViewById(R.id.home_view_dateTv);
         bsaTimeTv = (TextView) mInflatedView.findViewById(R.id.home_view_timeTv);
@@ -136,13 +145,11 @@ public class HomeFragment extends Fragment {
         }
 
         protected void onPostExecute(List<Advisory> list) {
-            // find time and date separately
-
             for(Advisory adv : list) {
-                if(adv.getDate() != null)
-                    bsaDateTv.setText(adv.getDate());
+                //if(adv.getDate() != null)
+                  //  bsaDateTv.setText(adv.getDate());
                 if(adv.getTime() != null)
-                    bsaTimeTv.setText(adv.getTime());
+                    bsaTimeTv.setText(getText(R.string.last_update) + " " + adv.getTime());
             }
             AdvisoryCustomAdapter adapter = new AdvisoryCustomAdapter(list, mContext);
             bsaListView.setAdapter(adapter);

@@ -5,13 +5,16 @@
     <TextView
         android:id="@+id/bsa_station_textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"/>
     <TextView
         android:id="@+id/bsa_type_textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"/>
     <TextView
         android:id="@+id/bsa_description_textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"/>
 </LinearLayout>

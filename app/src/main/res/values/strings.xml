@@ -29,6 +29,9 @@
     <string name="date_hint">Date</string>
     <string name="time_hint">Time</string>
     <string name="time_title">Select Time</string>
+    <string name="date_unavailable">Date is unavailable</string>
+    <string name="time_unavailable">Time is unavailable</string>
+    <string name="last_update">Last checked at</string>
 
     <!-- Station Fragment -->
     <string-array name="stations_list">

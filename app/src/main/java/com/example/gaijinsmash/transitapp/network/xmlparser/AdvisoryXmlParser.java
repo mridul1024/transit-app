@@ -1,6 +1,7 @@
 package com.example.gaijinsmash.transitapp.network.xmlparser;
 
 import android.content.Context;
+import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.util.Xml;
 
@@ -28,6 +29,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract {
     public AdvisoryXmlParser(Context mContext) {
         if(mContext == null)
             this.mContext = mContext;
+        advisory = new Advisory();
     }
 
     public List parse(InputStream in) throws IOException, XmlPullParserException {
@@ -63,13 +65,15 @@ public class AdvisoryXmlParser extends XmlParserAbstract {
             // Starts by looking for the first tag
             if(name.equals("date")) {
                 mDate = readDate(parser);
-                advisory.setDate(mDate);
+                if(mDate != null)
+                    advisory.setDate(mDate); // breaks here
                 if(DEBUG)
                     Log.i("mDate", mDate);
             }
             else if(name.equals("time")) {
                 mTime = readTime(parser);
-                advisory.setTime(mTime);
+                if(mTime != null)
+                    advisory.setTime(mTime);
                 if(DEBUG)
                     Log.i("mTime", mTime);
             }
@@ -82,10 +86,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract {
                 XmlParserAbstract.skip(parser);
             }
         }
-        Advisory mAdvisory = new Advisory();
-        mAdvisory.setDate(mDate);
-        mAdvisory.setTime(mTime);
-        list.add(mAdvisory);
+        list.add(advisory);
         return list;
     }
 
@@ -157,7 +158,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract {
             Log.i("readType():", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "type");
-        String type = readType(parser);
+        String type = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "type");
         return type;
     }
@@ -167,7 +168,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract {
             Log.i("readDescription():", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "description");
-        String description = readDescription(parser);
+        String description = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "description");
         return description;
     }
