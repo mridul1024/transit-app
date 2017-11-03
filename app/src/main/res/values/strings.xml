@@ -8,7 +8,7 @@
 
     <!-- Nav Drawer Menu -->>
     <string name="navigation_drawer_help">Help</string>
-    <string name="navigation_drawer_home">Home and Daily Updates</string>
+    <string name="navigation_drawer_home">Home</string>
     <string name="navigation_drawer_schedule">Train Schedule</string>
     <string name="navigation_drawer_stations">Station Info</string>
     <string name="navigation_drawer_bart_map">Map of BART</string>

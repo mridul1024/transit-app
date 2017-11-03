@@ -1,5 +1,10 @@
 <resources>
 
+    <!-- Splash -->
+    <style name="SplashTheme">
+        <item name="android:windowBackground">@drawable/background</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->

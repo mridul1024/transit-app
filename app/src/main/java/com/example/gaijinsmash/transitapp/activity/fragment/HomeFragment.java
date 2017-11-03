@@ -31,14 +31,11 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    private Button findNearestBtn;
     private Button mapBtn;
     private Button routeBtn;
-
     private TextView bsaDateTv = null;
     private TextView bsaTimeTv = null;
     private ListView bsaListView;
-
     private Context mContext;
 
     @Override
@@ -64,14 +61,6 @@ public class HomeFragment extends Fragment {
         bsaTimeTv = (TextView) mInflatedView.findViewById(R.id.home_view_timeTv);
         bsaListView = mInflatedView.findViewById(R.id.advisory_listView);
 
-        findNearestBtn = (Button) mInflatedView.findViewById(R.id.home_view_btn1);
-        findNearestBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "example", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         mapBtn   = (Button) mInflatedView.findViewById(R.id.home_view_btn2);
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +79,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 Fragment frag = new ScheduleFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_home_container, frag, "schedule frag")
+                        .replace(R.id.fragment_home_container, frag, "sched frag")
                         .addToBackStack(null)
                         .commit();
             }
@@ -99,7 +88,8 @@ public class HomeFragment extends Fragment {
         return mInflatedView;
     }
 
-    /*
+    //TODO: need to add onAttach and onDetach
+/*
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -116,7 +106,7 @@ public class HomeFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-    */
+*/
 
     private class GetAdvisoryTask extends AsyncTask<Void, Void, List<Advisory>> {
         private Context mContext;

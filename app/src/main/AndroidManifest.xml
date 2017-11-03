@@ -11,9 +11,7 @@
         android:theme="@style/AppTheme">
 
         <!-- Splash -->
-        <activity
-            android:name=".activity.SplashActivity"
-            android:label="@string/app_name">
+        <activity android:name=".activity.SplashActivity" android:theme="@style/SplashTheme" android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -21,10 +19,9 @@
         </activity>
 
         <!-- Main -->
-        <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activity.MainActivity" android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
     <!-- PERMISSIONS -->
