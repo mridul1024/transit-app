@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +58,6 @@ public class HomeFragment extends Fragment {
         }
         new GetAdvisoryTask(mContext).execute();
 
-
         bsaDateTv = (TextView) mInflatedView.findViewById(R.id.home_view_dateTv);
         bsaTimeTv = (TextView) mInflatedView.findViewById(R.id.home_view_timeTv);
         bsaListView = mInflatedView.findViewById(R.id.advisory_listView);
@@ -65,9 +66,9 @@ public class HomeFragment extends Fragment {
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment frag = new MapFragment();
+                Fragment newFragment = new MapFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_home_container, frag, "map frag")
+                        .replace(R.id.fragmentContent, newFragment)
                         .addToBackStack(null)
                         .commit();
             }
@@ -77,11 +78,12 @@ public class HomeFragment extends Fragment {
         routeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment frag = new ScheduleFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_home_container, frag, "sched frag")
-                        .addToBackStack(null)
-                        .commit();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Fragment newFragment = new ScheduleFragment();
+                ft.replace(R.id.fragmentContent, newFragment);
+                ft.addToBackStack(null);
+                ft.commitAllowingStateLoss();
+
             }
         });
 
