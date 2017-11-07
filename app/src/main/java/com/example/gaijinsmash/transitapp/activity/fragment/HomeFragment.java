@@ -1,11 +1,13 @@
 package com.example.gaijinsmash.transitapp.activity.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,11 +68,13 @@ public class HomeFragment extends Fragment {
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment newFragment = new MapFragment();
+
+                Fragment newFragment = new GmapFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContent, newFragment)
                         .addToBackStack(null)
                         .commit();
+
             }
         });
 

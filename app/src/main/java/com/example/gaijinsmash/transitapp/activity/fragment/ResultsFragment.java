@@ -27,7 +27,7 @@ public class ResultsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View mInflatedView = inflater.inflate(R.layout.schedule_view, container, false);
+        final View mInflatedView = inflater.inflate(R.layout.results_view, container, false);
 
         listView = (ListView) mInflatedView.findViewById(R.id.results_listView);
 

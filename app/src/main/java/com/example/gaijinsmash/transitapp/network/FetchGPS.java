@@ -13,7 +13,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 
-public class FetchGPS extends Activity implements LocationListener{
+public class FetchGPS extends Activity implements LocationListener {
 
     private final Context mContext;
     boolean isGPSEnabled = false;     // flag for GPS status
