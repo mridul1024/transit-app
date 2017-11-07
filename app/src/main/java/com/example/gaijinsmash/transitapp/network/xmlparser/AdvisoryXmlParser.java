@@ -6,6 +6,8 @@ import android.util.Log;
 import android.util.Xml;
 
 import com.example.gaijinsmash.transitapp.model.bart.Advisory;
+import com.example.gaijinsmash.transitapp.model.bart.Station;
+import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 
 import org.w3c.dom.Document;
 import org.xmlpull.v1.XmlPullParser;
@@ -16,7 +18,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdvisoryXmlParser extends XmlParserAbstract {
+public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInterface {
 
     private XmlParserAbstract xmlParserAbstract;
     private Context mContext = null;
@@ -30,6 +32,15 @@ public class AdvisoryXmlParser extends XmlParserAbstract {
         if(mContext == null)
             this.mContext = mContext;
         advisory = new Advisory();
+    }
+
+    public List<Advisory> getList(String call) throws IOException, XmlPullParserException {
+        if(DEBUG)
+            Log.i("makeCall()", "with " + call);
+        InputStream is = new FetchInputStream(mContext).connectToApi(call);
+        List<Advisory> results = parse(is);
+        is.close();
+        return results;
     }
 
     public List parse(InputStream in) throws IOException, XmlPullParserException {

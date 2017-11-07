@@ -20,7 +20,7 @@ import java.util.List;
  * Created by ryanj on 6/30/2017.
  */
 
-public class StationXMLParser {
+public class StationXMLParser implements XmlParserInterface {
 
     private Context mContext = null;
     private static final boolean DEBUG = true;
@@ -34,11 +34,11 @@ public class StationXMLParser {
     }
 
     // Insert the API URL in "call"
-    public List makeCall(String call) throws IOException, XmlPullParserException {
+    public List<Station> getList(String call) throws IOException, XmlPullParserException {
         if(DEBUG)
             Log.i("makeCall()", "with " + call);
         InputStream is = new FetchInputStream(mContext).connectToApi(call);
-        List results = parse(is);
+        List<Station> results = parse(is);
         is.close();
         return results;
     }

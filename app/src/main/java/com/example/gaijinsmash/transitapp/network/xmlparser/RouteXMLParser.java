@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RouteXMLParser {
+public class RouteXMLParser implements XmlParserInterface {
 
     private Context mContext = null;
     private static final boolean DEBUG = true;
@@ -28,11 +28,11 @@ public class RouteXMLParser {
             this.mContext = mContext;
     }
 
-    public List makeCall(String url) throws IOException, XmlPullParserException {
+    public List<Route> getList(String url) throws IOException, XmlPullParserException {
         if(DEBUG)
             Log.i("makeCall()", "with " + url);
         InputStream is = new FetchInputStream(mContext).connectToApi(url);
-        List results = parse(is);
+        List<Route> results = parse(is);
         return results;
     }
 
