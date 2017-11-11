@@ -21,10 +21,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created by ryanj on 6/30/2017.
- */
-
 public class StationFragment extends Fragment {
 
     private ProgressBar mProgressBar;

@@ -48,17 +48,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // ---------------------------------------------------------------------------------------------
     fun initBottomNavBar() {
         val bottomNavigation = findViewById<View>(R.id.bottom_navigation) as AHBottomNavigation
-        val item1 = AHBottomNavigationItem(R.string.bottomnav_title_0, R.drawable.ic_menu_home, R.color.colorBottomNavigationAccent)
-        val item2 = AHBottomNavigationItem(R.string.bottomnav_title_1, R.drawable.ic_menu_map, R.color.colorBottomNavigationAccent)
-        val item3 = AHBottomNavigationItem(R.string.bottomnav_title_2, R.drawable.ic_menu_schedule, R.color.colorBottomNavigationAccent)
+        val item1 = AHBottomNavigationItem(R.string.bottomnav_title_0, R.drawable.ic_menu_home, R.color.colorPrimaryDark)
+        val item2 = AHBottomNavigationItem(R.string.bottomnav_title_1, R.drawable.ic_menu_map, R.color.colorPrimaryDark)
+        val item3 = AHBottomNavigationItem(R.string.bottomnav_title_2, R.drawable.ic_menu_schedule, R.color.colorPrimaryDark)
         bottomNavigation.addItem(item1)
         bottomNavigation.addItem(item2)
         bottomNavigation.addItem(item3)
         bottomNavigation.setCurrentItem(0)
         bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"))
-        bottomNavigation.setColoredModeColors(getColor(R.color.activeColor), getColor(R.color.inactiveColor))
+        bottomNavigation.setColoredModeColors(getColor(R.color.activeColor), getColor(R.color.inactiveColor)) //todo: is this working?
         bottomNavigation.setOnTabSelectedListener { position, wasSelected ->
-            //TODO: do something cool here
             when(position) {
                 0 -> startHomeFragment()
                 1 -> startMapFragment()
