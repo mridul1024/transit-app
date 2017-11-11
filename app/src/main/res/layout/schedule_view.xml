@@ -1,48 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
+        android:id="@+id/schedule_linear1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="16dp">
+
         <AutoCompleteTextView
             android:id="@+id/schedule_autoCompleteTextView"
-            android:labelFor="@id/schedule_autoCompleteTextView"
-            android:layout_width="match_parent"
+            android:layout_width="258dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/departure_station" />
+            android:hint="@string/departure_station"
+            android:labelFor="@id/schedule_autoCompleteTextView" />
+
+        <Spinner
+            android:id="@+id/station_spinner1"
+            android:layout_width="102dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/colorAccent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/schedule_linear2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/schedule_linear1"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="85dp">
 
         <AutoCompleteTextView
             android:id="@+id/schedule_autoCompleteTextView2"
-            android:labelFor="@id/schedule_autoCompleteTextView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="256dp"
+            android:layout_height="match_parent"
             android:ems="10"
-            android:hint="@string/arrival_station" />
+            android:hint="@string/arrival_station"
+            android:labelFor="@id/schedule_autoCompleteTextView2" />
 
-        <EditText
-            android:id="@+id/date_editText"
-            android:labelFor="@id/date_editText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/date_hint"/>
-
-        <EditText
-            android:id="@+id/time_editText"
-            android:labelFor="@id/time_editText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/time_hint"/>
-
-        <Button
-            android:id="@+id/schedule_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/schedule_button" />
+        <Spinner
+            android:id="@+id/station_spinner2"
+            android:layout_width="102dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/colorAccent" />
     </LinearLayout>
 
-</FrameLayout>
+    <EditText
+        android:id="@+id/date_editText"
+        android:layout_width="197dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/schedule_linear2"
+        android:ems="10"
+        android:hint="@string/date_hint"
+        android:inputType="date"
+        android:labelFor="@id/date_editText"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="177dp" />
+
+    <EditText
+        android:id="@+id/time_editText"
+        android:layout_width="163dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/date_editText"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="@string/time_hint"
+        android:inputType="time"
+        android:labelFor="@id/time_editText"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="177dp" />
+
+    <Button
+        android:id="@+id/schedule_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/time_editText"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/schedule_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>

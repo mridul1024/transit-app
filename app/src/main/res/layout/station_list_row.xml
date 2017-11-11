@@ -15,13 +15,18 @@
 
     </LinearLayout>
 
+    <!-- Station Abbr -->
+    <TextView
+        android:id="@+id/stationAbbr_textView"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <!-- Station Address -->
     <TextView
         android:id="@+id/stationAddress_textView"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
     <!-- Station City -->
     <TextView
         android:id="@+id/stationCity_textView"

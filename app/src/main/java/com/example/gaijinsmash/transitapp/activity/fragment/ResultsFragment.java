@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ResultsFragment extends Fragment {
 
-    ListView listView;
+    private ListView listView;
     private static StationCustomAdapter adapter;
 
     @Override

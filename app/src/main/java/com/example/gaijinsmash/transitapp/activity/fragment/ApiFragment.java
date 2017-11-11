@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 
 public class ApiFragment extends FragmentActivity implements OnMapReadyCallback {
+
     private GoogleMap mMap;
 
     @Override
@@ -36,4 +37,33 @@ public class ApiFragment extends FragmentActivity implements OnMapReadyCallback 
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+
+    /*
+            mapBtn   = (Button) mInflatedView.findViewById(R.id.home_view_btn2);
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Fragment newFragment = new GmapFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentContent, newFragment)
+                        .addToBackStack(null)
+                        .commit();
+
+            }
+        });
+
+        routeBtn = (Button) mInflatedView.findViewById(R.id.home_view_btn3);
+        routeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Fragment newFragment = new ScheduleFragment();
+                ft.replace(R.id.fragmentContent, newFragment);
+                ft.addToBackStack(null);
+                ft.commitAllowingStateLoss();
+
+            }
+        });
+     */
 }

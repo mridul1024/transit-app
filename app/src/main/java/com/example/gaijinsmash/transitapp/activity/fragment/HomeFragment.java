@@ -35,8 +35,6 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    private Button mapBtn;
-    private Button routeBtn;
     private TextView bsaDateTv = null;
     private TextView bsaTimeTv = null;
     private ListView bsaListView;
@@ -46,7 +44,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //Inflate the layout for this fragment
         View mInflatedView = inflater.inflate(R.layout.home_view, container, false);
         mContext = getActivity();
 
@@ -54,42 +51,14 @@ public class HomeFragment extends Fragment {
         boolean networkActive = CheckInternet.isNetworkActive(mContext);
         if(networkActive == false) { new ErrorToast().noInternetErrorToast(mContext); }
 
-        // TODO: Display up-to-date news on BART - Change this to a background service.
-        if(networkActive) {
-            //new GetAdvisoryTask(mContext).execute();
-        }
+        // TODO: Display up-to-date news on BART - Change this to a splash_background service.
         new GetAdvisoryTask(mContext).execute();
 
         bsaDateTv = (TextView) mInflatedView.findViewById(R.id.home_view_dateTv);
         bsaTimeTv = (TextView) mInflatedView.findViewById(R.id.home_view_timeTv);
         bsaListView = mInflatedView.findViewById(R.id.advisory_listView);
 
-        mapBtn   = (Button) mInflatedView.findViewById(R.id.home_view_btn2);
-        mapBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                Fragment newFragment = new GmapFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragmentContent, newFragment)
-                        .addToBackStack(null)
-                        .commit();
-
-            }
-        });
-
-        routeBtn = (Button) mInflatedView.findViewById(R.id.home_view_btn3);
-        routeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                Fragment newFragment = new ScheduleFragment();
-                ft.replace(R.id.fragmentContent, newFragment);
-                ft.addToBackStack(null);
-                ft.commitAllowingStateLoss();
-
-            }
-        });
 
         return mInflatedView;
     }

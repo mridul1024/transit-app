@@ -1,10 +1,14 @@
 package com.example.gaijinsmash.transitapp.activity
 
+import android.app.PendingIntent.getActivity
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -13,6 +17,8 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.example.gaijinsmash.transitapp.R
 import com.example.gaijinsmash.transitapp.activity.fragment.HomeFragment
 import com.example.gaijinsmash.transitapp.activity.fragment.MapFragment
@@ -24,25 +30,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        /*
-        val fab = findViewById<View>(R.id.fab) as FloatingActionButton
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
-        */
-
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        val toggle = ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer.addDrawerListener(toggle)
-        toggle.syncState()
-
-        val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
-        navigationView.setNavigationItemSelectedListener(this)
+        initBottomNavBar()
+        initNavigationDrawer(toolbar)
 
         // Loads HomeFragment by default
         val tx = getSupportFragmentManager().beginTransaction()
@@ -50,14 +43,94 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         tx.commit()
     }
 
+    // ---------------------------------------------------------------------------------------------
+    //
+    // ---------------------------------------------------------------------------------------------
+    fun initBottomNavBar() {
+        val bottomNavigation = findViewById<View>(R.id.bottom_navigation) as AHBottomNavigation
+        val item1 = AHBottomNavigationItem(R.string.bottomnav_title_0, R.drawable.ic_menu_home, R.color.colorBottomNavigationAccent)
+        val item2 = AHBottomNavigationItem(R.string.bottomnav_title_1, R.drawable.ic_menu_map, R.color.colorBottomNavigationAccent)
+        val item3 = AHBottomNavigationItem(R.string.bottomnav_title_2, R.drawable.ic_menu_schedule, R.color.colorBottomNavigationAccent)
+        bottomNavigation.addItem(item1)
+        bottomNavigation.addItem(item2)
+        bottomNavigation.addItem(item3)
+        bottomNavigation.setCurrentItem(0)
+        bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"))
+        bottomNavigation.setColoredModeColors(getColor(R.color.activeColor), getColor(R.color.inactiveColor))
+        bottomNavigation.setOnTabSelectedListener { position, wasSelected ->
+            //TODO: do something cool here
+            when(position) {
+                0 -> startHomeFragment()
+                1 -> startMapFragment()
+                2 -> startScheduleFragment()
+            }
+            true
+        }
+        bottomNavigation.setOnNavigationPositionListener {
+            //TODO: manage the new x/y position
+        }
+    }
+
+    fun startHomeFragment() {
+        val homeFrag = HomeFragment()
+        replaceFrag(homeFrag)
+    }
+    fun startMapFragment() {
+        val mapFrag = MapFragment()
+        replaceFrag(mapFrag)
+    }
+    fun startScheduleFragment() {
+        val scheduleFrag = ScheduleFragment()
+        replaceFrag(scheduleFrag)
+    }
+
+    fun replaceFrag(newFrag:Fragment) {
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContent, newFrag)
+                .addToBackStack(newFrag.toString())
+                .commit()
+    }
+
+    fun initNavigationDrawer(toolbar:Toolbar) {
+        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+        val toggle = ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
+        val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
+        navigationView.setNavigationItemSelectedListener(this)
+    }
+
+    /*
+    fun initFAB() {
+        val fab = findViewById<View>(R.id.fab) as FloatingActionButton
+        fab.setOnClickListener { view ->
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+        }
+    }
+    */
+
+    // ---------------------------------------------------------------------------------------------
+    // User Action Handling Events
+    // ---------------------------------------------------------------------------------------------
+
     override fun onBackPressed() {
+        val count = fragmentManager.backStackEntryCount
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
+        } else if (count > 0) {
+            // todo: check logic
+            fragmentManager.popBackStack()
         } else {
             super.onBackPressed()
         }
     }
+
+    // ---------------------------------------------------------------------------------------------
+    // Navigation Settings
+    // ---------------------------------------------------------------------------------------------
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -109,9 +182,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun fragmentFactory(fragment: Fragment) {
         // Changes the fragment view
         val fragmentManager = getSupportFragmentManager()
-        fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit()
+        fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).addToBackStack(null).commit()
         // Closes the Navigation Drawer
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
     }
 }
+
+

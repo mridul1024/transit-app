@@ -163,7 +163,7 @@ public class ScheduleFragment extends Fragment {
             String uri = apiBuilder.getDetailedRoute(stations[0].toString(), stations[1].toString(), stations[2].toString(), stations[3].toString());
             try {
                 routeXMLParser = new RouteXMLParser(mContext);
-                routeList = routeXMLParser.makeCall(uri);
+                routeList = routeXMLParser.getList(uri);
             } catch (IOException e){
                 e.printStackTrace();
                 // TODO: Gracefully handle error for user
