@@ -20,10 +20,7 @@ import android.view.View
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.example.gaijinsmash.transitapp.R
-import com.example.gaijinsmash.transitapp.activity.fragment.HomeFragment
-import com.example.gaijinsmash.transitapp.activity.fragment.MapFragment
-import com.example.gaijinsmash.transitapp.activity.fragment.ScheduleFragment
-import com.example.gaijinsmash.transitapp.activity.fragment.StationFragment
+import com.example.gaijinsmash.transitapp.activity.fragment.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -75,7 +72,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         replaceFrag(homeFrag)
     }
     fun startMapFragment() {
-        val mapFrag = MapFragment()
+        val mapFrag = BartMapFragment()
         replaceFrag(mapFrag)
     }
     fun startScheduleFragment() {
@@ -121,6 +118,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawer.closeDrawer(GravityCompat.START)
         } else if (count > 0) {
             // todo: check logic
+            // if on HomeFrag - clean stack - do not add stack, back button exits app.
             fragmentManager.popBackStack()
         } else {
             super.onBackPressed()
@@ -130,6 +128,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // ---------------------------------------------------------------------------------------------
     // Navigation Settings
     // ---------------------------------------------------------------------------------------------
+
+    //TODO : when either nav menu is selected - the relevant item is also selected
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

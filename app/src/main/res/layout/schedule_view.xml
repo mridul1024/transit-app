@@ -79,7 +79,6 @@
         android:id="@+id/schedule_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:margin="5dp"
         android:text="@string/schedule_button"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/linearLayout3" />
