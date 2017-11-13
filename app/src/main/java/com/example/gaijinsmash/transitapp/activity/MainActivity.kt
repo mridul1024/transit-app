@@ -41,8 +41,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     // ---------------------------------------------------------------------------------------------
-    //
+    // Navigation
     // ---------------------------------------------------------------------------------------------
+    //TODO: if(orientation == landscape) -> hide bottom nav
     fun initBottomNavBar() {
         val bottomNavigation = findViewById<View>(R.id.bottom_navigation) as AHBottomNavigation
         val item1 = AHBottomNavigationItem(R.string.bottomnav_title_0, R.drawable.ic_menu_home, R.color.colorPrimaryDark)
@@ -128,7 +129,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // ---------------------------------------------------------------------------------------------
     // Navigation Settings
     // ---------------------------------------------------------------------------------------------
-
     //TODO : when either nav menu is selected - the relevant item is also selected
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -163,7 +163,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
             R.id.nav_map -> {
-                fragmentFactory(MapFragment())
+                fragmentFactory(GmapFragment())
                 return true
             }
             R.id.nav_share -> {

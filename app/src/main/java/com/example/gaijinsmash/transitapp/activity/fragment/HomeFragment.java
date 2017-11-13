@@ -54,11 +54,8 @@ public class HomeFragment extends Fragment {
         // TODO: Display up-to-date news on BART - Change this to a splash_background service.
         new GetAdvisoryTask(mContext).execute();
 
-        bsaDateTv = (TextView) mInflatedView.findViewById(R.id.home_view_dateTv);
         bsaTimeTv = (TextView) mInflatedView.findViewById(R.id.home_view_timeTv);
         bsaListView = mInflatedView.findViewById(R.id.advisory_listView);
-
-
 
         return mInflatedView;
     }

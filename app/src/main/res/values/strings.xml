@@ -87,6 +87,7 @@
         <item>West Dublin / Pleasanton</item>
         <item>West Oakland</item>
     </string-array>
+    <string name="title_activity_google_maps">Map</string>
 
     <!--  -->
 

@@ -15,10 +15,6 @@ import com.example.gaijinsmash.transitapp.model.bart.Station;
 
 import java.util.List;
 
-/**
- * Created by ryanj on 7/31/2017.
- */
-
 public class ResultsFragment extends Fragment {
 
     private ListView listView;

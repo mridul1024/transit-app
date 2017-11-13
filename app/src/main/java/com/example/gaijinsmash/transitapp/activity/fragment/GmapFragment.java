@@ -3,6 +3,8 @@ package com.example.gaijinsmash.transitapp.activity.fragment;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,13 +39,15 @@ public class GmapFragment extends SupportMapFragment implements OnMapReadyCallba
                              Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.gmap_view, container, false);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragment_gmap_container);
-        //getFragmentManager().findFragmentById(R.id.fragment_gmap_container);
-        mapFragment.getMapAsync(this);
-
+        try {
+            SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragment_gmap_container);
+            mapFragment.getMapAsync(this);
+        } catch (Exception e) {
+            Log.i("Error: ", e.toString());
+        }
         return inflatedView;
     }
-
+/*
     @Override
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
@@ -52,19 +56,20 @@ public class GmapFragment extends SupportMapFragment implements OnMapReadyCallba
                 .addApi(LocationServices.API)
                 .build();
     }
+*/
+    @Override
+    public void onResume() {
+        super.onResume();
 
+    }
     @Override
     public void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if(mGoogleApiClient != null && mGoogleApiClient.isConnected()){
-            mGoogleApiClient.disconnect();
-        }
     }
 
     @Override

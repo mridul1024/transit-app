@@ -8,9 +8,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/mp_primary</item>
+        <item name="colorPrimaryDark">@color/mp_primary_dark</item>
+        <item name="colorAccent">@color/mp_accent</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -23,12 +23,12 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="NavDrawerBackground">
-        <item name="colorPrimary">@color/colorYellowBg</item>
+        <item name="colorPrimary">@color/mp_primary_light</item>
     </style>
 
     <!-- Button Styles -->
     <style name="ButtonAppTheme" parent="android:Widget.Holo.Button.Borderless">
-        <item name="android:background">@color/colorButton</item>
+        <item name="android:background">@color/mp_accent</item>
     </style>
 
     <!-- Text Styles -->
