@@ -88,6 +88,10 @@
         <item>West Oakland</item>
     </string-array>
     <string name="title_activity_google_maps">Map</string>
+    <string name="navigation_drawer_misc">Misc</string>
+    <string name="location_permission_denied">GPS Permission Denied</string>
+    <string name="permission_required_toast">GPS Permission Required</string>
+    <string name="permission_rationale_location">Rationale Location</string>
 
     <!--  -->
 

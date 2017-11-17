@@ -1,12 +1,10 @@
-package com.example.gaijinsmash.transitapp.network;
+package com.example.gaijinsmash.transitapp.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-/**
- * Created by ryanj on 9/17/2017.
- */
+// TODO: Add to Permission Utils
 
 public class CheckInternet {
 

@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // ---------------------------------------------------------------------------------------------
     // Navigation
     // ---------------------------------------------------------------------------------------------
-    //TODO: if(orientation == landscape) -> hide bottom nav
+    // TODO: if(orientation == landscape) -> hide bottom nav
     fun initBottomNavBar() {
         val bottomNavigation = findViewById<View>(R.id.bottom_navigation) as AHBottomNavigation
         val item1 = AHBottomNavigationItem(R.string.bottomnav_title_0, R.drawable.ic_menu_home, R.color.colorPrimaryDark)
@@ -53,20 +53,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         bottomNavigation.addItem(item2)
         bottomNavigation.addItem(item3)
         bottomNavigation.setCurrentItem(0)
-        bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"))
-        bottomNavigation.setColoredModeColors(getColor(R.color.activeColor), getColor(R.color.inactiveColor)) //todo: is this working?
+
+        //bottomNavigation.setHasTransientState(true)
+        //bottomNavigation.setColoredModeColors(getColor(R.color.mp_accent), getColor(R.color.inactiveColor))
         bottomNavigation.setOnTabSelectedListener { position, wasSelected ->
             when(position) {
                 0 -> startHomeFragment()
                 1 -> startMapFragment()
                 2 -> startScheduleFragment()
             }
-            true
+            true // todo: check functionality of this boolean
         }
         bottomNavigation.setOnNavigationPositionListener {
-            //TODO: manage the new x/y position
+            // manage the new y position
+
         }
     }
+
+    //TODO: if button is clicked, change the active item in Navigation Drawer - vice versa.
 
     fun startHomeFragment() {
         val homeFrag = HomeFragment()
@@ -109,7 +113,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     */
 
     // ---------------------------------------------------------------------------------------------
-    // User Action Handling Events
+    // Lifecycle Events
     // ---------------------------------------------------------------------------------------------
 
     override fun onBackPressed() {
@@ -129,7 +133,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // ---------------------------------------------------------------------------------------------
     // Navigation Settings
     // ---------------------------------------------------------------------------------------------
-    //TODO : when either nav menu is selected - the relevant item is also selected
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -163,7 +166,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
             R.id.nav_map -> {
-                fragmentFactory(GmapFragment())
+                fragmentFactory(BartMapFragment())
                 return true
             }
             R.id.nav_share -> {

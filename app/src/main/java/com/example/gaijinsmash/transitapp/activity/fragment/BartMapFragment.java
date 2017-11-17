@@ -1,7 +1,10 @@
 package com.example.gaijinsmash.transitapp.activity.fragment;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.gaijinsmash.transitapp.R;
+import com.example.gaijinsmash.transitapp.network.FetchGPS;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -17,7 +21,10 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
 
 public class BartMapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -26,7 +33,7 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.bart_map_view, container, false);
 
         try {
@@ -43,12 +50,37 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
 
-        // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        // TODO: add all markers eventually
+        LatLng marker = new LatLng(37.803768, -122.271450);
+        mGoogleMap.addMarker(new MarkerOptions().position(marker).title("12th St. Oakland City Center"));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
+        mGoogleMap.setMinZoomPreference(12f);
+
+        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                return false;
+            }
+        });
+
+        // todo: default zoom in on current location if gps is enabled, else zoom to whole map of bay area.
+
         mMapView.onResume();
     }
+
+    private List<LatLng> initMarkers() {
+        // create runnable
+        // get all stations from sqlite
+        // get lat/lng for each station
+        // create a marker for each
+        // store in List
+
+        return null;
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // Lifecycle Events
+    //---------------------------------------------------------------------------------------------
 
     @Override
     public void onCreate(Bundle bundle) {
