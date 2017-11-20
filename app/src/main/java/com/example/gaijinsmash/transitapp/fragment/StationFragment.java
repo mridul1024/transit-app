@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.activity.fragment;
+package com.example.gaijinsmash.transitapp.fragment;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,10 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.adapter.StationCustomAdapter;
+import com.example.gaijinsmash.transitapp.view_adapter.StationCustomViewAdapter;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.network.xmlparser.StationXMLParser;
 
@@ -21,20 +20,21 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.List;
 
+
+
 public class StationFragment extends Fragment {
 
-    private ProgressBar mProgressBar;
     private ListView mListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View mInflatedView = inflater.inflate(R.layout.station_view, container, false);
-        mListView = mInflatedView.findViewById(R.id.station_listView);
+        View inflatedView = inflater.inflate(R.layout.station_view, container, false);
+        mListView = inflatedView.findViewById(R.id.station_listView);
 
         new GetStationsTask(getActivity()).execute();
 
-        return mInflatedView;
+        return inflatedView;
     }
 
     private class GetStationsTask extends AsyncTask<Void, Void, List<Station>> {
@@ -70,7 +70,7 @@ public class StationFragment extends Fragment {
 
         protected void onPostExecute(List<Station> stations) {
             if(stationList != null) {
-                StationCustomAdapter adapter = new StationCustomAdapter(stationList, mContext);
+                StationCustomViewAdapter adapter = new StationCustomViewAdapter(stationList, mContext);
                 mListView.setAdapter(adapter);
             } else {
                 // TODO: Handle error gracefully for use

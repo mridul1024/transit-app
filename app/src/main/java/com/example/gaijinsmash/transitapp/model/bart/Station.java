@@ -1,19 +1,24 @@
 package com.example.gaijinsmash.transitapp.model.bart;
 
+import android.arch.persistence.room.Entity;
+
 import com.example.gaijinsmash.transitapp.model.abstractClass.Place;
 
-/**
- * Created by ryanj on 6/29/2017.
- */
-
+@Entity // Connects to Room - sqlite
 public class Station extends Place {
 
     private String mAbbreviation;
 
-    public Station() {}
-
     public Station(String name) {
         super(name);
+    }
+
+    public Station(int id, String name) {
+        super(id, name);
+    }
+
+    public Station(int id, String name, String address) {
+        super(id, name ,address);
     }
 
     public void setAbbreviation(String abbreviation) {

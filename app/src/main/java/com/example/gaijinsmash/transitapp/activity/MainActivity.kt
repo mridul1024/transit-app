@@ -1,14 +1,8 @@
 package com.example.gaijinsmash.transitapp.activity
 
-import android.app.PendingIntent.getActivity
-import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
-import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -20,7 +14,11 @@ import android.view.View
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.example.gaijinsmash.transitapp.R
-import com.example.gaijinsmash.transitapp.activity.fragment.*
+
+import com.example.gaijinsmash.transitapp.fragment.BartMapFragment
+import com.example.gaijinsmash.transitapp.fragment.HomeFragment
+import com.example.gaijinsmash.transitapp.fragment.ScheduleFragment
+import com.example.gaijinsmash.transitapp.fragment.StationFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -115,6 +113,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // ---------------------------------------------------------------------------------------------
     // Lifecycle Events
     // ---------------------------------------------------------------------------------------------
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume();
+    }
+
+    override fun onPause() {
+        super.onPause();
+    }
 
     override fun onBackPressed() {
         val count = fragmentManager.backStackEntryCount

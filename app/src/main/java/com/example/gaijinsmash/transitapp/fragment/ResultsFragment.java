@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.activity.fragment;
+package com.example.gaijinsmash.transitapp.fragment;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.adapter.StationCustomAdapter;
+import com.example.gaijinsmash.transitapp.view_adapter.StationCustomViewAdapter;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 
 import java.util.List;
@@ -18,18 +18,18 @@ import java.util.List;
 public class ResultsFragment extends Fragment {
 
     private ListView listView;
-    private static StationCustomAdapter adapter;
+    private static StationCustomViewAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View mInflatedView = inflater.inflate(R.layout.results_view, container, false);
+        final View inflatedView = inflater.inflate(R.layout.results_view, container, false);
 
-        listView = (ListView) mInflatedView.findViewById(R.id.results_listView);
+        listView = (ListView) inflatedView.findViewById(R.id.results_listView);
 
         //new UpdateMainActivity(this).execute();
 
-        return mInflatedView;
+        return inflatedView;
     }
 
     private class UpdateMainActivity extends AsyncTask<Void, Void, List<Station>> {

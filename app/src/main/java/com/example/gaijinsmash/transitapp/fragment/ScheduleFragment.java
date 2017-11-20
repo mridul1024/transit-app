@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.activity.fragment;
+package com.example.gaijinsmash.transitapp.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -19,9 +19,6 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.activity.MainActivity;
-import com.example.gaijinsmash.transitapp.database.BartStationDAO;
-import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.model.bart.Route;
 import com.example.gaijinsmash.transitapp.network.xmlparser.RouteXMLParser;
@@ -29,11 +26,8 @@ import com.example.gaijinsmash.transitapp.network.xmlparser.RouteXMLParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.SimpleTimeZone;
 
@@ -45,15 +39,12 @@ import static android.app.DatePickerDialog.*;
 
 public class ScheduleFragment extends Fragment {
 
-    private TimePickerDialog timePickerDialog;
-    private DatePickerDialog datePickerDialog;
-    private DatePicker datePicker;
-    private Calendar calendar;
-    private SimpleTimeZone timeZone;
-    private SimpleDateFormat simpleDateFormat;
-    private AutoCompleteTextView departureActv, arrivalActv;
-    private EditText timeEt, dateEt;
-    private Button searchBtn;
+    private TimePickerDialog mTimePickerDialog;
+    private DatePickerDialog mDatePickerDialog;
+    private SimpleDateFormat mSimpleDateFormat;
+    private AutoCompleteTextView mDepartureActv, mArrivalActv;
+    private EditText mTimeEt, mDateEt;
+    private Button mSearchBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,41 +57,41 @@ public class ScheduleFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.select_dialog_item, stations);
 
         // Departure UI
-        departureActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView);
-        departureActv.setThreshold(1); // will start working from first character
-        departureActv.setAdapter(adapter);
+        mDepartureActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView);
+        mDepartureActv.setThreshold(1); // will start working from first character
+        mDepartureActv.setAdapter(adapter);
 
         // Arrival UI
-        arrivalActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView2);
-        arrivalActv.setThreshold(1);
-        arrivalActv.setAdapter(adapter);
+        mArrivalActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView2);
+        mArrivalActv.setThreshold(1);
+        mArrivalActv.setAdapter(adapter);
 
         // Date UI
-        dateEt = (EditText) mInflatedView.findViewById(R.id.date_editText);
-        dateEt.setInputType(InputType.TYPE_NULL);
-        dateEt.requestFocus();
-        dateEt.setOnClickListener(new View.OnClickListener() {
+        mDateEt = (EditText) mInflatedView.findViewById(R.id.date_editText);
+        mDateEt.setInputType(InputType.TYPE_NULL);
+        mDateEt.requestFocus();
+        mDateEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar newCalendar = Calendar.getInstance();
-                datePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
+                mDatePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int day) {
                         Calendar newDate = Calendar.getInstance();
                         newDate.set(year, month, day);
-                        simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy");
-                        dateEt.setText(simpleDateFormat.format(newDate.getTime()));
+                        mSimpleDateFormat = new SimpleDateFormat("MM-dd-yyyy");
+                        mDateEt.setText(mSimpleDateFormat.format(newDate.getTime()));
                     }
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.show();
+                mDatePickerDialog.show();
             }
         });
 
         // Time UI
-        timeEt = (EditText) mInflatedView.findViewById(R.id.time_editText);
-        timeEt.setInputType(InputType.TYPE_NULL);
-        timeEt.requestFocus();
-        timeEt.setOnClickListener(new View.OnClickListener() {
+        mTimeEt = (EditText) mInflatedView.findViewById(R.id.time_editText);
+        mTimeEt.setInputType(InputType.TYPE_NULL);
+        mTimeEt.requestFocus();
+        mTimeEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Current time is default value
@@ -109,32 +100,32 @@ public class ScheduleFragment extends Fragment {
                 int minute = currentTime.get(Calendar.MINUTE);
 
                 // Create and return a new instance of TimePickerDialog
-                timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                mTimePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
                         String aMpM = "AM";
                         if(selectedHour > 11) {
                             aMpM = "PM";
                         }
-                        timeEt.setText(String.format("%02d:%02d " + aMpM, selectedHour, selectedMinute));
+                        mTimeEt.setText(String.format("%02d:%02d " + aMpM, selectedHour, selectedMinute));
                     }
                 }, hour,minute,false); //True = 24 hour format
-                timePickerDialog.setTitle(getString(R.string.time_title));
-                timePickerDialog.show();
+                mTimePickerDialog.setTitle(getString(R.string.time_title));
+                mTimePickerDialog.show();
             }
         });
 
-        searchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
-        searchBtn.setOnClickListener(new View.OnClickListener() {
+        mSearchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
+        mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String departingStation = departureActv.getText().toString();
-                String arrivingStation = arrivalActv.getText().toString();
+                String departingStation = mDepartureActv.getText().toString();
+                String arrivingStation = mArrivalActv.getText().toString();
                 // TODO: Convert Stations to abbreviated names, access DAO --> get abbr value with matching station name, return abbr string
                 // time=h:mm+am/pm
                 // date=<mm/dd/yyyy>
-                String departingTime = timeEt.getText().toString();
-                String departingDate = dateEt.getText().toString();
+                String departingTime = mTimeEt.getText().toString();
+                String departingDate = mDateEt.getText().toString();
                 String[] array = {departingStation, arrivingStation, departingTime, departingDate};
                 new GetScheduleTask(getActivity()).execute(array);
             }

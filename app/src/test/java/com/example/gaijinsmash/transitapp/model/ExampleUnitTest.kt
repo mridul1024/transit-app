@@ -1,5 +1,6 @@
 package com.example.gaijinsmash.transitapp.model
 
+import com.example.gaijinsmash.transitapp.model.abstractClass.AbstractModelTest
 import org.junit.Test
 
 import org.junit.Assert.*

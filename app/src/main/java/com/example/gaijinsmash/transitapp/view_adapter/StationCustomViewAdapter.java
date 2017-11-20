@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.adapter;
+package com.example.gaijinsmash.transitapp.view_adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,12 +17,13 @@ import java.util.List;
  * the design.
  */
 
-public class StationCustomAdapter extends ArrayAdapter<Station> implements View.OnClickListener {
+// TODO : convert to RecyclerView
+public class StationCustomViewAdapter extends ArrayAdapter<Station> implements View.OnClickListener {
 
     private List<Station> stationList = null;
     private Context mContext;
 
-    public StationCustomAdapter(List<Station> data, Context context) {
+    public StationCustomViewAdapter(List<Station> data, Context context) {
         super(context, R.layout.station_list_row, data);
         this.stationList = data;
         this.mContext = context;

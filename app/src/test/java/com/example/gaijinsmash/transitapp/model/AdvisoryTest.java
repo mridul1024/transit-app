@@ -5,4 +5,5 @@ package com.example.gaijinsmash.transitapp.model;
  */
 
 public class AdvisoryTest {
+
 }

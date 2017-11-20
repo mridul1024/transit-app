@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gaijinsmash.transitapp">
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/icon"
@@ -14,6 +13,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBw0RN9TfARBv5WGCVo1JqRFB8-21Q58j4" />
+
         <!--Google Services API
         <meta-data
             android:name="com.google.android.geo.API_KEY"

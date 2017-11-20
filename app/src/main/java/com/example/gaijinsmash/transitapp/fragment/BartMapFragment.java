@@ -1,25 +1,17 @@
-package com.example.gaijinsmash.transitapp.activity.fragment;
+package com.example.gaijinsmash.transitapp.fragment;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.network.FetchGPS;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -64,15 +56,19 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
         });
 
         // todo: default zoom in on current location if gps is enabled, else zoom to whole map of bay area.
-
+        // if(gps.isDisabled) { show a picture of a map } else { show the map }
         mMapView.onResume();
     }
 
     private List<LatLng> initMarkers() {
         // create runnable
+
         // get all stations from sqlite
+
         // get lat/lng for each station
+
         // create a marker for each
+
         // store in List
 
         return null;

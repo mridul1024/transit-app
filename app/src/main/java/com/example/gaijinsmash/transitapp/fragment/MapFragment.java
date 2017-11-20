@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.activity.fragment;
+package com.example.gaijinsmash.transitapp.fragment;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -17,8 +17,8 @@ public class MapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View mInflatedView = inflater.inflate(R.layout.map_view, container, false);
+        final View inflatedView = inflater.inflate(R.layout.map_view, container, false);
 
-        return mInflatedView;
+        return inflatedView;
     }
 }
