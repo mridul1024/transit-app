@@ -1,8 +1,5 @@
 package com.example.gaijinsmash.transitapp.model.bart;
 
-/**
- * Created by ryanj on 10/28/2017.
- */
 
 public class Advisory {
 

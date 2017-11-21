@@ -4,11 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-
-// Strongly recommended to always compile with the latest SDK for
-// all the benefits - new compilation checks on existing code, avoid deprecated APIs, etc.
 android {
-    compileSdkVersion 27
+    compileSdkVersion 27 // this should always be the most recent version
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.example.gaijinsmash.transitapp"
@@ -43,12 +40,12 @@ dependencies {
     implementation 'com.android.support:support-v4:27.0.1'
     implementation 'com.android.support:recyclerview-v7:27.0.1'
 
-    // aurelhubert's bottom navbar
+    // ahb bottom navbar
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
 
     //Google Play Services
-    implementation 'com.google.android.gms:play-services-maps:10.2.6'
-    implementation 'com.google.android.gms:play-services-location:10.2.6'
+    implementation 'com.google.android.gms:play-services-maps:11.4.2'
+    implementation 'com.google.android.gms:play-services-location:11.4.2'
 
     // Required -- JUnit 4 framework
     testImplementation 'junit:junit:4.12'

@@ -23,14 +23,18 @@ public interface StationDAO {
     void delete(Station station);
 
     // Gets all stations from the database
-    @Query("SELECT * from station")
+    @Query("SELECT * from stations")
     public List<Station> getAllStations();
 
     // Selects station with the matching id
-    @Query("SELECT * from station where id = :mId")
-    public List<Station> getStation(int mId);
+    @Query("SELECT * from stations where abbr = :abbr")
+    public Station getStation(String abbr);
 
     // Updates a station
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateStation(Station station);
+
+    // Get count
+    @Query("SELECT COUNT(*) from stations")
+    int countStations();
 }

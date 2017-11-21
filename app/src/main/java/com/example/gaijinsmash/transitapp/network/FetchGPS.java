@@ -29,7 +29,6 @@ public class FetchGPS extends Activity implements LocationListener {
     private static final long LOCATION_REFRESH_DIST = 10; // 10 meters
     private static final long LOCATION_REFRESH_TIME = 1000 * 60 * 1; // 1 minute
 
-
     public FetchGPS(Context context) {
         this.mContext = context;
         //getLocation();
@@ -50,7 +49,6 @@ public class FetchGPS extends Activity implements LocationListener {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                                     && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-
             result = true;
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -63,8 +61,6 @@ public class FetchGPS extends Activity implements LocationListener {
         }
         return result;
     }
-
-
 
     @SuppressLint("MissingPermission")
     public Location getLocation() {

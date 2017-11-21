@@ -58,7 +58,7 @@ public class StationFragment extends Fragment {
             try {
                 if(stationList == null && stationXMLParser == null) {
                     stationXMLParser = new StationXMLParser(mContext);
-                    stationList = stationXMLParser.getStations();
+                    stationList = stationXMLParser.getAllStations();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -73,7 +73,7 @@ public class StationFragment extends Fragment {
                 StationCustomViewAdapter adapter = new StationCustomViewAdapter(stationList, mContext);
                 mListView.setAdapter(adapter);
             } else {
-                // TODO: Handle error gracefully for use
+                // TODO: Handle error gracefully for use - possibly use a cute img?
                 Log.e("onPostExecute()", "stationList is NULL");
             }
         }
