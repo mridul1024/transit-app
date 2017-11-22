@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,9 @@ public class ScheduleFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View mInflatedView = inflater.inflate(R.layout.schedule_view, container, false);
 
-        //TODO: fetch a list of Stations for dropdown into "example"
+        // TODO: update nav menus
+        DrawerLayout layout = (DrawerLayout) mInflatedView.findViewById(R.id.drawer_layout);
+
         Resources res = getResources();
         String[] stations = res.getStringArray(R.array.stations_list);
         ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.select_dialog_item, stations);
