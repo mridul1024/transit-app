@@ -36,31 +36,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         initBottomNavBar()
         initNavigationDrawer(toolbar)
 
-        // Init fragment adapter
-        initAdapter()
-
-        // Loads HomeFragment by default
-        //val tx = getSupportFragmentManager().beginTransaction()
-        //tx.replace(R.id.fragmentContent, HomeFragment())
-        //tx.commit()
+        //Loads HomeFragment by default
+        initDefaultFrag()
     }
 
     // ---------------------------------------------------------------------------------------------
     // Navigation
     // ---------------------------------------------------------------------------------------------
-    fun initAdapter() {
-        viewPager = findViewById<CustomViewPager>(R.id.pager)
-        viewPager.setPagingEnabled(false) // Turn off swiping
-        fragAdapter = FragmentAdapter(supportFragmentManager)
-        fragAdapter.addFragment(HomeFragment())    // pos 0
-        fragAdapter.addFragment(BartMapFragment()) // pos 1
-        fragAdapter.addFragment(MapFragment())     // pos 2
-        fragAdapter.addFragment(ResultsFragment()) // pos 3
-        fragAdapter.addFragment(ScheduleFragment())// pos 4
-        fragAdapter.addFragment(StationFragment()) // pos 5
-        // todo: fragAdapter.addFragment(SettingsFragment())
-        viewPager.adapter = fragAdapter
+    fun initDefaultFrag() {
+        val tx = getSupportFragmentManager().beginTransaction()
+        tx.replace(R.id.fragmentContent, HomeFragment())
+        tx.commit()
     }
+
 
     fun initBottomNavBar() {
         val bottomNavigation = findViewById<View>(R.id.bottom_navigation) as AHBottomNavigation
@@ -79,27 +67,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             true
         }
-        bottomNavigation.setOnNavigationPositionListener {
-            // handle event on position
-
-        }
     }
 
     //fragAdapter.getRegisteredFragment(position)
     fun startHomeFragment() {
-        fragAdapter.getRegisteredFragment(0)
+        replaceFrag(HomeFragment())
     }
     fun startMapFragment() {
         //todo: check if network is available
         if(CheckInternet.isNetworkActive(applicationContext)) {
-            fragAdapter.getRegisteredFragment(1)
+            replaceFrag(BartMapFragment())
         } else {
-            fragAdapter.getRegisteredFragment(2)
+            replaceFrag(MapFragment())
         }
     }
     fun startScheduleFragment() {
-        var frag = fragAdapter.getRegisteredFragment(4)
-        replaceFrag(frag)
+        replaceFrag(ScheduleFragment())
     }
 
     fun replaceFrag(newFrag:Fragment) {
