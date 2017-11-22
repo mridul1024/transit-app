@@ -5,16 +5,14 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-
 /*
 In future if you want to fetch a particular Fragment, you can do it using pagerAdapter.getRegisteredFragment(position).
-viewPager.setPagingEnabled(false); disable swiping
  */
 
-public class CustomPager extends ViewPager {
+public class CustomViewPager extends ViewPager {
     private boolean mEnabled;
 
-    public CustomPager(Context context, AttributeSet attrs) {
+    public CustomViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mEnabled = true;
     }

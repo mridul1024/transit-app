@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.view_adapter.AdvisoryCustomViewAdapter;
+import com.example.gaijinsmash.transitapp.view_adapter.AdvisoryViewAdapter;
 import com.example.gaijinsmash.transitapp.model.bart.Advisory;
 import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 import com.example.gaijinsmash.transitapp.network.xmlparser.AdvisoryXmlParser;
@@ -95,7 +95,7 @@ public class HomeFragment extends Fragment {
                 if(adv.getTime() != null)
                     mBsaTimeTv.setText(getText(R.string.last_update) + " " + adv.getTime());
             }
-            AdvisoryCustomViewAdapter adapter = new AdvisoryCustomViewAdapter(list, mContext);
+            AdvisoryViewAdapter adapter = new AdvisoryViewAdapter(list, mContext);
             mBsaListView.setAdapter(adapter);
         }
     }

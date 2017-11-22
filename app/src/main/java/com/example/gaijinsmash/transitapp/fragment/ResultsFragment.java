@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.view_adapter.StationCustomViewAdapter;
+import com.example.gaijinsmash.transitapp.view_adapter.StationViewAdapter;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 public class ResultsFragment extends Fragment {
 
     private ListView listView;
-    private static StationCustomViewAdapter adapter;
+    private static StationViewAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

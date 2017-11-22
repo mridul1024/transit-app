@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.view_adapter.StationCustomViewAdapter;
+import com.example.gaijinsmash.transitapp.view_adapter.StationViewAdapter;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.network.xmlparser.StationXMLParser;
 
@@ -70,7 +70,7 @@ public class StationFragment extends Fragment {
 
         protected void onPostExecute(List<Station> stations) {
             if(stationList != null) {
-                StationCustomViewAdapter adapter = new StationCustomViewAdapter(stationList, mContext);
+                StationViewAdapter adapter = new StationViewAdapter(stationList, mContext);
                 mListView.setAdapter(adapter);
             } else {
                 // TODO: Handle error gracefully for use - possibly use a cute img?

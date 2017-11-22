@@ -8,38 +8,38 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.model.bart.Station;
-
-import java.util.List;
+import com.example.gaijinsmash.transitapp.model.bart.Advisory;
 
 /**
  * Custom adapters create special layouts for data. Check a corresponding "~list_row.xml" to view
  * the design.
  */
 
-// TODO : convert to RecyclerView
-public class StationCustomViewAdapter extends ArrayAdapter<Station> implements View.OnClickListener {
+import java.util.List;
 
-    private List<Station> stationList = null;
+//TODO: many to one relationship with Stations
+
+public class AdvisoryViewAdapter extends ArrayAdapter<Advisory> implements View.OnClickListener {
+    private List<Advisory> mAdvisoryList = null;
     private Context mContext;
 
-    public StationCustomViewAdapter(List<Station> data, Context context) {
+    public AdvisoryViewAdapter(List<Advisory> data, Context context) {
         super(context, R.layout.station_list_row, data);
-        this.stationList = data;
+        this.mAdvisoryList = data;
         this.mContext = context;
     }
 
     private static class ViewHolder {
         TextView stationName;
-        TextView stationAddress;
-        TextView stationCity;
+        TextView bsaType;
+        TextView bsaDescription;
     }
 
     @Override
     public void onClick(View view) {
-        int position = (Integer) view.getTag();
+        int position  = (Integer) view.getTag();
         Object object = getItem(position);
-        Station station = (Station) object;
+        Advisory advisory = (Advisory) object;
 
         switch (view.getId()) {
             // TODO: do something on click?
@@ -49,27 +49,29 @@ public class StationCustomViewAdapter extends ArrayAdapter<Station> implements V
     private int lastPosition = -1;
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Station station = getItem(position);
+    public View getView(int position, View convertView , ViewGroup parent) {
+        Advisory advisory = getItem(position);
         ViewHolder viewHolder;
         final View view;
 
         if(convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            convertView = inflater.inflate(R.layout.station_list_row, parent, false);
-            viewHolder.stationName = (TextView) convertView.findViewById(R.id.stationName_textView);
-            viewHolder.stationAddress = (TextView) convertView.findViewById(R.id.stationAddress_textView);
-            viewHolder.stationCity = (TextView) convertView.findViewById(R.id.stationCity_textView);
+            convertView = inflater.inflate(R.layout.advisory_list_row, parent, false);
+            viewHolder.stationName = (TextView) convertView.findViewById(R.id.bsa_station_textView);
+            viewHolder.bsaType = (TextView) convertView.findViewById(R.id.bsa_type_textView);
+            viewHolder.bsaDescription = (TextView) convertView.findViewById(R.id.bsa_description_textView);
             view = convertView;
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
             view = convertView;
         }
-        viewHolder.stationName.setText(station.getName());
-        viewHolder.stationAddress.setText(station.getAddress());
-        viewHolder.stationCity.setText(station.getCity());
+        viewHolder.stationName.setText(advisory.getDate());
+        viewHolder.bsaType.setText(advisory.getType());
+        viewHolder.bsaDescription.setText(advisory.getDescription());
         return convertView;
     }
 }
+
+

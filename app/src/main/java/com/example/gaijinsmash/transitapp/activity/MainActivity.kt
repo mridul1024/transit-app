@@ -14,34 +14,54 @@ import android.view.View
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.example.gaijinsmash.transitapp.R
+import com.example.gaijinsmash.transitapp.fragment.*
 
-import com.example.gaijinsmash.transitapp.fragment.BartMapFragment
-import com.example.gaijinsmash.transitapp.fragment.HomeFragment
-import com.example.gaijinsmash.transitapp.fragment.ScheduleFragment
-import com.example.gaijinsmash.transitapp.fragment.StationFragment
+import com.example.gaijinsmash.transitapp.fragment_adapter.FragmentAdapter
+import com.example.gaijinsmash.transitapp.fragment_adapter.CustomViewPager
+import com.example.gaijinsmash.transitapp.utils.CheckInternet
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private lateinit var viewPager: CustomViewPager
+    private lateinit var fragAdapter: FragmentAdapter
+    private lateinit var currentFragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
+        // Initialize navigation menus
         initBottomNavBar()
         initNavigationDrawer(toolbar)
 
+        // Init fragment adapter
+        initAdapter()
+
         // Loads HomeFragment by default
-        val tx = getSupportFragmentManager().beginTransaction()
-        tx.replace(R.id.fragmentContent, HomeFragment())
-        tx.commit()
+        //val tx = getSupportFragmentManager().beginTransaction()
+        //tx.replace(R.id.fragmentContent, HomeFragment())
+        //tx.commit()
     }
 
     // ---------------------------------------------------------------------------------------------
     // Navigation
     // ---------------------------------------------------------------------------------------------
-    // TODO: if(orientation == landscape) -> hide bottom nav
+    fun initAdapter() {
+        viewPager = findViewById<CustomViewPager>(R.id.pager)
+        viewPager.setPagingEnabled(false) // Turn off swiping
+        fragAdapter = FragmentAdapter(supportFragmentManager)
+        fragAdapter.addFragment(HomeFragment())    // pos 0
+        fragAdapter.addFragment(BartMapFragment()) // pos 1
+        fragAdapter.addFragment(MapFragment())     // pos 2
+        fragAdapter.addFragment(ResultsFragment()) // pos 3
+        fragAdapter.addFragment(ScheduleFragment())// pos 4
+        fragAdapter.addFragment(StationFragment()) // pos 5
+        // todo: fragAdapter.addFragment(SettingsFragment())
+        viewPager.adapter = fragAdapter
+    }
+
     fun initBottomNavBar() {
         val bottomNavigation = findViewById<View>(R.id.bottom_navigation) as AHBottomNavigation
         val item1 = AHBottomNavigationItem(R.string.bottomnav_title_0, R.drawable.ic_menu_home, R.color.colorPrimaryDark)
@@ -51,36 +71,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         bottomNavigation.addItem(item2)
         bottomNavigation.addItem(item3)
         bottomNavigation.setCurrentItem(0)
-
-        //bottomNavigation.setHasTransientState(true)
-        //bottomNavigation.setColoredModeColors(getColor(R.color.mp_accent), getColor(R.color.inactiveColor))
         bottomNavigation.setOnTabSelectedListener { position, wasSelected ->
             when(position) {
                 0 -> startHomeFragment()
                 1 -> startMapFragment()
                 2 -> startScheduleFragment()
             }
-            true // todo: check functionality of this boolean
+            true
         }
         bottomNavigation.setOnNavigationPositionListener {
-            // manage the new y position
+            // handle event on position
 
         }
     }
 
-    //TODO: if button is clicked, change the active item in Navigation Drawer - vice versa.
-
+    //fragAdapter.getRegisteredFragment(position)
     fun startHomeFragment() {
-        val homeFrag = HomeFragment()
-        replaceFrag(homeFrag)
+        fragAdapter.getRegisteredFragment(0)
     }
     fun startMapFragment() {
-        val mapFrag = BartMapFragment()
-        replaceFrag(mapFrag)
+        //todo: check if network is available
+        if(CheckInternet.isNetworkActive(applicationContext)) {
+            fragAdapter.getRegisteredFragment(1)
+        } else {
+            fragAdapter.getRegisteredFragment(2)
+        }
     }
     fun startScheduleFragment() {
-        val scheduleFrag = ScheduleFragment()
-        replaceFrag(scheduleFrag)
+        var frag = fragAdapter.getRegisteredFragment(4)
+        replaceFrag(frag)
     }
 
     fun replaceFrag(newFrag:Fragment) {
@@ -177,6 +196,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_map -> {
                 fragmentFactory(BartMapFragment())
+
+                //check if network is active else show other map
                 return true
             }
             R.id.nav_share -> {
