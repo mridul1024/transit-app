@@ -41,7 +41,7 @@
             android:layout_margin="7dp"
             android:layout_marginBottom="23dp"
             android:background="@color/mp_primary_light"
-            android:elevation="10dp"
+            android:elevation="6dp"
             />
     </LinearLayout>
 </RelativeLayout>

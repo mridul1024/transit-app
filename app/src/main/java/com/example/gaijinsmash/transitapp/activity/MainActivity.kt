@@ -19,10 +19,13 @@ import com.example.gaijinsmash.transitapp.R
 import com.example.gaijinsmash.transitapp.fragment.*
 import com.example.gaijinsmash.transitapp.utils.CheckInternet
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FragmentManager.OnBackStackChangedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     var currentFragment = "HomeFragment"
     val fragmentManager = supportFragmentManager
+    lateinit var drawer: DrawerLayout
+    lateinit var navigationView: NavigationView
+    lateinit var bottomNavigation: AHBottomNavigation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +40,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Initialize Fragments
         //initFragments()
         initDefaultFrag()
-        fragmentManager.addOnBackStackChangedListener(this)
-    }
-
-    override fun onBackStackChanged() {
-
     }
 
     fun initFragments() {
@@ -61,10 +59,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // Navigation
     // ---------------------------------------------------------------------------------------------
     fun initBottomNavBar() {
-        val bottomNavigation = findViewById<View>(R.id.bottom_navigation) as AHBottomNavigation
+        bottomNavigation = findViewById<View>(R.id.bottom_navigation) as AHBottomNavigation
         val item1 = AHBottomNavigationItem(R.string.bottomnav_title_0, R.drawable.ic_menu_home, R.color.colorPrimaryDark)
         val item2 = AHBottomNavigationItem(R.string.bottomnav_title_1, R.drawable.ic_menu_map, R.color.colorPrimaryDark)
         val item3 = AHBottomNavigationItem(R.string.bottomnav_title_2, R.drawable.ic_menu_schedule, R.color.colorPrimaryDark)
+
         bottomNavigation.addItem(item1)
         bottomNavigation.addItem(item2)
         bottomNavigation.addItem(item3)
@@ -81,6 +80,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun initHomeFragment() {
         replaceFrag(HomeFragment(), "HomeFragment")
+        //navigationView.setCheckedItem(R.id.nav_home)
     }
 
     fun initMapFragment() {
@@ -89,14 +89,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             replaceFrag(MapFragment(), "MapFragment")
         }
+        navigationView.setCheckedItem(R.id.nav_map)
     }
 
     fun initScheduleFragment() {
         replaceFrag(ScheduleFragment(), "ScheduleFragment")
+        navigationView.setCheckedItem(R.id.nav_schedule)
     }
 
     fun initStationFragment() {
         replaceFrag(StationFragment(), "StationFragment")
+        navigationView.setCheckedItem(R.id.nav_station)
     }
 
     fun replaceFrag(newFrag:Fragment, tag: String) {
@@ -106,19 +109,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .replace(R.id.fragmentContent, newFrag, tag)
                 .commit()
         currentFragment = tag
-
-        fragmentManager.addOnBackStackChangedListener {
-
-        }
     }
 
     fun initNavigationDrawer(toolbar:Toolbar) {
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+        drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer.addDrawerListener(toggle)
         toggle.syncState()
-        val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
+        navigationView = findViewById<View>(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
     }
 
@@ -186,19 +185,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.nav_home -> {
                 fragmentFactory(HomeFragment(), "HomeFragment")
-                return true
-            }
-            R.id.nav_schedule -> {
-                fragmentFactory(ScheduleFragment(), "ScheduleFragment")
-                return true
-            }
-            R.id.nav_station -> {
-                fragmentFactory(StationFragment(), "StationFragment")
+                bottomNavigation.setCurrentItem(0)
                 return true
             }
             R.id.nav_map -> {
                 if(CheckInternet.isNetworkActive(applicationContext))
                     fragmentFactory(BartMapFragment(), "BartMapFragment") else fragmentFactory(MapFragment(), "MapFragment")
+                bottomNavigation.setCurrentItem(1)
+                return true
+            }
+            R.id.nav_schedule -> {
+                fragmentFactory(ScheduleFragment(), "ScheduleFragment")
+                bottomNavigation.setCurrentItem(2)
+                return true
+            }
+            R.id.nav_station -> {
+                fragmentFactory(StationFragment(), "StationFragment")
                 return true
             }
             R.id.nav_share -> {
