@@ -22,23 +22,25 @@ public class StationDbFacade {
     public StationDbFacade(Context context) {
         this.mContext = context;
         if (mContext != null) {
-            try {
-                mDb = StationDatabase.getRoomDB(mContext);
-                populateDB(mContext, mDb);
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            mDb = StationDatabase.getRoomDB(mContext);
+            //mDb.populateDB()
         }
     }
 
+    public boolean isEmpty() {
+        boolean result = true;
+        if(mDb == null) {
+            result = false;
+        }
+        return result;
+    }
+
     // populate db with objects
-    private void populateDB(Context context, StationDatabase db) throws XmlPullParserException, IOException {
-        StationXMLParser parser = new StationXMLParser(context);
+    public void populateDB() throws XmlPullParserException, IOException {
+        StationXMLParser parser = new StationXMLParser(mContext);
         List<Station> list = parser.getAllStations();
         for(Station station : list) {
-            db.getStationDAO().addStation(station);
+            mDb.getStationDAO().addStation(station);
         }
     }
 

@@ -93,6 +93,6 @@
     <string name="permission_required_toast">GPS Permission Required</string>
     <string name="permission_rationale_location">Rationale Location</string>
 
-    <!--  -->
-
+    <!-- Errors -->
+    <string name="error_form_completion">Please input all fields</string>
 </resources>

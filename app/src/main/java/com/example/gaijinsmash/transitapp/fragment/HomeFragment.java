@@ -3,6 +3,7 @@ package com.example.gaijinsmash.transitapp.fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.BundleCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,22 +27,18 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    private TextView bmBsaDateTv = null;
     private TextView mBsaTimeTv = null;
     private ListView mBsaListView;
-    private Context mContext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View inflatedView = inflater.inflate(R.layout.home_view, container, false);
-        mContext = getActivity();
 
         // TODO: Warn user if there's no internet connection
 
         // TODO: Display up-to-date news on BART - Change this to a splash_background service.
-        new GetAdvisoryTask(mContext).execute();
 
         mBsaTimeTv = (TextView) inflatedView.findViewById(R.id.home_view_timeTv);
         mBsaListView = inflatedView.findViewById(R.id.advisory_listView);
@@ -49,9 +46,20 @@ public class HomeFragment extends Fragment {
         return inflatedView;
     }
 
+
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
     //---------------------------------------------------------------------------------------------
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Context context = getActivity();
+        if(context != null) {
+            new GetAdvisoryTask(context).execute();
+        }
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

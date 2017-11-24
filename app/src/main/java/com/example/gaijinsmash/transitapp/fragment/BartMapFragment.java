@@ -14,6 +14,7 @@ import com.example.gaijinsmash.transitapp.database.StationDbFacade;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.network.FetchGPS;
 import com.example.gaijinsmash.transitapp.utils.CheckInternet;
+import com.example.gaijinsmash.transitapp.utils.PermissionUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -71,19 +72,17 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
 
     public void initMapSettings(GoogleMap map) {
         map.setMinZoomPreference(9f);
-        //LatLngBounds bayArea = new LatLngBounds(new LatLng(37.3382,121.8863), new LatLng(37.7749, 122.4194));
-        //map.setLatLngBoundsForCameraTarget(bayArea);
+        LatLngBounds bayArea = new LatLngBounds(
+                new LatLng(37.2982,-121.5363), //southwest
+                new LatLng(38.0694, -121.8494)); //northeast
+        map.setLatLngBoundsForCameraTarget(bayArea);
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.getUiSettings().setZoomGesturesEnabled(true);
-        //map.setLatLngBoundsForCameraTarget();
-        //map.setPadding(0, 0, 0, 80); // leftPad, topPad, rightPad, bottomPad
-
-
         // todo: default zoom in on current location if gps is enabled, else zoom to whole map of bay area.
         boolean gpsCheck = true; // need to replace with real check logic
         if(gpsCheck) {
-            LatLng marker = new LatLng(37.803768, -122.271450);
+            LatLng marker = new LatLng(37.803768, -122.231450);
             map.moveCamera(CameraUpdateFactory.newLatLng(marker));
         } else {
             // This is the default zoom
@@ -93,7 +92,6 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
 
         // todo: add station names to all markers
         //map.addMarker(new MarkerOptions().position(marker).title("12th St. Oakland City Center Station"));
-
     }
 
     //---------------------------------------------------------------------------------------------
@@ -139,7 +137,7 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
             mMapView.onSaveInstanceState(outState);
     }
     //---------------------------------------------------------------------------------------------
-    // Thread for call to database
+    // Thread for call to database and create Markers
     //---------------------------------------------------------------------------------------------
 
     private List<LatLng> initMarkers(GoogleMap map, Context context) {
