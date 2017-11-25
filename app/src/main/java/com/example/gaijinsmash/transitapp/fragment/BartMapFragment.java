@@ -10,11 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.database.StationDbFacade;
+import com.example.gaijinsmash.transitapp.database.StationDatabase;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
-import com.example.gaijinsmash.transitapp.network.FetchGPS;
-import com.example.gaijinsmash.transitapp.utils.CheckInternet;
-import com.example.gaijinsmash.transitapp.utils.PermissionUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -142,8 +139,8 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
 
     private List<LatLng> initMarkers(GoogleMap map, Context context) {
         List<LatLng> latLngList = new ArrayList<LatLng>();
-        StationDbFacade helper = new StationDbFacade(context);
-        List<Station> stationList = helper.getAllStations();
+        StationDatabase db = StationDatabase.getRoomDB(context);
+        List<Station> stationList = db.getStationDAO().getAllStations();
         if(DEBUG) {
             if(stationList.isEmpty())
                 Log.e("initMarkerS()", "stationList is EMPTY");

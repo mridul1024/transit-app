@@ -5,7 +5,6 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -19,7 +18,7 @@ import android.widget.Toast
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.example.gaijinsmash.transitapp.R
-import com.example.gaijinsmash.transitapp.database.StationDbFacade
+import com.example.gaijinsmash.transitapp.database.StationDatabase
 import com.example.gaijinsmash.transitapp.fragment.*
 import com.example.gaijinsmash.transitapp.utils.CheckInternet
 
@@ -37,12 +36,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        // Initialize navigation menus
         initBottomNavBar()
         initNavigationDrawer(toolbar)
-
-        // Initialize Fragments
-        //initFragments()
         initDefaultFrag()
     }
 
@@ -57,7 +52,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun initDefaultFrag() {
-        replaceFrag(HomeFragment(), "HomeFragment")
+        mFragmentManager.beginTransaction().add(R.id.fragmentContent, HomeFragment())
+
+        //replaceFrag(HomeFragment(), "HomeFragment")
     }
     // ---------------------------------------------------------------------------------------------
     // Navigation
@@ -110,7 +107,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragmentContent, newFrag, tag)
-                .addToBackStack(null)
+                //.addToBackStack(null)
                 .commit()
         mCurrentFragment = tag
     }
@@ -162,7 +159,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             super.onBackPressed()
         }
-        if(mCurrentFragment.equals("HomeFragment")) finish()
+        //if(mCurrentFragment.equals("HomeFragment")) finish()
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -234,7 +231,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
     }
-
+    // ---------------------------------------------------------------------------------------------
+    // AsyncTask
+    // ---------------------------------------------------------------------------------------------
     private class CreateDatabaseTask: AsyncTask<Void, Void, Boolean> {
         lateinit var mContext: Context
         constructor(context: Context) {
@@ -243,11 +242,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         override fun doInBackground(vararg p0: Void?): Boolean {
             var result = false;
-            val db = StationDbFacade(mContext)
-            if(db.isEmpty) {
-                db.populateDB()
-                result = true
-            }
+
             return result
         }
 

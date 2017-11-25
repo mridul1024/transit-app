@@ -28,7 +28,10 @@ public interface StationDAO {
 
     // Selects station with the matching id
     @Query("SELECT * from stations where abbr = :abbr")
-    public Station getStation(String abbr);
+    public Station getStationByAbbr(String abbr);
+
+    @Query("SELECT * from stations where name = :name")
+    public Station getStationByName(String name);
 
     // Updates a station
     @Update(onConflict = OnConflictStrategy.REPLACE)

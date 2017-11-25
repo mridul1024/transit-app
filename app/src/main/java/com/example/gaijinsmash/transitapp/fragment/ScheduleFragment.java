@@ -21,12 +21,11 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.database.StationDbFacade;
+import com.example.gaijinsmash.transitapp.database.StationDatabase;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.model.bart.Route;
 import com.example.gaijinsmash.transitapp.network.xmlparser.RouteXMLParser;
-import com.example.gaijinsmash.transitapp.utils.ErrorToast;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -34,14 +33,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.SimpleTimeZone;
-import java.util.logging.XMLFormatter;
 
 import static android.app.DatePickerDialog.*;
-
-/**
- * Created by ryanj on 6/30/2017.
- */
 
 public class ScheduleFragment extends Fragment {
 
@@ -142,10 +135,10 @@ public class ScheduleFragment extends Fragment {
         return mInflatedView;
     }
 
-    public String getAbbrFromDb(String station) throws XmlPullParserException, IOException {
-            StationDbFacade db = new StationDbFacade(getActivity());
-            Station result = db.getStation(new Station(station));
-        return result.getAbbreviation();
+    public String getAbbrFromDb(String stationName) throws XmlPullParserException, IOException {
+        StationDatabase db = StationDatabase.getRoomDB(getActivity());
+        Station station = db.getStationDAO().getStationByName(stationName);
+        return station.getAbbreviation();
     }
 
     private class GetScheduleTask extends AsyncTask<String[], Void, Boolean> {
@@ -179,8 +172,7 @@ public class ScheduleFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            ApiStringBuilder apiBuilder = new ApiStringBuilder();
-            String uri = apiBuilder.getDetailedRoute(mDepartAbbr, mArriveAbbr, stations[2].toString(), stations[3].toString());
+            String uri = ApiStringBuilder.getDetailedRoute(mDepartAbbr, mArriveAbbr, stations[2].toString(), stations[3].toString());
             try {
                 routeXMLParser = new RouteXMLParser(mContext);
                 routeList = routeXMLParser.getList(uri);

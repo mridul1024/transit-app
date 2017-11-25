@@ -36,10 +36,6 @@ public class HomeFragment extends Fragment {
 
         View inflatedView = inflater.inflate(R.layout.home_view, container, false);
 
-        // TODO: Warn user if there's no internet connection
-
-        // TODO: Display up-to-date news on BART - Change this to a splash_background service.
-
         mBsaTimeTv = (TextView) inflatedView.findViewById(R.id.home_view_timeTv);
         mBsaListView = inflatedView.findViewById(R.id.advisory_listView);
 
