@@ -35,6 +35,7 @@
     <string name="time_title">Select Time</string>
     <string name="date_unavailable">Date is unavailable</string>
     <string name="time_unavailable">Time is unavailable</string>
+    <string name="update_unavailable">Updates are currently not available. Please check your network settings.</string>
     <string name="last_update">Last checked at</string>
 
     <!-- Station Fragment -->

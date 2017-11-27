@@ -11,18 +11,12 @@ import android.view.ViewGroup;
 import com.example.gaijinsmash.transitapp.R;
 import com.google.android.gms.maps.MapView;
 
-/**
- * Created by ryanj on 11/18/2017.
- */
-
 public class DummyFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.bart_map_view, container, false);
-
-
 
         return inflatedView;
     }

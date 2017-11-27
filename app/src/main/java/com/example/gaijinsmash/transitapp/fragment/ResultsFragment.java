@@ -20,6 +20,17 @@ public class ResultsFragment extends Fragment {
     private ListView listView;
     private static StationViewAdapter adapter;
 
+    //---------------------------------------------------------------------------------------------
+    // Lifecycle Events
+    //---------------------------------------------------------------------------------------------
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        // Initialize data here
+        setRetainInstance(true);
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -31,6 +42,10 @@ public class ResultsFragment extends Fragment {
 
         return inflatedView;
     }
+
+    //---------------------------------------------------------------------------------------------
+    // AsyncTask
+    //---------------------------------------------------------------------------------------------
 
     private class UpdateMainActivity extends AsyncTask<Void, Void, List<Station>> {
         private Context context;

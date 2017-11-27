@@ -18,6 +18,7 @@ import android.widget.Toast
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.example.gaijinsmash.transitapp.R
+import com.example.gaijinsmash.transitapp.R.id.nav_home
 import com.example.gaijinsmash.transitapp.database.StationDatabase
 import com.example.gaijinsmash.transitapp.fragment.*
 import com.example.gaijinsmash.transitapp.utils.CheckInternet
@@ -30,6 +31,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var mNavigationView: NavigationView
     lateinit var mBottomNavigation: AHBottomNavigation
 
+    // ---------------------------------------------------------------------------------------------
+    // Lifecycle Events
+    // ---------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -38,23 +42,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         initBottomNavBar()
         initNavigationDrawer(toolbar)
-        initDefaultFrag()
+
+        if(savedInstanceState == null) {
+            initHomeFragment()
+        }
     }
 
-    fun initFragments() {
-        val fragmentTransaction = mFragmentManager.beginTransaction()
-        fragmentTransaction.add(HomeFragment(), "HomeFragment")
-        fragmentTransaction.add(BartMapFragment(), "BartMapFragment")
-        fragmentTransaction.add(MapFragment(), "MapFragment")
-        fragmentTransaction.add(StationFragment(), "StationFragment")
-        fragmentTransaction.add(ScheduleFragment(), "ScheduleFragment")
-        fragmentTransaction.commitAllowingStateLoss() // todo: check if this is appropriate method
+    override fun onAttachFragment(fragment: Fragment) {
+        super.onAttachFragment(fragment)
     }
 
-    fun initDefaultFrag() {
-        mFragmentManager.beginTransaction().add(R.id.fragmentContent, HomeFragment())
+    override fun onDestroy() {
+        super.onDestroy()
+    }
 
-        //replaceFrag(HomeFragment(), "HomeFragment")
+    override fun onResume() {
+        super.onResume();
+    }
+
+    override fun onPause() {
+        super.onPause();
+    }
+
+    override fun onBackPressed() {
+        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+        if(mCurrentFragment.equals("HomeFragment")) finish()
     }
     // ---------------------------------------------------------------------------------------------
     // Navigation
@@ -81,7 +98,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun initHomeFragment() {
         replaceFrag(HomeFragment(), "HomeFragment")
-        //navigationView.setCheckedItem(R.id.nav_home)
+        mNavigationView.setCheckedItem(R.id.nav_home)
     }
 
     fun initMapFragment() {
@@ -107,7 +124,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragmentContent, newFrag, tag)
-                //.addToBackStack(null)
+                .addToBackStack(null)
+                .setTransition(1)
                 .commit()
         mCurrentFragment = tag
     }
@@ -131,36 +149,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
     */
-
-    // ---------------------------------------------------------------------------------------------
-    // Lifecycle Events
-    // ---------------------------------------------------------------------------------------------
-
-    override fun onAttachFragment(fragment: Fragment) {
-        super.onAttachFragment(fragment)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun onResume() {
-        super.onResume();
-    }
-
-    override fun onPause() {
-        super.onPause();
-    }
-
-    override fun onBackPressed() {
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-        //if(mCurrentFragment.equals("HomeFragment")) finish()
-    }
 
     // ---------------------------------------------------------------------------------------------
     // Navigation Settings

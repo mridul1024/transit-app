@@ -18,6 +18,7 @@ import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 import com.example.gaijinsmash.transitapp.network.xmlparser.AdvisoryXmlParser;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 
+import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -30,31 +31,9 @@ public class HomeFragment extends Fragment {
     private TextView mBsaTimeTv = null;
     private ListView mBsaListView;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        View inflatedView = inflater.inflate(R.layout.home_view, container, false);
-
-        mBsaTimeTv = (TextView) inflatedView.findViewById(R.id.home_view_timeTv);
-        mBsaListView = inflatedView.findViewById(R.id.advisory_listView);
-
-        return inflatedView;
-    }
-
-
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
     //---------------------------------------------------------------------------------------------
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Context context = getActivity();
-        if(context != null) {
-            new GetAdvisoryTask(context).execute();
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -62,9 +41,42 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        // Initialize data here
+        setRetainInstance(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View inflatedView = inflater.inflate(R.layout.home_view, container, false);
+        mBsaTimeTv = (TextView) inflatedView.findViewById(R.id.home_view_timeTv);
+        mBsaListView = inflatedView.findViewById(R.id.advisory_listView);
+        return inflatedView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        new GetAdvisoryTask(getActivity()).execute();
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        // Setup any handles to view objects here
+        // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
+        // Any references in onAttach should be nulled out here to prevent memory leaks
     }
+
+    //---------------------------------------------------------------------------------------------
+    // AsyncTask
+    //---------------------------------------------------------------------------------------------
 
     private class GetAdvisoryTask extends AsyncTask<Void, Void, List<Advisory>> {
         private Context mContext;

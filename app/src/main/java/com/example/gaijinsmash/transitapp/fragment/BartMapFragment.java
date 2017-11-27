@@ -30,6 +30,23 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     private MapView mMapView;
     private GoogleMap mGoogleMap;
 
+    //---------------------------------------------------------------------------------------------
+    // Lifecycle Events
+    //---------------------------------------------------------------------------------------------
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        setRetainInstance(true);
+        if(mMapView != null)
+            mMapView.onCreate(bundle);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,8 +63,64 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
         return inflatedView;
     }
 
-    // This is called when google map is initialized
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState != null) {
+
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mMapView != null)
+            mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mMapView != null)
+            mMapView.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mMapView != null)
+            mMapView.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mMapView != null)
+            mMapView.onDestroy();
+    }
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if(mMapView != null)
+            mMapView.onLowMemory();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(mMapView != null)
+            mMapView.onSaveInstanceState(outState);
+    }
+    //---------------------------------------------------------------------------------------------
+    // Google Maps
+    //---------------------------------------------------------------------------------------------
+
+    @Override // This is called when google map is initialized
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
 
@@ -92,48 +165,6 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     //---------------------------------------------------------------------------------------------
-    // Lifecycle Events
-    //---------------------------------------------------------------------------------------------
-
-    @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        if(mMapView != null)
-            mMapView.onCreate(bundle);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(mMapView != null)
-            mMapView.onResume();
-    }
-    @Override
-    public void onPause() {
-        super.onPause();
-        if(mMapView != null)
-            mMapView.onPause();
-    }
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(mMapView != null)
-            mMapView.onDestroy();
-    }
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        if(mMapView != null)
-            mMapView.onLowMemory();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if(mMapView != null)
-            mMapView.onSaveInstanceState(outState);
-    }
-    //---------------------------------------------------------------------------------------------
     // Thread for call to database and create Markers
     //---------------------------------------------------------------------------------------------
 
@@ -153,7 +184,7 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     // 3 params are Params, Progress, Result
-    private class GetMarkersTask extends AsyncTask<Void, Void, List<LatLng>> {
+    private class GetMarkersTask extends AsyncTask<Void, Integer, List<LatLng>> {
         private Context mContext;
         private GoogleMap mGoogleMap;
 
@@ -165,6 +196,11 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
         @Override
         protected List<LatLng> doInBackground(Void...voids) {
             return initMarkers(mGoogleMap, mContext);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer...percent) {
+            // Update progress here
         }
 
         @Override

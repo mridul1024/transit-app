@@ -45,6 +45,18 @@ public class ScheduleFragment extends Fragment {
     private EditText mTimeEt, mDateEt;
     private Button mSearchBtn;
 
+    //---------------------------------------------------------------------------------------------
+    // Lifecycle Events
+    //---------------------------------------------------------------------------------------------
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        // Initialize data here
+        setRetainInstance(true);
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -135,11 +147,19 @@ public class ScheduleFragment extends Fragment {
         return mInflatedView;
     }
 
+    //---------------------------------------------------------------------------------------------
+    // Helper Methods
+    //---------------------------------------------------------------------------------------------
+
     public String getAbbrFromDb(String stationName) throws XmlPullParserException, IOException {
         StationDatabase db = StationDatabase.getRoomDB(getActivity());
         Station station = db.getStationDAO().getStationByName(stationName);
         return station.getAbbreviation();
     }
+
+    //---------------------------------------------------------------------------------------------
+    // AsyncTask
+    //---------------------------------------------------------------------------------------------
 
     private class GetScheduleTask extends AsyncTask<String[], Void, Boolean> {
         private RouteXMLParser routeXMLParser = null;
