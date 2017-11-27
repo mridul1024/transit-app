@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragmentContent, newFrag, tag)
-                .addToBackStack(null)
+                //.addToBackStack(null)
                 .setTransition(1)
                 .commit()
         mCurrentFragment = tag

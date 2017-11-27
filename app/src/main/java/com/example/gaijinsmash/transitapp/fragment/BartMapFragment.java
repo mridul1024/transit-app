@@ -47,14 +47,12 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
         setRetainInstance(true);
         if(mMapView != null)
             mMapView.onCreate(bundle);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.bart_map_view, container, false);
-
         mProgressBar = (ProgressBar) inflatedView.findViewById(R.id.bart_map_progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
         try {
@@ -164,7 +162,6 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
             LatLng marker = new LatLng(37.803768, -122.271450);
             map.moveCamera(CameraUpdateFactory.newLatLng(marker));
         }
-
         // todo: add station names to all markers
         //map.addMarker(new MarkerOptions().position(marker).title("12th St. Oakland City Center Station"));
     }
