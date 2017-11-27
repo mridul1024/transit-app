@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.database.StationDatabase;
@@ -29,6 +30,7 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     private static final boolean DEBUG = true;
     private MapView mMapView;
     private GoogleMap mGoogleMap;
+    private ProgressBar mProgressBar;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -45,6 +47,7 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
         setRetainInstance(true);
         if(mMapView != null)
             mMapView.onCreate(bundle);
+
     }
 
     @Override
@@ -52,6 +55,8 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.bart_map_view, container, false);
 
+        mProgressBar = (ProgressBar) inflatedView.findViewById(R.id.bart_map_progress_bar);
+        mProgressBar.setVisibility(View.VISIBLE);
         try {
             mMapView = (MapView) inflatedView.findViewById(R.id.mapView);
             mMapView.onCreate(savedInstanceState);
@@ -209,6 +214,7 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
             for(LatLng latLng : list) {
                 mGoogleMap.addMarker(new MarkerOptions().position(latLng));
             }
+            mProgressBar.setVisibility(View.INVISIBLE);
         }
     }
 }
