@@ -1,6 +1,7 @@
 package com.example.gaijinsmash.transitapp.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -42,7 +43,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         initBottomNavBar()
         initNavigationDrawer(toolbar)
-
         if(savedInstanceState == null) {
             initHomeFragment()
         }
@@ -71,7 +71,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             super.onBackPressed()
         }
-        if(mCurrentFragment.equals("HomeFragment")) finish()
     }
     // ---------------------------------------------------------------------------------------------
     // Navigation
@@ -165,23 +164,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
-        if(mFragmentManager.backStackEntryCount > 0) {
-            mFragmentManager.popBackStack()
+        if(id == R.id.menu_item_share) {
+            return true
         }
-
         if (id == R.id.action_settings) {
             return true
         }
-
         return super.onOptionsItemSelected(item)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_home -> {
-                fragmentFactory(HomeFragment(), "HomeFragment")
-                mBottomNavigation.setCurrentItem(0)
-                return true
+                if(mCurrentFragment.equals("HomeFragment")) {
+                    closeDrawer()
+                    return false
+                } else {
+                    fragmentFactory(HomeFragment(), "HomeFragment")
+                    mBottomNavigation.setCurrentItem(0)
+                    return true
+                }
             }
             R.id.nav_map -> {
                 if(CheckInternet.isNetworkActive(applicationContext))
@@ -198,45 +200,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 fragmentFactory(StationFragment(), "StationFragment")
                 return true
             }
-            R.id.nav_share -> {
+            R.id.nav_help -> {
                 // TODO: add logic
-                Toast.makeText(applicationContext, "Share", Toast.LENGTH_SHORT).show();
+                Toast.makeText(applicationContext, "Help", Toast.LENGTH_SHORT).show();
             }
-            R.id.nav_send -> {
+            R.id.nav_about -> {
                 // TODO: add logic
-                Toast.makeText(applicationContext, "Send", Toast.LENGTH_SHORT).show();
+                Toast.makeText(applicationContext, "About", Toast.LENGTH_SHORT).show();
             }
         }
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        drawer.closeDrawer(GravityCompat.START)
+        closeDrawer()
         return true
     }
 
     fun fragmentFactory(fragment: Fragment, tag: String) {
-        //replaceFrag(fragment, tag)
+        mFragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment, tag).commit()
+        closeDrawer()
+    }
 
-        mFragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment, tag).addToBackStack(null).commit()
+    fun closeDrawer() {
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
     }
-    // ---------------------------------------------------------------------------------------------
-    // AsyncTask
-    // ---------------------------------------------------------------------------------------------
-    private class CreateDatabaseTask: AsyncTask<Void, Void, Boolean> {
-        lateinit var mContext: Context
-        constructor(context: Context) {
-            mContext = context;
-        }
 
-        override fun doInBackground(vararg p0: Void?): Boolean {
-            var result = false;
-
-            return result
-        }
-
-        override fun onPostExecute(result: Boolean) {
-            if(result) Log.i("CreateDatabaseTask:", "DB created")
-        }
+    fun shareSomething() {
+        // Create intent
+        val intent = Intent(android.content.Intent.ACTION_SEND)
+        intent.setType("text/plain")
+        //intent.setType("img")
+        val shareText = "Here is the share content"
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Shared from TransitApp")
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, shareText)
+        startActivity(Intent.createChooser(intent, "Share via"))
     }
 }
 

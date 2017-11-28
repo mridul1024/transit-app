@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.gaijinsmash.transitapp.R;
+import com.example.gaijinsmash.transitapp.activity.MainActivity;
 import com.example.gaijinsmash.transitapp.view_adapter.AdvisoryViewAdapter;
 import com.example.gaijinsmash.transitapp.model.bart.Advisory;
 import com.example.gaijinsmash.transitapp.network.FetchInputStream;
@@ -59,13 +60,18 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        new GetAdvisoryTask(getActivity()).execute();
+        new GetAdvisoryTask(getActivity(), getText(R.string.last_update).toString()).execute();
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
         // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -81,11 +87,13 @@ public class HomeFragment extends Fragment {
     private class GetAdvisoryTask extends AsyncTask<Void, Void, List<Advisory>> {
         private Context mContext;
         private List<Advisory> mList;
+        private String mMessage;
 
-        public GetAdvisoryTask(Context mContext) {
+        public GetAdvisoryTask(Context mContext, String message) {
             if(this.mContext == null)
                 this.mContext = mContext;
             mList = new ArrayList<Advisory>();
+            mMessage = message;
         }
 
         @Override
@@ -106,10 +114,8 @@ public class HomeFragment extends Fragment {
 
         protected void onPostExecute(List<Advisory> list) {
             for(Advisory adv : list) {
-                //if(adv.getDate() != null)
-                  //  bsaDateTv.setText(adv.getDate());
-                if(adv.getTime() != null)
-                    mBsaTimeTv.setText(getText(R.string.last_update) + " " + adv.getTime());
+                if(adv.getTime() != null && mBsaTimeTv != null)
+                    mBsaTimeTv.setText(mMessage + " " + adv.getTime());
             }
             AdvisoryViewAdapter adapter = new AdvisoryViewAdapter(list, mContext);
             mBsaListView.setAdapter(adapter);

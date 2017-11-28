@@ -96,4 +96,6 @@
 
     <!-- Errors -->
     <string name="error_form_completion">Please input all fields</string>
+    <string name="navigation_drawer_about">About</string>
+    <string name="menu_share">Share</string>
 </resources>
