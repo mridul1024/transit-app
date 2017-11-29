@@ -1,17 +1,15 @@
 package com.example.gaijinsmash.transitapp.activity
 
-import android.content.Context
+import android.app.Fragment
 import android.content.Intent
-import android.os.AsyncTask
 import android.os.Bundle
+import android.provider.Settings
 import android.support.design.widget.NavigationView
-import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -19,15 +17,14 @@ import android.widget.Toast
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.example.gaijinsmash.transitapp.R
-import com.example.gaijinsmash.transitapp.R.id.nav_home
-import com.example.gaijinsmash.transitapp.database.StationDatabase
 import com.example.gaijinsmash.transitapp.fragment.*
 import com.example.gaijinsmash.transitapp.utils.CheckInternet
+import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     var mCurrentFragment = "HomeFragment"
-    val mFragmentManager = supportFragmentManager
+    val mFragmentManager = fragmentManager
     lateinit var mDrawer: DrawerLayout
     lateinit var mNavigationView: NavigationView
     lateinit var mBottomNavigation: AHBottomNavigation
@@ -124,7 +121,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .beginTransaction()
                 .replace(R.id.fragmentContent, newFrag, tag)
                 //.addToBackStack(null)
-                .setTransition(1)
                 .commit()
         mCurrentFragment = tag
     }
@@ -164,10 +160,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
-        if(id == R.id.menu_item_share) {
-            return true
-        }
         if (id == R.id.action_settings) {
+            mFragmentManager.beginTransaction().replace(R.id.fragmentContent, SettingsFragment()).commit()
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -201,15 +195,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
             R.id.nav_help -> {
-                // TODO: add logic
-                Toast.makeText(applicationContext, "Help", Toast.LENGTH_SHORT).show();
+                fragmentFactory(HelpFragment(), "HelpFragment")
+                //todo: resolve setCheckedItem issue with nav menus
+                return true
             }
             R.id.nav_about -> {
-                // TODO: add logic
-                Toast.makeText(applicationContext, "About", Toast.LENGTH_SHORT).show();
+                fragmentFactory(AboutFragment(), "AboutFragment")
+                //todo: resolve setCheckedItem issue with nav menus
+                return true
             }
         }
-        closeDrawer()
         return true
     }
 

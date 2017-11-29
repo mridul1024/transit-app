@@ -3,7 +3,7 @@ package com.example.gaijinsmash.transitapp.fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,9 +69,6 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(savedInstanceState != null) {
-
-        }
     }
 
     @Override

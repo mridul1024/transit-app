@@ -3,8 +3,7 @@ package com.example.gaijinsmash.transitapp.fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.BundleCompat;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +11,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.activity.MainActivity;
-import com.example.gaijinsmash.transitapp.view_adapter.AdvisoryViewAdapter;
 import com.example.gaijinsmash.transitapp.model.bart.Advisory;
 import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 import com.example.gaijinsmash.transitapp.network.xmlparser.AdvisoryXmlParser;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
+import com.example.gaijinsmash.transitapp.view_adapter.AdvisoryViewAdapter;
 
-import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;

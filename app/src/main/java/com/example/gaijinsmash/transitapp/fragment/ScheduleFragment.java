@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -128,6 +128,7 @@ public class ScheduleFragment extends Fragment {
             }
         });
 
+        // Submit Button
         mSearchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override

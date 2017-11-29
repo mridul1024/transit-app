@@ -96,6 +96,23 @@
 
     <!-- Errors -->
     <string name="error_form_completion">Please input all fields</string>
+
+    <!-- Menus -->
     <string name="navigation_drawer_about">About</string>
     <string name="menu_share">Share</string>
+    <string name="about_textView">Made by Ryan J Suzuki. All Rights Reserved.</string>
+    <string name="logo_description">Application Logo</string>
+    <string name="help_view_title">Got Questions?</string>
+
+    <!-- Preference Screen -->
+    <string name="preference_title">Settings</string>
+    <string name="preference_checkbox_title">Switch to 24HR setting</string>
+    <string name="preference_checkbox_value">Something goes here</string>
+    <string name="preference_edittext_title">Your Daily Commute</string>
+    <string name="preference_edittext_summary">Save your most common route here</string>
+    <string name="preference_edittext_dialog">Dialog Title</string>
+    <string name="preference_category_title">Title</string>
+    <string name="preference_list_title">List Title</string>
+    <string name="preference_list_dialog">Dialog Title</string>
+    <string name="preference_intent_title">Intent</string>
 </resources>
