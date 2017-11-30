@@ -23,15 +23,22 @@ public class ApiStringBuilder {
         String origin = null;
         String dest = null;
         return BASE_URI + "sched.aspx?cmd=depart&orig=" + origin + "&dest=" + dest + API_KEY;
-     }
+    }
 
     public static String getStationInfo(String station) {
         return BASE_URI;
-     }
+    }
+
+    public static String getSpecialSchedule() {
+        String cmd = "sched.aspx?cmd=special";
+        return BASE_URI + cmd + API_KEY;
+    }
 
     public static String getHolidayInfo(){
-        return BASE_URI;
-     }
+        String cmd = "sched.aspx?cmd=holiday";
+        return BASE_URI + cmd + API_KEY;
+    }
+
 
     //stations are in capital Abbr
     //date=<mm/dd/yyyy>

@@ -3,7 +3,6 @@ package com.example.gaijinsmash.transitapp.activity
 import android.app.Fragment
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
@@ -13,13 +12,11 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.example.gaijinsmash.transitapp.R
 import com.example.gaijinsmash.transitapp.fragment.*
 import com.example.gaijinsmash.transitapp.utils.CheckInternet
-import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -161,7 +158,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
         if (id == R.id.action_settings) {
-            mFragmentManager.beginTransaction().replace(R.id.fragmentContent, SettingsFragment()).commit()
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContent, SettingsFragment())
+                    .addToBackStack(null)
+                    .commit()
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -209,7 +209,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun fragmentFactory(fragment: Fragment, tag: String) {
-        mFragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment, tag).commit()
+        replaceFrag(fragment, tag)
         closeDrawer()
     }
 

@@ -106,13 +106,15 @@
 
     <!-- Preference Screen -->
     <string name="preference_title">Settings</string>
-    <string name="preference_checkbox_title">Switch to 24HR setting</string>
+    <string name="preference_checkbox_title">24 Hour Format</string>
     <string name="preference_checkbox_value">Something goes here</string>
     <string name="preference_edittext_title">Your Daily Commute</string>
-    <string name="preference_edittext_summary">Save your most common route here</string>
+    <string name="preference_edittext_summary">Click here to create your most common route</string>
     <string name="preference_edittext_dialog">Dialog Title</string>
-    <string name="preference_category_title">Title</string>
+    <string name="preference_category_title">Time Format</string>
     <string name="preference_list_title">List Title</string>
     <string name="preference_list_dialog">Dialog Title</string>
     <string name="preference_intent_title">Intent</string>
+    <string name="preference_time_title">Time Format</string>
+    <string name="preference_checkbox_title2">24 Hour Format</string>
 </resources>

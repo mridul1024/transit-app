@@ -1,12 +1,15 @@
 package com.example.gaijinsmash.transitapp.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -26,6 +29,7 @@ import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.model.bart.Route;
 import com.example.gaijinsmash.transitapp.network.xmlparser.RouteXMLParser;
+import com.example.gaijinsmash.transitapp.utils.SharedPreferencesUtils;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -112,17 +116,21 @@ public class ScheduleFragment extends Fragment {
                 int hour = currentTime.get(Calendar.HOUR_OF_DAY);
                 int minute = currentTime.get(Calendar.MINUTE);
 
+                // Check SharedPreferences for time setting
+                boolean timeBoolean = SharedPreferencesUtils.isTwentyFourHrTimeOn(getActivity());
+
                 // Create and return a new instance of TimePickerDialog
                 mTimePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
+                        // AM/PM Format
                         String aMpM = "AM";
                         if(selectedHour > 11) {
                             aMpM = "PM";
                         }
                         mTimeEt.setText(String.format("%02d:%02d " + aMpM, selectedHour, selectedMinute));
                     }
-                }, hour,minute,false); //True = 24 hour format
+                }, hour,minute,timeBoolean); //True = 24 hour format. False = AM/PM
                 mTimePickerDialog.setTitle(getString(R.string.time_title));
                 mTimePickerDialog.show();
             }
@@ -213,8 +221,12 @@ public class ScheduleFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
-                // change fragment view to Results
+                // Switch to ResultsFragment
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction().replace(R.id.fragmentContent, new ResultsFragment()).commit();
+
                 // display results in a custom list view
+                //todo: how to pass data to new fragment?
             }
         }
     }

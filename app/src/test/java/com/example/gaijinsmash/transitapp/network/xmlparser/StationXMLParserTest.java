@@ -19,10 +19,6 @@ import java.util.List;
 
 import static junit.framework.Assert.assertTrue;
 
-/**
- * Created by ryanj on 8/23/2017.
- */
-
 @RunWith(MockitoJUnitRunner.class)
 public class StationXMLParserTest {
 
@@ -43,6 +39,6 @@ public class StationXMLParserTest {
 
     public List testCall() throws IOException, XmlPullParserException {
         StationXMLParser stationXMLParser = new StationXMLParser(mMockContext);
-        return stationXMLParser.getStations();
+        return stationXMLParser.getAllStations();
     }
 }

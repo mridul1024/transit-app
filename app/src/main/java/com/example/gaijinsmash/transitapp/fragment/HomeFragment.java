@@ -1,9 +1,11 @@
 package com.example.gaijinsmash.transitapp.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import com.example.gaijinsmash.transitapp.model.bart.Advisory;
 import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 import com.example.gaijinsmash.transitapp.network.xmlparser.AdvisoryXmlParser;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
+import com.example.gaijinsmash.transitapp.utils.SharedPreferencesUtils;
 import com.example.gaijinsmash.transitapp.view_adapter.AdvisoryViewAdapter;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -110,12 +113,22 @@ public class HomeFragment extends Fragment {
         }
 
         protected void onPostExecute(List<Advisory> list) {
+            boolean is24FormatOn = SharedPreferencesUtils.isTwentyFourHrTimeOn(getActivity());
+            String time = "";
             for(Advisory adv : list) {
-                if(adv.getTime() != null && mBsaTimeTv != null)
-                    mBsaTimeTv.setText(mMessage + " " + adv.getTime());
+                if(is24FormatOn) {
+                    time = adv.getTime();
+                } else {
+                    time = adv.getTwentyFourHr();
+                }
+                if(adv.getTime() != null && mBsaTimeTv != null) {
+                    mBsaTimeTv.setText(mMessage + " " + time);
+                }
             }
             AdvisoryViewAdapter adapter = new AdvisoryViewAdapter(list, mContext);
             mBsaListView.setAdapter(adapter);
         }
     }
+
+
 }
