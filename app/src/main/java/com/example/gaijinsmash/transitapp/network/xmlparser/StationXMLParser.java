@@ -43,17 +43,6 @@ public class StationXMLParser implements XmlParserInterface {
         return results;
     }
 
-    public List<Station> getAllStations() throws IOException, XmlPullParserException {
-        if(DEBUG)
-            Log.i("getStations()", "Fetching all stations from xml");
-        ApiStringBuilder sb = new ApiStringBuilder();
-        String uri = sb.getAllStations();
-        InputStream is = new FetchInputStream(mContext).connectToApi(uri);
-        List results = parse(is);
-        is.close();
-        return results;
-    }
-
     public List<Station> parse(InputStream is) throws XmlPullParserException, IOException {
         if(DEBUG)
             Log.i("parse()", "***BEGINNING***");
@@ -69,7 +58,7 @@ public class StationXMLParser implements XmlParserInterface {
         }
     }
 
-    private List<Station> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+    public List<Station> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         if(DEBUG)
             Log.i("readFeed():", "***BEGINNING***");
 
@@ -82,9 +71,8 @@ public class StationXMLParser implements XmlParserInterface {
             String name = parser.getName();
             // Starts by looking for the first tag
             if (name.equals("stations")) {
-                if(DEBUG) {
+                if(DEBUG)
                     Log.i("STATIONS tag: ", "MATCHED");
-                }
                 stationList = readStations(parser);
             } else {
                 XmlParserAbstract.skip(parser);
@@ -98,15 +86,15 @@ public class StationXMLParser implements XmlParserInterface {
             Log.i("readStations()", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "stations");
         List<Station> stationList = new ArrayList<Station>();
-
         while (parser.next() != XmlPullParser.END_TAG) {
             if(parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
-
             if(name.equals("station")) {
                 stationList.add(readStationObject(parser));
+            } else {
+                XmlParserAbstract.skip(parser);
             }
         }
         return stationList;
@@ -189,12 +177,18 @@ public class StationXMLParser implements XmlParserInterface {
     }
     //----------------------------------------------------------------------------------------------
     // Processes name tags in the StationInfo feed
+
+    //TODO: refactor into simple method that takes two parameters(XmlPullParser and String)
     private String readName(XmlPullParser parser) throws IOException, XmlPullParserException {
         if(DEBUG)
             Log.i("readName()", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "name");
         String name = XmlParserAbstract.readText(parser);
+
+        // ADD REGEX to modify "international"
+        name.replace("International", "Int'l");
+        //name.replaceAll("International", "Int'l");
         parser.require(XmlPullParser.END_TAG, ns, "name");
         return name;
     }
@@ -206,6 +200,7 @@ public class StationXMLParser implements XmlParserInterface {
 
         parser.require(XmlPullParser.START_TAG, ns, "address");
         String address = XmlParserAbstract.readText(parser);
+        address.replaceAll("International", "Int'l");
         parser.require(XmlPullParser.END_TAG, ns, "address");
         return address;
     }

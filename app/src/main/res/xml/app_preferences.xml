@@ -5,9 +5,9 @@
     <PreferenceCategory
         android:title="@string/preference_category_title">
         <CheckBoxPreference
-            android:key="checkbox_time_key"
+            android:key="TIME_KEY"
             android:title="@string/preference_checkbox_title"
-            android:defaultValue="@string/help_view_title">
+            android:defaultValue="false">
         </CheckBoxPreference>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -46,6 +46,7 @@ public class ApiStringBuilder {
     //b=<number> how many trips to show before specified time(0,4)
     //a=<number> how many trips to show after specified time (0,4)
 
+    // format is mm/dd/yyyy, now, or today.
     public static String getDetailedRoute(String origin, String arrival, String date, String time) {
          String cmd = "sched.aspx?cmd=depart&orig=" + origin + "&dest=" + arrival + "&date=" + date + "&time=" + time;
          return BASE_URI + cmd + API_KEY;

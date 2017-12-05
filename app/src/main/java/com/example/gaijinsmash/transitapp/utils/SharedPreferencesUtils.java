@@ -7,7 +7,8 @@ import android.preference.PreferenceManager;
 public class SharedPreferencesUtils {
 
     public static boolean isTwentyFourHrTimeOn(Context context) {
+        //TODO: fix the boolean
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return sharedPreferences.getBoolean("",true);
+        return sharedPreferences.getBoolean("", true);
     }
 }

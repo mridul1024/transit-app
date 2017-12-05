@@ -32,13 +32,5 @@ public class StationXMLParserTest {
 
     }
 
-    @Test
-    public void testXmlParser_shouldReturnTrue() throws IOException, XmlPullParserException {
-        assertTrue("Stations list is not null", testCall() != null);
-    }
 
-    public List testCall() throws IOException, XmlPullParserException {
-        StationXMLParser stationXMLParser = new StationXMLParser(mMockContext);
-        return stationXMLParser.getAllStations();
-    }
 }

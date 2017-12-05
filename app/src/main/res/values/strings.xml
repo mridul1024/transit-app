@@ -18,6 +18,12 @@
     <string name="navigation_drawer_schedule">BART Schedule</string>
     <string name="navigation_drawer_stations">BART Station Info</string>
     <string name="navigation_drawer_bart_map">Map of BART</string>
+    <string name="navigation_drawer_misc">Misc</string>
+    <string name="navigation_drawer_about">About</string>
+    <string name="menu_share">Share</string>
+    <string name="about_textView">Made by Ryan J Suzuki. All Rights Reserved.</string>
+    <string name="logo_description">Application Logo</string>
+    <string name="help_view_title">Got Questions?</string>
 
     <!-- Home Fragment -->
     <string name="home_title">Welcome to the BART App!</string>
@@ -41,44 +47,43 @@
     <!-- Station Fragment -->
     <string-array name="stations_list">
         <item>12th St. Oakland City Center</item>
-        <item>16th St. Mission SF</item>
+        <item>16th St. Mission</item>
         <item>19th St. Oakland</item>
-        <item>24th St. Mission SF</item>
-        <item>Ashby (Berkeley)</item>
-        <item>Balboa Park SF</item>
-        <item>Bay Fair (San Leandro)</item>
+        <item>24th St. Mission</item>
+        <item>Ashby</item>
+        <item>Balboa Park</item>
+        <item>Bay Fair</item>
         <item>Castro Valley</item>
-        <item>Civic Center / UN Plaza</item>
+        <item>Civic Center/UN Plaza</item>
         <item>Coliseum</item>
         <item>Colma></item>
         <item>Concord</item>
         <item>Daly City</item>
         <item>Downtown Berkeley</item>
-        <item>Dublin / Pleasanton</item>
+        <item>Dublin/Pleasanton</item>
         <item>El Cerrito del Norte</item>
         <item>El Cerrito Plaza</item>
         <item>Embarcadero</item>
         <item>Fremont</item>
-        <item>Fruitvale (Oakland)</item>
-        <item>Glen Park (SF)</item>
+        <item>Fruitvale</item>
+        <item>Glen Park</item>
         <item>Hayward</item>
         <item>Lafayette</item>
-        <item>Lake Merritt (Oakland)</item>
+        <item>Lake Merritt</item>
         <item>MacArthur (Oakland)</item>
         <item>Millbrae</item>
         <item>Montgomery St. (SF)</item>
         <item>North Berkeley</item>
-        <item>North Concord / Martinez</item>
-        <item>Oakland Int'l Airport</item>
+        <item>North Concord/Martinez</item>
+        <item>Oakland International Airport</item>
         <item>Orinda</item>
         <item>Pittsburg / Bay Point</item>
-        <item>Pleasant Hill / Contra Costa</item>
-        <item>Centre</item>
+        <item>Pleasant Hill/Contra Costa Centre</item>
         <item>Powell St. (SF)</item>
         <item>Richmond</item>
         <item>Rockridge (Oakland)</item>
         <item>San Bruno</item>
-        <item>San Francisco Int'l Airport</item>
+        <item>San Francisco International Airport</item>
         <item>San Leandro</item>
         <item>South Hayward</item>
         <item>South San Francisco</item>
@@ -88,8 +93,10 @@
         <item>West Dublin / Pleasanton</item>
         <item>West Oakland</item>
     </string-array>
+
     <string name="title_activity_google_maps">Map</string>
-    <string name="navigation_drawer_misc">Misc</string>
+
+    <!-- Permissions -->
     <string name="location_permission_denied">GPS Permission Denied</string>
     <string name="permission_required_toast">GPS Permission Required</string>
     <string name="permission_rationale_location">Rationale Location</string>
@@ -97,19 +104,12 @@
     <!-- Errors -->
     <string name="error_form_completion">Please input all fields</string>
 
-    <!-- Menus -->
-    <string name="navigation_drawer_about">About</string>
-    <string name="menu_share">Share</string>
-    <string name="about_textView">Made by Ryan J Suzuki. All Rights Reserved.</string>
-    <string name="logo_description">Application Logo</string>
-    <string name="help_view_title">Got Questions?</string>
-
     <!-- Preference Screen -->
     <string name="preference_title">Settings</string>
     <string name="preference_checkbox_title">24 Hour Format</string>
     <string name="preference_checkbox_value">Something goes here</string>
     <string name="preference_edittext_title">Your Daily Commute</string>
-    <string name="preference_edittext_summary">Click here to create your most common route</string>
+    <string name="preference_edittext_summary">Click here to create your most common trip</string>
     <string name="preference_edittext_dialog">Dialog Title</string>
     <string name="preference_category_title">Time Format</string>
     <string name="preference_list_title">List Title</string>
@@ -117,4 +117,6 @@
     <string name="preference_intent_title">Intent</string>
     <string name="preference_time_title">Time Format</string>
     <string name="preference_checkbox_title2">24 Hour Format</string>
+    <string name="cannot_do_this">\"Sorry, can\'t do this right now. Please try again in a bit.\"</string>
+    <string name="preference_button">Save</string>
 </resources>

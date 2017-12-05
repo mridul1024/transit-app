@@ -1,6 +1,7 @@
 package com.example.gaijinsmash.transitapp.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -8,10 +9,10 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.preference.PreferenceManager;
+import android.os.Parcelable;
 import android.support.v4.widget.DrawerLayout;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,34 +21,39 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.database.StationDatabase;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
+import com.example.gaijinsmash.transitapp.model.bart.Trip;
+import com.example.gaijinsmash.transitapp.network.xmlparser.TripXMLParser;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
-import com.example.gaijinsmash.transitapp.model.bart.Route;
-import com.example.gaijinsmash.transitapp.network.xmlparser.RouteXMLParser;
-import com.example.gaijinsmash.transitapp.utils.SharedPreferencesUtils;
+import com.example.gaijinsmash.transitapp.utils.TimeAndDate;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static android.app.DatePickerDialog.*;
+import static android.app.DatePickerDialog.OnDateSetListener;
 
-public class ScheduleFragment extends Fragment {
+public class TripFragment extends Fragment {
 
+    private Spinner mOriginSpinner, mDestinationSpinner;
     private TimePickerDialog mTimePickerDialog;
     private DatePickerDialog mDatePickerDialog;
     private SimpleDateFormat mSimpleDateFormat;
     private AutoCompleteTextView mDepartureActv, mArrivalActv;
     private EditText mTimeEt, mDateEt;
     private Button mSearchBtn;
+
+    boolean timeBoolean = false;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -57,34 +63,49 @@ public class ScheduleFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         // Initialize data here
-        setRetainInstance(true);
+        setRetainInstance(true); // handles screen orientation
 
+        // Check SharedPreferences for time setting
+        SharedPreferences prefs = getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
+        timeBoolean = prefs.getBoolean("TIME_KEY", false); // false = default value if Key is not found
+        Log.i("checkbox_value is ", String.valueOf(timeBoolean));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View mInflatedView = inflater.inflate(R.layout.schedule_view, container, false);
+        final View inflatedView = inflater.inflate(R.layout.trip_view, container, false);
 
-        // TODO: update nav menus
-        DrawerLayout layout = (DrawerLayout) mInflatedView.findViewById(R.id.drawer_layout);
+        DrawerLayout layout = (DrawerLayout) inflatedView.findViewById(R.id.drawer_layout);
 
+        // This data adapter is to provide a station list for Spinner and AutoCompleteTextView
         Resources res = getResources();
         String[] stations = res.getStringArray(R.array.stations_list);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getContext(), android.R.layout.select_dialog_item, stations);
+        ArrayAdapter<String> textViewAdapter = new ArrayAdapter<String> (getActivity(), android.R.layout.simple_selectable_list_item, stations);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stations);
+
+        // Spinners (Drop Down List on Touch)
+        mOriginSpinner = (Spinner) inflatedView.findViewById(R.id.station_spinner1);
+        mDestinationSpinner = (Spinner) inflatedView.findViewById(R.id.station_spinner2);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        mOriginSpinner.setAdapter(spinnerAdapter);
+        mDestinationSpinner.setAdapter(spinnerAdapter);
+        // todo: set listener to fill textview on selected item
 
         // Departure UI
-        mDepartureActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView);
+        mDepartureActv = (AutoCompleteTextView) inflatedView.findViewById(R.id.schedule_autoCompleteTextView);
         mDepartureActv.setThreshold(1); // will start working from first character
-        mDepartureActv.setAdapter(adapter);
+        mDepartureActv.setAdapter(textViewAdapter);
 
         // Arrival UI
-        mArrivalActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView2);
+        mArrivalActv = (AutoCompleteTextView) inflatedView.findViewById(R.id.schedule_autoCompleteTextView2);
         mArrivalActv.setThreshold(1);
-        mArrivalActv.setAdapter(adapter);
+        mArrivalActv.setAdapter(textViewAdapter);
+
+        // TODO: default to today and now.
 
         // Date UI
-        mDateEt = (EditText) mInflatedView.findViewById(R.id.date_editText);
+        mDateEt = (EditText) inflatedView.findViewById(R.id.date_editText);
         mDateEt.setInputType(InputType.TYPE_NULL);
         mDateEt.requestFocus();
         mDateEt.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +126,7 @@ public class ScheduleFragment extends Fragment {
         });
 
         // Time UI
-        mTimeEt = (EditText) mInflatedView.findViewById(R.id.time_editText);
+        mTimeEt = (EditText) inflatedView.findViewById(R.id.time_editText);
         mTimeEt.setInputType(InputType.TYPE_NULL);
         mTimeEt.requestFocus();
         mTimeEt.setOnClickListener(new View.OnClickListener() {
@@ -116,53 +137,67 @@ public class ScheduleFragment extends Fragment {
                 int hour = currentTime.get(Calendar.HOUR_OF_DAY);
                 int minute = currentTime.get(Calendar.MINUTE);
 
-                // Check SharedPreferences for time setting
-                boolean timeBoolean = SharedPreferencesUtils.isTwentyFourHrTimeOn(getActivity());
-
                 // Create and return a new instance of TimePickerDialog
                 mTimePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
-                        // AM/PM Format
-                        String aMpM = "AM";
-                        if(selectedHour > 11) {
-                            aMpM = "PM";
+                        // Returned value is always 24hr - so conversion is necessary
+                        if(timeBoolean) {
+                            mTimeEt.setText(String.format("%02d:%02d", selectedHour, selectedMinute));
+
+                        } else {
+                            String result = TimeAndDate.convertTo12Hr(selectedHour + ":" + selectedMinute);
+                            mTimeEt.setText(result);
                         }
-                        mTimeEt.setText(String.format("%02d:%02d " + aMpM, selectedHour, selectedMinute));
                     }
-                }, hour,minute,timeBoolean); //True = 24 hour format. False = AM/PM
+                }, hour,minute,timeBoolean); //True = 24 hour format on TimePicker only
                 mTimePickerDialog.setTitle(getString(R.string.time_title));
                 mTimePickerDialog.show();
             }
         });
 
         // Submit Button
-        mSearchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
+        mSearchBtn = (Button) inflatedView.findViewById(R.id.schedule_button);
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String departingStation = mDepartureActv.getText().toString();
+                Log.i("departing: ", departingStation);
                 String arrivingStation = mArrivalActv.getText().toString();
-                String departingTime = mTimeEt.getText().toString();    // time=h:mm+am/pm
-                String departingDate = mDateEt.getText().toString();    // date=<mm/dd/yyyy>
+                Log.i("arriving: ", arrivingStation);
+
+                // if 24hour time is true, convert time.
+                String preformatTime = mTimeEt.getText().toString();
+                String departingTime = "";
+                if(timeBoolean) {
+                    departingTime = TimeAndDate.convertTo12Hr(preformatTime);
+                    Log.i("time is : ", departingTime);
+                }
+                departingTime = TimeAndDate.formatTime(mTimeEt.getText().toString());    // time=h:mm+AM/PM
+                String departingDate = TimeAndDate.formatDate(mDateEt.getText().toString());    // date=<mm/dd/yyyy>
+
                 if(departingStation.isEmpty() || arrivingStation.isEmpty() || departingDate.isEmpty() || departingDate.isEmpty()) {
                     Toast.makeText(getActivity(), getString(R.string.error_form_completion), Toast.LENGTH_LONG);
                 } else {
-                    String[] array = {departingStation, arrivingStation, departingTime, departingDate};
-                    new GetScheduleTask(getActivity()).execute(array);
+                    //String[] array = {departingStation, arrivingStation, departingTime, departingDate};
+                    new GetScheduleTask(getActivity(), departingStation, arrivingStation, departingDate, departingTime).execute();
                 }
             }
         });
-        return mInflatedView;
+        return inflatedView;
     }
+
 
     //---------------------------------------------------------------------------------------------
     // Helper Methods
     //---------------------------------------------------------------------------------------------
 
+    //TODO check if database is present
     public String getAbbrFromDb(String stationName) throws XmlPullParserException, IOException {
+        Log.i("station: ", stationName);
         StationDatabase db = StationDatabase.getRoomDB(getActivity());
         Station station = db.getStationDAO().getStationByName(stationName);
+        Log.i("ABBR: ", station.getAbbreviation());
         return station.getAbbreviation();
     }
 
@@ -170,63 +205,58 @@ public class ScheduleFragment extends Fragment {
     // AsyncTask
     //---------------------------------------------------------------------------------------------
 
-    private class GetScheduleTask extends AsyncTask<String[], Void, Boolean> {
-        private RouteXMLParser routeXMLParser = null;
-        private List<Route> routeList = null;
+    private class GetScheduleTask extends AsyncTask<Void, Void, Boolean> {
+        private TripXMLParser routeXMLParser = null;
+        private List<Trip> mTripList = null;
         private Context mContext;
-        private String mDepart, mArrive, mTime, mDate, mDepartAbbr, mArriveAbbr;
+        private String mDepartingStn, mArrivingStn, mDepartAbbr, mArriveAbbr, mDate, mTime;
 
-        public GetScheduleTask(Context mContext) {
+        public GetScheduleTask(Context context, String departingStn, String arrivingStn, String date, String time) {
             if(this.mContext == null) {
-                this.mContext = mContext;
+                mContext = context;
+                mDate = date;
+                mTime = time;
+                mDepartingStn = departingStn;
+                mArrivingStn = arrivingStn;
             }
-        }
-
-        public void setFields(String depart, String arrive, String time, String date) {
-            this.mDepart = depart;
-            this.mArrive = arrive;
-            this.mTime = time;
-            this.mDate = date;
         }
 
         @Override
-        protected Boolean doInBackground(String[]...stations) {
-
+        protected Boolean doInBackground(Void...voids) {
+            boolean result = false;
             // Create the API Call
             try {
-                mDepartAbbr = getAbbrFromDb(stations[0].toString());
-                mArriveAbbr = getAbbrFromDb(stations[1].toString());
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+                mDepartAbbr = getAbbrFromDb(mDepartingStn);
+                mArriveAbbr = getAbbrFromDb(mArrivingStn);
+            } catch (XmlPullParserException | IOException e) {
                 e.printStackTrace();
             }
-            String uri = ApiStringBuilder.getDetailedRoute(mDepartAbbr, mArriveAbbr, stations[2].toString(), stations[3].toString());
+
+            String uri = ApiStringBuilder.getDetailedRoute(mDepartAbbr, mArriveAbbr, mDate, mTime);
             try {
-                routeXMLParser = new RouteXMLParser(mContext);
-                routeList = routeXMLParser.getList(uri);
-            } catch (IOException e){
+                routeXMLParser = new TripXMLParser(mContext);
+                mTripList = routeXMLParser.getList(uri);
+            } catch (IOException | XmlPullParserException e){
                 e.printStackTrace();
                 // TODO: Gracefully handle error for user
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
             }
-            if (routeList != null) {
-                return true;
-            } else {
-                return false;
+            if (mTripList != null) {
+                result = true;
             }
+            return result;
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
             if (result) {
+                // add list to parcelable bundle
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("Trips", (ArrayList<? extends Parcelable>) mTripList);
                 // Switch to ResultsFragment
+                Fragment newFrag = new ResultsFragment();
+                newFrag.setArguments(bundle);
                 FragmentManager fm = getFragmentManager();
-                fm.beginTransaction().replace(R.id.fragmentContent, new ResultsFragment()).commit();
-
-                // display results in a custom list view
-                //todo: how to pass data to new fragment?
+                fm.beginTransaction().replace(R.id.fragmentContent, newFrag).commit();
             }
         }
     }

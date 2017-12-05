@@ -4,21 +4,25 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.gaijinsmash.transitapp.R;
+import com.example.gaijinsmash.transitapp.model.bart.Trip;
 import com.example.gaijinsmash.transitapp.view_adapter.StationViewAdapter;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
+import com.example.gaijinsmash.transitapp.view_adapter.TripViewAdapter;
 
 import java.util.List;
 
 public class ResultsFragment extends Fragment {
 
-    private ListView listView;
-    private static StationViewAdapter adapter;
+    private ListView mListView;
+    private List<Trip> mTripList;
+    private Bundle mBundle;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -36,11 +40,25 @@ public class ResultsFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.results_view, container, false);
 
-        listView = (ListView) inflatedView.findViewById(R.id.results_listView);
+        mListView = (ListView) inflatedView.findViewById(R.id.results_listView);
 
-        //new UpdateMainActivity(this).execute();
 
         return inflatedView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mBundle = getArguments();
+        if(mBundle != null) {
+            mTripList = mBundle.getParcelableArrayList("Trips");
+        }
+        if(mTripList != null) {
+            TripViewAdapter adapter = new TripViewAdapter(mTripList, getActivity());
+            mListView.setAdapter(adapter);
+        } else {
+            Log.e("trip list", "null");
+        }
     }
 
     //---------------------------------------------------------------------------------------------

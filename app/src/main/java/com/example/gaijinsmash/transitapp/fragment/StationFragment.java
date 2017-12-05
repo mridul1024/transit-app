@@ -9,8 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
+import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.view_adapter.StationViewAdapter;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.network.xmlparser.StationXMLParser;
@@ -25,6 +28,7 @@ import java.util.List;
 public class StationFragment extends Fragment {
 
     private ListView mListView;
+    private ProgressBar mProgressBar;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -41,7 +45,8 @@ public class StationFragment extends Fragment {
                              Bundle savedInstanceState) {
         View inflatedView = inflater.inflate(R.layout.station_view, container, false);
         mListView = inflatedView.findViewById(R.id.station_listView);
-
+        mProgressBar = (ProgressBar) inflatedView.findViewById(R.id.station_progress_bar);
+        mProgressBar.setVisibility(View.VISIBLE);
         new GetStationsTask(getActivity()).execute();
 
         return inflatedView;
@@ -60,22 +65,14 @@ public class StationFragment extends Fragment {
             mContext = context;
         }
 
-        protected void onPreExecute() {
-            // TODO: set progress bar
-            // progressBar = (ProgressBar) findViewById.(R.id.progressBar);
-            // progressBar.setVisibility(View.VISIBLE);
-        }
-
         @Override
         protected List<Station> doInBackground(Void... voids) {
             try {
                 if(stationList == null && stationXMLParser == null) {
                     stationXMLParser = new StationXMLParser(mContext);
-                    stationList = stationXMLParser.getAllStations();
+                    stationList = stationXMLParser.getList(ApiStringBuilder.getAllStations());
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
+            } catch (IOException | XmlPullParserException e) {
                 e.printStackTrace();
             }
             return stationList;
@@ -87,6 +84,7 @@ public class StationFragment extends Fragment {
                 mListView.setAdapter(adapter);
             } else {
                 // TODO: Handle error gracefully for use - possibly use a cute img?
+                Toast.makeText(mContext, getString(R.string.cannot_do_this), Toast.LENGTH_LONG);
                 Log.e("onPostExecute()", "stationList is NULL");
             }
         }

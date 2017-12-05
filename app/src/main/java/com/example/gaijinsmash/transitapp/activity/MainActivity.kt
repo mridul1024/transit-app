@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun initScheduleFragment() {
-        replaceFrag(ScheduleFragment(), "ScheduleFragment")
+        replaceFrag(TripFragment(), "TripFragment")
         mNavigationView.setCheckedItem(R.id.nav_schedule)
     }
 
@@ -186,7 +186,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
             R.id.nav_schedule -> {
-                fragmentFactory(ScheduleFragment(), "ScheduleFragment")
+                fragmentFactory(TripFragment(), "TripFragment")
                 mBottomNavigation.setCurrentItem(2)
                 return true
             }

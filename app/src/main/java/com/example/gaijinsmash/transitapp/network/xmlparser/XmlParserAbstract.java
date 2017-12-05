@@ -22,6 +22,13 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class XmlParserAbstract {
 
+    //todo: update this
+    public static String readTag(XmlPullParser parser, String tag) {
+
+        return null;
+    }
+
+
     public static String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
         String result = "";
         if(parser.next() == XmlPullParser.TEXT) {
@@ -56,4 +63,6 @@ public class XmlParserAbstract {
         in.close();
         return in;
     }
+
+
 }

@@ -2,7 +2,7 @@ package com.example.gaijinsmash.transitapp.model
 
 import org.junit.Test
 
-class RouteTest {
+class TripTest {
 
     @Test
     fun testRoute_isCorrect () {
