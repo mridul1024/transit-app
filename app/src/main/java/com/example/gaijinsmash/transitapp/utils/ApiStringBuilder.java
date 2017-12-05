@@ -12,26 +12,33 @@ public class ApiStringBuilder {
 
     //TODO : finish API calls
 
-    public String getAllStations() {
+    public static String getAllStations() {
         String stations = "stn.aspx?cmd=stns";
         return BASE_URI + stations + API_KEY;
     }
 
-    public String getRoute(String stationA, String stationB) {
+    public static String getRoute(String stationA, String stationB) {
         // get abbr for stationA
         // get abbr for stationB
         String origin = null;
         String dest = null;
         return BASE_URI + "sched.aspx?cmd=depart&orig=" + origin + "&dest=" + dest + API_KEY;
-     }
+    }
 
-    public String getStationInfo(String station) {
+    public static String getStationInfo(String station) {
         return BASE_URI;
-     }
+    }
 
-    public String getHolidayInfo(){
-        return BASE_URI;
-     }
+    public static String getSpecialSchedule() {
+        String cmd = "sched.aspx?cmd=special";
+        return BASE_URI + cmd + API_KEY;
+    }
+
+    public static String getHolidayInfo(){
+        String cmd = "sched.aspx?cmd=holiday";
+        return BASE_URI + cmd + API_KEY;
+    }
+
 
     //stations are in capital Abbr
     //date=<mm/dd/yyyy>
@@ -39,12 +46,13 @@ public class ApiStringBuilder {
     //b=<number> how many trips to show before specified time(0,4)
     //a=<number> how many trips to show after specified time (0,4)
 
-    public String getDetailedRoute(String origin, String arrival, String date, String time) {
+    // format is mm/dd/yyyy, now, or today.
+    public static String getDetailedRoute(String origin, String arrival, String date, String time) {
          String cmd = "sched.aspx?cmd=depart&orig=" + origin + "&dest=" + arrival + "&date=" + date + "&time=" + time;
          return BASE_URI + cmd + API_KEY;
     }
 
-    public String getBSA() {
+    public static String getBSA() {
         String cmd = "bsa.aspx?cmd=bsa";
         return BASE_URI + cmd + API_KEY;
     }

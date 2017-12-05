@@ -8,6 +8,7 @@ import org.junit.Before;
 
 public class StationTest extends AbstractModelTest<Station> {
 
+
     public StationTest() {
         super(Station.class);
     }
@@ -18,8 +19,9 @@ public class StationTest extends AbstractModelTest<Station> {
 
     }
 
+
     @Override
-    public int compare(Station station, Station t1) {
+    public int compare(Station o1, Station o2) {
         return 0;
     }
 }

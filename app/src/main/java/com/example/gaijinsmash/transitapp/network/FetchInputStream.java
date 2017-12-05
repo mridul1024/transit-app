@@ -17,10 +17,6 @@ public class FetchInputStream {
         this.mContext = mContext;
     }
 
-    public Context getContext() {
-        return mContext;
-    }
-
     // Attempt a URL connection and return an InputStream
     public InputStream connectToApi(String url) throws IOException {
         URL apiURL = new URL(url);
@@ -31,7 +27,7 @@ public class FetchInputStream {
 
         if(responseCode != HttpURLConnection.HTTP_OK) {
             ErrorToast toast = new ErrorToast();
-            toast.networkConnectionErrorToast(getContext(), responseCode);
+            toast.networkConnectionErrorToast(mContext, responseCode);
         }
 
         InputStream in = httpURLConnection.getInputStream();

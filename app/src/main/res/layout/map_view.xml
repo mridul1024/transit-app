@@ -3,12 +3,20 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_map_container">
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:id="@+id/map_view_iv"
-        android:src="@drawable/bart_map"
-        android:scaleType="centerCrop" />
+        <ImageView
+            android:id="@+id/map_view_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:elevation="1dp"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:src="@drawable/bart_map" />
+
+    </HorizontalScrollView>
+
 </FrameLayout>

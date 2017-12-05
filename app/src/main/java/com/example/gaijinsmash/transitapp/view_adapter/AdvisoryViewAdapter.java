@@ -1,4 +1,4 @@
-package com.example.gaijinsmash.transitapp.adapter;
+package com.example.gaijinsmash.transitapp.view_adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,13 +17,15 @@ import com.example.gaijinsmash.transitapp.model.bart.Advisory;
 
 import java.util.List;
 
-public class AdvisoryCustomAdapter extends ArrayAdapter<Advisory> implements View.OnClickListener {
-    private List<Advisory> advisoryList = null;
+//TODO: many to one relationship with Stations
+
+public class AdvisoryViewAdapter extends ArrayAdapter<Advisory> implements View.OnClickListener {
+    private List<Advisory> mAdvisoryList = null;
     private Context mContext;
 
-    public AdvisoryCustomAdapter(List<Advisory> data, Context context) {
+    public AdvisoryViewAdapter(List<Advisory> data, Context context) {
         super(context, R.layout.station_list_row, data);
-        this.advisoryList = data;
+        this.mAdvisoryList = data;
         this.mContext = context;
     }
 

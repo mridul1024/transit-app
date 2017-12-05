@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_menu_home"
             android:title="@string/navigation_drawer_home" />
         <item
+            android:id="@+id/nav_map"
+            android:icon="@drawable/ic_menu_map"
+            android:title="@string/navigation_drawer_bart_map" />
+        <item
             android:id="@+id/nav_schedule"
             android:icon="@drawable/ic_menu_schedule"
             android:title="@string/navigation_drawer_schedule" />
@@ -16,22 +20,18 @@
             android:id="@+id/nav_station"
             android:icon="@drawable/ic_menu_station"
             android:title="@string/navigation_drawer_stations" />
-        <item
-            android:id="@+id/nav_map"
-            android:icon="@drawable/ic_menu_map"
-            android:title="@string/navigation_drawer_bart_map" />
     </group>
 
-    <item android:title="@string/navigation_drawer_help">
+    <item android:title="@string/navigation_drawer_misc">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_menu_help"
+                android:title="@string/navigation_drawer_help" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_menu_about"
+                android:title="@string/navigation_drawer_about" />
         </menu>
     </item>
 

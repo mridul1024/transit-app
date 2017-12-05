@@ -1,15 +1,18 @@
 package com.example.gaijinsmash.transitapp.network;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 
@@ -26,7 +29,6 @@ public class FetchGPS extends Activity implements LocationListener {
     private static final long LOCATION_REFRESH_DIST = 10; // 10 meters
     private static final long LOCATION_REFRESH_TIME = 1000 * 60 * 1; // 1 minute
 
-
     public FetchGPS(Context context) {
         this.mContext = context;
         //getLocation();
@@ -40,6 +42,19 @@ public class FetchGPS extends Activity implements LocationListener {
     }
     public Double getLongitude() {
         return mLongitude;
+    }
+
+    public static boolean checkGPSPermission(Context context) {
+        boolean result = false;
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            result = true;
+            // TODO: Consider calling
+
+
+        }
+        return result;
     }
 
     @SuppressLint("MissingPermission")
