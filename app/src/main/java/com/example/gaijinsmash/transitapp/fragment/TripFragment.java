@@ -16,12 +16,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -36,7 +38,6 @@ import com.example.gaijinsmash.transitapp.utils.TimeAndDate;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -85,13 +86,34 @@ public class TripFragment extends Fragment {
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stations);
 
         // Spinners (Drop Down List on Touch)
-        Spinner originSpinner = (Spinner) inflatedView.findViewById(R.id.station_spinner1);
-        Spinner destinationSpinner = (Spinner) inflatedView.findViewById(R.id.station_spinner2);
+        Spinner departureSpinner = (Spinner) inflatedView.findViewById(R.id.station_spinner1);
+        Spinner arrivalSpinner = (Spinner) inflatedView.findViewById(R.id.station_spinner2);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        originSpinner.setAdapter(spinnerAdapter);
-        destinationSpinner.setAdapter(spinnerAdapter);
-        // todo: set listener to fill textview on selected item
 
+        departureSpinner.setAdapter(spinnerAdapter);
+        departureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                TextView textView = (TextView) departureSpinner.getSelectedView();
+                String itemSelected = textView.getText().toString();
+                mDepartureActv.setText(itemSelected);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+        arrivalSpinner.setAdapter(spinnerAdapter);
+        arrivalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                TextView textView = (TextView) arrivalSpinner.getSelectedView();
+                String itemSelected = textView.getText().toString();
+                mArrivalActv.setText(itemSelected);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
         // Departure UI
         mDepartureActv = (AutoCompleteTextView) inflatedView.findViewById(R.id.schedule_autoCompleteTextView);
         mDepartureActv.setThreshold(1); // will start working from first character
