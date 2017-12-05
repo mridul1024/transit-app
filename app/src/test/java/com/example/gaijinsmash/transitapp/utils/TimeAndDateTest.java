@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.Time;
+import java.util.Calendar;
 
 import static junit.framework.Assert.assertTrue;
 
@@ -19,6 +20,15 @@ public class TimeAndDateTest {
 
     @Before
     public void setUp() throws Exception {
+    }
+
+    @Test
+    public void testGetCurrentDate() throws Exception {
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH);
+        int year = c.get(Calendar.YEAR);
+
     }
 
     @Test

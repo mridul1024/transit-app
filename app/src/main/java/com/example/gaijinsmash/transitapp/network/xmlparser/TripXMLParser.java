@@ -142,34 +142,34 @@ public class TripXMLParser implements XmlParserInterface {
         if(name.equals("trip")) {
             origin = parser.getAttributeValue(null, "origin"); // abbr
             if(DEBUG)
-                Log.i("origin", "matched");
+                Log.i("origin", origin);
             destination = parser.getAttributeValue(null, "destination"); // abbr
             if(DEBUG)
-                Log.i("destination", "matched");
+                Log.i("destination", destination);
             fare = parser.getAttributeValue(null, "fare"); // BigDecimal or Currency
             if(DEBUG)
-                Log.i("fare", "matched");
+                Log.i("fare: ", fare);
             origTimeMin = parser.getAttributeValue(null, "origTimeMin");
             if(DEBUG)
-                Log.i("origTimeMin", "matched");
+                Log.i("origTimeMin", origTimeMin);
             origTimeDate = parser.getAttributeValue(null, "origTimeDate");
             if(DEBUG)
-                Log.i("origTimeDate", "matched");
+                Log.i("origTimeDate", origTimeDate);
             destTimeMin = parser.getAttributeValue(null, "destTimeMin");
             if(DEBUG)
-                Log.i("destTimeMin", "matched");
+                Log.i("destTimeMin", destTimeMin);
             destTimeDate = parser.getAttributeValue(null, "destTimeDate");
             if(DEBUG)
-                Log.i("destTimeDate", "matched");
+                Log.i("destTimeDate", destTimeDate);
             clipper = parser.getAttributeValue(null, "clipper");
             if(DEBUG)
-                Log.i("clipper", "matched");
+                Log.i("clipper", clipper);
             tripTime = parser.getAttributeValue(null, "tripTime");
             if(DEBUG)
-                Log.i("tripTime", "matched");
+                Log.i("tripTime", tripTime);
             co2 = parser.getAttributeValue(null, "co2");
             if(DEBUG)
-                Log.i("co2", "matched");
+                Log.i("co2", co2);
         }
         Trip trip = new Trip();
         trip.setOrigin(origin);

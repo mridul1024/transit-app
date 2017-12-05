@@ -21,4 +21,15 @@ public class TripXMLParserTest {
     public void RouteXMLParser_should_Return_True() throws Exception {
         assertTrue("", false);
     }
+
+    @Test
+    public void testSubmissionButton() throws Exception {
+        // test that now
+
+        // test that today
+
+        // test that chosen time
+
+        // test that chosen date
+    }
 }

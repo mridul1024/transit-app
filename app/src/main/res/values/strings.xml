@@ -70,18 +70,18 @@
         <item>Hayward</item>
         <item>Lafayette</item>
         <item>Lake Merritt</item>
-        <item>MacArthur (Oakland)</item>
+        <item>MacArthur</item>
         <item>Millbrae</item>
-        <item>Montgomery St. (SF)</item>
+        <item>Montgomery St.</item>
         <item>North Berkeley</item>
         <item>North Concord/Martinez</item>
         <item>Oakland International Airport</item>
         <item>Orinda</item>
-        <item>Pittsburg / Bay Point</item>
+        <item>Pittsburg/Bay Point</item>
         <item>Pleasant Hill/Contra Costa Centre</item>
-        <item>Powell St. (SF)</item>
+        <item>Powell St.</item>
         <item>Richmond</item>
-        <item>Rockridge (Oakland)</item>
+        <item>Rockridge</item>
         <item>San Bruno</item>
         <item>San Francisco International Airport</item>
         <item>San Leandro</item>
@@ -89,8 +89,8 @@
         <item>South San Francisco</item>
         <item>Union City</item>
         <item>Walnut Creek</item>
-        <item>Warm Springs / South Fremont</item>
-        <item>West Dublin / Pleasanton</item>
+        <item>Warm Springs/South Fremont</item>
+        <item>West Dublin/Pleasanton</item>
         <item>West Oakland</item>
     </string-array>
 
@@ -119,4 +119,6 @@
     <string name="preference_checkbox_title2">24 Hour Format</string>
     <string name="cannot_do_this">\"Sorry, can\'t do this right now. Please try again in a bit.\"</string>
     <string name="preference_button">Save</string>
+    <string name="currentDate">Today</string>
+    <string name="currentTime">Now</string>
 </resources>

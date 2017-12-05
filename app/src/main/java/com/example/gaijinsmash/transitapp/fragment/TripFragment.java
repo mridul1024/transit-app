@@ -36,6 +36,7 @@ import com.example.gaijinsmash.transitapp.utils.TimeAndDate;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,7 +46,6 @@ import static android.app.DatePickerDialog.OnDateSetListener;
 
 public class TripFragment extends Fragment {
 
-    private Spinner mOriginSpinner, mDestinationSpinner;
     private TimePickerDialog mTimePickerDialog;
     private DatePickerDialog mDatePickerDialog;
     private SimpleDateFormat mSimpleDateFormat;
@@ -85,11 +85,11 @@ public class TripFragment extends Fragment {
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stations);
 
         // Spinners (Drop Down List on Touch)
-        mOriginSpinner = (Spinner) inflatedView.findViewById(R.id.station_spinner1);
-        mDestinationSpinner = (Spinner) inflatedView.findViewById(R.id.station_spinner2);
+        Spinner originSpinner = (Spinner) inflatedView.findViewById(R.id.station_spinner1);
+        Spinner destinationSpinner = (Spinner) inflatedView.findViewById(R.id.station_spinner2);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        mOriginSpinner.setAdapter(spinnerAdapter);
-        mDestinationSpinner.setAdapter(spinnerAdapter);
+        originSpinner.setAdapter(spinnerAdapter);
+        destinationSpinner.setAdapter(spinnerAdapter);
         // todo: set listener to fill textview on selected item
 
         // Departure UI
@@ -102,10 +102,9 @@ public class TripFragment extends Fragment {
         mArrivalActv.setThreshold(1);
         mArrivalActv.setAdapter(textViewAdapter);
 
-        // TODO: default to today and now.
-
         // Date UI
         mDateEt = (EditText) inflatedView.findViewById(R.id.date_editText);
+        mDateEt.setText(getText(R.string.currentDate));
         mDateEt.setInputType(InputType.TYPE_NULL);
         mDateEt.requestFocus();
         mDateEt.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +116,7 @@ public class TripFragment extends Fragment {
                     public void onDateSet(DatePicker view, int year, int month, int day) {
                         Calendar newDate = Calendar.getInstance();
                         newDate.set(year, month, day);
-                        mSimpleDateFormat = new SimpleDateFormat("MM-dd-yyyy");
+                        mSimpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
                         mDateEt.setText(mSimpleDateFormat.format(newDate.getTime()));
                     }
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -127,6 +126,7 @@ public class TripFragment extends Fragment {
 
         // Time UI
         mTimeEt = (EditText) inflatedView.findViewById(R.id.time_editText);
+        mTimeEt.setText(getText(R.string.currentTime));
         mTimeEt.setInputType(InputType.TYPE_NULL);
         mTimeEt.requestFocus();
         mTimeEt.setOnClickListener(new View.OnClickListener() {
@@ -166,18 +166,27 @@ public class TripFragment extends Fragment {
                 String arrivingStation = mArrivalActv.getText().toString();
                 Log.i("arriving: ", arrivingStation);
 
-                // if 24hour time is true, convert time.
+                // TIME
                 String preformatTime = mTimeEt.getText().toString();
                 String departingTime = "";
-                if(timeBoolean) {
-                    departingTime = TimeAndDate.convertTo12Hr(preformatTime);
-                    Log.i("time is : ", departingTime);
+
+                if(!preformatTime.equals("Now") && timeBoolean) {
+                    String convertedTime = TimeAndDate.convertTo12Hr(preformatTime);
+                    Log.d("convertedTime : ", convertedTime);
+                    departingTime = TimeAndDate.formatTime(convertedTime);
+                } else if(!preformatTime.equals("Now") && !timeBoolean){
+                    departingTime = TimeAndDate.formatTime(preformatTime); // time=h:mm+AM/PM
+                } else {
+                    departingTime = preformatTime;
                 }
-                departingTime = TimeAndDate.formatTime(mTimeEt.getText().toString());    // time=h:mm+AM/PM
-                String departingDate = TimeAndDate.formatDate(mDateEt.getText().toString());    // date=<mm/dd/yyyy>
+                Log.d("departingTime : ", departingTime);
+
+                // DATE
+                String departingDate = mDateEt.getText().toString();
+                Log.d("departingDate : ", departingDate);
 
                 if(departingStation.isEmpty() || arrivingStation.isEmpty() || departingDate.isEmpty() || departingDate.isEmpty()) {
-                    Toast.makeText(getActivity(), getString(R.string.error_form_completion), Toast.LENGTH_LONG);
+                    Toast.makeText(getActivity(), getString(R.string.error_form_completion), Toast.LENGTH_LONG).show();
                 } else {
                     //String[] array = {departingStation, arrivingStation, departingTime, departingDate};
                     new GetScheduleTask(getActivity(), departingStation, arrivingStation, departingDate, departingTime).execute();
@@ -187,12 +196,10 @@ public class TripFragment extends Fragment {
         return inflatedView;
     }
 
-
     //---------------------------------------------------------------------------------------------
     // Helper Methods
     //---------------------------------------------------------------------------------------------
 
-    //TODO check if database is present
     public String getAbbrFromDb(String stationName) throws XmlPullParserException, IOException {
         Log.i("station: ", stationName);
         StationDatabase db = StationDatabase.getRoomDB(getActivity());
