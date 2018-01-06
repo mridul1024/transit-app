@@ -32,10 +32,10 @@ public class Trip implements Parcelable {
     public String getClipper() { return clipper; }
     public String getTripTime() { return tripTime; }
     public String getCo2() { return co2; }
-    public void setOrigin(String departingStation) {
+    public void setOrigin(String origin) {
         this.origin = origin;
     }
-    public void setDestination(String arrivingStation) {
+    public void setDestination(String destination) {
         this.destination = destination;
     }
     public void setFare(String fare) {

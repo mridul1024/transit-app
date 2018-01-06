@@ -2,6 +2,7 @@ package com.example.gaijinsmash.transitapp.network.xmlparser;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Xml;
 
@@ -178,6 +179,8 @@ public class TripXMLParser implements XmlParserInterface {
         }
 
         Trip trip = new Trip();
+
+        // TODO: need to convert abbr to full names
         trip.setOrigin(origin);
         trip.setDestination(destination);
         trip.setFare(fare);
@@ -190,4 +193,36 @@ public class TripXMLParser implements XmlParserInterface {
         trip.setCo2(co2);
         return trip;
     }
+
+    private class GetStationTask extends AsyncTask<Void, Void, String[]> {
+        private Context mContext;
+        private Trip mTrip;
+        private String mOriginAbbr;
+        private String mDestAbbr;
+
+        public GetStationTask(Context context, Trip trip, String originAbbr, String destAbbr) {
+            mContext = context;
+            mTrip = trip;
+            mOriginAbbr = originAbbr;
+            mDestAbbr = destAbbr;
+        }
+
+        @Override
+        protected String[] doInBackground(Void... voids) {
+            String[] list = new String[2];
+            StationDatabase db = StationDatabase.getRoomDB(mContext);
+            Station originStation = db.getStationDAO().getStationByAbbr(mOriginAbbr);
+            Station destStation = db.getStationDAO().getStationByAbbr(mDestAbbr);
+            list[0] = (originStation.getName());
+            list[1] = (destStation.getName());
+            return list;
+        }
+
+        @Override
+        protected void onPostExecute(String[] stationList) {
+            mTrip.setOrigin(stationList[0]);
+            mTrip.setDestination(stationList[1]);
+        }
+    }
+
 }

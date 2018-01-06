@@ -1,6 +1,7 @@
 package com.example.gaijinsmash.transitapp.view_adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +9,14 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.gaijinsmash.transitapp.R;
+import com.example.gaijinsmash.transitapp.database.StationDatabase;
+import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.model.bart.Trip;
 
 import org.w3c.dom.Text;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.IOException;
 import java.util.List;
 
 public class TripViewAdapter  extends ArrayAdapter<Trip> implements View.OnClickListener {
@@ -81,5 +86,14 @@ public class TripViewAdapter  extends ArrayAdapter<Trip> implements View.OnClick
         viewHolder.tripTime.setText(trip.getTripTime());
         viewHolder.clipper.setText(trip.getClipper());
         return convertView;
+    }
+
+    // Helper Method
+    public String getNameFromAbbr(String abbr) throws XmlPullParserException, IOException {
+        Log.i("***ABBR***", "START");
+        StationDatabase db = StationDatabase.getRoomDB(mContext);
+        Station station = db.getStationDAO().getStationByAbbr(abbr);
+        Log.i("Station Name", station.getName());
+        return station.getName();
     }
 }

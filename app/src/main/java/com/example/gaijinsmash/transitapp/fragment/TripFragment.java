@@ -38,6 +38,7 @@ import com.example.gaijinsmash.transitapp.utils.TimeAndDate;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;

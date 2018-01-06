@@ -84,6 +84,8 @@ public class HomeFragment extends Fragment {
     // AsyncTask
     //---------------------------------------------------------------------------------------------
 
+    //TODO: check for 24 hour format in sharedpreferences
+
     private class GetAdvisoryTask extends AsyncTask<Void, Void, List<Advisory>> {
         private Context mContext;
         private List<Advisory> mList;
