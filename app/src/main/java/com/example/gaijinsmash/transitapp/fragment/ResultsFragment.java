@@ -39,10 +39,7 @@ public class ResultsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.results_view, container, false);
-
         mListView = (ListView) inflatedView.findViewById(R.id.results_listView);
-
-
         return inflatedView;
     }
 
@@ -59,28 +56,5 @@ public class ResultsFragment extends Fragment {
         } else {
             Log.e("trip list", "null");
         }
-    }
-
-    //---------------------------------------------------------------------------------------------
-    // AsyncTask
-    //---------------------------------------------------------------------------------------------
-
-    private class UpdateMainActivity extends AsyncTask<Void, Void, List<Station>> {
-        private Context context;
-
-        public UpdateMainActivity(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected List<Station> doInBackground(Void... voids) {
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(List<Station> stationList) {
-
-        }
-
     }
 }

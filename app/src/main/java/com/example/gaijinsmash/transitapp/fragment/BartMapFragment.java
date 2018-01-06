@@ -1,6 +1,7 @@
 package com.example.gaijinsmash.transitapp.fragment;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -9,10 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.database.StationDatabase;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
+import com.example.gaijinsmash.transitapp.network.FetchGPS;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -29,7 +33,6 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
 
     private static final boolean DEBUG = true;
     private MapView mMapView;
-    private GoogleMap mGoogleMap;
     private ProgressBar mProgressBar;
 
     //---------------------------------------------------------------------------------------------
@@ -45,7 +48,7 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setRetainInstance(true);
-        if(mMapView != null)
+        if (mMapView != null)
             mMapView.onCreate(bundle);
     }
 
@@ -58,7 +61,7 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
         try {
             mMapView = (MapView) inflatedView.findViewById(R.id.mapView);
             mMapView.onCreate(savedInstanceState);
-            mMapView.getMapAsync(this::onMapReady);
+            mMapView.getMapAsync(this);
         } catch (Exception e) {
             Log.i("Map View Error:", e.toString());
         }
@@ -79,41 +82,42 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onResume() {
         super.onResume();
-        if(mMapView != null)
+        if (mMapView != null)
             mMapView.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if(mMapView != null)
+        if (mMapView != null)
             mMapView.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if(mMapView != null)
+        if (mMapView != null)
             mMapView.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mMapView != null)
+        if (mMapView != null)
             mMapView.onDestroy();
     }
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        if(mMapView != null)
+        if (mMapView != null)
             mMapView.onLowMemory();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mMapView != null)
+        if (mMapView != null)
             mMapView.onSaveInstanceState(outState);
     }
     //---------------------------------------------------------------------------------------------
@@ -122,10 +126,15 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override // This is called when google map is initialized
     public void onMapReady(GoogleMap googleMap) {
-        mGoogleMap = googleMap;
+        GoogleMap mGoogleMap = googleMap;
 
         // GoogleMaps settings
         initMapSettings(mGoogleMap);
+        try {
+            initUserLocation(getActivity(), mGoogleMap);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
 
         // Populate map with all the stations (markers)
         new GetMarkersTask(mGoogleMap, getActivity()).execute();
@@ -143,7 +152,7 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     public void initMapSettings(GoogleMap map) {
         map.setMinZoomPreference(9f);
         LatLngBounds bayArea = new LatLngBounds(
-                new LatLng(37.2982,-121.5363), //southwest
+                new LatLng(37.2982, -121.5363), //southwest
                 new LatLng(38.0694, -121.8494)); //northeast
         map.setLatLngBoundsForCameraTarget(bayArea);
         map.getUiSettings().setZoomControlsEnabled(false);
@@ -151,7 +160,7 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
         map.getUiSettings().setZoomGesturesEnabled(true);
         // todo: default zoom in on current location if gps is enabled, else zoom to whole map of bay area.
         boolean gpsCheck = true; // need to replace with real check logic
-        if(gpsCheck) {
+        if (gpsCheck) {
             LatLng marker = new LatLng(37.803768, -122.231450);
             map.moveCamera(CameraUpdateFactory.newLatLng(marker));
         } else {
@@ -166,6 +175,16 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     //---------------------------------------------------------------------------------------------
     // Thread for call to database and create Markers
     //---------------------------------------------------------------------------------------------
+    private void initUserLocation(Context context, GoogleMap map) throws GooglePlayServicesNotAvailableException {
+        FetchGPS gps = new FetchGPS(context);
+        Location loc = gps.getLocation();
+        if (FetchGPS.checkGPSPermission(context)) {
+            map.setMyLocationEnabled(true);
+        } else {
+            Toast.makeText(context, "Please enable Network Permissions", Toast.LENGTH_LONG).show();
+            //TODO: insert AlertDialog
+        }
+    }
 
     private List<LatLng> initMarkers(GoogleMap map, Context context) {
         List<LatLng> latLngList = new ArrayList<LatLng>();

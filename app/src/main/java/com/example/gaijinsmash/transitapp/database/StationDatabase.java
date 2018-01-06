@@ -22,7 +22,7 @@ public abstract class StationDatabase extends RoomDatabase {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), StationDatabase.class, "station-database")
                     //.addMigrations(MIGRATION)
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration() //todo: need to change this
                     .build();
         }
         return INSTANCE;

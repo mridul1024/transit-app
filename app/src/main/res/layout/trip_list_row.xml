@@ -5,19 +5,51 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/trip_originTitle_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="From:" />
+
+    <TextView
         android:id="@+id/trip_origin_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:text="origin" />
-
+    <TextView
+        android:id="@+id/trip_destinationTitle_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="To:" />
     <TextView
         android:id="@+id/trip_destination_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:text="destination" />
+    <TextView
+        android:id="@+id/trip_timeTitle_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="Departing Time:" />
 
+    <TextView
+        android:id="@+id/trip_time_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="departing time" />
+
+
+    <TextView
+        android:id="@+id/trip_fareTitle_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="Fare: " />
     <TextView
         android:id="@+id/trip_fare_textView"
         android:layout_width="wrap_content"

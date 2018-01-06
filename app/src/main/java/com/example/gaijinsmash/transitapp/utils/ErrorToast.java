@@ -9,19 +9,19 @@ import android.widget.Toast;
 
 public class ErrorToast {
 
-    public void noInternetErrorToast(Context context) {
+    public static void noInternetErrorToast(Context context) {
         Toast.makeText(context, "Cannot connect to Internet.", Toast.LENGTH_LONG).show();
     }
 
-    public void unknownErrorToast(Context context) {
+    public static void unknownErrorToast(Context context) {
         Toast.makeText(context, "An unknown error occurred.", Toast.LENGTH_LONG).show();
     }
 
-    public void noGPSErrorToast(Context context) {
+    public static void noGPSErrorToast(Context context) {
         Toast.makeText(context, "GPS is currently unavailable", Toast.LENGTH_LONG).show();
     }
 
-    public void networkConnectionErrorToast(Context context, int responseCode) {
+    public static void networkConnectionErrorToast(Context context, int responseCode) {
         Toast.makeText(context, "There was a problem with the network (code: " + responseCode + "). Please try again", Toast.LENGTH_LONG).show();
     }
 }

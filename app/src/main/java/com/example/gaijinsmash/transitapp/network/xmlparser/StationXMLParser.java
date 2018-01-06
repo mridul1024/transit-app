@@ -164,21 +164,19 @@ public class StationXMLParser implements XmlParserInterface {
             }
         }
 
-        Station mStation = new Station(mName);
-        mStation.setAbbreviation(mAbbreviation);
-        mStation.setLatitude(Double.parseDouble(mLatitude));
-        mStation.setLongitude(Double.parseDouble(mLongitude));
-        mStation.setAddress(mAddress);
-        mStation.setCity(mCity);
-        mStation.setCounty(mCounty);
-        mStation.setState(mState);
-        mStation.setZipcode(mZipcode);
-        return mStation;
+        Station station = new Station(mName);
+        station.setAbbreviation(mAbbreviation);
+        station.setLatitude(Double.parseDouble(mLatitude));
+        station.setLongitude(Double.parseDouble(mLongitude));
+        station.setAddress(mAddress);
+        station.setCity(mCity);
+        station.setCounty(mCounty);
+        station.setState(mState);
+        station.setZipcode(mZipcode);
+        return station;
     }
     //----------------------------------------------------------------------------------------------
     // Processes name tags in the StationInfo feed
-
-    //TODO: refactor into simple method that takes two parameters(XmlPullParser and String)
     private String readName(XmlPullParser parser) throws IOException, XmlPullParserException {
         if(DEBUG)
             Log.i("readName()", "***BEGINNING***");

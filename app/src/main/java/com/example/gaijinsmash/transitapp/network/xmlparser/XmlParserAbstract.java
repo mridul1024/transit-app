@@ -24,7 +24,6 @@ public class XmlParserAbstract {
 
     //todo: update this
     public static String readTag(XmlPullParser parser, String tag) {
-
         return null;
     }
 
@@ -63,6 +62,4 @@ public class XmlParserAbstract {
         in.close();
         return in;
     }
-
-
 }

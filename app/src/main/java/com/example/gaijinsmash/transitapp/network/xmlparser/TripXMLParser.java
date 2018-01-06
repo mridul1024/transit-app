@@ -1,13 +1,18 @@
 package com.example.gaijinsmash.transitapp.network.xmlparser;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
+import com.example.gaijinsmash.transitapp.database.StationDAO;
+import com.example.gaijinsmash.transitapp.database.StationDatabase;
 import com.example.gaijinsmash.transitapp.model.bart.Fare;
 import com.example.gaijinsmash.transitapp.model.bart.Leg;
+import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.model.bart.Trip;
 import com.example.gaijinsmash.transitapp.network.FetchInputStream;
+import com.example.gaijinsmash.transitapp.utils.PermissionUtils;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -68,11 +73,6 @@ public class TripXMLParser implements XmlParserInterface {
                 if(DEBUG)
                     Log.i("SCHEDULE tag: ", "MATCHED");
                 tripList = readSchedule(parser);
-            }
-            else if (name.equals("message")) {
-                if(DEBUG)
-                    Log.i("MESSAGE tag: ", "MATCHED");
-                // TODO: create message object and display to screen
             } else {
                 XmlParserAbstract.skip(parser);
             }
@@ -111,15 +111,7 @@ public class TripXMLParser implements XmlParserInterface {
             }
             String name = parser.getName();
             if(name.equals("trip")) {
-                if(DEBUG)
-                    Log.i("trip", "matched!");
                 tripList.add(readTripObject(parser));
-            } else if(name.equals("fares")) {
-                if(DEBUG)
-                    Log.i("fares", "matched");
-            } else if (name.equals("leg")) {
-                if(DEBUG)
-                    Log.i("leg","matched");
             } else {
                 XmlParserAbstract.skip(parser);
             }
@@ -127,7 +119,7 @@ public class TripXMLParser implements XmlParserInterface {
         return tripList;
     }
 
-    private Trip readTripObject(XmlPullParser parser)  throws XmlPullParserException, IOException {
+    private Trip readTripObject(XmlPullParser parser) {
         String origin = "";
         String destination = "";
         String fare = "";
@@ -138,87 +130,64 @@ public class TripXMLParser implements XmlParserInterface {
         String clipper = "";
         String tripTime = "";
         String co2 = "";
-        String name = parser.getName();
-        if(name.equals("trip")) {
-            origin = parser.getAttributeValue(null, "origin"); // abbr
-            if(DEBUG)
-                Log.i("origin", origin);
-            destination = parser.getAttributeValue(null, "destination"); // abbr
-            if(DEBUG)
-                Log.i("destination", destination);
-            fare = parser.getAttributeValue(null, "fare"); // BigDecimal or Currency
-            if(DEBUG)
-                Log.i("fare: ", fare);
-            origTimeMin = parser.getAttributeValue(null, "origTimeMin");
-            if(DEBUG)
-                Log.i("origTimeMin", origTimeMin);
-            origTimeDate = parser.getAttributeValue(null, "origTimeDate");
-            if(DEBUG)
-                Log.i("origTimeDate", origTimeDate);
-            destTimeMin = parser.getAttributeValue(null, "destTimeMin");
-            if(DEBUG)
-                Log.i("destTimeMin", destTimeMin);
-            destTimeDate = parser.getAttributeValue(null, "destTimeDate");
-            if(DEBUG)
-                Log.i("destTimeDate", destTimeDate);
-            clipper = parser.getAttributeValue(null, "clipper");
-            if(DEBUG)
-                Log.i("clipper", clipper);
-            tripTime = parser.getAttributeValue(null, "tripTime");
-            if(DEBUG)
-                Log.i("tripTime", tripTime);
-            co2 = parser.getAttributeValue(null, "co2");
-            if(DEBUG)
-                Log.i("co2", co2);
+
+        try {
+            parser.require(XmlPullParser.START_TAG, ns, "trip");
+            int eventType = parser.getEventType();
+            while(eventType != XmlPullParser.END_TAG) {
+                String name = parser.getName();
+                Log.i("name", name);
+                if(name.equals("trip")) {
+                    origin = parser.getAttributeValue(null, "origin"); // abbr
+                    if (DEBUG)
+                        Log.i("origin", origin);
+                    destination = parser.getAttributeValue(null, "destination"); // abbr
+                    if (DEBUG)
+                        Log.i("destination", destination);
+                    fare = parser.getAttributeValue(null, "fare"); // BigDecimal or Currency
+                    if (DEBUG)
+                        Log.i("fare: ", fare);
+                    origTimeMin = parser.getAttributeValue(null, "origTimeMin");
+                    if (DEBUG)
+                        Log.i("origTimeMin", origTimeMin);
+                    origTimeDate = parser.getAttributeValue(null, "origTimeDate");
+                    if (DEBUG)
+                        Log.i("origTimeDate", origTimeDate);
+                    destTimeMin = parser.getAttributeValue(null, "destTimeMin");
+                    if (DEBUG)
+                        Log.i("destTimeMin", destTimeMin);
+                    destTimeDate = parser.getAttributeValue(null, "destTimeDate");
+                    if (DEBUG)
+                        Log.i("destTimeDate", destTimeDate);
+                    clipper = parser.getAttributeValue(null, "clipper");
+                    if (DEBUG)
+                        Log.i("clipper", clipper);
+                    tripTime = parser.getAttributeValue(null, "tripTime");
+                    if (DEBUG)
+                        Log.i("tripTime", tripTime);
+                    co2 = parser.getAttributeValue(null, "co2");
+                    if (DEBUG)
+                        Log.i("co2", co2);
+                } else {
+                    XmlParserAbstract.skip(parser);
+                }
+                eventType = parser.next();
+            }
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
         }
+
         Trip trip = new Trip();
         trip.setOrigin(origin);
         trip.setDestination(destination);
         trip.setFare(fare);
-
-        //todo: add more values
+        trip.setOrigTimeMin(origTimeMin);
+        trip.setOrigTimeDate(origTimeDate);
+        trip.setDestTimeMin(destTimeMin);
+        trip.setDestTimeDate(destTimeDate);
+        trip.setClipper(clipper);
+        trip.setTripTime(tripTime);
+        trip.setCo2(co2);
         return trip;
-    }
-
-    private List<Fare> readFares(XmlPullParser parser) throws IOException, XmlPullParserException {
-        List<Fare> faresList = new ArrayList<Fare>();
-        parser.require(XmlPullParser.START_TAG, ns, "fares");
-        String fareAmount, fareClass, fareName = null;
-
-        while(parser.next() != XmlPullParser.END_TAG) {
-            if(parser.getEventType() != XmlPullParser.START_TAG) {
-                continue;
-            }
-            String name = parser.getName();
-
-            if(name.equals("fare")) {
-                fareAmount = parser.getAttributeValue(null, "amount");
-                fareClass = parser.getAttributeValue(null, "class");
-                fareName = parser.getAttributeValue(null, "name");
-            }
-        }
-
-        return faresList;
-    }
-
-    private List<Leg> readLegs(XmlPullParser parser) throws IOException, XmlPullParserException {
-        List<Leg> legsList = new ArrayList<Leg> ();
-
-        String name = parser.getName();
-        if(name.equals("")) {
-
-        }
-        return legsList;
-    }
-
-    //----------------------------------------------------------------------------------------------
-    // Processes name tags of Trip Objects
-    private String readTag(XmlPullParser parser, String tag) throws IOException, XmlPullParserException {
-        if(DEBUG)
-            Log.i("readTag() : ", tag);
-        parser.require(XmlPullParser.START_TAG, ns, tag);
-        String result = XmlParserAbstract.readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, tag);
-        return result;
     }
 }
