@@ -54,7 +54,7 @@ public class TripFragment extends Fragment {
     private EditText mTimeEt, mDateEt;
     private Button mSearchBtn;
 
-    boolean timeBoolean = false;
+    boolean mTimeBoolean = false;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -68,8 +68,8 @@ public class TripFragment extends Fragment {
 
         // Check SharedPreferences for time setting
         SharedPreferences prefs = getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
-        timeBoolean = prefs.getBoolean("TIME_KEY", false); // false = default value if Key is not found
-        Log.i("checkbox_value is ", String.valueOf(timeBoolean));
+        mTimeBoolean = prefs.getBoolean("TIME_KEY", false); // false = default value if Key is not found
+        Log.i("checkbox_value is ", String.valueOf(mTimeBoolean));
     }
 
     @Override
@@ -164,7 +164,7 @@ public class TripFragment extends Fragment {
                     @Override
                     public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
                         // Returned value is always 24hr - so conversion is necessary
-                        if(timeBoolean) {
+                        if(mTimeBoolean) {
                             mTimeEt.setText(String.format("%02d:%02d", selectedHour, selectedMinute));
 
                         } else {
@@ -172,7 +172,7 @@ public class TripFragment extends Fragment {
                             mTimeEt.setText(result);
                         }
                     }
-                }, hour,minute,timeBoolean); //True = 24 hour format on TimePicker only
+                }, hour,minute,mTimeBoolean); //True = 24 hour format on TimePicker only
                 mTimePickerDialog.setTitle(getString(R.string.time_title));
                 mTimePickerDialog.show();
             }
@@ -192,11 +192,11 @@ public class TripFragment extends Fragment {
                 String preformatTime = mTimeEt.getText().toString();
                 String departingTime = "";
 
-                if(!preformatTime.equals("Now") && timeBoolean) {
+                if(!preformatTime.equals("Now") && mTimeBoolean) {
                     String convertedTime = TimeAndDate.convertTo12Hr(preformatTime);
                     Log.d("convertedTime : ", convertedTime);
                     departingTime = TimeAndDate.formatTime(convertedTime);
-                } else if(!preformatTime.equals("Now") && !timeBoolean){
+                } else if(!preformatTime.equals("Now") && !mTimeBoolean){
                     departingTime = TimeAndDate.formatTime(preformatTime); // time=h:mm+AM/PM
                 } else {
                     departingTime = preformatTime;

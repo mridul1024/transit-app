@@ -9,6 +9,8 @@ import android.os.Parcelable;
 
 public class Trip implements Parcelable {
 
+    // NOTE: origin and destination will return the Abbreviation of a Station.
+    //          Will need to convert to the full name.
     private String origin;
     private String destination;
     private String fare;

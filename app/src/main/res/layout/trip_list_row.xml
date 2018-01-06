@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:text="From:" />
-
     <TextView
         android:id="@+id/trip_origin_textView"
         android:layout_width="wrap_content"
@@ -30,28 +29,78 @@
         android:layout_margin="2dp"
         android:text="destination" />
     <TextView
-        android:id="@+id/trip_timeTitle_textView"
+        android:id="@+id/trip_dateTitle_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="Date:" />
+    <TextView
+        android:id="@+id/trip_date_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="date" />
+
+    <TextView
+        android:id="@+id/trip_departTimeTitle_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:text="Departing Time:" />
 
     <TextView
-        android:id="@+id/trip_time_textView"
+        android:id="@+id/trip_departTime_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:text="departing time" />
+    <TextView
+        android:id="@+id/trip_arrivalTimeTitle_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="Arrival Time:" />
 
+    <TextView
+        android:id="@+id/trip_arrivalTime_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="arrival time" />
+    <TextView
+        android:id="@+id/trip_totalTimeTitle_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="Trip Time:" />
+
+    <TextView
+        android:id="@+id/trip_totalTime_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="trip time" />
 
     <TextView
         android:id="@+id/trip_fareTitle_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
-        android:text="Fare: " />
+        android:text="Cash Fare: " />
     <TextView
         android:id="@+id/trip_fare_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="fare" />
+    <TextView
+        android:id="@+id/trip_clipperTitle_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="Clipper Fare: " />
+    <TextView
+        android:id="@+id/trip_clipper_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"

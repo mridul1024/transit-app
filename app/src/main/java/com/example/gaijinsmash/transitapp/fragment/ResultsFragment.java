@@ -32,7 +32,6 @@ public class ResultsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Initialize data here
         setRetainInstance(true);
-
     }
 
     @Override

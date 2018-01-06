@@ -67,7 +67,10 @@ public class StationViewAdapter extends ArrayAdapter<Station> implements View.On
             viewHolder = (ViewHolder) convertView.getTag();
             view = convertView;
         }
-        viewHolder.stationName.setText(station.getName());
+
+        String name = station.getName();
+        String newName = name.replaceAll("International", "Int'l");
+        viewHolder.stationName.setText(newName);
         viewHolder.stationAddress.setText(station.getAddress());
         viewHolder.stationCity.setText(station.getCity());
         return convertView;
