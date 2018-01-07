@@ -8,9 +8,6 @@ import android.view.ViewGroup;
 
 import com.example.gaijinsmash.transitapp.R;
 
-/**
- * Created by ryanj on 9/5/2017.
- */
 
 public class MapFragment extends Fragment {
 

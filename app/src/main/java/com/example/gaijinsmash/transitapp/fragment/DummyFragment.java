@@ -13,8 +13,8 @@ import com.google.android.gms.maps.MapView;
 
 /*
     This is purely for creating new Fragments - copy and paste!
-
  */
+
 public class DummyFragment extends Fragment {
 
     @Override

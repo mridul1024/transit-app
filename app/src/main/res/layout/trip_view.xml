@@ -13,14 +13,18 @@
         android:layout_alignParentTop="true"
         android:orientation="horizontal"
         android:layout_marginTop="20dp">
-        <AutoCompleteTextView
-            android:id="@+id/schedule_autoCompleteTextView"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/departure_station"
-            android:labelFor="@id/schedule_autoCompleteTextView"
-            android:layout_weight="1"/>
+            android:layout_weight="1">
+            <AutoCompleteTextView
+                android:id="@+id/schedule_autoCompleteTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/departure_station"
+                android:labelFor="@id/schedule_autoCompleteTextView" />
+        </android.support.design.widget.TextInputLayout>
         <Spinner
             android:id="@+id/station_spinner1"
             android:layout_width="50dp"
@@ -35,14 +39,18 @@
         android:layout_below="@+id/linearLayout1"
         android:layout_marginTop="20dp"
         android:orientation="horizontal">
-        <AutoCompleteTextView
-            android:id="@+id/schedule_autoCompleteTextView2"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/arrival_station"
-            android:labelFor="@id/schedule_autoCompleteTextView2"
-            android:layout_weight="1"/>
+            android:layout_weight="1">
+            <AutoCompleteTextView
+                android:id="@+id/schedule_autoCompleteTextView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/arrival_station"
+                android:labelFor="@id/schedule_autoCompleteTextView2" />
+        </android.support.design.widget.TextInputLayout>
         <Spinner
             android:id="@+id/station_spinner2"
             android:layout_width="50dp"
@@ -55,25 +63,34 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout2"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-        <EditText
-            android:id="@+id/date_editText"
+        android:orientation="horizontal" android:baselineAligned="false">
+        <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/date_hint"
-            android:inputType="date"
-            android:labelFor="@id/date_editText"
-            android:layout_weight="3"/>
-        <EditText
-            android:id="@+id/time_editText"
+            android:layout_weight="3">
+            <EditText
+                android:id="@+id/date_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/date_hint"
+                android:inputType="date"
+                android:labelFor="@id/date_editText" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/time_hint"
-            android:inputType="time"
-            android:labelFor="@id/time_editText"
-            android:layout_weight="2"/>
+            android:layout_weight="2">
+            <EditText
+                android:id="@+id/time_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/time_hint"
+                android:inputType="time"
+                android:labelFor="@id/time_editText" />
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <Button
