@@ -1,108 +1,290 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/trip_originTitle_textView"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="From:" />
-    <TextView
-        android:id="@+id/trip_origin_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="origin" />
-    <TextView
-        android:id="@+id/trip_destinationTitle_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="To:" />
-    <TextView
-        android:id="@+id/trip_destination_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="destination" />
-    <TextView
-        android:id="@+id/trip_dateTitle_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="Date:" />
-    <TextView
-        android:id="@+id/trip_date_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="date" />
+        android:elevation="1dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:paddingBottom="15dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/trip_departTimeTitle_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="Departing Time:" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/trip_date_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="@string/departing_date"
+                    android:text="02/13/2018" />
 
-    <TextView
-        android:id="@+id/trip_departTime_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="departing time" />
-    <TextView
-        android:id="@+id/trip_arrivalTimeTitle_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="Arrival Time:" />
+                <TextView
+                    android:id="@+id/trip_origin_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignTop="@+id/textView8"
+                    android:layout_marginStart="108dp"
+                    android:text="origin" />
 
-    <TextView
-        android:id="@+id/trip_arrivalTime_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="arrival time" />
-    <TextView
-        android:id="@+id/trip_totalTimeTitle_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="Trip Time:" />
+                <TextView
+                    android:id="@+id/trip_destination_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/trip_origin_textView"
+                    android:layout_below="@+id/trip_origin_textView"
+                    android:layout_marginTop="0dp"
+                    android:text="destination" />
 
-    <TextView
-        android:id="@+id/trip_totalTime_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="trip time" />
+                <TextView
+                    android:id="@+id/trip_arriveTitle1"
+                    android:layout_width="74dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/textView8"
+                    android:layout_below="@+id/trip_origin_textView"
+                    android:text="@string/bart_result_arrive" />
 
-    <TextView
-        android:id="@+id/trip_fareTitle_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="Cash Fare: " />
-    <TextView
-        android:id="@+id/trip_fare_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="fare" />
-    <TextView
-        android:id="@+id/trip_clipperTitle_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="Clipper Fare: " />
-    <TextView
-        android:id="@+id/trip_clipper_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:text="fare" />
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="74dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignStart="@+id/trip_date_textView"
+                    android:layout_marginTop="53dp"
+                    android:text="@string/bart_result_depart" />
+
+                <TextView
+                    android:id="@+id/trip_colored_line1"
+                    android:layout_width="150dp"
+                    android:layout_height="5dp"
+                    android:layout_below="@+id/trip_destination_textView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="7dp"
+                    android:background="@color/bartDefault"
+                     />
+
+                <TextView
+                    android:id="@+id/trip_arrivalTime_textView"
+                    android:layout_width="74dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/trip_arriveTitle1"
+                    android:layout_marginEnd="12dp"
+                    android:text="@string/bart_result_arriveTime" />
+
+                <TextView
+                    android:id="@+id/trip_departTime_textView"
+                    android:layout_width="74dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/trip_date_textView"
+                    android:layout_below="@+id/trip_arriveTitle1"
+                    android:text="@string/bart_result_departTime" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/trip_relative_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/trip_departTime_textView2"
+                    android:layout_width="74dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/trip_arriveTitle2"
+                    android:layout_below="@+id/trip_arriveTitle2"
+                    android:text="@string/bart_result_departTime" />
+
+                <TextView
+                    android:id="@+id/trip_colored_line2"
+                    android:layout_width="150dp"
+                    android:layout_height="5dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_alignTop="@+id/trip_departTime_textView2"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="false"
+                    android:background="@color/bartDefault" />
+
+                <TextView
+                    android:id="@+id/trip_arrivalTime_textView2"
+                    android:layout_width="74dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/trip_arriveTitle2"
+                    android:layout_marginEnd="12dp"
+                    android:text="@string/bart_result_arriveTime" />
+
+                <TextView
+                    android:id="@+id/trip_arriveTitle2"
+                    android:layout_width="74dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/trip_departTitle2"
+                    android:layout_below="@+id/trip_departTitle2"
+                    android:text="@string/bart_result_arrive" />
+
+                <TextView
+                    android:id="@+id/trip_origin_textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/trip_destination_textView2"
+                    android:text="origin" />
+
+                <TextView
+                    android:id="@+id/trip_destination_textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/trip_origin_textView2"
+                    android:layout_marginStart="110dp"
+                    android:text="destination" />
+
+                <TextView
+                    android:id="@+id/trip_departTitle2"
+                    android:layout_width="74dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignTop="@+id/trip_origin_textView2"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/bart_result_depart" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/trip_relative_layout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/trip_departTime_textView3"
+                    android:layout_width="74dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/trip_arriveTitle3"
+                    android:layout_below="@+id/trip_arriveTitle3"
+                    android:text="@string/bart_result_departTime" />
+
+                <TextView
+                    android:id="@+id/trip_colored_line3"
+                    android:layout_width="150dp"
+                    android:layout_height="5dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_alignTop="@+id/trip_departTime_textView3"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="false"
+                    android:background="@color/bartDefault" />
+
+                <TextView
+                    android:id="@+id/trip_arrivalTime_textView3"
+                    android:layout_width="74dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@id/trip_arriveTitle3"
+                    android:layout_marginEnd="12dp"
+                    android:text="@string/bart_result_arriveTime" />
+
+                <TextView
+                    android:id="@+id/trip_arriveTitle3"
+                    android:layout_width="74dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/trip_departTitle3"
+                    android:layout_below="@+id/trip_departTitle3"
+                    android:text="@string/bart_result_arrive" />
+
+                <TextView
+                    android:id="@+id/trip_origin_textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/trip_destination_textView3"
+                    android:text="origin" />
+
+                <TextView
+                    android:id="@+id/trip_destination_textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/trip_origin_textView3"
+                    android:layout_marginStart="110dp"
+                    android:text="destination" />
+
+                <TextView
+                    android:id="@+id/trip_departTitle3"
+                    android:layout_width="74dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignTop="@+id/trip_origin_textView3"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/bart_result_depart" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/textView25"
+                    android:layout_width="74dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/textView21"
+                    android:layout_below="@+id/textView21"
+                    android:text="@string/bart_result_tripTime" />
+
+                <TextView
+                    android:id="@+id/trip_totalTime_textView"
+                    android:layout_width="76dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/textView25"
+                    android:layout_toEndOf="@+id/textView21"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/textView21"
+                    android:layout_width="74dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/bart_result_cashFare" />
+
+                <TextView
+                    android:id="@+id/trip_fare_textView"
+                    android:layout_width="76dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/textView21"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/textView23"
+                    android:layout_width="85dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toStartOf="@+id/trip_clipper_textView"
+                    android:text="@string/bart_result_clipperFare" />
+
+                <TextView
+                    android:id="@+id/trip_clipper_textView"
+                    android:layout_width="74dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="17dp"
+                    android:text="TextView" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 </LinearLayout>
