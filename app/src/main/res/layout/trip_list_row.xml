@@ -256,7 +256,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="20dp"
-                    android:text="@string/bart_result_cashFare" />
+                    android:text="@string/bart_result_clipperFare" />
 
                 <TextView
                     android:id="@+id/trip_fare_textView"
@@ -272,7 +272,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_toStartOf="@+id/trip_clipper_textView"
-                    android:text="@string/bart_result_clipperFare" />
+                    android:text="@string/bart_result_cashFare" />
 
                 <TextView
                     android:id="@+id/trip_clipper_textView"
