@@ -75,4 +75,18 @@ public class TimeAndDate {
         output = sdf.format(date);
         return output;
     }
+
+    public static String convertTo12HrForTrip(String input) {
+        String output = "";
+        Date date = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        try {
+            date = sdf.parse(input);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        sdf = new SimpleDateFormat("hh:mm");
+        output = sdf.format(date);
+        return output;
+    }
 }

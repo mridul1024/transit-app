@@ -54,7 +54,7 @@ public class TripFragment extends Fragment {
     private AutoCompleteTextView mDepartureActv, mArrivalActv;
     private EditText mTimeEt, mDateEt;
     private Button mSearchBtn;
-    boolean mTimeBoolean = false;
+    boolean mIs24HrTimeOn = false;
     private View mInflatedView;
 
     //---------------------------------------------------------------------------------------------
@@ -69,8 +69,8 @@ public class TripFragment extends Fragment {
 
         // Check SharedPreferences for time setting
         SharedPreferences prefs = getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
-        mTimeBoolean = prefs.getBoolean("TIME_KEY", false); // false = default value if Key is not found
-        Log.i("checkbox_value is ", String.valueOf(mTimeBoolean));
+        mIs24HrTimeOn = prefs.getBoolean("TIME_KEY", false); // false = default value if Key is not found
+        Log.i("checkbox_value is ", String.valueOf(mIs24HrTimeOn));
     }
 
     @Override
@@ -169,15 +169,18 @@ public class TripFragment extends Fragment {
                     @Override
                     public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
                         // Returned value is always 24hr - so conversion is necessary
-                        if(mTimeBoolean) {
-                            mTimeEt.setText(String.format("%02d:%02d", selectedHour, selectedMinute));
+                        if(mIs24HrTimeOn) {
+                            String formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute);
+                            Log.i("formattedTime",formattedTime);
+                            mTimeEt.setText(formattedTime);
 
                         } else {
-                            String result = TimeAndDate.convertTo12Hr(selectedHour + ":" + selectedMinute);
-                            mTimeEt.setText(result);
+                            String converttedTime = TimeAndDate.convertTo12HrForTrip(selectedHour + ":" + selectedMinute);
+                            Log.i("converttedTime", converttedTime);
+                            mTimeEt.setText(converttedTime);
                         }
                     }
-                }, hour,minute,mTimeBoolean); //True = 24 hour format on TimePicker only
+                }, hour,minute,mIs24HrTimeOn); //True = 24 hour format on TimePicker only
                 mTimePickerDialog.setTitle(getString(R.string.time_title));
                 mTimePickerDialog.show();
             }
@@ -197,11 +200,11 @@ public class TripFragment extends Fragment {
                 String preformatTime = mTimeEt.getText().toString();
                 String departingTime = "";
 
-                if(!preformatTime.equals("Now") && mTimeBoolean) {
+                if(!preformatTime.equals("Now") && mIs24HrTimeOn) {
                     String convertedTime = TimeAndDate.convertTo12Hr(preformatTime);
                     Log.d("convertedTime : ", convertedTime);
                     departingTime = TimeAndDate.formatTime(convertedTime);
-                } else if(!preformatTime.equals("Now") && !mTimeBoolean){
+                } else if(!preformatTime.equals("Now") && !mIs24HrTimeOn){
                     departingTime = TimeAndDate.formatTime(preformatTime); // time=h:mm+AM/PM
                 } else {
                     departingTime = preformatTime;
