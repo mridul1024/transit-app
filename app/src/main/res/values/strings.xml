@@ -23,11 +23,11 @@
     <string name="menu_share">Share</string>
     <string name="about_textView">Made by Ryan J Suzuki. All Rights Reserved.</string>
     <string name="logo_description">Application Logo</string>
-    <string name="help_view_title">Got Questions?</string>
+    <string name="help_view_title">FAQ</string>
 
     <!-- Home Fragment -->
     <string name="home_title">Welcome to the BART App!</string>
-    <string name="home_alerts">Updates and Advisories</string>
+    <string name="home_alerts">Recent Updates</string>
     <string name="banner">banner</string>
 
     <!-- Schedule Fragment -->
@@ -46,6 +46,7 @@
 
     <!-- Station Fragment -->
     <string-array name="stations_list">
+        <item></item>
         <item>12th St. Oakland City Center</item>
         <item>16th St. Mission</item>
         <item>19th St. Oakland</item>
@@ -56,7 +57,7 @@
         <item>Castro Valley</item>
         <item>Civic Center/UN Plaza</item>
         <item>Coliseum</item>
-        <item>Colma></item>
+        <item>Colma</item>
         <item>Concord</item>
         <item>Daly City</item>
         <item>Downtown Berkeley</item>
@@ -103,6 +104,7 @@
 
     <!-- Errors -->
     <string name="error_form_completion">Please input all fields</string>
+    <string name="network_error">Sorry, but there\'s a network problem. Try again in bit.</string>
 
     <!-- Preference Screen -->
     <string name="preference_title">Settings</string>
@@ -121,4 +123,30 @@
     <string name="preference_button">Save</string>
     <string name="currentDate">Today</string>
     <string name="currentTime">Now</string>
+
+
+    <!-- Alert Dialog -->
+    <string name="alert_dialog_yes">Yes</string>
+    <string name="alert_dialog_no">No</string>
+    <string name="alert_dialog_network_title">Network Settings</string>
+    <string name="alert_dialog_network_message">Network is not available. Do you want to turn it on?</string>
+    <string name="alert_dialog_location_title">GPS Settings</string>
+    <string name="alert_dialog_location_message">GPS is not enabled. Do you want to change that now?</string>
+
+    <!-- Bart Results Fragment-->
+    <string name="bart_result_depart">Depart:</string>
+    <string name="bart_result_arrive">Arrive:</string>
+    <string name="bart_result_tripTime">Total Time:</string>
+    <string name="bart_result_date">Date</string>
+    <string name="bart_result_departTime">Departure Time:</string>
+    <string name="bart_result_arriveTime">Arrival Time:</string>
+    <string name="bart_result_cashFare">Cash Fare:</string>
+    <string name="bart_result_clipperFare">Clipper Fare:</string>
+    <string name="bart_result_minutes">minutes</string>
+
+    <!-- Help Fragment -->
+    <string name="help_report_button">Report an Issue</string>
+    <string name="help_intent_title">Send Email</string>
+    <string name="help_intent_text">Please input your message here.</string>
+
 </resources>

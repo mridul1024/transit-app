@@ -74,6 +74,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
             }
             String name = parser.getName();
             // Starts by looking for the first tag
+            // todo: change to switch statements
             if(name.equals("date")) {
                 mDate = readDate(parser);
                 if(mDate != null)

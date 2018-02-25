@@ -1,6 +1,9 @@
 package com.example.gaijinsmash.transitapp
 
 import android.support.test.InstrumentationRegistry
+import android.support.test.filters.LargeTest
+import android.support.test.filters.MediumTest
+import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
 
 import org.junit.Test
@@ -31,5 +34,25 @@ class ExampleInstrumentedTest {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
         assertEquals("com.example.gaijinsmash.transitapp", appContext.packageName)
+    }
+
+
+    @Test
+    @SmallTest
+    fun demoSmallTest() {
+        // do something
+    }
+
+    @Test
+    @MediumTest
+    fun demoMediumTest() {
+
+    }
+
+    @Test
+    @LargeTest
+    fun demoLargeTest() {
+        //do something that takes a long time
+        // these tests can be run on CI servers like Jenkins
     }
 }

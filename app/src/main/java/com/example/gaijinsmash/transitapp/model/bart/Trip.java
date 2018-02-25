@@ -3,11 +3,8 @@ package com.example.gaijinsmash.transitapp.model.bart;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by ryanj on 7/26/2017.
- */
-
 public class Trip implements Parcelable {
+
 
     // NOTE: origin and destination will return the Abbreviation of a Station.
     //          Will need to convert to the full name.
@@ -21,6 +18,33 @@ public class Trip implements Parcelable {
     private String clipper;
     private String tripTime;
     private String co2;
+
+    public Trip() { }
+
+    protected Trip(Parcel in) {
+        origin = in.readString();
+        destination = in.readString();
+        fare = in.readString();
+        origTimeMin = in.readString();
+        origTimeDate = in.readString();
+        destTimeMin = in.readString();
+        destTimeDate = in.readString();
+        clipper = in.readString();
+        tripTime = in.readString();
+        co2 = in.readString();
+    }
+
+    public static final Creator<Trip> CREATOR = new Creator<Trip>() {
+        @Override
+        public Trip createFromParcel(Parcel in) {
+            return new Trip(in);
+        }
+
+        @Override
+        public Trip[] newArray(int size) {
+            return new Trip[size];
+        }
+    };
 
     public String getOrigin() { return origin; }
     public String getDestination() { return destination; }
@@ -67,32 +91,4 @@ public class Trip implements Parcelable {
         dest.writeString(this.tripTime);
         dest.writeString(this.co2);
     }
-
-    public Trip() {
-    }
-
-    protected Trip(Parcel in) {
-        this.origin = in.readString();
-        this.destination = in.readString();
-        this.fare = in.readString();
-        this.origTimeMin = in.readString();
-        this.origTimeDate = in.readString();
-        this.destTimeMin = in.readString();
-        this.destTimeDate = in.readString();
-        this.clipper = in.readString();
-        this.tripTime = in.readString();
-        this.co2 = in.readString();
-    }
-
-    public static final Parcelable.Creator<Trip> CREATOR = new Parcelable.Creator<Trip>() {
-        @Override
-        public Trip createFromParcel(Parcel source) {
-            return new Trip(source);
-        }
-
-        @Override
-        public Trip[] newArray(int size) {
-            return new Trip[size];
-        }
-    };
 }

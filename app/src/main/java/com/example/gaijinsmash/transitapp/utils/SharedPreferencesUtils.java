@@ -6,9 +6,12 @@ import android.preference.PreferenceManager;
 
 public class SharedPreferencesUtils {
 
+    // todo: fix this to //
+    //              Check SharedPreferences for time setting
+    //        SharedPreferences prefs = getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
+    //        mTimeBoolean = prefs.getBoolean("TIME_KEY", false);
     public static boolean isTwentyFourHrTimeOn(Context context) {
-        //TODO: fix the boolean
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return sharedPreferences.getBoolean("", true);
+        return sharedPreferences.getBoolean("", false);
     }
 }

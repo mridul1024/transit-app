@@ -1,11 +1,7 @@
 package com.example.gaijinsmash.transitapp.utils;
 
-/**
- * Created by ryanj on 7/19/2017.
- */
 
 public class ApiStringBuilder {
-    private static final boolean DEBUG = true; // True: turns on debug logging, False: off
     private static final String API_KEY = "&key=Q7Z9-PZ53-9QXT-DWE9";
     private static final String BASE_URI = "http://api.bart.gov/api/";
     private static final String TEST_URI = "http://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V";
@@ -39,13 +35,11 @@ public class ApiStringBuilder {
         return BASE_URI + cmd + API_KEY;
     }
 
-
     //stations are in capital Abbr
     //date=<mm/dd/yyyy>
     //time=h:mm+am/pm or now
     //b=<number> how many trips to show before specified time(0,4)
     //a=<number> how many trips to show after specified time (0,4)
-
     // format is mm/dd/yyyy, now, or today.
     public static String getDetailedRoute(String origin, String arrival, String date, String time) {
          String cmd = "sched.aspx?cmd=depart&orig=" + origin + "&dest=" + arrival + "&date=" + date + "&time=" + time;

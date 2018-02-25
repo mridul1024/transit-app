@@ -1,10 +1,19 @@
 package com.example.gaijinsmash.transitapp.fragment;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +23,9 @@ import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.database.StationDatabase;
+import com.example.gaijinsmash.transitapp.database.StationDbHelper;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
+import com.example.gaijinsmash.transitapp.network.CheckInternet;
 import com.example.gaijinsmash.transitapp.network.FetchGPS;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,10 +45,13 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     private static final boolean DEBUG = true;
     private MapView mMapView;
     private ProgressBar mProgressBar;
+    private View mInflatedView;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
     //---------------------------------------------------------------------------------------------
+
+    //todo : add button to view bartmap as img
 
     @Override
     public void onAttach(Context context) {
@@ -55,18 +69,21 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View inflatedView = inflater.inflate(R.layout.bart_map_view, container, false);
-        mProgressBar = (ProgressBar) inflatedView.findViewById(R.id.bart_map_progress_bar);
+        mInflatedView = inflater.inflate(R.layout.bart_map_view, container, false);
+        return mInflatedView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        mProgressBar = (ProgressBar) mInflatedView.findViewById(R.id.bart_map_progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
         try {
-            mMapView = (MapView) inflatedView.findViewById(R.id.mapView);
+            mMapView = (MapView) mInflatedView.findViewById(R.id.mapView);
             mMapView.onCreate(savedInstanceState);
             mMapView.getMapAsync(this);
         } catch (Exception e) {
             Log.i("Map View Error:", e.toString());
         }
-
-        return inflatedView;
     }
 
     @Override
@@ -158,9 +175,38 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.getUiSettings().setZoomGesturesEnabled(true);
-        // todo: default zoom in on current location if gps is enabled, else zoom to whole map of bay area.
-        boolean gpsCheck = true; // need to replace with real check logic
+    }
+
+    private void initUserLocation(Context context, GoogleMap map) throws GooglePlayServicesNotAvailableException {
+        FetchGPS gps = new FetchGPS(context);
+        Location loc = gps.getLocation();
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(true);
+        } else {
+            //Toast.makeText(context, "Please enable Network Permissions", Toast.LENGTH_LONG).show();
+            //TODO: abstract AlertDialog code
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+            alertDialog.setTitle("Location Settings");
+            alertDialog.setMessage("Location is not available. Do you want to turn it on?");
+            alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    context.startActivity(intent);
+                }
+            });
+            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            alertDialog.show();
+        }
+
+        boolean gpsCheck = CheckInternet.isGPSEnabled(getActivity());
         if (gpsCheck) {
+            //todo: move camera to user location
             LatLng marker = new LatLng(37.803768, -122.231450);
             map.moveCamera(CameraUpdateFactory.newLatLng(marker));
         } else {
@@ -168,41 +214,23 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
             LatLng marker = new LatLng(37.803768, -122.271450);
             map.moveCamera(CameraUpdateFactory.newLatLng(marker));
         }
-        // todo: add station names to all markers
-        //map.addMarker(new MarkerOptions().position(marker).title("12th St. Oakland City Center Station"));
     }
 
-    //---------------------------------------------------------------------------------------------
-    // Thread for call to database and create Markers
-    //---------------------------------------------------------------------------------------------
-    private void initUserLocation(Context context, GoogleMap map) throws GooglePlayServicesNotAvailableException {
-        FetchGPS gps = new FetchGPS(context);
-        Location loc = gps.getLocation();
-        if (FetchGPS.checkGPSPermission(context)) {
-            map.setMyLocationEnabled(true);
-        } else {
-            Toast.makeText(context, "Please enable Network Permissions", Toast.LENGTH_LONG).show();
-            //TODO: insert AlertDialog
-        }
-    }
-
-    private List<LatLng> initMarkers(GoogleMap map, Context context) {
-        List<LatLng> latLngList = new ArrayList<LatLng>();
+    private List<Station> initMarkers(GoogleMap map, Context context) {
         StationDatabase db = StationDatabase.getRoomDB(context);
         List<Station> stationList = db.getStationDAO().getAllStations();
         if(DEBUG) {
             if(stationList.isEmpty())
                 Log.e("initMarkerS()", "stationList is EMPTY");
         }
-        for (Station station : stationList) {
-            LatLng marker = new LatLng(station.getLatitude(), station.getLongitude());
-            latLngList.add(marker);
-        }
-        return latLngList;
+        return stationList;
     }
 
+    //---------------------------------------------------------------------------------------------
+    // Thread for call to database and create Markers
+    //---------------------------------------------------------------------------------------------
     // 3 params are Params, Progress, Result
-    private class GetMarkersTask extends AsyncTask<Void, Integer, List<LatLng>> {
+    private class GetMarkersTask extends AsyncTask<Void, Integer, List<Station>> {
         private Context mContext;
         private GoogleMap mGoogleMap;
 
@@ -212,7 +240,12 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
         }
 
         @Override
-        protected List<LatLng> doInBackground(Void...voids) {
+        protected List<Station> doInBackground(Void...voids) {
+            try {
+                StationDbHelper.initStationDb(mContext);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return initMarkers(mGoogleMap, mContext);
         }
 
@@ -222,12 +255,13 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
         }
 
         @Override
-        protected void onPostExecute(List<LatLng> list) {
+        protected void onPostExecute(List<Station> list) {
             // fill map with markers
-            for(LatLng latLng : list) {
-                mGoogleMap.addMarker(new MarkerOptions().position(latLng));
+            for(Station station : list) {
+                LatLng latLng = new LatLng(station.getLatitude(), station.getLongitude());
+                mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(station.getName()));
             }
-            mProgressBar.setVisibility(View.INVISIBLE);
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 }

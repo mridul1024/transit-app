@@ -15,28 +15,9 @@ public class TimeAndDateTest {
     String timeExample1 = "13:45";
     String timeExample2 = "00:23";
     String timeExample3 = "12:22 PM";
+    String timeExample4 = "22:11:00 AM PST";
     String dateExample1 = "12-30-2017";
     String dateExample2 = "01-22-2018";
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @Test
-    public void testGetCurrentDate() throws Exception {
-        Calendar c = Calendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        int month = c.get(Calendar.MONTH);
-        int year = c.get(Calendar.YEAR);
-
-    }
-
-    @Test
-    public void testTimeConversion() throws Exception {
-        String result = TimeAndDate.convertTo12Hr(timeExample1);
-        assertTrue("converts correctly to hh:mm PM", result.equals("01:45 PM"));
-        assertTrue("converts correctly to hh:mm AM", TimeAndDate.convertTo12Hr(timeExample2).equals("12:23 AM"));
-    }
 
     @Test
     public void testDateFormatting() throws Exception {
@@ -45,6 +26,32 @@ public class TimeAndDateTest {
 
     @Test
     public void testRegex() throws Exception {
-        assertTrue("whitespace should be eliminated", TimeAndDate.formatTime(timeExample3).equals("12:22PM"));
+        assertTrue("first whitespace should be eliminated", TimeAndDate.formatTime(timeExample3).equals("12:22PM"));
+    }
+
+    @Test
+    public void format24hrTimeTest() throws Exception {
+        String input = "21:12:00 AM PST";
+        String result = TimeAndDate.format24hrTime(input);
+        String expected = "21:12 PST";
+        assertTrue("time format", expected.equals(result));
+
+        String input2 = "01:22:00 AM PST";
+        String result2 = TimeAndDate.format24hrTime(input);
+        String expected2 = "01:22 PST";
+        assertTrue("time format", expected.equals(result));
+    }
+
+    @Test
+    public void convertTo12HrTest() throws Exception {
+        String input = "17:11:00 PM PST";
+        String result = TimeAndDate.convertTo12Hr(input);
+        String expected = "5:11 PM PST";
+        assertTrue("time format", expected.equals(result));
+
+        String input2 = "24:04:00 AM PST";
+        String result2 = TimeAndDate.convertTo12Hr(input);
+        String expected2 = "12:04 AM PST";
+        assertTrue("time format", expected.equals(result));
     }
 }

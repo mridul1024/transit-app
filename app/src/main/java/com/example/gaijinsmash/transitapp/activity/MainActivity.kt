@@ -16,10 +16,11 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.example.gaijinsmash.transitapp.R
 import com.example.gaijinsmash.transitapp.fragment.*
-import com.example.gaijinsmash.transitapp.utils.CheckInternet
+import com.example.gaijinsmash.transitapp.network.CheckInternet
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    //todo: add FAVORITES Module
     var mCurrentFragment = "HomeFragment"
     val mFragmentManager = fragmentManager
     lateinit var mDrawer: DrawerLayout

@@ -29,8 +29,9 @@ import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.database.StationDatabase;
+import com.example.gaijinsmash.transitapp.database.StationDbHelper;
+import com.example.gaijinsmash.transitapp.model.bart.FullTrip;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
-import com.example.gaijinsmash.transitapp.model.bart.Trip;
 import com.example.gaijinsmash.transitapp.network.xmlparser.TripXMLParser;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.utils.TimeAndDate;
@@ -53,8 +54,8 @@ public class TripFragment extends Fragment {
     private AutoCompleteTextView mDepartureActv, mArrivalActv;
     private EditText mTimeEt, mDateEt;
     private Button mSearchBtn;
-
     boolean mTimeBoolean = false;
+    private View mInflatedView;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -75,9 +76,13 @@ public class TripFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View inflatedView = inflater.inflate(R.layout.trip_view, container, false);
+        mInflatedView = inflater.inflate(R.layout.trip_view, container, false);
+        return mInflatedView;
+    }
 
-        DrawerLayout layout = (DrawerLayout) inflatedView.findViewById(R.id.drawer_layout);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        DrawerLayout layout = (DrawerLayout) mInflatedView.findViewById(R.id.drawer_layout);
 
         // This data adapter is to provide a station list for Spinner and AutoCompleteTextView
         Resources res = getResources();
@@ -86,8 +91,8 @@ public class TripFragment extends Fragment {
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stations);
 
         // Spinners (Drop Down List on Touch)
-        Spinner departureSpinner = (Spinner) inflatedView.findViewById(R.id.station_spinner1);
-        Spinner arrivalSpinner = (Spinner) inflatedView.findViewById(R.id.station_spinner2);
+        Spinner departureSpinner = (Spinner) mInflatedView.findViewById(R.id.station_spinner1);
+        Spinner arrivalSpinner = (Spinner) mInflatedView.findViewById(R.id.station_spinner2);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         departureSpinner.setAdapter(spinnerAdapter);
@@ -115,17 +120,17 @@ public class TripFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
         // Departure UI
-        mDepartureActv = (AutoCompleteTextView) inflatedView.findViewById(R.id.schedule_autoCompleteTextView);
+        mDepartureActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView);
         mDepartureActv.setThreshold(1); // will start working from first character
         mDepartureActv.setAdapter(textViewAdapter);
 
         // Arrival UI
-        mArrivalActv = (AutoCompleteTextView) inflatedView.findViewById(R.id.schedule_autoCompleteTextView2);
+        mArrivalActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView2);
         mArrivalActv.setThreshold(1);
         mArrivalActv.setAdapter(textViewAdapter);
 
         // Date UI
-        mDateEt = (EditText) inflatedView.findViewById(R.id.date_editText);
+        mDateEt = (EditText) mInflatedView.findViewById(R.id.date_editText);
         mDateEt.setText(getText(R.string.currentDate));
         mDateEt.setInputType(InputType.TYPE_NULL);
         mDateEt.requestFocus();
@@ -147,7 +152,7 @@ public class TripFragment extends Fragment {
         });
 
         // Time UI
-        mTimeEt = (EditText) inflatedView.findViewById(R.id.time_editText);
+        mTimeEt = (EditText) mInflatedView.findViewById(R.id.time_editText);
         mTimeEt.setText(getText(R.string.currentTime));
         mTimeEt.setInputType(InputType.TYPE_NULL);
         mTimeEt.requestFocus();
@@ -179,7 +184,7 @@ public class TripFragment extends Fragment {
         });
 
         // Submit Button
-        mSearchBtn = (Button) inflatedView.findViewById(R.id.schedule_button);
+        mSearchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -215,17 +220,13 @@ public class TripFragment extends Fragment {
                 }
             }
         });
-        return inflatedView;
     }
 
-    //---------------------------------------------------------------------------------------------
-    // Helper Methods
-    //---------------------------------------------------------------------------------------------
-
     public String getAbbrFromDb(String stationName) throws XmlPullParserException, IOException {
-        Log.i("station: ", stationName);
+        Log.i("STATION NAME: ", stationName);
         StationDatabase db = StationDatabase.getRoomDB(getActivity());
         Station station = db.getStationDAO().getStationByName(stationName);
+        Log.i("Station", station.getName());
         Log.i("ABBR: ", station.getAbbreviation());
         return station.getAbbreviation();
     }
@@ -236,7 +237,7 @@ public class TripFragment extends Fragment {
 
     private class GetScheduleTask extends AsyncTask<Void, Void, Boolean> {
         private TripXMLParser routeXMLParser = null;
-        private List<Trip> mTripList = null;
+        private List<FullTrip> mTripList = null;
         private Context mContext;
         private String mDepartingStn, mArrivingStn, mDepartAbbr, mArriveAbbr, mDate, mTime;
 
@@ -255,9 +256,12 @@ public class TripFragment extends Fragment {
             boolean result = false;
             // Create the API Call
             try {
+                StationDbHelper.initStationDb(mContext);
                 mDepartAbbr = getAbbrFromDb(mDepartingStn);
                 mArriveAbbr = getAbbrFromDb(mArrivingStn);
             } catch (XmlPullParserException | IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -267,7 +271,7 @@ public class TripFragment extends Fragment {
                 mTripList = routeXMLParser.getList(uri);
             } catch (IOException | XmlPullParserException e){
                 e.printStackTrace();
-                // TODO: Gracefully handle error for user
+                Toast.makeText(mContext, getResources().getText(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
             if (mTripList != null) {
                 result = true;
@@ -280,9 +284,9 @@ public class TripFragment extends Fragment {
             if (result) {
                 // add list to parcelable bundle
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("Trips", (ArrayList<? extends Parcelable>) mTripList);
-                // Switch to ResultsFragment
-                Fragment newFrag = new ResultsFragment();
+                bundle.putParcelableArrayList("TripList", (ArrayList<? extends Parcelable>) mTripList);
+                // Switch to BartResultsFragment
+                Fragment newFrag = new BartResultsFragment();
                 newFrag.setArguments(bundle);
                 FragmentManager fm = getFragmentManager();
                 fm.beginTransaction().replace(R.id.fragmentContent, newFrag).commit();

@@ -16,9 +16,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by ryanj on 6/30/2017.
- */
 
 public class StationXMLParser implements XmlParserInterface {
 
@@ -112,6 +109,7 @@ public class StationXMLParser implements XmlParserInterface {
         String mState = null;
         String mZipcode = null;
 
+        // todo: change to switch case
         while (parser.next() != XmlPullParser.END_TAG) {
             if(parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,19 +19,26 @@ import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 import com.example.gaijinsmash.transitapp.network.xmlparser.AdvisoryXmlParser;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.utils.SharedPreferencesUtils;
+import com.example.gaijinsmash.transitapp.utils.TimeAndDate;
 import com.example.gaijinsmash.transitapp.view_adapter.AdvisoryViewAdapter;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
 
     private TextView mBsaTimeTv = null;
     private ListView mBsaListView;
+    private View mInflatedView;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -51,10 +59,8 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View inflatedView = inflater.inflate(R.layout.home_view, container, false);
-        mBsaTimeTv = (TextView) inflatedView.findViewById(R.id.home_view_timeTv);
-        mBsaListView = inflatedView.findViewById(R.id.advisory_listView);
-        return inflatedView;
+        mInflatedView = inflater.inflate(R.layout.home_view, container, false);
+        return mInflatedView;
     }
 
     @Override
@@ -65,8 +71,11 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        // Setup any handles to view objects here
+        // todo: fix this and all other fragments
+        // Setup any handles to view objects here because of automatic null check
         // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
+        mBsaTimeTv = (TextView) mInflatedView.findViewById(R.id.home_view_timeTv);
+        mBsaListView = mInflatedView.findViewById(R.id.advisory_listView);
     }
 
     @Override
@@ -83,19 +92,23 @@ public class HomeFragment extends Fragment {
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
-
-    //TODO: check for 24 hour format in sharedpreferences
+    //todo: add holiday info and convert listview to recyclerview
 
     private class GetAdvisoryTask extends AsyncTask<Void, Void, List<Advisory>> {
         private Context mContext;
         private List<Advisory> mList;
         private String mMessage;
+        private boolean mTimeBoolean;
 
         public GetAdvisoryTask(Context mContext, String message) {
             if(this.mContext == null)
                 this.mContext = mContext;
             mList = new ArrayList<Advisory>();
             mMessage = message;
+
+            // Check SharedPreferences for time setting
+            SharedPreferences prefs = getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
+            mTimeBoolean = prefs.getBoolean("TIME_KEY", false);
         }
 
         @Override
@@ -115,22 +128,21 @@ public class HomeFragment extends Fragment {
         }
 
         protected void onPostExecute(List<Advisory> list) {
-            boolean is24FormatOn = SharedPreferencesUtils.isTwentyFourHrTimeOn(getActivity());
+            Log.i("24hrFormatOn", Boolean.toString(mTimeBoolean));
             String time = "";
             for(Advisory adv : list) {
-                if(is24FormatOn) {
-                    time = adv.getTime();
-                } else {
-                    time = adv.getTwentyFourHr();
-                }
                 if(adv.getTime() != null && mBsaTimeTv != null) {
-                    mBsaTimeTv.setText(mMessage + " " + time);
+                    if(mTimeBoolean) {
+                        time = TimeAndDate.format24hrTime(adv.getTime());
+                    } else {
+                        time = TimeAndDate.convertTo12Hr(adv.getTime());
+                    }
+                    String message = mMessage + " " + time;
+                    mBsaTimeTv.setText(message);
                 }
             }
             AdvisoryViewAdapter adapter = new AdvisoryViewAdapter(list, mContext);
             mBsaListView.setAdapter(adapter);
         }
     }
-
-
 }

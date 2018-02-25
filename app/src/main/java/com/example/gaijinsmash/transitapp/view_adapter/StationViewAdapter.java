@@ -42,7 +42,7 @@ public class StationViewAdapter extends ArrayAdapter<Station> implements View.On
         Station station = (Station) object;
 
         switch (view.getId()) {
-            // TODO: do something on click?
+            // TODO: onClick() switch to bart map fragment and move cursor/camera to selected station
         }
     }
 

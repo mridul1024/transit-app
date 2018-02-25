@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface XmlParserInterface {
 
-    public List<?> getList(String url) throws IOException, XmlPullParserException;
+    public Object getList(String url) throws IOException, XmlPullParserException;
 
-    public List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException;
+    public Object readFeed(XmlPullParser parser) throws XmlPullParserException, IOException;
 
 }

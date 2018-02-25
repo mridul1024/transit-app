@@ -13,6 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
+import com.example.gaijinsmash.transitapp.database.StationDatabase;
+import com.example.gaijinsmash.transitapp.database.StationDbHelper;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.view_adapter.StationViewAdapter;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
@@ -49,6 +51,7 @@ public class StationFragment extends Fragment {
         mProgressBar.setVisibility(View.VISIBLE);
         new GetStationsTask(getActivity()).execute();
 
+
         return inflatedView;
     }
 
@@ -68,11 +71,14 @@ public class StationFragment extends Fragment {
         @Override
         protected List<Station> doInBackground(Void... voids) {
             try {
-                if(stationList == null && stationXMLParser == null) {
-                    stationXMLParser = new StationXMLParser(mContext);
-                    stationList = stationXMLParser.getList(ApiStringBuilder.getAllStations());
+                StationDbHelper.initStationDb(mContext);
+                if(stationList == null) {
+                    StationDatabase db = StationDatabase.getRoomDB(mContext);
+                    stationList = db.getStationDAO().getAllStations();
                 }
             } catch (IOException | XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return stationList;
@@ -83,7 +89,6 @@ public class StationFragment extends Fragment {
                 StationViewAdapter adapter = new StationViewAdapter(stationList, mContext);
                 mListView.setAdapter(adapter);
             } else {
-                // TODO: Handle error gracefully for use - possibly use a cute img?
                 Toast.makeText(mContext, getString(R.string.cannot_do_this), Toast.LENGTH_LONG);
                 Log.e("onPostExecute()", "stationList is NULL");
             }

@@ -1,41 +1,29 @@
 package com.example.gaijinsmash.transitapp.model.abstractClass;
 
-import com.example.gaijinsmash.transitapp.model.bart.Station;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Comparator;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
-public abstract class AbstractModelTest<T> implements Comparator<T> {
-    Class<T> reference;
-    Class<T> primary = null;
-    Class<T> same1 = null;
-    Class<T> same2 = null;
-    Class<T> different = null;
+public abstract class AbstractModelTest<T> {
 
-    public AbstractModelTest(Class<T> classRef) {
-        reference = classRef;
-    }
+    private T primary;
+    private T same1;
+    private T same2;
+    private T different;
 
     @Before
-    public void setupTest() throws Exception {
-        primary = (Class<T>) getInstance();
-        same1 = (Class<T>) getInstance();
-        same2 = (Class<T>) getInstance();
-        different = (Class<T>) getInstance();
+    public void setUp() throws Exception {
+        primary = null;
+        same1 = null;
+        same2 = null;
+        different = null;
     }
 
-    public T getInstance() throws Exception {
-        return reference.newInstance();
-    }
 
     @Test
-    public void startTest() throws Exception {
+    public void compareObjectsTest() throws Exception {
         assertTrue("Same1 equals Same2", same1 == same2);
         //("Same1 does not equal Different", same1 != different);
         //assertTrue("Same2 does not equal Different", same2 != different);

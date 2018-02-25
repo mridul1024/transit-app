@@ -26,6 +26,10 @@ public interface StationDAO {
     @Query("SELECT * from stations")
     public List<Station> getAllStations();
 
+    // Select station by matching Longitude coordinate
+    @Query("SELECT * from stations where longitude = :longitude")
+    public Station getStationByLongitude(String longitude);
+
     // Selects station with the matching id
     @Query("SELECT * from stations where abbr = :abbr")
     public Station getStationByAbbr(String abbr);

@@ -32,4 +32,13 @@
     <color name="mp_secondary_text">#757575</color>
     <color name="mp_icons">#FFFFFF</color>
     <color name="mp_divider">#BDBDBD</color>
+
+    <!-- BART Line Colors -->
+    <color name="bartRedLine">#ff0000</color>
+    <color name="bartYellowLine">#ffff33</color>
+    <color name="bartGreenLine">#339933</color>
+    <color name="bartBlueLine">#0099cc</color>
+    <color name="bartOrangeLine">#ff9933</color>
+    <color name="bartOakAirport">#d5cfa3</color>
+    <color name="bartDefault">#000000</color>
 </resources>

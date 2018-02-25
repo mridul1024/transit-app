@@ -10,7 +10,7 @@ import android.content.Context;
 
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 
-@Database(entities = {Station.class /*, Example.class*/}, version = 3)
+@Database(entities = {Station.class /*, Example.class*/}, version = 1)
 public abstract class StationDatabase extends RoomDatabase {
 
     private static StationDatabase INSTANCE;
@@ -34,7 +34,7 @@ public abstract class StationDatabase extends RoomDatabase {
 
 
     // Edit this to create a new migration for database - and use ".addMigrations(example)
-    public static final Migration MIGRATION = new Migration(2,3) {
+    public static final Migration MIGRATION = new Migration(1,2) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE stations ADD COLUMN last_update INTEGER");

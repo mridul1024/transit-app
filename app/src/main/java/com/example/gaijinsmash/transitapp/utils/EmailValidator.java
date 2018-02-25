@@ -3,6 +3,9 @@ package com.example.gaijinsmash.transitapp.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/*
+Currently unnecessary
+ */
 public class EmailValidator {
     private Pattern pattern;
     private Matcher matcher;
@@ -11,7 +14,6 @@ public class EmailValidator {
     public boolean isEmailValid(String email) {
         pattern = Pattern.compile(EMAIL_PATTERN);
         matcher = pattern.matcher(email);
-
         return matcher.matches();
     }
 }
