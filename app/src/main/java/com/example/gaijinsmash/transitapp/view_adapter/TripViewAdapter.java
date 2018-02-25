@@ -177,31 +177,31 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
             viewHolder.origTimeMin2.setText(fullTrip.getLegList().get(1).getOrigTimeMin());
             viewHolder.destTimeMin2.setText(fullTrip.getLegList().get(1).getDestTimeMin());
             switch(fullTrip.getLegList().get(1).getLine()) {
-                case "ROUTE 1": viewHolder.coloredBar1.setBackgroundColor(yellowLine);
+                case "ROUTE 1": viewHolder.coloredBar2.setBackgroundColor(yellowLine);
                     break;
-                case "ROUTE 2": viewHolder.coloredBar1.setBackgroundColor(yellowLine);
+                case "ROUTE 2": viewHolder.coloredBar2.setBackgroundColor(yellowLine);
                     break;
-                case "ROUTE 3": viewHolder.coloredBar1.setBackgroundColor(orangeLine);
+                case "ROUTE 3": viewHolder.coloredBar2.setBackgroundColor(orangeLine);
                     break;
-                case "ROUTE 4": viewHolder.coloredBar1.setBackgroundColor(orangeLine);
+                case "ROUTE 4": viewHolder.coloredBar2.setBackgroundColor(orangeLine);
                     break;
-                case "ROUTE 5": viewHolder.coloredBar1.setBackgroundColor(greenLine);
+                case "ROUTE 5": viewHolder.coloredBar2.setBackgroundColor(greenLine);
                     break;
-                case "ROUTE 6": viewHolder.coloredBar1.setBackgroundColor(greenLine);
+                case "ROUTE 6": viewHolder.coloredBar2.setBackgroundColor(greenLine);
                     break;
-                case "ROUTE 7": viewHolder.coloredBar1.setBackgroundColor(redLine);
+                case "ROUTE 7": viewHolder.coloredBar2.setBackgroundColor(redLine);
                     break;
-                case "ROUTE 8":  viewHolder.coloredBar1.setBackgroundColor(redLine);
+                case "ROUTE 8":  viewHolder.coloredBar2.setBackgroundColor(redLine);
                     break;
-                case "ROUTE 11": viewHolder.coloredBar1.setBackgroundColor(blueLine);
+                case "ROUTE 11": viewHolder.coloredBar2.setBackgroundColor(blueLine);
                     break;
-                case "ROUTE 12": viewHolder.coloredBar1.setBackgroundColor(blueLine);
+                case "ROUTE 12": viewHolder.coloredBar2.setBackgroundColor(blueLine);
                     break;
-                case "ROUTE 19": viewHolder.coloredBar1.setBackgroundColor(grayLine);
+                case "ROUTE 19": viewHolder.coloredBar2.setBackgroundColor(grayLine);
                     break;
-                case "ROUTE 20": viewHolder.coloredBar1.setBackgroundColor(grayLine);
+                case "ROUTE 20": viewHolder.coloredBar2.setBackgroundColor(grayLine);
                     break;
-                default:        viewHolder.coloredBar1.setBackgroundColor(defaultLine);
+                default:        viewHolder.coloredBar2.setBackgroundColor(defaultLine);
                     break;
             }
         } else { // Hide Text Views if no data is present, bottom textviews will automatically move up because of LinearLayout behavior
