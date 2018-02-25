@@ -40,6 +40,29 @@ public class Station  {
     @ColumnInfo(name = "abbr")
     private String abbreviation;
 
+    @ColumnInfo(name = "platform_info")
+    private String platformInfo;
+
+    @ColumnInfo(name = "intro")
+    private String intro;
+
+    @ColumnInfo(name = "cross_street")
+    private String crossStreet;
+
+    @ColumnInfo(name = "food")
+    private String food;
+
+    @ColumnInfo(name = "shopping")
+    private String shopping;
+
+    @ColumnInfo(name = "attraction")
+    private String attraction;
+
+    @ColumnInfo(name = "link")
+    private String link;
+
+
+
     public Station(String name) {
         this.name = name;
     }
