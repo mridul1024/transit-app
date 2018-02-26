@@ -15,6 +15,17 @@ public class ApiStringBuilder {
         return BASE_URI + cmd + abbreviatedStation + API_KEY;
     }
 
+    /*
+        parking_flag: 0 = No BART parking, 1 = Yes, parking available.
+        bike_flag: 0 = No bike racks, 1 = Yes, bike racks available.
+        bike_station_flag: 0 = Not a bike station, 1 = Yes, station is a bike station.
+        locker_flag: 0 = No lockers, 1 = Yes, station has lockers.
+     */
+    public static String getStationAccess(String abbreviatedStation) {
+        String cmd = "stn.aspx?cmd=stnaccess&orig=";
+        return BASE_URI + cmd + abbreviatedStation + API_KEY;
+    }
+
     public static String getRoute(String stationA, String stationB) {
         String origin = null;
         String dest = null;
