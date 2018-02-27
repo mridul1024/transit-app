@@ -1,7 +1,13 @@
 # Transit App
 ### An open-source project in Java and Kotlin
 --------------------------------------------------------------------------------
-![alt tag](https://drive.google.com/open?id=1KVn4TzOnFPDMHaU8c2mGb_2it74NQURm)
+
+## Screenshots
+![home-screen](https://i.imgur.com/RNqOXCjm.png)
+![trip-screen](https://i.imgur.com/YVE99ELm.png)
+![results-screen](https://i.imgur.com/P9HThYLm.png)
+![nav-screen](https://i.imgur.com/eR66b9Mm.png)
+![map-screen](https://i.imgur.com/DvNsHQGm.png)
 
 ## Table of Contents
 
