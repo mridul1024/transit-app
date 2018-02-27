@@ -1,8 +1,7 @@
 # Transit App
 ### An open-source project in Java and Kotlin
 --------------------------------------------------------------------------------
-ADD LOGO and DEVICE PICTURES HERE
-
+![alt tag](https://drive.google.com/open?id=1KVn4TzOnFPDMHaU8c2mGb_2it74NQURm)
 
 ## Table of Contents
 
@@ -45,17 +44,12 @@ To check SDK Tools in Android Studio > Go to Tools > SDK Manager > SDK Tools > D
 I will begin posting instructions for the next module soon, but in the mean time, if you notice any bugs, please let me know and feel free to make a Pull Request!
 
 ## Syntax and Coding Guidelines
-	
-
 
 ### Java and Kotlin 
 
 1. camelCase
 2. Global variables begin with 'm' => mExampleVariable
-3. Do not use protected, only public and private
-4. Don't repeat yourself
-5. Abstraction when appropriate
-6. Delegation over inheritance
+3. Do not use protected, only public and privat
 
 ### XML Layout
 
