@@ -1,5 +1,7 @@
 # Transit App
 ### An open-source project in Java and Kotlin
+
+## Current Status : In Development
 --------------------------------------------------------------------------------
 
 ## Screenshots
