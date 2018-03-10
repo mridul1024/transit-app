@@ -27,8 +27,18 @@
     </style>
 
     <!-- Button Styles -->
-    <style name="ButtonAppTheme" parent="android:Widget.Holo.Button.Borderless">
+    <style name="ButtonAppTheme">
         <item name="android:background">@color/mp_accent</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:elevation">1dp</item>
+        <item name="android:color">#fff</item>
+    </style>
+
+    <style name="ButtonAppTheme2">
+        <item name="android:background">@color/mp_primary_light</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:elevation">1dp</item>
+        <item name="android:color">#fff</item>
     </style>
 
     <!-- Text Styles -->
@@ -40,7 +50,6 @@
 
     <style name="ViewTitle" parent="android:TextAppearance.Large">
         <item name="android:textColor"></item>
-        <item name="android:typeface">monospace</item>
         <item name="android:textSize">25sp</item>
     </style>
 

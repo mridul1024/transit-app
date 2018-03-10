@@ -16,6 +16,9 @@ public class HelpFragment extends Fragment {
     private View mInflatedView;
     private Button mButton;
 
+    //---------------------------------------------------------------------------------------------
+    // Lifecycle Events
+    //---------------------------------------------------------------------------------------------
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

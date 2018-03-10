@@ -25,6 +25,22 @@
     <string name="logo_description">Application Logo</string>
     <string name="help_view_title">FAQ</string>
 
+    <!-- Bart Results Fragment-->
+    <string name="bart_result_depart">Depart:</string>
+    <string name="bart_result_arrive">Arrive:</string>
+    <string name="bart_result_tripTime">Total Time:</string>
+    <string name="bart_result_date">Date</string>
+    <string name="bart_result_departTime">Departure Time:</string>
+    <string name="bart_result_arriveTime">Arrival Time:</string>
+    <string name="bart_result_cashFare">Cash Fare:</string>
+    <string name="bart_result_clipperFare">Clipper Fare:</string>
+    <string name="bart_result_minutes">minutes</string>
+
+    <!-- Help Fragment -->
+    <string name="help_report_button">Report an Issue</string>
+    <string name="help_intent_title">Send Email</string>
+    <string name="help_intent_text">Please input your message here.</string>
+
     <!-- Home Fragment -->
     <string name="home_title">Welcome to the BART App!</string>
     <string name="home_alerts">Recent Updates</string>
@@ -95,6 +111,16 @@
         <item>West Oakland</item>
     </string-array>
 
+    <!-- Station Info Fragment -->
+    <string name="stationInfo_oops">Oops!</string>
+    <string name="stationInfo_error">Sorry, but there was a network error. Please go back and try again.</string>
+    <string name="stationInfo_return_button">Go Back</string>
+    <string name="stationInfo_attractionTitle">Attractions</string>
+    <string name="stationInfo_foodTitle">Food</string>
+    <string name="stationInfo_shoppingTitle">Shopping</string>
+    <string name="stationInfo_map_button">Map</string>
+
+    <!-- Google Map -->
     <string name="title_activity_google_maps">Map</string>
 
     <!-- Permissions -->
@@ -105,6 +131,14 @@
     <!-- Errors -->
     <string name="error_form_completion">Please input all fields</string>
     <string name="network_error">Sorry, but there\'s a network problem. Try again in bit.</string>
+
+    <!-- Alert Dialog -->
+    <string name="alert_dialog_yes">Yes</string>
+    <string name="alert_dialog_no">No</string>
+    <string name="alert_dialog_network_title">Network Settings</string>
+    <string name="alert_dialog_network_message">Network is not available. Do you want to turn it on?</string>
+    <string name="alert_dialog_location_title">GPS Settings</string>
+    <string name="alert_dialog_location_message">GPS is not enabled. Do you want to change that now?</string>
 
     <!-- Preference Screen -->
     <string name="preference_title">Settings</string>
@@ -123,30 +157,9 @@
     <string name="preference_button">Save</string>
     <string name="currentDate">Today</string>
     <string name="currentTime">Now</string>
-
-
-    <!-- Alert Dialog -->
-    <string name="alert_dialog_yes">Yes</string>
-    <string name="alert_dialog_no">No</string>
-    <string name="alert_dialog_network_title">Network Settings</string>
-    <string name="alert_dialog_network_message">Network is not available. Do you want to turn it on?</string>
-    <string name="alert_dialog_location_title">GPS Settings</string>
-    <string name="alert_dialog_location_message">GPS is not enabled. Do you want to change that now?</string>
-
-    <!-- Bart Results Fragment-->
-    <string name="bart_result_depart">Depart:</string>
-    <string name="bart_result_arrive">Arrive:</string>
-    <string name="bart_result_tripTime">Total Time:</string>
-    <string name="bart_result_date">Date</string>
-    <string name="bart_result_departTime">Departure Time:</string>
-    <string name="bart_result_arriveTime">Arrival Time:</string>
-    <string name="bart_result_cashFare">Cash Fare:</string>
-    <string name="bart_result_clipperFare">Clipper Fare:</string>
-    <string name="bart_result_minutes">minutes</string>
-
-    <!-- Help Fragment -->
-    <string name="help_report_button">Report an Issue</string>
-    <string name="help_intent_title">Send Email</string>
-    <string name="help_intent_text">Please input your message here.</string>
+    <string name="help_html"><![CDATA[![CDATA[ ...raw html data ...]] >]]></string>
+    <string name="bart_map_button">Switch to Train Lines Map</string>
+    <string name="bart_lines_map_btn">Switch To GoogleMap</string>
+    <string name="bart_lines_map_description">An image of the BART Train Lines</string>
 
 </resources>

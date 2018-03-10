@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.gaijinsmash.transitapp.model.bart.Station;
-import com.example.gaijinsmash.transitapp.network.xmlparser.StationXMLParser;
+import com.example.gaijinsmash.transitapp.network.xmlparser.StationXmlParser;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -29,7 +29,7 @@ public class StationDbHelper {
         StationDatabase db = StationDatabase.getRoomDB(context);
         if(db.getStationDAO().countStations() == 0) {
             List<Station> stationList = null;
-            StationXMLParser parser = new StationXMLParser(context);
+            StationXmlParser parser = new StationXmlParser(context);
             stationList = parser.getList(ApiStringBuilder.getAllStations());
             for(Station x : stationList) {
                 db.getStationDAO().addStation(x);

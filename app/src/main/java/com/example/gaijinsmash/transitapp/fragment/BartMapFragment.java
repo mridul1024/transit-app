@@ -2,6 +2,8 @@ package com.example.gaijinsmash.transitapp.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -46,6 +49,8 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     private MapView mMapView;
     private ProgressBar mProgressBar;
     private View mInflatedView;
+    private Bundle mBundle;
+    private Button mButton;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -75,6 +80,16 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        mButton = (Button) mInflatedView.findViewById(R.id.bart_map_btn);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction tx = manager.beginTransaction();
+                Fragment newFrag = new MapFragment();
+                tx.replace(R.id.fragmentContent, newFrag).addToBackStack(null).commit();
+            }
+        });
         mProgressBar = (ProgressBar) mInflatedView.findViewById(R.id.bart_map_progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
         try {
@@ -89,6 +104,11 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        String stationAddress = "";
+        mBundle = getArguments();
+        if (mBundle != null) {
+            stationAddress = mBundle.getString("StationAddress");
+        }
     }
 
     @Override
@@ -137,6 +157,7 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
         if (mMapView != null)
             mMapView.onSaveInstanceState(outState);
     }
+
     //---------------------------------------------------------------------------------------------
     // Google Maps
     //---------------------------------------------------------------------------------------------
@@ -156,10 +177,11 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
         // Populate map with all the stations (markers)
         new GetMarkersTask(mGoogleMap, getActivity()).execute();
 
-        // Handles click event on markers
+        // todo: Handles click event on markers
         mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                //todo show a button on marker click for options
                 return false;
             }
         });
@@ -172,6 +194,17 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
                 new LatLng(37.2982, -121.5363), //southwest
                 new LatLng(38.0694, -121.8494)); //northeast
         map.setLatLngBoundsForCameraTarget(bayArea);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        map.setMyLocationEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.getUiSettings().setZoomGesturesEnabled(true);
@@ -183,7 +216,6 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
         } else {
-            //Toast.makeText(context, "Please enable Network Permissions", Toast.LENGTH_LONG).show();
             //TODO: abstract AlertDialog code
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
             alertDialog.setTitle("Location Settings");
@@ -214,6 +246,10 @@ public class BartMapFragment extends Fragment implements OnMapReadyCallback {
             LatLng marker = new LatLng(37.803768, -122.271450);
             map.moveCamera(CameraUpdateFactory.newLatLng(marker));
         }
+
+        // if bundle arguments are present
+        //todo : where to put this?
+
     }
 
     private List<Station> initMarkers(GoogleMap map, Context context) {

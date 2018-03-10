@@ -27,7 +27,6 @@ public class XmlParserAbstract {
         return null;
     }
 
-
     public static String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
         String result = "";
         if(parser.next() == XmlPullParser.TEXT) {
@@ -55,11 +54,4 @@ public class XmlParserAbstract {
         }
     }
 
-    // Converts File to InputStream
-    // Mainly for testing purposes only
-    public static InputStream convertToInputStream(File file) throws IOException {
-        InputStream in = new FileInputStream(file);
-        in.close();
-        return in;
-    }
 }

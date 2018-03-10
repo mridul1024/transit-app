@@ -37,6 +37,9 @@ public interface StationDAO {
     @Query("SELECT * from stations where name = :name")
     public Station getStationByName(String name);
 
+    @Query("SELECT * from stations where address = :address")
+    public Station getStationByAddress(String address);
+
     // Updates a station
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateStation(Station station);

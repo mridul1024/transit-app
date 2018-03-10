@@ -219,6 +219,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer.closeDrawer(GravityCompat.START)
     }
 
+    // todo: needs to be removed or implemented
     fun shareSomething() {
         // Create intent
         val intent = Intent(android.content.Intent.ACTION_SEND)

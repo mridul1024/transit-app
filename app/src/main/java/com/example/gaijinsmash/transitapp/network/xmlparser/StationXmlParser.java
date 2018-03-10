@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class StationXMLParser implements XmlParserInterface {
+public class StationXmlParser implements XmlParserInterface {
 
     private Context mContext = null;
     private static final boolean DEBUG = true;
@@ -25,12 +25,11 @@ public class StationXMLParser implements XmlParserInterface {
     // require(int type, String namespace, String name) if namespace is null, will pass when matched against any name
     private static final String ns = null;
 
-    public StationXMLParser(Context mContext) {
+    public StationXmlParser(Context mContext) {
         if(this.mContext == null)
             this.mContext = mContext;
     }
 
-    // TODO: remove this method?
     public List<Station> getList(String call) throws IOException, XmlPullParserException {
         if(DEBUG)
             Log.i("makeCall()", "with " + call);
@@ -108,6 +107,13 @@ public class StationXMLParser implements XmlParserInterface {
         String mCounty = null;
         String mState = null;
         String mZipcode = null;
+        String mPlatformInfo = null;
+        String mIntro = null;
+        String mCrossStreet = null;
+        String mFood = null;
+        String mShopping = null;
+        String mAttraction = null;
+        String mLink = null;
 
         // todo: change to switch case
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -160,6 +166,29 @@ public class StationXMLParser implements XmlParserInterface {
                 if(DEBUG)
                     Log.i("zipcode", mZipcode);
             }
+            else if (name.equals("platform_info")) {
+                mPlatformInfo = readPlatformInfo(parser);
+            }
+            else if (name.equals("intro")) {
+                mIntro = readIntro(parser);
+            }
+            else if (name.equals("cross_street")) {
+                mCrossStreet = readCrossStreet(parser);
+            }
+            else if (name.equals("food")) {
+                mFood = readFood(parser);
+            }
+            else if (name.equals("shopping")) {
+                mShopping = readShopping(parser);
+            }
+            else if (name.equals("attraction")) {
+                mAttraction = readAttraction(parser);
+            }
+            else if (name.equals("link")) {
+                mLink = readLink(parser);
+            } else {
+                XmlParserAbstract.skip(parser);
+            }
         }
 
         Station station = new Station(mName);
@@ -171,6 +200,13 @@ public class StationXMLParser implements XmlParserInterface {
         station.setCounty(mCounty);
         station.setState(mState);
         station.setZipcode(mZipcode);
+        station.setPlatformInfo(mPlatformInfo);
+        station.setIntro(mIntro);
+        station.setAttraction(mAttraction);
+        station.setCrossStreet(mCrossStreet);
+        station.setShopping(mShopping);
+        station.setFood(mFood);
+        station.setLink(mLink);
         return station;
     }
     //----------------------------------------------------------------------------------------------
@@ -271,5 +307,68 @@ public class StationXMLParser implements XmlParserInterface {
         String zipcode = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "zipcode");
         return zipcode;
+    }
+
+    private String readPlatformInfo(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG)
+            Log.i("readPlatformInfo()", "***BEGINNING***");
+        parser.require(XmlPullParser.START_TAG, ns, "platform_info");
+        String platformInfo = XmlParserAbstract.readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "platform_info");
+        return platformInfo;
+    }
+
+    private String readIntro(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG)
+            Log.i("readIntro()", "***BEGINNING***");
+        parser.require(XmlPullParser.START_TAG, ns, "intro");
+        String intro = XmlParserAbstract.readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "intro");
+        return intro;
+    }
+
+    private String readCrossStreet(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG)
+            Log.i("readCrossStreet()", "***BEGINNING***");
+        parser.require(XmlPullParser.START_TAG, ns, "cross_street");
+        String crossStreet = XmlParserAbstract.readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "cross_street");
+        return crossStreet;
+    }
+
+    private String readFood(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG)
+            Log.i("readFood()", "***BEGINNING***");
+        parser.require(XmlPullParser.START_TAG, ns, "food");
+        String food = XmlParserAbstract.readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "food");
+        return food;
+    }
+
+    private String readShopping(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG)
+            Log.i("readShopping()", "***BEGINNING***");
+        parser.require(XmlPullParser.START_TAG, ns, "shopping");
+        String shopping = XmlParserAbstract.readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "shopping");
+        return shopping;
+    }
+
+    private String readAttraction(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG)
+            Log.i("readAttraction()", "***BEGINNING***");
+        parser.require(XmlPullParser.START_TAG, ns, "attraction");
+        String attraction = XmlParserAbstract.readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "attraction");
+        return attraction;
+    }
+
+    private String readLink(XmlPullParser parser) throws IOException, XmlPullParserException {
+        if(DEBUG)
+            Log.i("readLink()", "***BEGINNING***");
+        parser.require(XmlPullParser.START_TAG, ns, "link");
+        String link = XmlParserAbstract.readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "link");
+        return link;
     }
 }

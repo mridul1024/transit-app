@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="60dp">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="1dp"
+            android:padding="10dp"
+            android:layout_margin="5dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/stationInfo_title_textView"
+                    style="@style/ViewTitle"
+                    android:textColor="@color/mp_primary_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:text="Station Name" />
+
+                <TextView
+                    android:id="@+id/stationInfo_address_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/stationInfo_title_textView"
+                    android:text="Address" />
+
+                <Button
+                    android:id="@+id/stationInfo_map_btn"
+                    style="@style/ButtonAppTheme2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignTop="@id/stationInfo_address_textView"
+                    android:text="@string/stationInfo_map_button" />
+
+                <TextView
+                    android:id="@+id/stationInfo_city_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/stationInfo_address_textView"
+                    android:text="City"/>
+
+                <TextView
+                    android:id="@+id/stationInfo_crossStreet_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/stationInfo_city_textView"
+                    android:layout_marginTop="10dp"
+                    android:text="Cross Street" />
+
+                <TextView
+                    android:id="@+id/stationInfo_link_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/stationInfo_crossStreet_textView"
+                    android:textColor="@color/mp_primary"
+                    android:autoLink="web"
+                    android:text="Link" />
+
+                <TextView
+                    android:id="@+id/stationInfo_intro_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/stationInfo_link_textView"
+                    android:layout_marginTop="10dp"
+                    android:text="Intro" />
+
+                <TextView
+                    android:id="@+id/stationInfo_attractionTitle_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/stationInfo_intro_textView"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/mp_primary_text"
+                    android:text="@string/stationInfo_attractionTitle"
+                    />
+
+                <TextView
+                    android:id="@+id/stationInfo_attraction_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/stationInfo_attractionTitle_textView"
+                    android:text="Attractions" />
+
+                <TextView
+                    android:id="@+id/stationInfo_shoppingTitle_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/stationInfo_attraction_textView"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/mp_primary_text"
+                    android:text="@string/stationInfo_shoppingTitle" />
+
+                <TextView
+                    android:id="@+id/stationInfo_shopping_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/stationInfo_shoppingTitle_textView"
+                    android:text="Shopping" />
+
+                <TextView
+                    android:id="@+id/stationInfo_foodTitle_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/stationInfo_shopping_textView"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/mp_primary_text"
+                    android:text="@string/stationInfo_foodTitle" />
+
+                <TextView
+                    android:id="@+id/stationInfo_food_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/stationInfo_foodTitle_textView"
+                    android:text="Food" />
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <Button
+            android:id="@+id/stationInfo_return_btn"
+            style="@style/ButtonAppTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/stationInfo_return_button" />
+
+    </LinearLayout>
+
+</ScrollView>

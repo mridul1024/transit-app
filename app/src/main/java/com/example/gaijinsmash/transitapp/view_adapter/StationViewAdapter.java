@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
@@ -17,7 +18,6 @@ import java.util.List;
  * the design.
  */
 
-// TODO : convert to RecyclerView
 public class StationViewAdapter extends ArrayAdapter<Station> implements View.OnClickListener {
 
     private List<Station> stationList = null;
@@ -40,12 +40,7 @@ public class StationViewAdapter extends ArrayAdapter<Station> implements View.On
         int position = (Integer) view.getTag();
         Object object = getItem(position);
         Station station = (Station) object;
-
-        switch (view.getId()) {
-            // switch to a detailed page of station info.
-
-            // and option to view on map.
-        }
+        Toast.makeText(mContext, "test", Toast.LENGTH_LONG).show();
     }
 
     private int lastPosition = -1;
