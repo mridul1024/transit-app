@@ -26,7 +26,7 @@ public class DummyFragment extends Fragment {
                              Bundle savedInstanceState) {
         // only create View here
         // Example:
-        // mInflatedView = inflater.inflate(R.layout.google_map_view, container, false);
+        // mInflatedView = inflater.inflate(R.layout.example_view, container, false);
         return mInflatedView;
     }
 

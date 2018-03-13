@@ -19,6 +19,13 @@
             android:background="@color/mp_primary_light">
 
             <TextView
+                android:id="@+id/textView13"
+                style="@style/HelpTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="A: Yes! This is a non-profit, open source app. Developers can go to this link below for more information." />
+
+            <TextView
                 style="@style/HelpTextView"
                 android:id="@+id/help_title_textView"
                 android:layout_width="match_parent"
@@ -71,10 +78,12 @@
 
             <TextView
                 android:id="@+id/textView11"
+                style="@style/HelpTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="https://github.com/rjsuzuki/transit-app"
-                android:autoLink="web"/>
+                android:autoLink="web"
+                android:text="https://github.com/rjsuzuki/transit-app" />
+
 
             <TextView
                 style="@style/HelpTextView"

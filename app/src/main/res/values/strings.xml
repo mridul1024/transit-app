@@ -161,5 +161,10 @@
     <string name="bart_map_button">Switch to Train Lines Map</string>
     <string name="bart_lines_map_btn">Switch To GoogleMap</string>
     <string name="bart_lines_map_description">An image of the BART Train Lines</string>
+    <string name="navigation_drawer_phoneLines">Call Lines</string>
+    <string name="phonesLines_lostFound">BART Lost and Found:</string>
+    <string name="phonesLines_bartComplaints">BART Comments and Complaints:</string>
+    <string name="phoneLines_bartPolice">BART Police:</string>
+    <string name="phoneLines_bartLink">For a complete list of BART phone lines, please click the link below.</string>
 
 </resources>

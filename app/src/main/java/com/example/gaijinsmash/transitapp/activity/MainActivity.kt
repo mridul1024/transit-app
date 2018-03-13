@@ -202,7 +202,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_about -> {
                 fragmentFactory(AboutFragment(), "AboutFragment")
-                //todo: resolve setCheckedItem issue with nav menus
+                return true
+            }
+            R.id.nav_phoneLines -> {
+                fragmentFactory(PhoneLinesFragment(), "PhoneLinesFragment")
                 return true
             }
         }
