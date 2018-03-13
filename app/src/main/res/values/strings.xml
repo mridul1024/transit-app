@@ -166,5 +166,6 @@
     <string name="phonesLines_bartComplaints">BART Comments and Complaints:</string>
     <string name="phoneLines_bartPolice">BART Police:</string>
     <string name="phoneLines_bartLink">For a complete list of BART phone lines, please click the link below.</string>
+    <string name="error_form_completion2">You\'re going nowhere! Please try again.</string>
 
 </resources>

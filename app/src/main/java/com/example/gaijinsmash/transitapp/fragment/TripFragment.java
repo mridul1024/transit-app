@@ -200,11 +200,11 @@ public class TripFragment extends Fragment {
                 String preformatTime = mTimeEt.getText().toString();
                 String departingTime = "";
 
-                if(!preformatTime.equals("Now") && mIs24HrTimeOn) {
+                if (!preformatTime.equals("Now") && mIs24HrTimeOn) {
                     String convertedTime = TimeAndDate.convertTo12Hr(preformatTime);
                     Log.d("convertedTime : ", convertedTime);
                     departingTime = TimeAndDate.formatTime(convertedTime);
-                } else if(!preformatTime.equals("Now") && !mIs24HrTimeOn){
+                } else if (!preformatTime.equals("Now") && !mIs24HrTimeOn) {
                     departingTime = TimeAndDate.formatTime(preformatTime); // time=h:mm+AM/PM
                 } else {
                     departingTime = preformatTime;
@@ -215,10 +215,11 @@ public class TripFragment extends Fragment {
                 String departingDate = mDateEt.getText().toString();
                 Log.d("departingDate : ", departingDate);
 
-                if(departingStation.isEmpty() || arrivingStation.isEmpty() || departingDate.isEmpty() || departingDate.isEmpty()) {
+                if (departingStation.isEmpty() || arrivingStation.isEmpty() || departingDate.isEmpty() || departingDate.isEmpty()) {
                     Toast.makeText(getActivity(), getString(R.string.error_form_completion), Toast.LENGTH_LONG).show();
+                } else if (departingStation.equals(arrivingStation)) {
+                    Toast.makeText(getActivity(), getString(R.string.error_form_completion2), Toast.LENGTH_LONG).show();
                 } else {
-                    //String[] array = {departingStation, arrivingStation, departingTime, departingDate};
                     new GetScheduleTask(getActivity(), departingStation, arrivingStation, departingDate, departingTime).execute();
                 }
             }
