@@ -1,34 +1,19 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    xmlns:map="http://schemas.android.com/apk/res-auto">
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:clickable="true"
-        map:uiZoomControls="true"
-        map:uiCompass="true"
-        android:paddingBottom="50dp"/>
-
-    <Button
-        android:id="@+id/bart_map_btn"
-        style="@style/ButtonAppTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/bart_map_button" />
-
-    <ProgressBar
-        android:id="@+id/bart_map_progress_bar"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-</RelativeLayout>
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/fragment_map_container">
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/bartMap_imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/bart_lines_map_description"
+                    android:elevation="1dp"
+                    android:scaleType="matrix"
+                    android:src="@drawable/bart_map"
+                    />
+        </HorizontalScrollView>
+</ScrollView>

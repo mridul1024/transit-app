@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mBottomNavigation.addItem(item2)
         mBottomNavigation.addItem(item3)
         mBottomNavigation.setCurrentItem(0)
-        mBottomNavigation.setOnTabSelectedListener { position, wasSelected ->
+        mBottomNavigation.setOnTabSelectedListener { position, _ ->
             when(position) {
                 0 -> initHomeFragment()
                 1 -> initMapFragment()
@@ -97,9 +97,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun initMapFragment() {
         if(CheckInternet.isNetworkActive(applicationContext)) {
-            replaceFrag(BartMapFragment(), "BartMapFragment")
+            replaceFrag(GoogleMapFragment(), "GoogleMapFragment")
         } else {
-            replaceFrag(MapFragment(), "MapFragment")
+            replaceFrag(BartMapFragment(), "BartMapFragment")
         }
         mNavigationView.setCheckedItem(R.id.nav_map)
     }
@@ -182,7 +182,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_map -> {
                 if(CheckInternet.isNetworkActive(applicationContext))
-                    fragmentFactory(BartMapFragment(), "BartMapFragment") else fragmentFactory(MapFragment(), "MapFragment")
+                    fragmentFactory(GoogleMapFragment(), "GoogleMapFragment") else fragmentFactory(BartMapFragment(), "BartMapFragment")
                 mBottomNavigation.setCurrentItem(1)
                 return true
             }

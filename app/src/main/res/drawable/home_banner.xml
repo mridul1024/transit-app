@@ -1,5 +1,5 @@
 
 <bitmap
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/sfbay">
+    android:src="@drawable/sf_day">
 </bitmap>

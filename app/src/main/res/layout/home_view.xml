@@ -8,7 +8,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/home_banner"
+            android:id="@+id/home_banner_imageView"
             android:src="@drawable/home_banner"
             android:adjustViewBounds="true"
             android:contentDescription="@string/banner"
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_below="@+id/home_banner">
+            android:layout_below="@+id/home_banner_imageView">
 
             <TextView
                 android:id="@+id/home_view_alertsTv"

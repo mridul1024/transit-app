@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,8 +32,11 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.SimpleTimeZone;
 
 public class HomeFragment extends Fragment {
 
@@ -45,14 +49,8 @@ public class HomeFragment extends Fragment {
     //---------------------------------------------------------------------------------------------
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        // Initialize data here
         setRetainInstance(true);
     }
 
@@ -71,28 +69,18 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        // todo: fix this and all other fragments
-        // Setup any handles to view objects here because of automatic null check
-        // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
         mBsaTimeTv = (TextView) mInflatedView.findViewById(R.id.home_view_timeTv);
         mBsaListView = mInflatedView.findViewById(R.id.advisory_listView);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        // Any references in onAttach should be nulled out here to prevent memory leaks
+        ImageView imageView = (ImageView) mInflatedView.findViewById(R.id.home_banner_imageView);
+        if(TimeAndDate.isNightTime()) {
+            imageView.setImageResource(R.drawable.sf_night);
+        }
     }
 
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
-    //todo: add holiday info and convert listview to recyclerview
+    //todo: add holiday info
 
     private class GetAdvisoryTask extends AsyncTask<Void, Void, List<Advisory>> {
         private Context mContext;
@@ -119,9 +107,7 @@ public class HomeFragment extends Fragment {
                 InputStream in = is.connectToApi(builder.getBSA());
                 AdvisoryXmlParser parser = new AdvisoryXmlParser(mContext);
                 mList = parser.parse(in);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
+            } catch (IOException | XmlPullParserException e) {
                 e.printStackTrace();
             }
             return mList;

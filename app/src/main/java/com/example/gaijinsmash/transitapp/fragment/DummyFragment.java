@@ -26,8 +26,7 @@ public class DummyFragment extends Fragment {
                              Bundle savedInstanceState) {
         // only create View here
         // Example:
-        // mInflatedView = inflater.inflate(R.layout.bart_map_view, container, false);
-
+        // mInflatedView = inflater.inflate(R.layout.google_map_view, container, false);
         return mInflatedView;
     }
 
@@ -36,6 +35,6 @@ public class DummyFragment extends Fragment {
 
         // All other UI elements are called here
         // Example:
-        //mButton = (Button) mInflatedView.findViewById(R.id.help_report_button);
+        // mButton = (Button) mInflatedView.findViewById(R.id.help_report_button);
     }
 }

@@ -1,11 +1,15 @@
 package com.example.gaijinsmash.transitapp.utils;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class TimeAndDate {
+
 
     public static String getTodaysDate() {
         Calendar c = Calendar.getInstance();
@@ -24,6 +28,11 @@ public class TimeAndDate {
         return String.format("%02d:%02d", hour, minute);
     }
 
+    public static String formatTime(String input) {
+        String output = input.replaceFirst("\\s", "");
+        return output;
+    }
+
     // Format date for api string - mm/dd/yyyy
     public static String formatDate(String input) {
         String output = "";
@@ -38,13 +47,6 @@ public class TimeAndDate {
         output = sdf.format(date);
         return output;
     }
-
-    //eliminate am:pm and pst
-    public static String formatTime(String input) {
-        String output = input.replaceFirst("\\s", "");
-        return output;
-    }
-
 
     // Remove am/pm from
     public static String format24hrTime(String input) {
@@ -88,5 +90,15 @@ public class TimeAndDate {
         sdf = new SimpleDateFormat("hh:mm");
         output = sdf.format(date);
         return output;
+    }
+
+    public static boolean isNightTime() {
+        Calendar time = Calendar.getInstance(TimeZone.getTimeZone("PST"));
+        int hour = time.get(Calendar.HOUR);
+        Log.i("HOUR in INT", String.valueOf(hour));
+        if(hour <= 6 || hour >= 18) {
+            return true;
+        }
+        return false;
     }
 }

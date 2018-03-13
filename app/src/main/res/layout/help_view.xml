@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="60dp">
+    android:paddingBottom="50dp">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="15dp"
+        android:layout_margin="10dp"
         android:elevation="1dp">
 
         <LinearLayout
@@ -73,7 +73,8 @@
                 android:id="@+id/textView11"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="https://github.com/rjsuzuki/transit-app" />
+                android:text="https://github.com/rjsuzuki/transit-app"
+                android:autoLink="web"/>
 
             <TextView
                 style="@style/HelpTextView"
@@ -87,7 +88,7 @@
                 android:id="@+id/textView10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="A: If you found a problem that you would like to report, please click the button just below." />
+                android:text="A: If you have found an application problem that you would like to report, please click the button just below and send us an email :)" />
 
             <Button
                 android:id="@+id/help_report_button"

@@ -28,12 +28,12 @@
     <!-- Bart Results Fragment-->
     <string name="bart_result_depart">Depart:</string>
     <string name="bart_result_arrive">Arrive:</string>
-    <string name="bart_result_tripTime">Total Time:</string>
+    <string name="bart_result_tripTime">Travel Time (minutes):</string>
     <string name="bart_result_date">Date</string>
     <string name="bart_result_departTime">Departure Time:</string>
     <string name="bart_result_arriveTime">Arrival Time:</string>
-    <string name="bart_result_cashFare">Cash Fare:</string>
-    <string name="bart_result_clipperFare">Clipper Fare:</string>
+    <string name="bart_result_cashFare">Cash Fare: $</string>
+    <string name="bart_result_clipperFare">Clipper Fare: $</string>
     <string name="bart_result_minutes">minutes</string>
 
     <!-- Help Fragment -->

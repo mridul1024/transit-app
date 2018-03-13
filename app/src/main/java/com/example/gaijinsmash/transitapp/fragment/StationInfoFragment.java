@@ -30,10 +30,7 @@ import java.util.List;
 public class StationInfoFragment extends Fragment {
 
     private View mInflatedView;
-    private ProgressBar mProgressBar;
-    private Bundle mBundle;
     private String mStation;
-    private Button mMapButton, mReturnButton;
     private TextView mTitle, mAddress, mCity, mLink, mIntro, mAttraction, mCrossStreet, mShopping, mFood;
 
     //---------------------------------------------------------------------------------------------
@@ -58,8 +55,8 @@ public class StationInfoFragment extends Fragment {
         mAttraction = (TextView) mInflatedView.findViewById(R.id.stationInfo_attraction_textView);
         mShopping = (TextView) mInflatedView.findViewById(R.id.stationInfo_shopping_textView);
         mFood = (TextView) mInflatedView.findViewById(R.id.stationInfo_food_textView);
-        mMapButton = (Button) mInflatedView.findViewById(R.id.stationInfo_map_btn);
-        mMapButton.setOnClickListener(new View.OnClickListener() {
+        Button mapButton = (Button) mInflatedView.findViewById(R.id.stationInfo_map_btn);
+        mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
@@ -67,13 +64,13 @@ public class StationInfoFragment extends Fragment {
                 bundle.putString("Station", stationAddress);
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction tx = manager.beginTransaction();
-                Fragment newFrag = new BartMapFragment();
+                Fragment newFrag = new GoogleMapFragment();
                 newFrag.setArguments(bundle);
                 tx.replace(R.id.fragmentContent, newFrag).addToBackStack(null).commit();
             }
         });
-        mReturnButton = (Button) mInflatedView.findViewById(R.id.stationInfo_return_btn);
-        mReturnButton.setOnClickListener(new View.OnClickListener() {
+        Button returnButton = (Button) mInflatedView.findViewById(R.id.stationInfo_return_btn);
+        returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().getFragmentManager().popBackStack();
@@ -84,9 +81,9 @@ public class StationInfoFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mBundle = getArguments();
-        if(mBundle != null) {
-            mStation = mBundle.getString("StationAddress");
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            mStation = bundle.getString("StationAddress");
         }
         if(mStation != null) {
             new GetStationDetails(getActivity(), mStation).execute();
@@ -123,7 +120,6 @@ public class StationInfoFragment extends Fragment {
                    mStation = list.get(0);
                 }
             } else {
-                Toast.makeText(mContext, "There was a network error. Please try again later.", Toast.LENGTH_LONG).show();
                 return false;
             }
             return true;
