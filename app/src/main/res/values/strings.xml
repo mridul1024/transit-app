@@ -17,7 +17,7 @@
     <string name="navigation_drawer_home">Home</string>
     <string name="navigation_drawer_schedule">BART Schedule</string>
     <string name="navigation_drawer_stations">BART Station Info</string>
-    <string name="navigation_drawer_bart_map">Map of BART</string>
+    <string name="navigation_drawer_bart_map">Map</string>
     <string name="navigation_drawer_misc">Misc</string>
     <string name="navigation_drawer_about">About</string>
     <string name="menu_share">Share</string>
@@ -167,5 +167,6 @@
     <string name="phoneLines_bartPolice">BART Police:</string>
     <string name="phoneLines_bartLink">For a complete list of BART phone lines, please click the link below.</string>
     <string name="error_form_completion2">You\'re going nowhere! Please try again.</string>
+    <string name="bottomnav_title_3">Favorites</string>
 
 </resources>

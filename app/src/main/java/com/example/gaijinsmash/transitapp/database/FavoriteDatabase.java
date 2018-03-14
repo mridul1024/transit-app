@@ -1,6 +1,5 @@
 package com.example.gaijinsmash.transitapp.database;
 
-
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -8,21 +7,19 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
-import com.example.gaijinsmash.transitapp.model.bart.Station;
+import com.example.gaijinsmash.transitapp.model.bart.Favorite;
 
-@Database(entities = {Station.class /*, Example.class*/}, version = 2)
-public abstract class StationDatabase extends RoomDatabase {
+@Database(entities = {Favorite.class}, version = 1)
+public abstract class FavoriteDatabase extends RoomDatabase {
 
-    private static StationDatabase INSTANCE;
+    private static FavoriteDatabase INSTANCE;
+    public abstract FavoriteDAO getFavoriteDAO();
 
-    public abstract StationDAO getStationDAO();
-
-    // Room Builder
-    public static StationDatabase getRoomDB(Context context) {
+    public static FavoriteDatabase getRoomDB(Context context) {
         if(INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), StationDatabase.class, "station-database")
+            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), FavoriteDatabase.class, "favorite-database")
                     //.addMigrations(MIGRATION)
-                    .fallbackToDestructiveMigration() //todo: need to change this
+                    .fallbackToDestructiveMigration()
                     .build();
         }
         return INSTANCE;
@@ -45,6 +42,6 @@ public abstract class StationDatabase extends RoomDatabase {
 /*
 To get an instance saved file in example-database
 
-StationDatabase db = Room.databaseBuilder(getApplicationContext(),
-        StationDatabase.class, "example-database").build();
+FavoriteDatabase db = Room.databaseBuilder(getApplicationContext(),
+        FavoriteDatabase.class, "example-database").build();
 */

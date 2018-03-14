@@ -75,16 +75,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val item1 = AHBottomNavigationItem(R.string.bottomnav_title_0, R.drawable.ic_menu_home, R.color.colorPrimaryDark)
         val item2 = AHBottomNavigationItem(R.string.bottomnav_title_1, R.drawable.ic_menu_map, R.color.colorPrimaryDark)
         val item3 = AHBottomNavigationItem(R.string.bottomnav_title_2, R.drawable.ic_menu_schedule, R.color.colorPrimaryDark)
+        val item4 = AHBottomNavigationItem(R.string.bottomnav_title_3, R.drawable.ic_menu_favorites, R.color.colorPrimaryDark)
 
         mBottomNavigation.addItem(item1)
         mBottomNavigation.addItem(item2)
         mBottomNavigation.addItem(item3)
+        mBottomNavigation.addItem(item4)
         mBottomNavigation.setCurrentItem(0)
         mBottomNavigation.setOnTabSelectedListener { position, _ ->
             when(position) {
                 0 -> initHomeFragment()
                 1 -> initMapFragment()
                 2 -> initScheduleFragment()
+                3 -> initFavoritesFragment()
             }
             true
         }
@@ -109,9 +112,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mNavigationView.setCheckedItem(R.id.nav_schedule)
     }
 
-    fun initStationFragment() {
-        replaceFrag(StationFragment(), "StationFragment")
-        mNavigationView.setCheckedItem(R.id.nav_station)
+    fun initFavoritesFragment() {
+        replaceFrag(FavoritesFragment(), "FavoritesFragment")
+        // todo: should nav_drawer have an item too?
     }
 
     fun replaceFrag(newFrag:Fragment, tag: String) {
@@ -134,6 +137,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     /*
+    todo: FAB
     fun initFAB() {
         val fab = findViewById<View>(R.id.fab) as FloatingActionButton
         fab.setOnClickListener { view ->

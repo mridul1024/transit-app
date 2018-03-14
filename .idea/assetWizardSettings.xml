@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/G:/Programs/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_phone_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/G:/Programs/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_favorite_border_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,7 +33,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_menu_phone" />
+                            <entry key="outputName" value="ic_menu_favorites" />
                             <entry key="sourceFile" value="C:\Users\Ryan" />
                           </map>
                         </option>

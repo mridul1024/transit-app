@@ -1,13 +1,14 @@
 package com.example.gaijinsmash.transitapp.fragment;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.support.v7.widget.Toolbar;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.model.bart.FullTrip;
@@ -31,6 +32,10 @@ public class BartResultsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Initialize data here
         setRetainInstance(true);
+
+        //todo: add favorites icon to action bar
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+
     }
 
     @Override
