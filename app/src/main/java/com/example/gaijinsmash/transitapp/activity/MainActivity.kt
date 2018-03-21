@@ -20,7 +20,6 @@ import com.example.gaijinsmash.transitapp.network.CheckInternet
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    //todo: add FAVORITES Module
     var mCurrentFragment = "HomeFragment"
     val mFragmentManager = fragmentManager
     lateinit var mDrawer: DrawerLayout
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val item1 = AHBottomNavigationItem(R.string.bottomnav_title_0, R.drawable.ic_menu_home, R.color.colorPrimaryDark)
         val item2 = AHBottomNavigationItem(R.string.bottomnav_title_1, R.drawable.ic_menu_map, R.color.colorPrimaryDark)
         val item3 = AHBottomNavigationItem(R.string.bottomnav_title_2, R.drawable.ic_menu_schedule, R.color.colorPrimaryDark)
-        val item4 = AHBottomNavigationItem(R.string.bottomnav_title_3, R.drawable.ic_menu_favorites, R.color.colorPrimaryDark)
+        val item4 = AHBottomNavigationItem(R.string.bottomnav_title_3, R.drawable.ic_menu_favorite, R.color.colorPrimaryDark)
 
         mBottomNavigation.addItem(item1)
         mBottomNavigation.addItem(item2)
@@ -114,7 +113,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun initFavoritesFragment() {
         replaceFrag(FavoritesFragment(), "FavoritesFragment")
-        // todo: should nav_drawer have an item too?
     }
 
     fun replaceFrag(newFrag:Fragment, tag: String) {
@@ -232,8 +230,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val intent = Intent(android.content.Intent.ACTION_SEND)
         intent.setType("text/plain")
         //intent.setType("img")
-        val shareText = "Here is the share content"
-        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Shared from TransitApp")
+        val shareText = "Info from Riderz"
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Shared from Riderz")
         intent.putExtra(android.content.Intent.EXTRA_TEXT, shareText)
         startActivity(Intent.createChooser(intent, "Share via"))
     }

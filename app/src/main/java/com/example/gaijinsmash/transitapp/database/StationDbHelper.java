@@ -54,6 +54,4 @@ public class StationDbHelper {
         Log.i("ABBR: ", station.getAbbreviation());
         return station.getAbbreviation();
     }
-
-
 }

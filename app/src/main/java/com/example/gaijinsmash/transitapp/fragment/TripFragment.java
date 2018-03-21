@@ -263,8 +263,6 @@ public class TripFragment extends Fragment {
                 StationDbHelper.initStationDb(mContext);
                 mDepartAbbr = getAbbrFromDb(mDepartingStn);
                 mArriveAbbr = getAbbrFromDb(mArrivingStn);
-            } catch (XmlPullParserException | IOException e) {
-                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -289,6 +287,8 @@ public class TripFragment extends Fragment {
                 // add list to parcelable bundle
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("TripList", (ArrayList<? extends Parcelable>) mTripList);
+                String[] stations = {mDepartAbbr, mArriveAbbr};
+                bundle.putStringArray("Favorite", stations);
                 // Switch to BartResultsFragment
                 Fragment newFrag = new BartResultsFragment();
                 newFrag.setArguments(bundle);

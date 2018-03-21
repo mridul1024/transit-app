@@ -24,4 +24,10 @@ public interface FavoriteDAO {
     @Query("SELECT * from favorites")
     public List<Favorite> getAllFavorites();
 
+    @Query("SELECT * from favorites where origin = :origin")
+    public List<Favorite> getFavoritesByOrigin(String origin);
+
+    // Get count
+    @Query("SELECT COUNT(*) from favorites")
+    int countFavorites();
 }

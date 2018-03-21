@@ -6,7 +6,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="50dp"
+        android:layout_margin="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -15,9 +17,14 @@
 
             <TextView
                 style="@style/ViewTitle"
+                android:id="@+id/bartFavorites_title_tV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Favorites"/>
+            <TextView
+                android:id="@+id/bartFavorites_error_tV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
             <ListView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">

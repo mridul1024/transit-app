@@ -59,6 +59,7 @@ public class TimeAndDate {
             e.printStackTrace();
         }
         sdf = new SimpleDateFormat("HH:mm z");
+        sdf.setTimeZone(TimeZone.getTimeZone("PST"));
         output = sdf.format(date);
         return output;
     }
@@ -74,6 +75,7 @@ public class TimeAndDate {
             e.printStackTrace();
         }
         sdf = new SimpleDateFormat("hh:mm a z");
+        sdf.setTimeZone(TimeZone.getTimeZone("PST"));
         output = sdf.format(date);
         return output;
     }

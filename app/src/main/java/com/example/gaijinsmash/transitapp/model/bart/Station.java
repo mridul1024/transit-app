@@ -59,7 +59,6 @@ public class Station  {
     private String link;
 
     public Station () {}
-    public Station(String name) { this.name = name; }
 
     // Setters
     public void setId(int id) { this.id = id; }

@@ -168,5 +168,10 @@
     <string name="phoneLines_bartLink">For a complete list of BART phone lines, please click the link below.</string>
     <string name="error_form_completion2">You\'re going nowhere! Please try again.</string>
     <string name="bottomnav_title_3">Favorites</string>
+    <string name="action_favorites">Favorites</string>
+    <string name="bart_favorites_empty">You currently don\'t have any favorite routes.</string>
+    <string name="alert_dialog_favorite_title">Just Checking</string>
+    <string name="alert_dialog_favorite_message">Are you sure you want to remove this from your favorites?</string>
+    <string name="fav_system_bart">BART</string>
 
 </resources>

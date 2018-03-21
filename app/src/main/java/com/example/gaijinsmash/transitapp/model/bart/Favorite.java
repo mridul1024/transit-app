@@ -11,24 +11,29 @@ public class Favorite {
     private int id;
 
     @ColumnInfo(name = "origin")
-    private String origin;
+    private String origin; // abbreviated
 
     @ColumnInfo(name = "destination")
-    private String destination;
+    private String destination; // abbreviated
 
     // System = BART, MUNI, etc.
     @ColumnInfo(name = "system")
     private String system;
+
+    @ColumnInfo(name = "description")
+    private String description;
 
     // Getters
     public int getId() { return id; }
     public String getOrigin() { return origin; }
     public String getDestination() { return destination; }
     public String getSystem() { return system; }
+    public String getDescription() { return description; }
 
     // Setters
     public void setId(int id) { this.id = id; }
     public void setOrigin(String origin) { this.origin = origin; }
     public void setDestination(String destination) { this.destination = destination; }
     public void setSystem(String system) { this.system = system; }
+    public void setDescription(String description) { this.description = description; }
 }

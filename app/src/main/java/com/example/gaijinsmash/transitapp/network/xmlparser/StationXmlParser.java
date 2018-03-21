@@ -191,7 +191,8 @@ public class StationXmlParser implements XmlParserInterface {
             }
         }
 
-        Station station = new Station(mName);
+        Station station = new Station();
+        station.setName(mName);
         station.setAbbreviation(mAbbreviation);
         station.setLatitude(Double.parseDouble(mLatitude));
         station.setLongitude(Double.parseDouble(mLongitude));
