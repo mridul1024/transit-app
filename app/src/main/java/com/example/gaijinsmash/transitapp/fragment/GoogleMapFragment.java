@@ -40,6 +40,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +50,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
     private MapView mMapView;
     private ProgressBar mProgressBar;
     private View mInflatedView;
-    private Bundle mBundle;
-    private Button mButton;
     private List<Marker> mMarkerList;
 
 
@@ -80,7 +79,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mButton = (Button) mInflatedView.findViewById(R.id.googleMap_btn);
+        Button mButton = (Button) mInflatedView.findViewById(R.id.googleMap_btn);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,7 +168,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
         }
 
         // Populate map with all the stations (markers)
-        new GetMarkersTask(googleMap, getActivity()).execute();
+        new GetMarkersTask(googleMap, this).execute();
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -185,7 +184,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        mBundle = getArguments();
+        Bundle mBundle = getArguments();
         if(mBundle != null) {
             String stationTitle = mBundle.getString("StationTitle");
             Log.i("stationTitle", stationTitle);
@@ -201,6 +200,9 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
 
         mMapView.onResume();
     }
+    //---------------------------------------------------------------------------------------------
+    // Helpers
+    //---------------------------------------------------------------------------------------------
 
     public void initMapSettings(GoogleMap map) {
         // Set boundary of map area
@@ -254,7 +256,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private List<Station> initMarkers(GoogleMap map, Context context) {
+    private static List<Station> initMarkers(GoogleMap map, Context context) {
         StationDatabase db = StationDatabase.getRoomDB(context);
         List<Station> stationList = db.getStationDAO().getAllStations();
         if(DEBUG) {
@@ -265,31 +267,32 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     //---------------------------------------------------------------------------------------------
-    // Thread for call to database and create Markers
+    // AsyncTask for call to database and create Markers
     //---------------------------------------------------------------------------------------------
     // 3 params are Params, Progress, Result
-    private class GetMarkersTask extends AsyncTask<Void, Integer, List<Station>> {
-        private Context mContext;
+    private static class GetMarkersTask extends AsyncTask<Void, Integer, List<Station>> {
+        WeakReference<GoogleMapFragment> mWeakRef;
         private GoogleMap mGoogleMap;
 
-        public GetMarkersTask(GoogleMap map, Context context) {
-                this.mContext = context;
+        private GetMarkersTask(GoogleMap map, GoogleMapFragment context) {
+                mWeakRef = new WeakReference<>(context);
                 this.mGoogleMap = map;
-                mMarkerList = new ArrayList<Marker>();
         }
 
         @Override
         protected List<Station> doInBackground(Void...voids) {
+            GoogleMapFragment frag = mWeakRef.get();
             try {
-                StationDbHelper.initStationDb(mContext);
+                StationDbHelper.initStationDb(frag.getActivity());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return initMarkers(mGoogleMap, mContext);
+            return initMarkers(mGoogleMap, frag.getActivity());
         }
 
         @Override
         protected void onPostExecute(List<Station> list) {
+            GoogleMapFragment frag = mWeakRef.get();
             // fill map with markers
             for(Station station : list) {
                 LatLng latLng = new LatLng(station.getLatitude(), station.getLongitude());
@@ -298,11 +301,9 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
                 //mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(station.getName()));
 
                 //add marker to list
-                Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(station.getName()));
-                marker.setTag(0);
-                mMarkerList.add(marker);
+                mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(station.getName()));
             }
-            mProgressBar.setVisibility(View.GONE);
+            frag.mProgressBar.setVisibility(View.GONE);
         }
     }
 }
