@@ -26,6 +26,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        new GetAdvisoryTask(getActivity(), getText(R.string.last_update).toString()).execute();
+        new GetAdvisoryTask(this, getText(R.string.last_update).toString()).execute();
     }
 
     @Override
@@ -83,29 +84,32 @@ public class HomeFragment extends Fragment {
     //---------------------------------------------------------------------------------------------
     //todo: add holiday info
 
-    private class GetAdvisoryTask extends AsyncTask<Void, Void, Boolean> {
-        private Context mContext;
+    private static class GetAdvisoryTask extends AsyncTask<Void, Void, Boolean> {
+        private WeakReference<HomeFragment> mHomeRef;
         private List<Advisory> mList;
         private String mMessage;
         private boolean mTimeBoolean;
 
-        private GetAdvisoryTask(Context mContext, String message) {
-            if(this.mContext == null)
-                this.mContext = mContext;
+        private GetAdvisoryTask(HomeFragment context, String message) {
             mList = new ArrayList<Advisory>();
             mMessage = message;
-
-            // Check SharedPreferences for time setting
-            SharedPreferences prefs = getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
-            mTimeBoolean = prefs.getBoolean("TIME_KEY", false);
+            mHomeRef = new WeakReference<>(context);
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
+            // Check SharedPreferences for time setting
+            //todo: stil lworks?
+            // must use WeakReference to prevent memory leaks
+            HomeFragment homeFrag = mHomeRef.get();
+
+            SharedPreferences prefs = homeFrag.getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
+            mTimeBoolean = prefs.getBoolean("TIME_KEY", false);
+
             try {
-                FetchInputStream is = new FetchInputStream(mContext);
+                FetchInputStream is = new FetchInputStream(homeFrag.getActivity());
                 InputStream in = is.connectToApi(ApiStringBuilder.getBSA());
-                AdvisoryXmlParser parser = new AdvisoryXmlParser(mContext);
+                AdvisoryXmlParser parser = new AdvisoryXmlParser(homeFrag.getActivity());
                 mList = parser.parse(in);
             } catch (IOException | XmlPullParserException e) {
                 e.printStackTrace();
@@ -117,10 +121,11 @@ public class HomeFragment extends Fragment {
         }
 
         protected void onPostExecute(Boolean result) {
+            HomeFragment homeFrag = mHomeRef.get();
             if(result) {
                 String time = "";
                 for(Advisory adv : mList) {
-                    if(adv.getTime() != null && mBsaTimeTv != null) {
+                    if(adv.getTime() != null && homeFrag.mBsaTimeTv != null) {
                         if(mTimeBoolean) {
                             //time = adv.getTime();
                             time = TimeAndDate.format24hrTime(adv.getTime());
@@ -128,15 +133,15 @@ public class HomeFragment extends Fragment {
                             time = TimeAndDate.convertTo12Hr(adv.getTime());
                         }
                         String message = mMessage + " " + time;
-                        mBsaTimeTv.setText(message);
+                        homeFrag.mBsaTimeTv.setText(message);
                     }
                 }
-                AdvisoryViewAdapter adapter = new AdvisoryViewAdapter(mList, mContext);
-                mBsaListView.setAdapter(adapter);
-                mProgressBar.setVisibility(View.GONE);
+                AdvisoryViewAdapter adapter = new AdvisoryViewAdapter(mList, homeFrag.getActivity());
+                homeFrag.mBsaListView.setAdapter(adapter);
+                homeFrag.mProgressBar.setVisibility(View.GONE);
             } else {
-                mBsaTimeTv.setText(getResources().getString(R.string.update_unavailable));
-                mProgressBar.setVisibility(View.GONE);
+                homeFrag.mBsaTimeTv.setText(homeFrag.getResources().getString(R.string.update_unavailable));
+                homeFrag.mProgressBar.setVisibility(View.GONE);
             }
         }
     }
