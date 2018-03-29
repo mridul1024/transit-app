@@ -25,6 +25,7 @@ import com.example.gaijinsmash.transitapp.model.bart.Station;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class StationFragment extends Fragment {
@@ -57,7 +58,6 @@ public class StationFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 // Because some station names are edited in the textView,
                 // the address will ensure the right object
                 // is found in the Database.
@@ -73,32 +73,30 @@ public class StationFragment extends Fragment {
             }
         });
         mProgressBar = (ProgressBar) mInflatedView.findViewById(R.id.station_progress_bar);
-        new GetStationsTask(getActivity()).execute();
+        new GetStationsTask(this).execute();
     }
 
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
-    private class GetStationsTask extends AsyncTask<Void, Void, List<Station>> {
-
+    private static class GetStationsTask extends AsyncTask<Void, Void, List<Station>> {
+        private WeakReference<StationFragment> mWeakRef;
         private List<Station> stationList = null;
-        private Context mContext;
 
-        public GetStationsTask(Context context) {
-            mContext = context;
+        private GetStationsTask(StationFragment context) {
+            mWeakRef = new WeakReference<>(context);
         }
 
         @Override
         protected List<Station> doInBackground(Void... voids) {
-            mProgressBar.setVisibility(View.VISIBLE);
+            StationFragment frag = mWeakRef.get();
+            frag.mProgressBar.setVisibility(View.VISIBLE);
             try {
-                StationDbHelper.initStationDb(mContext);
+                StationDbHelper.initStationDb(frag.getActivity());
                 if(stationList == null) {
-                    StationDatabase db = StationDatabase.getRoomDB(mContext);
+                    StationDatabase db = StationDatabase.getRoomDB(frag.getActivity());
                     stationList = db.getStationDAO().getAllStations();
                 }
-            } catch (IOException | XmlPullParserException e) {
-                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -106,14 +104,15 @@ public class StationFragment extends Fragment {
         }
 
         protected void onPostExecute(List<Station> stations) {
+            StationFragment frag = mWeakRef.get();
             if(stationList != null) {
-                StationViewAdapter adapter = new StationViewAdapter(stationList, mContext);
-                mListView.setAdapter(adapter);
-                mProgressBar.setVisibility(View.GONE);
+                StationViewAdapter adapter = new StationViewAdapter(stationList, frag.getActivity());
+                frag.mListView.setAdapter(adapter);
+                frag.mProgressBar.setVisibility(View.GONE);
             } else {
-                Toast.makeText(mContext, getString(R.string.cannot_do_this), Toast.LENGTH_LONG);
+                Toast.makeText(frag.getActivity(), frag.getResources().getString(R.string.cannot_do_this), Toast.LENGTH_LONG).show();
                 Log.e("onPostExecute()", "stationList is NULL");
-                mProgressBar.setVisibility(View.GONE);
+                frag.mProgressBar.setVisibility(View.GONE);
             }
         }
     }

@@ -26,16 +26,16 @@
                 <TextView
                     android:id="@+id/stationInfo_title_textView"
                     style="@style/ViewTitle"
-                    android:textColor="@color/mp_primary_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:text="@string/stationInfo_stationName" />
+                    android:text="@string/stationInfo_stationName"
+                    android:textColor="@color/mp_primary_text" />
 
                 <TextView
-                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_address_textView"
+                    style="@style/TextViewRiderz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_title_textView"
@@ -51,16 +51,16 @@
                     android:text="@string/stationInfo_map_button" />
 
                 <TextView
-                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_city_textView"
+                    style="@style/TextViewRiderz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/stationInfo_address_textView"
-                    android:text="@string/stationInfo_stationCity"/>
+                    android:text="@string/stationInfo_stationCity" />
 
                 <TextView
-                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_crossStreet_textView"
+                    style="@style/TextViewRiderz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_city_textView"
@@ -68,19 +68,19 @@
                     android:text="@string/stationInfo_station_crossStreet" />
 
                 <TextView
-                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_link_textView"
+                    style="@style/TextViewRiderz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/stationInfo_crossStreet_textView"
-                    android:textColor="@color/mp_primary"
                     android:autoLink="web"
-                    android:text="@string/stationInfo_stationLink" />
+                    android:text="@string/stationInfo_stationLink"
+                    android:textColor="@color/mp_primary" />
 
                 <TextView
-                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_intro_textView"
+                    style="@style/TextViewRiderz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_link_textView"
@@ -88,59 +88,58 @@
                     android:text="@string/stationInfo_stationIntro" />
 
                 <TextView
-                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_attractionTitle_textView"
+                    style="@style/TextViewRiderz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_intro_textView"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/mp_primary_text"
                     android:text="@string/stationInfo_attractionTitle"
-                    />
+                    android:textColor="@color/mp_primary_text" />
 
                 <TextView
-                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_attraction_textView"
+                    style="@style/TextViewRiderz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_attractionTitle_textView"
-                    android:text="@string/stationInfo_stationAttraction" />
+                    tools:text="@string/stationInfo_stationAttraction" />
 
                 <TextView
-                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_shoppingTitle_textView"
+                    style="@style/TextViewRiderz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_attraction_textView"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/mp_primary_text"
-                    android:text="@string/stationInfo_shoppingTitle" />
+                    android:text="@string/stationInfo_shoppingTitle"
+                    android:textColor="@color/mp_primary_text" />
 
                 <TextView
-                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_shopping_textView"
+                    style="@style/TextViewRiderz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_shoppingTitle_textView"
-                    android:text="@string/stationInfo_stationShopping" />
+                    tools:text="@string/stationInfo_stationShopping" />
 
                 <TextView
-                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_foodTitle_textView"
+                    style="@style/TextViewRiderz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_shopping_textView"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/mp_primary_text"
-                    android:text="@string/stationInfo_foodTitle" />
+                    android:text="@string/stationInfo_foodTitle"
+                    android:textColor="@color/mp_primary_text" />
 
                 <TextView
-                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_food_textView"
+                    style="@style/TextViewRiderz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_foodTitle_textView"
-                    android:text="@string/stationInfo_stationFood" />
+                    tools:text="@string/stationInfo_stationFood" />
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
