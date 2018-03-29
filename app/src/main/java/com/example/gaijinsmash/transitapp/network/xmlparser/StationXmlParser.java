@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
+import com.example.gaijinsmash.transitapp.BuildConfig;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.network.FetchInputStream;
-import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -20,7 +20,7 @@ import java.util.List;
 public class StationXmlParser implements XmlParserInterface {
 
     private Context mContext = null;
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = BuildConfig.DEBUG;
 
     // require(int type, String namespace, String name) if namespace is null, will pass when matched against any name
     private static final String ns = null;
@@ -39,7 +39,7 @@ public class StationXmlParser implements XmlParserInterface {
         return results;
     }
 
-    public List<Station> parse(InputStream is) throws XmlPullParserException, IOException {
+    private List<Station> parse(InputStream is) throws XmlPullParserException, IOException {
         if(DEBUG)
             Log.i("parse()", "***BEGINNING***");
 

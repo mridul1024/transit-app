@@ -98,13 +98,12 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            // Check SharedPreferences for time setting
-            //todo: stil lworks?
-            // must use WeakReference to prevent memory leaks
             HomeFragment homeFrag = mHomeRef.get();
-
-            SharedPreferences prefs = homeFrag.getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
-            mTimeBoolean = prefs.getBoolean("TIME_KEY", false);
+            // Check SharedPreferences for time setting
+            if(homeFrag != null) {
+                SharedPreferences prefs = homeFrag.getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
+                mTimeBoolean = prefs.getBoolean("TIME_KEY", false);
+            }
 
             try {
                 FetchInputStream is = new FetchInputStream(homeFrag.getActivity());

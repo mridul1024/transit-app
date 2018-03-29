@@ -5,6 +5,7 @@ import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.util.Xml;
 
+import com.example.gaijinsmash.transitapp.BuildConfig;
 import com.example.gaijinsmash.transitapp.model.bart.Advisory;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.network.FetchInputStream;
@@ -22,7 +23,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
 
     private XmlParserAbstract xmlParserAbstract;
     private Context mContext = null;
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = BuildConfig.DEBUG;
     private Advisory advisory = null;
 
     // require(int type, String namespace, String name) if namespace is null, will pass when matched against any name

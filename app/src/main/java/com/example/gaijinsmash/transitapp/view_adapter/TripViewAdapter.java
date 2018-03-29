@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.gaijinsmash.transitapp.R;
@@ -61,6 +62,9 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
         TextView arriveTitle2;
         TextView departTitle3;
         TextView arriveTitle3;
+
+        ImageView imageView1;
+        ImageView imageView2;
     }
 
     @Override
@@ -91,30 +95,32 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
             viewHolder.origin =       (TextView) convertView.findViewById(R.id.trip_origin_textView);
             viewHolder.destination =  (TextView) convertView.findViewById(R.id.trip_destination_textView);
             viewHolder.origTimeMin =  (TextView) convertView.findViewById(R.id.trip_departTime_textView);
+            viewHolder.coloredBar1 =  (TextView) convertView.findViewById(R.id.trip_colored_line1);
             viewHolder.destTimeMin =  (TextView) convertView.findViewById(R.id.trip_arrivalTime_textView);
 
+            viewHolder.imageView1  =  (ImageView) convertView.findViewById(R.id.trip_imageView1);
+
+            viewHolder.departTitle2 = (TextView) convertView.findViewById(R.id.trip_departTitle2);
+            viewHolder.arriveTitle2 = (TextView) convertView.findViewById(R.id.trip_arriveTitle2);
             viewHolder.origin2 =      (TextView) convertView.findViewById(R.id.trip_origin_textView2);
             viewHolder.destination2 = (TextView) convertView.findViewById(R.id.trip_destination_textView2);
             viewHolder.origTimeMin2 = (TextView) convertView.findViewById(R.id.trip_departTime_textView2);
+            viewHolder.coloredBar2 =  (TextView) convertView.findViewById(R.id.trip_colored_line2);
             viewHolder.destTimeMin2 = (TextView) convertView.findViewById(R.id.trip_arrivalTime_textView2);
 
+            viewHolder.imageView2  =  (ImageView) convertView.findViewById(R.id.trip_imageView2);
+
+            viewHolder.departTitle3 = (TextView) convertView.findViewById(R.id.trip_departTitle3);
+            viewHolder.arriveTitle3 = (TextView) convertView.findViewById(R.id.trip_arriveTitle3);
             viewHolder.origin3 =      (TextView) convertView.findViewById(R.id.trip_origin_textView3);
             viewHolder.destination3 = (TextView) convertView.findViewById(R.id.trip_destination_textView3);
             viewHolder.origTimeMin3 = (TextView) convertView.findViewById(R.id.trip_departTime_textView3);
+            viewHolder.coloredBar3 =  (TextView) convertView.findViewById(R.id.trip_colored_line3);
             viewHolder.destTimeMin3 = (TextView) convertView.findViewById(R.id.trip_arrivalTime_textView3);
 
             viewHolder.fare =         (TextView) convertView.findViewById(R.id.trip_fare_textView);
             viewHolder.clipper =      (TextView) convertView.findViewById(R.id.trip_clipper_textView);
-
             viewHolder.tripTime =     (TextView) convertView.findViewById(R.id.trip_totalTime_textView);
-
-            viewHolder.coloredBar1 =  (TextView) convertView.findViewById(R.id.trip_colored_line1);
-            viewHolder.coloredBar2 =  (TextView) convertView.findViewById(R.id.trip_colored_line2);
-            viewHolder.coloredBar3 =  (TextView) convertView.findViewById(R.id.trip_colored_line3);
-            viewHolder.departTitle2 = (TextView) convertView.findViewById(R.id.trip_departTitle2);
-            viewHolder.arriveTitle2 = (TextView) convertView.findViewById(R.id.trip_arriveTitle2);
-            viewHolder.departTitle3 = (TextView) convertView.findViewById(R.id.trip_departTitle3);
-            viewHolder.arriveTitle3 = (TextView) convertView.findViewById(R.id.trip_arriveTitle3);
 
             view = convertView;
             convertView.setTag(viewHolder);
@@ -205,6 +211,7 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
                     break;
             }
         } else { // Hide Text Views if no data is present, bottom textviews will automatically move up because of LinearLayout behavior
+            viewHolder.imageView1.setVisibility(View.GONE);
             viewHolder.origin2.setVisibility(View.GONE);
             viewHolder.destination2.setVisibility(View.GONE);
             viewHolder.origTimeMin2.setVisibility(View.GONE);
@@ -251,6 +258,7 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
                     break;
             }
         } else { // Hide Text Views if no data is present and  move bottom TextViews up
+            viewHolder.imageView2.setVisibility(View.GONE);
             viewHolder.origin3.setVisibility(View.GONE);
             viewHolder.destination3.setVisibility(View.GONE);
             viewHolder.origTimeMin3.setVisibility(View.GONE);

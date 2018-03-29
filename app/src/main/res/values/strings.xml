@@ -213,6 +213,8 @@
     <string name="stationInfo_stationAttraction">Attractions</string>
     <string name="stationInfo_stationShopping">Shopping</string>
     <string name="stationInfo_stationFood">Food</string>
+    <string name="bart_result_transfer">Transfer</string>
+    <string name="bart_result_transfer_cd">Train Transfer Icon</string>
 
 
 </resources>

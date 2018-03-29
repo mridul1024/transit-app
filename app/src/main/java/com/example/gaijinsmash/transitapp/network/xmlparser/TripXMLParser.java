@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
+import com.example.gaijinsmash.transitapp.BuildConfig;
 import com.example.gaijinsmash.transitapp.model.bart.Fare;
 import com.example.gaijinsmash.transitapp.model.bart.FullTrip;
 import com.example.gaijinsmash.transitapp.model.bart.Leg;
@@ -21,7 +22,7 @@ import java.util.List;
 public class TripXMLParser implements XmlParserInterface {
 
     private Context mContext = null;
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = BuildConfig.DEBUG;
 
     // require(int type, String namespace, String name) if namespace is null, will pass when matched against any name
     private static final String ns = null;
@@ -35,11 +36,10 @@ public class TripXMLParser implements XmlParserInterface {
         if(DEBUG)
             Log.i("makeCall()", "with " + url);
         InputStream is = new FetchInputStream(mContext).connectToApi(url);
-        List<FullTrip> results = parse(is);
-        return results;
+        return parse(is);
     }
 
-    public List<FullTrip> parse(InputStream in) throws XmlPullParserException, IOException {
+    private List<FullTrip> parse(InputStream in) throws XmlPullParserException, IOException {
         if(DEBUG)
             Log.i("parse()", "***BEGINNING***");
         try {
