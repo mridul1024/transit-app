@@ -29,7 +29,6 @@ import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.database.StationDbHelper;
-import com.example.gaijinsmash.transitapp.helper.TripHelper;
 import com.example.gaijinsmash.transitapp.model.bart.FullTrip;
 import com.example.gaijinsmash.transitapp.network.xmlparser.TripXMLParser;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
@@ -38,10 +37,12 @@ import com.example.gaijinsmash.transitapp.utils.TimeAndDate;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import static android.app.DatePickerDialog.OnDateSetListener;
 
@@ -52,9 +53,9 @@ public class TripFragment extends Fragment {
     private SimpleDateFormat mSimpleDateFormat;
     private AutoCompleteTextView mDepartureActv, mArrivalActv;
     private EditText mTimeEt, mDateEt;
-    private Button mSearchBtn;
     boolean mIs24HrTimeOn = false;
     private View mInflatedView;
+    private TripFragment mTripFragment = this;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -81,8 +82,6 @@ public class TripFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        DrawerLayout layout = (DrawerLayout) mInflatedView.findViewById(R.id.drawer_layout);
-
         // This data adapter is to provide a station list for Spinner and AutoCompleteTextView
         Resources res = getResources();
         String[] stations = res.getStringArray(R.array.stations_list);
@@ -142,7 +141,7 @@ public class TripFragment extends Fragment {
                     public void onDateSet(DatePicker view, int year, int month, int day) {
                         Calendar newDate = Calendar.getInstance();
                         newDate.set(year, month, day);
-                        mSimpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                        mSimpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
                         mDateEt.setText(mSimpleDateFormat.format(newDate.getTime()));
                     }
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -169,7 +168,7 @@ public class TripFragment extends Fragment {
                     public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
                         // Returned value is always 24hr - so conversion is necessary
                         if(mIs24HrTimeOn) {
-                            String formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute);
+                            String formattedTime = String.format(Locale.US, "%02d:%02d", selectedHour, selectedMinute);
                             Log.i("formattedTime",formattedTime);
                             mTimeEt.setText(formattedTime);
 
@@ -186,7 +185,7 @@ public class TripFragment extends Fragment {
         });
 
         // Submit Button
-        mSearchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
+        Button mSearchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -214,12 +213,12 @@ public class TripFragment extends Fragment {
                 String departingDate = mDateEt.getText().toString();
                 Log.d("departingDate : ", departingDate);
 
-                if (departingStation.isEmpty() || arrivingStation.isEmpty() || departingDate.isEmpty() || departingDate.isEmpty()) {
+                if (departingStation.isEmpty() || arrivingStation.isEmpty() || departingDate.isEmpty() || departingTime.isEmpty()) {
                     Toast.makeText(getActivity(), getString(R.string.error_form_completion), Toast.LENGTH_LONG).show();
                 } else if (departingStation.equals(arrivingStation)) {
                     Toast.makeText(getActivity(), getString(R.string.error_form_completion2), Toast.LENGTH_LONG).show();
                 } else {
-                    new GetTripTask(getActivity(), departingStation, arrivingStation, departingDate, departingTime).execute();
+                    new GetTripTask(mTripFragment, departingStation, arrivingStation, departingDate, departingTime).execute();
                 }
             }
         });
@@ -229,41 +228,40 @@ public class TripFragment extends Fragment {
     // AsyncTask
     //---------------------------------------------------------------------------------------------
 
-    private class GetTripTask extends AsyncTask<Void, Void, Boolean> {
+    private static class GetTripTask extends AsyncTask<Void, Void, Boolean> {
+        private WeakReference<TripFragment> mWeakRef;
         private TripXMLParser routeXMLParser = null;
         private List<FullTrip> mTripList = null;
-        private Context mContext;
         private String mDepartingStn, mArrivingStn, mDepartAbbr, mArriveAbbr, mDate, mTime;
 
-        private GetTripTask(Context context, String departingStn, String arrivingStn, String date, String time) {
-            if(this.mContext == null) {
-                mContext = context;
-                mDate = date;
-                mTime = time;
-                mDepartingStn = departingStn;
-                mArrivingStn = arrivingStn;
-            }
+        private GetTripTask(TripFragment context, String departingStn, String arrivingStn, String date, String time) {
+            mWeakRef = new WeakReference<>(context);
+            mDate = date;
+            mTime = time;
+            mDepartingStn = departingStn;
+            mArrivingStn = arrivingStn;
         }
 
         @Override
         protected Boolean doInBackground(Void...voids) {
+            TripFragment frag = mWeakRef.get();
             boolean result = false;
             // Create the API Call
             try {
-                StationDbHelper.initStationDb(mContext);
-                mDepartAbbr = TripHelper.getAbbrFromDb(mDepartingStn, mContext);
-                mArriveAbbr = TripHelper.getAbbrFromDb(mArrivingStn, mContext);
+                StationDbHelper.initStationDb(frag.getActivity());
+                mDepartAbbr = StationDbHelper.getAbbrFromDb(mDepartingStn, frag.getActivity());
+                mArriveAbbr = StationDbHelper.getAbbrFromDb(mArrivingStn, frag.getActivity());
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             String uri = ApiStringBuilder.getDetailedRoute(mDepartAbbr, mArriveAbbr, mDate, mTime);
             try {
-                routeXMLParser = new TripXMLParser(mContext);
+                routeXMLParser = new TripXMLParser(frag.getActivity());
                 mTripList = routeXMLParser.getList(uri);
             } catch (IOException | XmlPullParserException e){
                 e.printStackTrace();
-                Toast.makeText(mContext, getResources().getText(R.string.network_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(frag.getActivity(), frag.getResources().getText(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
             if (mTripList != null) {
                 result = true;
@@ -273,6 +271,7 @@ public class TripFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean result) {
+            TripFragment frag = mWeakRef.get();
             if (result) {
                 // add list to parcelable bundle
                 Bundle bundle = new Bundle();
@@ -282,8 +281,10 @@ public class TripFragment extends Fragment {
                 // Switch to BartResultsFragment
                 Fragment newFrag = new BartResultsFragment();
                 newFrag.setArguments(bundle);
-                FragmentManager fm = getFragmentManager();
+                FragmentManager fm = frag.getFragmentManager();
                 fm.beginTransaction().replace(R.id.fragmentContent, newFrag).commit();
+            } else {
+                Toast.makeText(frag.getActivity(),frag.getResources().getString(R.string.error_try_again),Toast.LENGTH_SHORT).show();
             }
         }
     }
