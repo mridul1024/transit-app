@@ -17,7 +17,6 @@ import com.example.gaijinsmash.transitapp.R;
 
 public class SettingsFragment extends PreferenceFragment {
 
-    private CheckBoxPreference mCheckBoxPreference;
     private SharedPreferences mSharedPreferences;
     SharedPreferences.Editor mEditor;
     public static String PREFS_NAME = "TIME_PREFS";
@@ -30,7 +29,7 @@ public class SettingsFragment extends PreferenceFragment {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.app_preferences);
 
-        mCheckBoxPreference = (CheckBoxPreference) findPreference(PREFS_KEY);
+        CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference) findPreference(PREFS_KEY);
         mCheckBoxPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -45,7 +44,7 @@ public class SettingsFragment extends PreferenceFragment {
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(PREFS_KEY, result);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean getCheckboxValue(Context context) {
@@ -55,15 +54,14 @@ public class SettingsFragment extends PreferenceFragment {
 
     public boolean getValue(Context context) {
         SharedPreferences settings = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
-        boolean result = settings.getBoolean(PREFS_KEY, false);
-        return result;
+        return settings.getBoolean(PREFS_KEY, false);
     }
 
     public void clearSharedPreferences(Context context) {
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.clear();
-        editor.commit();
+        editor.apply();
     }
 
 
