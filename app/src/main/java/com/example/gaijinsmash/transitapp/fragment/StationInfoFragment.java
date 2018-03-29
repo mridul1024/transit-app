@@ -24,6 +24,7 @@ import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,29 +90,30 @@ public class StationInfoFragment extends Fragment {
             mStationAddress = bundle.getString("StationAddress");
         }
         if(mStationAddress != null) {
-            new GetStationDetails(getActivity(), mStationAddress).execute();
+            new GetStationDetails(this, mStationAddress).execute();
         }
     }
 
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
-    private class GetStationDetails extends AsyncTask<Void,Void,Boolean> {
-        private Context mContext;
+    private static class GetStationDetails extends AsyncTask<Void,Void,Boolean> {
+        private WeakReference<StationInfoFragment> mWeakRef;
         private String mStationAddress, mStationName, mAbbr;
 
-        public GetStationDetails(Context context, String stationAddress) {
-            this.mContext = context;
+        private GetStationDetails(StationInfoFragment context, String stationAddress) {
+            mWeakRef = new WeakReference<>(context);
             this.mStationAddress = stationAddress;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            StationDatabase db = StationDatabase.getRoomDB(mContext);
+            StationInfoFragment frag = mWeakRef.get();
+            StationDatabase db = StationDatabase.getRoomDB(frag.getActivity());
             mAbbr = db.getStationDAO().getStationByAddress(mStationAddress).getAbbreviation();
             if(mAbbr != null) {
                 String uri = ApiStringBuilder.getStationInfo(mAbbr);
-                StationXmlParser parser = new StationXmlParser(mContext);
+                StationXmlParser parser = new StationXmlParser(frag.getActivity());
                 List<Station> list = new ArrayList<Station>();
                 try {
                     list = parser.getList(uri);
@@ -119,7 +121,7 @@ public class StationInfoFragment extends Fragment {
                     e.printStackTrace();
                 }
                 if(list != null) {
-                    mStationObject = list.get(0);
+                    frag.mStationObject = list.get(0);
                 }
             } else {
                 return false;
@@ -129,26 +131,27 @@ public class StationInfoFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean result) {
+            StationInfoFragment frag = mWeakRef.get();
             if(result) {
-                mTitle.setText(mStationObject.getName());
-                mAddress.setText(mStationObject.getAddress());
-                mCity.setText(mStationObject.getCity());
-                mCrossStreet.setText(mStationObject.getCrossStreet());
-                mLink.setText(mStationObject.getLink());
-                mIntro.setText(mStationObject.getIntro());
-                mAttraction.setText(Html.fromHtml(mStationObject.getAttraction(), Html.FROM_HTML_MODE_LEGACY));
-                mShopping.setText(Html.fromHtml(mStationObject.getShopping(), Html.FROM_HTML_MODE_LEGACY));
-                mFood.setText(Html.fromHtml(mStationObject.getFood(), Html.FROM_HTML_MODE_LEGACY));
+                frag.mTitle.setText(frag.mStationObject.getName());
+                frag.mAddress.setText(frag.mStationObject.getAddress());
+                frag.mCity.setText(frag.mStationObject.getCity());
+                frag.mCrossStreet.setText(frag.mStationObject.getCrossStreet());
+                frag.mLink.setText(frag.mStationObject.getLink());
+                frag.mIntro.setText(frag.mStationObject.getIntro());
+                frag.mAttraction.setText(Html.fromHtml(frag.mStationObject.getAttraction(), Html.FROM_HTML_MODE_LEGACY));
+                frag.mShopping.setText(Html.fromHtml(frag.mStationObject.getShopping(), Html.FROM_HTML_MODE_LEGACY));
+                frag.mFood.setText(Html.fromHtml(frag.mStationObject.getFood(), Html.FROM_HTML_MODE_LEGACY));
             } else {
-                mTitle.setText(getResources().getString(R.string.stationInfo_oops));
-                mAddress.setVisibility(View.GONE);
-                mCity.setVisibility(View.GONE);
-                mCrossStreet.setVisibility(View.GONE);
-                mIntro.setText(getResources().getString(R.string.stationInfo_error));
-                mLink.setVisibility(View.GONE);
-                mAttraction.setVisibility(View.GONE);
-                mShopping.setVisibility(View.GONE);
-                mFood.setVisibility(View.GONE);
+                frag.mTitle.setText(frag.getResources().getString(R.string.stationInfo_oops));
+                frag.mAddress.setVisibility(View.GONE);
+                frag.mCity.setVisibility(View.GONE);
+                frag.mCrossStreet.setVisibility(View.GONE);
+                frag.mIntro.setText(frag.getResources().getString(R.string.stationInfo_error));
+                frag.mLink.setVisibility(View.GONE);
+                frag.mAttraction.setVisibility(View.GONE);
+                frag.mShopping.setVisibility(View.GONE);
+                frag.mFood.setVisibility(View.GONE);
             }
         }
     }
