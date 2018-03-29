@@ -28,10 +28,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.database.StationDatabase;
 import com.example.gaijinsmash.transitapp.database.StationDbHelper;
+import com.example.gaijinsmash.transitapp.helper.TripHelper;
 import com.example.gaijinsmash.transitapp.model.bart.FullTrip;
-import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.network.xmlparser.TripXMLParser;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
 import com.example.gaijinsmash.transitapp.utils.TimeAndDate;
@@ -220,32 +219,23 @@ public class TripFragment extends Fragment {
                 } else if (departingStation.equals(arrivingStation)) {
                     Toast.makeText(getActivity(), getString(R.string.error_form_completion2), Toast.LENGTH_LONG).show();
                 } else {
-                    new GetScheduleTask(getActivity(), departingStation, arrivingStation, departingDate, departingTime).execute();
+                    new GetTripTask(getActivity(), departingStation, arrivingStation, departingDate, departingTime).execute();
                 }
             }
         });
-    }
-
-    public String getAbbrFromDb(String stationName) throws XmlPullParserException, IOException {
-        Log.i("STATION NAME: ", stationName);
-        StationDatabase db = StationDatabase.getRoomDB(getActivity());
-        Station station = db.getStationDAO().getStationByName(stationName);
-        Log.i("Station", station.getName());
-        Log.i("ABBR: ", station.getAbbreviation());
-        return station.getAbbreviation();
     }
 
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
 
-    private class GetScheduleTask extends AsyncTask<Void, Void, Boolean> {
+    private class GetTripTask extends AsyncTask<Void, Void, Boolean> {
         private TripXMLParser routeXMLParser = null;
         private List<FullTrip> mTripList = null;
         private Context mContext;
         private String mDepartingStn, mArrivingStn, mDepartAbbr, mArriveAbbr, mDate, mTime;
 
-        public GetScheduleTask(Context context, String departingStn, String arrivingStn, String date, String time) {
+        private GetTripTask(Context context, String departingStn, String arrivingStn, String date, String time) {
             if(this.mContext == null) {
                 mContext = context;
                 mDate = date;
@@ -261,8 +251,8 @@ public class TripFragment extends Fragment {
             // Create the API Call
             try {
                 StationDbHelper.initStationDb(mContext);
-                mDepartAbbr = getAbbrFromDb(mDepartingStn);
-                mArriveAbbr = getAbbrFromDb(mArrivingStn);
+                mDepartAbbr = TripHelper.getAbbrFromDb(mDepartingStn, mContext);
+                mArriveAbbr = TripHelper.getAbbrFromDb(mArrivingStn, mContext);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -287,8 +277,8 @@ public class TripFragment extends Fragment {
                 // add list to parcelable bundle
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("TripList", (ArrayList<? extends Parcelable>) mTripList);
-                String[] stations = {mDepartAbbr, mArriveAbbr};
-                bundle.putStringArray("Favorite", stations);
+                bundle.putString("Origin", mDepartAbbr);
+                bundle.putString("Destination", mArriveAbbr);
                 // Switch to BartResultsFragment
                 Fragment newFrag = new BartResultsFragment();
                 newFrag.setArguments(bundle);

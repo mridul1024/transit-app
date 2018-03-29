@@ -72,8 +72,16 @@ public class HomeFragment extends Fragment {
         mBsaTimeTv = (TextView) mInflatedView.findViewById(R.id.home_view_timeTv);
         mBsaListView = mInflatedView.findViewById(R.id.advisory_listView);
         ImageView imageView = (ImageView) mInflatedView.findViewById(R.id.home_banner_imageView);
-        if(TimeAndDate.isNightTime()) {
+
+        // Beach picture is shown by default
+        int hour = TimeAndDate.getCurrentHour();
+        if(hour < 6 || hour >= 21) {
+            // show night picture
             imageView.setImageResource(R.drawable.sf_night);
+        }
+        if(hour >= 17 && hour < 21) {
+            // show dusk picture
+            imageView.setImageResource(R.drawable.sf_dusk);
         }
     }
 
@@ -102,9 +110,8 @@ public class HomeFragment extends Fragment {
         @Override
         protected List<Advisory> doInBackground(Void... voids) {
             try {
-                ApiStringBuilder builder = new ApiStringBuilder();
                 FetchInputStream is = new FetchInputStream(mContext);
-                InputStream in = is.connectToApi(builder.getBSA());
+                InputStream in = is.connectToApi(ApiStringBuilder.getBSA());
                 AdvisoryXmlParser parser = new AdvisoryXmlParser(mContext);
                 mList = parser.parse(in);
             } catch (IOException | XmlPullParserException e) {
@@ -119,7 +126,8 @@ public class HomeFragment extends Fragment {
             for(Advisory adv : list) {
                 if(adv.getTime() != null && mBsaTimeTv != null) {
                     if(mTimeBoolean) {
-                        time = TimeAndDate.format24hrTime(adv.getTime());
+                        time = adv.getTime();
+                        //time = TimeAndDate.format24hrTime(adv.getTime());
                     } else {
                         time = TimeAndDate.convertTo12Hr(adv.getTime());
                     }

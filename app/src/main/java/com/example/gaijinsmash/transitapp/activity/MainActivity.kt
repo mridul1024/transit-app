@@ -90,6 +90,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             true
         }
+        mBottomNavigation.titleState = AHBottomNavigation.TitleState.ALWAYS_SHOW
     }
 
     fun initHomeFragment() {

@@ -260,8 +260,8 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
             viewHolder.arriveTitle3.setVisibility(View.GONE);
         }
 
-        viewHolder.fare.setText(fullTrip.getFareList().get(0).getFareAmount());
-        viewHolder.clipper.setText(fullTrip.getFareList().get(1).getFareAmount());
+        viewHolder.fare.setText(fullTrip.getFareList().get(1).getFareAmount());
+        viewHolder.clipper.setText(fullTrip.getFareList().get(0).getFareAmount());
 
         return convertView;
     }

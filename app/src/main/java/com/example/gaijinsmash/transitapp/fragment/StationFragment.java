@@ -31,6 +31,7 @@ public class StationFragment extends Fragment {
 
     private ListView mListView;
     private ProgressBar mProgressBar;
+    private View mInflatedView;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -45,8 +46,14 @@ public class StationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View inflatedView = inflater.inflate(R.layout.station_view, container, false);
-        mListView = inflatedView.findViewById(R.id.station_listView);
+        mInflatedView = inflater.inflate(R.layout.station_view, container, false);
+        return mInflatedView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mListView = mInflatedView.findViewById(R.id.station_listView);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -62,13 +69,11 @@ public class StationFragment extends Fragment {
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, newFrag)
-                            .addToBackStack(null).commit();
+                        .addToBackStack(null).commit();
             }
         });
-        mProgressBar = (ProgressBar) inflatedView.findViewById(R.id.station_progress_bar);
+        mProgressBar = (ProgressBar) mInflatedView.findViewById(R.id.station_progress_bar);
         new GetStationsTask(getActivity()).execute();
-
-        return inflatedView;
     }
 
     //---------------------------------------------------------------------------------------------

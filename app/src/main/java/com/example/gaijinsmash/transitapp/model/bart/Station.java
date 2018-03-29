@@ -3,14 +3,14 @@ package com.example.gaijinsmash.transitapp.model.bart;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 @Entity(tableName = "stations")
 public class Station  {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
+    @PrimaryKey
     @ColumnInfo(name = "name")
+    @NonNull
     private String name;
 
     @ColumnInfo(name = "zipcode")
@@ -61,7 +61,6 @@ public class Station  {
     public Station () {}
 
     // Setters
-    public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setAddress(String address) { this.address = address; }
     public void setLatitude(double latitude) { this.latitude = latitude; }
@@ -80,7 +79,6 @@ public class Station  {
     public void setAbbreviation(String abbreviation) { this.abbreviation = abbreviation; }
 
     // Getters
-    public int getId() { return id; }
     public String getName() {
         return name;
     }

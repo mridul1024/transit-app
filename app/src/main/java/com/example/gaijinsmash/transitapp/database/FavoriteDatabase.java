@@ -9,7 +9,7 @@ import android.content.Context;
 
 import com.example.gaijinsmash.transitapp.model.bart.Favorite;
 
-@Database(entities = {Favorite.class}, version = 1)
+@Database(entities = {Favorite.class}, version = 4)
 public abstract class FavoriteDatabase extends RoomDatabase {
 
     private static FavoriteDatabase INSTANCE;

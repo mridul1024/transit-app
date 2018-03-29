@@ -8,11 +8,12 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="1dp"
         android:layout_marginBottom="2dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:elevation="1dp"
         android:paddingBottom="15dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -21,6 +22,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/trip_date_textView"
                     android:layout_width="wrap_content"
@@ -64,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_alignStart="@+id/trip_date_textView"
-                    android:layout_marginTop="53dp"
+                    android:layout_marginTop="40dp"
                     android:text="@string/bart_result_depart" />
 
                 <TextView
@@ -74,8 +76,7 @@
                     android:layout_below="@+id/trip_destination_textView"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="7dp"
-                    android:background="@color/bartDefault"
-                     />
+                    android:background="@color/bartDefault" />
 
                 <TextView
                     android:id="@+id/trip_arrivalTime_textView"
@@ -89,10 +90,10 @@
                 <TextView
                     android:id="@+id/trip_departTime_textView"
                     android:layout_width="74dp"
-                    android:layout_marginLeft="20dp"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/trip_date_textView"
                     android:layout_below="@+id/trip_arriveTitle1"
+                    android:layout_marginStart="20dp"
                     android:text="@string/bart_result_departTime" />
             </RelativeLayout>
 
@@ -104,20 +105,20 @@
                 <TextView
                     android:id="@+id/trip_departTime_textView2"
                     android:layout_width="74dp"
-                    android:layout_marginLeft="20dp"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/trip_arriveTitle2"
                     android:layout_below="@+id/trip_arriveTitle2"
+                    android:layout_marginStart="20dp"
                     android:text="@string/bart_result_departTime" />
 
                 <TextView
                     android:id="@+id/trip_colored_line2"
                     android:layout_width="150dp"
                     android:layout_height="5dp"
-                    android:layout_marginTop="7dp"
                     android:layout_alignTop="@+id/trip_departTime_textView2"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="false"
+                    android:layout_marginTop="7dp"
                     android:background="@color/bartDefault" />
 
                 <TextView
@@ -170,20 +171,20 @@
                 <TextView
                     android:id="@+id/trip_departTime_textView3"
                     android:layout_width="74dp"
-                    android:layout_marginLeft="20dp"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/trip_arriveTitle3"
                     android:layout_below="@+id/trip_arriveTitle3"
+                    android:layout_marginStart="20dp"
                     android:text="@string/bart_result_departTime" />
 
                 <TextView
                     android:id="@+id/trip_colored_line3"
                     android:layout_width="150dp"
                     android:layout_height="5dp"
-                    android:layout_marginTop="7dp"
                     android:layout_alignTop="@+id/trip_departTime_textView3"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="false"
+                    android:layout_marginTop="7dp"
                     android:background="@color/bartDefault" />
 
                 <TextView
@@ -235,7 +236,7 @@
 
                 <TextView
                     android:id="@+id/textView25"
-                    android:layout_width="74dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/textView21"
                     android:layout_below="@+id/textView21"
@@ -243,10 +244,11 @@
 
                 <TextView
                     android:id="@+id/trip_totalTime_textView"
-                    android:layout_width="76dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/textView25"
-                    android:layout_toEndOf="@+id/textView21"
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@+id/textView25"
                     android:text="TextView" />
 
                 <TextView
@@ -264,7 +266,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_toEndOf="@+id/textView21"
-                    android:paddingLeft="5dp"
+                    android:paddingStart="5dp"
                     android:text="1" />
 
                 <TextView

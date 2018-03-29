@@ -5,6 +5,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.example.gaijinsmash.transitapp.model.bart.Favorite;
 
@@ -18,7 +19,7 @@ public interface FavoriteDAO {
 
     // Removes a favorite from the database
     @Delete
-    void delete(Favorite favorite);
+    public void delete(Favorite favorite);
 
     // Gets all favorites from the database
     @Query("SELECT * from favorites")
@@ -30,4 +31,7 @@ public interface FavoriteDAO {
     // Get count
     @Query("SELECT COUNT(*) from favorites")
     int countFavorites();
+
+    @Query("SELECT * from favorites where origin = :origin and destination = :destination")
+    public Favorite getFavorite(String origin, String destination);
 }

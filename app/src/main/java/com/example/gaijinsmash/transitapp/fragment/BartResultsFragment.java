@@ -4,26 +4,23 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.database.FavoriteDatabase;
-import com.example.gaijinsmash.transitapp.dialog.FavoriteDialog;
 import com.example.gaijinsmash.transitapp.model.bart.Favorite;
 import com.example.gaijinsmash.transitapp.model.bart.FullTrip;
-import com.example.gaijinsmash.transitapp.model.bart.Trip;
 import com.example.gaijinsmash.transitapp.view_adapter.TripViewAdapter;
 
 import java.util.List;
@@ -35,10 +32,14 @@ public class BartResultsFragment extends Fragment {
     private List<FullTrip> mTripList;
     private ProgressBar mProgressBar;
     private View mInflatedView;
-    private String[] mFavoriteArray;
+    private String mOrigin, mDestination;
+
     private Toolbar mToolbar;
-    private Favorite mFavorite;
+    private MenuItem mFavoriteIcon, mFavoritedIcon;
+    private Favorite mFavoriteObject;
+
     private static final String BART = "BART";
+    private static boolean IS_FAVORITED_ON = false;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -48,6 +49,7 @@ public class BartResultsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -71,90 +73,103 @@ public class BartResultsFragment extends Fragment {
         mBundle = getArguments();
         if(mBundle != null) {
             mTripList = mBundle.getParcelableArrayList("TripList");
-            mFavoriteArray = mBundle.getStringArray("Favorite");
+            mOrigin = mBundle.getString("Origin");
+            mDestination = mBundle.getString("Destination");
         }
         if(mTripList != null) {
             TripViewAdapter adapter = new TripViewAdapter(mTripList, getActivity());
             mListView.setAdapter(adapter);
             mProgressBar.setVisibility(View.GONE);
         }
-        if(mFavoriteArray != null) {
-            mFavorite.setOrigin(mFavoriteArray[0]);
-            mFavorite.setDestination(mFavoriteArray[1]);
-            mFavorite.setSystem(BART);
+        if(mOrigin != null && mDestination != null) {
+            mFavoriteObject = new Favorite();
+            mFavoriteObject.setTitle(mOrigin + mDestination);
+            mFavoriteObject.setOrigin(mOrigin);
+            mFavoriteObject.setDestination(mDestination);
+            mFavoriteObject.setSystem(BART);
         }
 
         // Checks database and displays appropriate view in toolbar
-        new GetFavorites(getActivity()).execute();
-
-        // event listener on user click
-        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int id = item.getItemId();
-
-                // if user is creating a favorite
-                if(id == R.id.action_favorite) {
-                    new SetFavorite(getActivity(), mFavorite);
-                    return true;
-                }
-
-                // if user is destroying favorite
-                if(id == R.id.action_favorited) {
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                    alertDialog.setTitle("Remove Favorite");
-                    alertDialog.setMessage("Are you sure you want to remove this favorite?");
-                    alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //todo: remove favorite action
-                            // delete from db and change icon view
-
-                        }
-                    });
-                    alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    alertDialog.show();
-                    return true;
-                }
-
-                return false;
-            }
-        });
+        new SetFavoritesTask(getActivity()).execute();
     }
 
-    /*
-        This AsyncTask checks if the current trip has already been saved to Favorites
-    */
-    private class GetFavorites extends AsyncTask<Void, Void, Boolean> {
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.favorite, menu);
+        inflater.inflate(R.menu.favorited, menu);
+        mFavoriteIcon = menu.findItem(R.id.action_favorite);
+        mFavoritedIcon = menu.findItem(R.id.action_favorited);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_favorite:
+                new SetFavoritesTask(getActivity(), 1).execute();
+                return true;
+            case R.id.action_favorited:
+                //todo: abstract dialog to a separate file
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                alertDialog.setTitle("Remove Favorite");
+                alertDialog.setMessage("Are you sure you want to remove this favorite?");
+                alertDialog.setPositiveButton(getResources().getString(R.string.alert_dialog_yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new SetFavoritesTask(getActivity(), 2).execute();
+                    }
+                });
+                alertDialog.setNegativeButton(getResources().getString(R.string.alert_dialog_no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                alertDialog.show();
+                return true;
+        }
+        return false;
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // AsyncTask
+    //---------------------------------------------------------------------------------------------
+    private class SetFavoritesTask extends AsyncTask<Void, Void, Boolean> {
 
         private Context mContext;
+        private int mStatus = 0;
 
-        public GetFavorites(Context context) {
+        public SetFavoritesTask(Context context) {
             this.mContext = context;
+        }
+
+        public SetFavoritesTask(Context context, int status) {
+            this.mContext = context;
+            this.mStatus = status;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            String origin = mFavorite.getOrigin();
-            String destination = mFavorite.getDestination();
-
-            // check if object exists in DB
-            // todo: does db need to be initialized?
             FavoriteDatabase db = FavoriteDatabase.getRoomDB(mContext);
-            if(db.getFavoriteDAO().getFavoritesByOrigin(origin) != null) {
-                //if found, check what destination is
-                List<Favorite> list = db.getFavoriteDAO().getFavoritesByOrigin(origin);
-                for(Favorite x : list) {
-                    if(x.getDestination().equals(destination)) {
-                        return true;
-                    }
-                }
-
+            switch(mStatus) {
+                case 0:
+                    Log.i("Switch", "0");
+                    return initFavorites(db, mFavoriteObject);
+                case 1:
+                    addToFavorites(db, mFavoriteObject);
+                    // This adds the inverse of the Trip
+                    Favorite favoriteReversed = new Favorite();
+                    favoriteReversed.setTitle(mDestination + mOrigin);
+                    favoriteReversed.setOrigin(mDestination);
+                    favoriteReversed.setDestination(mOrigin);
+                    addToFavorites(db, favoriteReversed);
+                    Log.i("Switch", "1");
+                    return true;
+                case 2:
+                    removeFromFavorites(db, mFavoriteObject);
+                    Log.i("Switch", "2");
+                    return false;
             }
             return false;
         }
@@ -162,38 +177,39 @@ public class BartResultsFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean result) {
             if(result) {
-                // if Favorite is found in DB , change favorite icon in toolbar
-                mToolbar.inflateMenu(R.menu.favorited);
+                IS_FAVORITED_ON = true;
+                mFavoritedIcon.setVisible(true);
+                mFavoriteIcon.setVisible(false);
             } else {
-                mToolbar.inflateMenu(R.menu.favorite);
+                IS_FAVORITED_ON = false;
+                mFavoriteIcon.setVisible(true);
+                mFavoritedIcon.setVisible(false);
             }
         }
     }
 
-    private class SetFavorite extends AsyncTask<Void, Void, Boolean> {
-        private Favorite mFavorite;
-        private Context mContext;
-
-        public SetFavorite(Context context, Favorite favorite) {
-            this.mContext = context;
-            this.mFavorite = favorite;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            FavoriteDatabase db = FavoriteDatabase.getRoomDB(mContext);
-            db.getFavoriteDAO().addStation(mFavorite);
-            //todo: need to add checks
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            if(result) {
-                Toast.makeText(mContext, "Added to favorites!", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(mContext, "Error", Toast.LENGTH_LONG).show();
+    //---------------------------------------------------------------------------------------------
+    // Helper Methods
+    //---------------------------------------------------------------------------------------------
+    public boolean initFavorites(FavoriteDatabase db, Favorite favorite) {
+        if(db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin()) != null) {
+            //if found, check what destination is
+            List<Favorite> list = db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin());
+            // search for matching favorite object
+            for(Favorite x : list) {
+                if(x.getDestination().equals(favorite.getDestination())) {
+                    return true;
+                }
             }
         }
+        return false;
+    }
+
+    public void addToFavorites(FavoriteDatabase db, Favorite favorite) {
+        db.getFavoriteDAO().addStation(favorite);
+    }
+
+    public void removeFromFavorites(FavoriteDatabase db, Favorite favorite) {
+        db.getFavoriteDAO().delete(favorite);
     }
 }

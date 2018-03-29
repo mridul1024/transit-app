@@ -1,4 +1,7 @@
 <resources>
+    <!-- Time and Date -->
+
+
     <!-- GENERAL -->
     <string name="app_name">Riderz</string>
     <string name="title_activity_main">Riderz</string>
@@ -11,6 +14,7 @@
     <string name="bottomnav_title_0">Home</string>
     <string name="bottomnav_title_1">Map</string>
     <string name="bottomnav_title_2">Schedule</string>
+    <string name="bottomnav_title_3">Favorites</string>
 
     <!-- Nav Drawer Menu -->>
     <string name="navigation_drawer_help">Help</string>
@@ -18,12 +22,18 @@
     <string name="navigation_drawer_schedule">BART Schedule</string>
     <string name="navigation_drawer_stations">BART Station Info</string>
     <string name="navigation_drawer_bart_map">Map</string>
+    <string name="navigation_drawer_phoneLines">Call Lines</string>
     <string name="navigation_drawer_misc">Misc</string>
     <string name="navigation_drawer_about">About</string>
     <string name="menu_share">Share</string>
     <string name="about_textView">Made by Ryan J Suzuki. All Rights Reserved.</string>
     <string name="logo_description">Application Logo</string>
     <string name="help_view_title">FAQ</string>
+
+    <!-- BART Map Fragment-->
+    <string name="bart_map_button">Switch to Train Lines Map</string>
+    <string name="bart_lines_map_btn">Switch To GoogleMap</string>
+    <string name="bart_lines_map_description">An image of the BART Train Lines</string>
 
     <!-- Bart Results Fragment-->
     <string name="bart_result_depart">Depart:</string>
@@ -36,6 +46,13 @@
     <string name="bart_result_clipperFare">Clipper Fare: $</string>
     <string name="bart_result_minutes">minutes</string>
 
+    <!-- Favorites Fragment -->
+    <string name="action_favorites">Favorites</string>
+    <string name="bart_favorites_empty">You currently don\'t have any favorite routes.</string>
+    <string name="fav_system_bart">BART</string>
+    <string name="favorite_origin">Origin</string>
+    <string name="favorite_destination">Destination</string>
+
     <!-- Help Fragment -->
     <string name="help_report_button">Report an Issue</string>
     <string name="help_intent_title">Send Email</string>
@@ -46,12 +63,20 @@
     <string name="home_alerts">Recent Updates</string>
     <string name="banner">banner</string>
 
-    <!-- Schedule Fragment -->
+    <!-- Phone Lines Fragment -->
+    <string name="phonesLines_lostFound">BART Lost and Found:</string>
+    <string name="phonesLines_bartComplaints">BART Comments and Complaints:</string>
+    <string name="phoneLines_bartPolice">BART Police:</string>
+    <string name="phoneLines_bartLink">For a complete list of BART phone lines, please click the link below.</string>
+
+    <!-- Trip Fragment -->
     <string name="departure_station">Departing Station</string>
     <string name="arrival_station">Arriving Station</string>
     <string name="departing_time">Time of Departure</string>
     <string name="departing_date">Date of Departure</string>
+
     <string name="schedule_button">Search</string>
+
     <string name="date_hint">Date</string>
     <string name="time_hint">Time</string>
     <string name="time_title">Select Time</string>
@@ -59,6 +84,9 @@
     <string name="time_unavailable">Time is unavailable</string>
     <string name="update_unavailable">Updates are currently not available. Please check your network settings.</string>
     <string name="last_update">Last checked at</string>
+    <string name="currentDate">Today</string>
+    <string name="currentTime">Now</string>
+
 
     <!-- Station Fragment -->
     <string-array name="stations_list">
@@ -131,6 +159,8 @@
     <!-- Errors -->
     <string name="error_form_completion">Please input all fields</string>
     <string name="network_error">Sorry, but there\'s a network problem. Try again in bit.</string>
+    <string name="error_form_completion2">You\'re going nowhere! Please try again.</string>
+    <string name="error_try_again">Sorry! Something went wrong. Please try again.</string>
 
     <!-- Alert Dialog -->
     <string name="alert_dialog_yes">Yes</string>
@@ -139,6 +169,8 @@
     <string name="alert_dialog_network_message">Network is not available. Do you want to turn it on?</string>
     <string name="alert_dialog_location_title">GPS Settings</string>
     <string name="alert_dialog_location_message">GPS is not enabled. Do you want to change that now?</string>
+    <string name="alert_dialog_favorite_title">Just Checking</string>
+    <string name="alert_dialog_favorite_message">Are you sure you want to remove this from your favorites?</string>
 
     <!-- Preference Screen -->
     <string name="preference_title">Settings</string>
@@ -153,25 +185,19 @@
     <string name="preference_intent_title">Intent</string>
     <string name="preference_time_title">Time Format</string>
     <string name="preference_checkbox_title2">24 Hour Format</string>
-    <string name="cannot_do_this">\"Sorry, can\'t do this right now. Please try again in a bit.\"</string>
     <string name="preference_button">Save</string>
-    <string name="currentDate">Today</string>
-    <string name="currentTime">Now</string>
+    <string name="cannot_do_this">\"Sorry, can\'t do this right now. Please try again in a bit.\"</string>
+
     <string name="help_html"><![CDATA[![CDATA[ ...raw html data ...]] >]]></string>
-    <string name="bart_map_button">Switch to Train Lines Map</string>
-    <string name="bart_lines_map_btn">Switch To GoogleMap</string>
-    <string name="bart_lines_map_description">An image of the BART Train Lines</string>
-    <string name="navigation_drawer_phoneLines">Call Lines</string>
-    <string name="phonesLines_lostFound">BART Lost and Found:</string>
-    <string name="phonesLines_bartComplaints">BART Comments and Complaints:</string>
-    <string name="phoneLines_bartPolice">BART Police:</string>
-    <string name="phoneLines_bartLink">For a complete list of BART phone lines, please click the link below.</string>
-    <string name="error_form_completion2">You\'re going nowhere! Please try again.</string>
-    <string name="bottomnav_title_3">Favorites</string>
-    <string name="action_favorites">Favorites</string>
-    <string name="bart_favorites_empty">You currently don\'t have any favorite routes.</string>
-    <string name="alert_dialog_favorite_title">Just Checking</string>
-    <string name="alert_dialog_favorite_message">Are you sure you want to remove this from your favorites?</string>
-    <string name="fav_system_bart">BART</string>
+    <string name="contentDesc_arrow">Arrow pointing right</string>
+    <string name="contentDesc_search">Search Button</string>
+    <string name="contentDesc_options">Options Button</string>
+    <string name="favorite_search">Search</string>
+    <string name="favorite_options">Options</string>
+    <string name="favorite_color">Change Color</string>
+    <string name="action_delete">Delete</string>
+    <string name="favorite_priority">Change Priority</string>
+    <string name="deletion_success">Successfully Deleted</string>
+
 
 </resources>

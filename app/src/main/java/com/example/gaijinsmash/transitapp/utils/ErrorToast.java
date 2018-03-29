@@ -24,4 +24,5 @@ public class ErrorToast {
     public static void networkConnectionErrorToast(Context context, int responseCode) {
         Toast.makeText(context, "There was a problem with the network (code: " + responseCode + "). Please try again", Toast.LENGTH_LONG).show();
     }
+
 }

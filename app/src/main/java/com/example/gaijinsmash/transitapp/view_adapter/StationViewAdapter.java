@@ -20,12 +20,12 @@ import java.util.List;
 
 public class StationViewAdapter extends ArrayAdapter<Station> implements View.OnClickListener {
 
-    private List<Station> stationList = null;
+    private List<Station> mStationList = null;
     private Context mContext;
 
     public StationViewAdapter(List<Station> data, Context context) {
         super(context, R.layout.station_list_row, data);
-        this.stationList = data;
+        this.mStationList = data;
         this.mContext = context;
     }
 

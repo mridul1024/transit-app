@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import static junit.framework.Assert.assertTrue;
@@ -18,6 +19,19 @@ public class TimeAndDateTest {
     String timeExample4 = "22:11:00 AM PST";
     String dateExample1 = "12-30-2017";
     String dateExample2 = "01-22-2018";
+
+    @Test
+    public void getTodaysDateTest() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyy");
+        String expectedDate = sdf.format(Calendar.getInstance().getTime());
+        assertTrue("current date is returned properly", TimeAndDate.getTodaysDate().equals(expectedDate));
+    }
+
+    @Test
+    public void getCurrentTimeTest() throws Exception {
+        String expectedTime = new SimpleDateFormat("hh:mm a").format(Calendar.getInstance().getTime());
+        assertTrue("current time is returned properly", TimeAndDate.getCurrentTime().equals(expectedTime));
+    }
 
     @Test
     public void testDateFormatting() throws Exception {
@@ -54,4 +68,5 @@ public class TimeAndDateTest {
         String expected2 = "12:04 AM PST";
         assertTrue("time format", expected.equals(result));
     }
+
 }

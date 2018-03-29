@@ -20,6 +20,7 @@ import java.util.List;
 //TODO: many to one relationship with Stations
 
 public class AdvisoryViewAdapter extends ArrayAdapter<Advisory> implements View.OnClickListener {
+
     private List<Advisory> mAdvisoryList = null;
     private Context mContext;
 

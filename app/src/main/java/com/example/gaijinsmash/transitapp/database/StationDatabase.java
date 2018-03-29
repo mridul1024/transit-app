@@ -10,7 +10,7 @@ import android.content.Context;
 
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 
-@Database(entities = {Station.class /*, Example.class*/}, version = 2)
+@Database(entities = {Station.class /*, Example.class*/}, version = 3)
 public abstract class StationDatabase extends RoomDatabase {
 
     private static StationDatabase INSTANCE;

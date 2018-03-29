@@ -5,20 +5,30 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.database.FavoriteDatabase;
 import com.example.gaijinsmash.transitapp.model.bart.Favorite;
+import com.example.gaijinsmash.transitapp.view_adapter.FavoriteViewAdapter;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
 public class FavoritesFragment extends Fragment {
     private View mInflatedView;
-    private TextView mError;
+    private TextView mError, mOrigin, mDestination;
+    private ListView mListView;
+
+    private Button mSearchButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,20 +40,29 @@ public class FavoritesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mError = (TextView) mInflatedView.findViewById(R.id.bartFavorites_error_tV);
+        mListView = (ListView) mInflatedView.findViewById(R.id.bartFavorites_listView);
+        mOrigin = (TextView) mInflatedView.findViewById(R.id.bartFavorites_origin_tV);
+        mDestination = (TextView) mInflatedView.findViewById(R.id.bartFavorites_destination_tV);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        new GetFavorites(getActivity()).execute();
+        new GetFavoritesTask(getActivity()).execute();
     }
 
-    private class GetFavorites extends AsyncTask<Void, Void, Boolean> {
+    @Override
+    public void onResume() {
+        super.onResume();
+        new GetFavoritesTask(getActivity()).execute();
+    }
+
+    private class GetFavoritesTask extends AsyncTask<Void, Void, Boolean> {
 
         private Context mContext;
         private List<Favorite> mFavoritesList;
 
-        public GetFavorites(Context context) {
+        private GetFavoritesTask(Context context) {
             this.mContext = context;
         }
 
@@ -52,8 +71,9 @@ public class FavoritesFragment extends Fragment {
 
             // connect to DB
             FavoriteDatabase db = FavoriteDatabase.getRoomDB(mContext);
-            mFavoritesList = db.getFavoriteDAO().getAllFavorites();
-            if(mFavoritesList != null) {
+            int numberOfFavorites = db.getFavoriteDAO().countFavorites();
+            if(numberOfFavorites > 0) {
+                mFavoritesList = db.getFavoriteDAO().getAllFavorites();
                 return true;
             }
             return false;
@@ -63,7 +83,12 @@ public class FavoritesFragment extends Fragment {
         protected void onPostExecute(Boolean result) {
             if(result) {
                 // set view
-
+                if(mFavoritesList != null) {
+                    FavoriteViewAdapter adapter = new FavoriteViewAdapter(mFavoritesList, mContext, mListView);
+                    mListView.setAdapter(adapter);
+                } else {
+                    mError.setText(getResources().getString(R.string.bart_favorites_empty));
+                }
             } else {
                 // set a default view for empty favorites list
                 mError.setText(getResources().getString(R.string.bart_favorites_empty));

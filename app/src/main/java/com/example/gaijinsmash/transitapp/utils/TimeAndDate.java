@@ -2,10 +2,14 @@ package com.example.gaijinsmash.transitapp.utils;
 
 import android.util.Log;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class TimeAndDate {
@@ -21,16 +25,16 @@ public class TimeAndDate {
         return sdf.format(c.getTime());
     }
 
+    // returns in 12 hour format
     public static String getCurrentTime() {
-        Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR);
-        int minute = c.get(Calendar.MINUTE);
-        return String.format("%02d:%02d", hour, minute);
+        DateFormat df = new SimpleDateFormat("hh:mm a", Locale.US);
+        Date date = df.getCalendar().getTime();
+        df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+        return df.format(date);
     }
 
     public static String formatTime(String input) {
-        String output = input.replaceFirst("\\s", "");
-        return output;
+        return input.replaceFirst("\\s", "");
     }
 
     // Format date for api string - mm/dd/yyyy
@@ -48,9 +52,8 @@ public class TimeAndDate {
         return output;
     }
 
-    // Remove am/pm from
+    // Remove am/pm from 24hour time
     public static String format24hrTime(String input) {
-        String output = "";
         Date date = null;
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss a z");
         try {
@@ -58,28 +61,25 @@ public class TimeAndDate {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        sdf = new SimpleDateFormat("HH:mm z");
-        sdf.setTimeZone(TimeZone.getTimeZone("PST"));
-        output = sdf.format(date);
-        return output;
+        sdf = new SimpleDateFormat("HH:mm z", Locale.US);
+        sdf.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+        return sdf.format(date);
     }
-
 
     public static String convertTo12Hr(String input) {
-        String output = "";
         Date date = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss a z");
+        DateFormat df = new SimpleDateFormat("HH:mm:ss a z", Locale.US);
         try {
-            date = sdf.parse(input);
+            date = df.parse(input);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        sdf = new SimpleDateFormat("hh:mm a z");
-        sdf.setTimeZone(TimeZone.getTimeZone("PST"));
-        output = sdf.format(date);
-        return output;
+        DateFormat printFormat = new SimpleDateFormat("hh:mm a z");
+        printFormat.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+        return printFormat.format(date);
     }
 
+    //todo: check if time is returning properly to API call
     public static String convertTo12HrForTrip(String input) {
         String output = "";
         Date date = null;
@@ -89,18 +89,17 @@ public class TimeAndDate {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        sdf = new SimpleDateFormat("hh:mm");
+        sdf = new SimpleDateFormat("hh:mm a");
         output = sdf.format(date);
         return output;
     }
 
-    public static boolean isNightTime() {
-        Calendar time = Calendar.getInstance(TimeZone.getTimeZone("PST"));
-        int hour = time.get(Calendar.HOUR);
-        Log.i("HOUR in INT", String.valueOf(hour));
-        if(hour <= 6 || hour >= 18) {
-            return true;
-        }
-        return false;
+    public static int getCurrentHour() {
+        DateFormat df = new SimpleDateFormat("HH", Locale.US);
+        Date date = df.getCalendar().getTime();
+        df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+        String time = df.format(date);
+        Log.i("TIME HOUR", time);
+        return  Integer.valueOf(time);
     }
 }
