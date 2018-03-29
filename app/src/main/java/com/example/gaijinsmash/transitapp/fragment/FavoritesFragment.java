@@ -21,11 +21,12 @@ import com.example.gaijinsmash.transitapp.view_adapter.FavoriteViewAdapter;
 
 import org.w3c.dom.Text;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class FavoritesFragment extends Fragment {
     private View mInflatedView;
-    private TextView mError, mOrigin, mDestination;
+    private TextView mError;
     private ListView mListView;
 
     private Button mSearchButton;
@@ -41,36 +42,33 @@ public class FavoritesFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mError = (TextView) mInflatedView.findViewById(R.id.bartFavorites_error_tV);
         mListView = (ListView) mInflatedView.findViewById(R.id.bartFavorites_listView);
-        mOrigin = (TextView) mInflatedView.findViewById(R.id.bartFavorites_origin_tV);
-        mDestination = (TextView) mInflatedView.findViewById(R.id.bartFavorites_destination_tV);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        new GetFavoritesTask(getActivity()).execute();
+        new GetFavoritesTask(this).execute();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        new GetFavoritesTask(getActivity()).execute();
+        new GetFavoritesTask(this).execute();
     }
 
-    private class GetFavoritesTask extends AsyncTask<Void, Void, Boolean> {
-
-        private Context mContext;
+    private static class GetFavoritesTask extends AsyncTask<Void, Void, Boolean> {
+        private WeakReference<FavoritesFragment> mWeakRef;
         private List<Favorite> mFavoritesList;
 
-        private GetFavoritesTask(Context context) {
-            this.mContext = context;
+        private GetFavoritesTask(FavoritesFragment context) {
+            mWeakRef = new WeakReference<>(context);
         }
 
         @Override
         protected Boolean doInBackground(Void...voids) {
-
+            FavoritesFragment frag = mWeakRef.get();
             // connect to DB
-            FavoriteDatabase db = FavoriteDatabase.getRoomDB(mContext);
+            FavoriteDatabase db = FavoriteDatabase.getRoomDB(frag.getActivity());
             int numberOfFavorites = db.getFavoriteDAO().countFavorites();
             if(numberOfFavorites > 0) {
                 mFavoritesList = db.getFavoriteDAO().getAllFavorites();
@@ -81,17 +79,18 @@ public class FavoritesFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean result) {
+            FavoritesFragment frag = mWeakRef.get();
             if(result) {
                 // set view
                 if(mFavoritesList != null) {
-                    FavoriteViewAdapter adapter = new FavoriteViewAdapter(mFavoritesList, mContext, mListView);
-                    mListView.setAdapter(adapter);
+                    FavoriteViewAdapter adapter = new FavoriteViewAdapter(mFavoritesList, frag.getActivity(), frag.mListView);
+                    frag.mListView.setAdapter(adapter);
                 } else {
-                    mError.setText(getResources().getString(R.string.bart_favorites_empty));
+                    frag.mError.setText(frag.getResources().getString(R.string.bart_favorites_empty));
                 }
             } else {
                 // set a default view for empty favorites list
-                mError.setText(getResources().getString(R.string.bart_favorites_empty));
+                frag.mError.setText(frag.getResources().getString(R.string.bart_favorites_empty));
             }
         }
 
