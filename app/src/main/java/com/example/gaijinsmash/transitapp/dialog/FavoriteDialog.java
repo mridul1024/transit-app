@@ -3,24 +3,22 @@ package com.example.gaijinsmash.transitapp.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
-
+import com.example.gaijinsmash.transitapp.fragment.BartResultsFragment;
 
 
 public class FavoriteDialog extends DialogFragment {
-    static FavoriteDialog newInstance(int num) {
-        FavoriteDialog fd = new FavoriteDialog();
-        Bundle args = new Bundle();
-        args.putInt("num", num);
-        fd.setArguments(args);
-        return fd;
+    private Fragment mFragment;
+
+    static FavoriteDialog newInstance(Fragment context, AsyncTask task) {
+        return new FavoriteDialog();
     }
-
-
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -31,7 +29,6 @@ public class FavoriteDialog extends DialogFragment {
                 .setPositiveButton(getResources().getString(R.string.alert_dialog_yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getActivity(), "Pressed OK", Toast.LENGTH_SHORT);
                         // Todo: remove selected from favorites
 
                     }

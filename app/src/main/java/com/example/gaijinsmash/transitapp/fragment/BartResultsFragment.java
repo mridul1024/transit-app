@@ -23,6 +23,7 @@ import com.example.gaijinsmash.transitapp.model.bart.Favorite;
 import com.example.gaijinsmash.transitapp.model.bart.FullTrip;
 import com.example.gaijinsmash.transitapp.view_adapter.TripViewAdapter;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class BartResultsFragment extends Fragment {
@@ -34,13 +35,13 @@ public class BartResultsFragment extends Fragment {
     private View mInflatedView;
     private String mOrigin, mDestination;
 
-    private Toolbar mToolbar;
     private MenuItem mFavoriteIcon, mFavoritedIcon;
     private Favorite mFavoriteObject;
 
     private static final String BART = "BART";
     private static boolean IS_FAVORITED_ON = false;
 
+    private BartResultsFragment mBartResultsFragment = this;
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
     //---------------------------------------------------------------------------------------------
@@ -61,7 +62,6 @@ public class BartResultsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         mProgressBar = (ProgressBar) mInflatedView.findViewById(R.id.bart_results_progressBar);
         mProgressBar.setVisibility(View.VISIBLE);
         mListView = (ListView) mInflatedView.findViewById(R.id.results_listView);
@@ -90,7 +90,7 @@ public class BartResultsFragment extends Fragment {
         }
 
         // Checks database and displays appropriate view in toolbar
-        new SetFavoritesTask(getActivity()).execute();
+        new SetFavoritesTask(this).execute();
     }
 
     @Override
@@ -107,17 +107,17 @@ public class BartResultsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_favorite:
-                new SetFavoritesTask(getActivity(), 1).execute();
+                new SetFavoritesTask(this, 1).execute();
                 return true;
             case R.id.action_favorited:
-                //todo: abstract dialog to a separate file
+                //todo: abstract dialog to a separate file.
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                 alertDialog.setTitle("Remove Favorite");
                 alertDialog.setMessage("Are you sure you want to remove this favorite?");
                 alertDialog.setPositiveButton(getResources().getString(R.string.alert_dialog_yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        new SetFavoritesTask(getActivity(), 2).execute();
+                        new SetFavoritesTask(mBartResultsFragment, 2).execute();
                     }
                 });
                 alertDialog.setNegativeButton(getResources().getString(R.string.alert_dialog_no), new DialogInterface.OnClickListener() {
@@ -135,39 +135,39 @@ public class BartResultsFragment extends Fragment {
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
-    private class SetFavoritesTask extends AsyncTask<Void, Void, Boolean> {
-
-        private Context mContext;
+    private static class SetFavoritesTask extends AsyncTask<Void, Void, Boolean> {
+        private WeakReference<BartResultsFragment> mWeakRef;
         private int mStatus = 0;
 
-        public SetFavoritesTask(Context context) {
-            this.mContext = context;
+        private SetFavoritesTask(BartResultsFragment context) {
+            mWeakRef = new WeakReference<>(context);
         }
 
-        public SetFavoritesTask(Context context, int status) {
-            this.mContext = context;
+        private SetFavoritesTask(BartResultsFragment context, int status) {
+            mWeakRef = new WeakReference<>(context);
             this.mStatus = status;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            FavoriteDatabase db = FavoriteDatabase.getRoomDB(mContext);
+            BartResultsFragment frag = mWeakRef.get();
+            FavoriteDatabase db = FavoriteDatabase.getRoomDB(frag.getActivity());
             switch(mStatus) {
                 case 0:
                     Log.i("Switch", "0");
-                    return initFavorites(db, mFavoriteObject);
+                    return initFavorites(db, frag.mFavoriteObject);
                 case 1:
-                    addToFavorites(db, mFavoriteObject);
+                    addToFavorites(db, frag.mFavoriteObject);
                     // This adds the inverse of the Trip
                     Favorite favoriteReversed = new Favorite();
-                    favoriteReversed.setTitle(mDestination + mOrigin);
-                    favoriteReversed.setOrigin(mDestination);
-                    favoriteReversed.setDestination(mOrigin);
+                    favoriteReversed.setTitle(frag.mDestination + frag.mOrigin);
+                    favoriteReversed.setOrigin(frag.mDestination);
+                    favoriteReversed.setDestination(frag.mOrigin);
                     addToFavorites(db, favoriteReversed);
                     Log.i("Switch", "1");
                     return true;
                 case 2:
-                    removeFromFavorites(db, mFavoriteObject);
+                    removeFromFavorites(db, frag.mFavoriteObject);
                     Log.i("Switch", "2");
                     return false;
             }
@@ -176,14 +176,15 @@ public class BartResultsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean result) {
+            BartResultsFragment frag = mWeakRef.get();
             if(result) {
                 IS_FAVORITED_ON = true;
-                mFavoritedIcon.setVisible(true);
-                mFavoriteIcon.setVisible(false);
+                frag.mFavoritedIcon.setVisible(true);
+                frag.mFavoriteIcon.setVisible(false);
             } else {
                 IS_FAVORITED_ON = false;
-                mFavoriteIcon.setVisible(true);
-                mFavoritedIcon.setVisible(false);
+                frag.mFavoriteIcon.setVisible(true);
+                frag.mFavoritedIcon.setVisible(false);
             }
         }
     }
@@ -191,7 +192,7 @@ public class BartResultsFragment extends Fragment {
     //---------------------------------------------------------------------------------------------
     // Helper Methods
     //---------------------------------------------------------------------------------------------
-    public boolean initFavorites(FavoriteDatabase db, Favorite favorite) {
+    public static boolean initFavorites(FavoriteDatabase db, Favorite favorite) {
         if(db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin()) != null) {
             //if found, check what destination is
             List<Favorite> list = db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin());
@@ -205,11 +206,11 @@ public class BartResultsFragment extends Fragment {
         return false;
     }
 
-    public void addToFavorites(FavoriteDatabase db, Favorite favorite) {
+    public static void addToFavorites(FavoriteDatabase db, Favorite favorite) {
         db.getFavoriteDAO().addStation(favorite);
     }
 
-    public void removeFromFavorites(FavoriteDatabase db, Favorite favorite) {
+    public static void removeFromFavorites(FavoriteDatabase db, Favorite favorite) {
         db.getFavoriteDAO().delete(favorite);
     }
 }
