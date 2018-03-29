@@ -33,6 +33,7 @@
             android:text="@string/favorite_destination"
             android:layout_weight="2"/>
         <ImageButton
+            style="@style/ButtonAppTheme"
             android:id="@+id/favorite_search_ib"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,6 +43,7 @@
             android:layout_weight="1"/>
 
         <ImageButton
+            style="@style/ButtonAppTheme2"
             android:id="@+id/favorite_options_ib"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -5,13 +5,13 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.gaijinsmash.transitapp.R;
@@ -19,7 +19,6 @@ import com.example.gaijinsmash.transitapp.model.bart.Advisory;
 import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 import com.example.gaijinsmash.transitapp.network.xmlparser.AdvisoryXmlParser;
 import com.example.gaijinsmash.transitapp.utils.ApiStringBuilder;
-import com.example.gaijinsmash.transitapp.utils.SharedPreferencesUtils;
 import com.example.gaijinsmash.transitapp.utils.TimeAndDate;
 import com.example.gaijinsmash.transitapp.view_adapter.AdvisoryViewAdapter;
 
@@ -27,22 +26,15 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.SimpleTimeZone;
 
 public class HomeFragment extends Fragment {
 
     private TextView mBsaTimeTv = null;
     private ListView mBsaListView;
     private View mInflatedView;
+    private ProgressBar mProgressBar;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -69,6 +61,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        mProgressBar = (ProgressBar) mInflatedView.findViewById(R.id.home_progressBar);
         mBsaTimeTv = (TextView) mInflatedView.findViewById(R.id.home_view_timeTv);
         mBsaListView = mInflatedView.findViewById(R.id.advisory_listView);
         ImageView imageView = (ImageView) mInflatedView.findViewById(R.id.home_banner_imageView);
@@ -90,13 +83,13 @@ public class HomeFragment extends Fragment {
     //---------------------------------------------------------------------------------------------
     //todo: add holiday info
 
-    private class GetAdvisoryTask extends AsyncTask<Void, Void, List<Advisory>> {
+    private class GetAdvisoryTask extends AsyncTask<Void, Void, Boolean> {
         private Context mContext;
         private List<Advisory> mList;
         private String mMessage;
         private boolean mTimeBoolean;
 
-        public GetAdvisoryTask(Context mContext, String message) {
+        private GetAdvisoryTask(Context mContext, String message) {
             if(this.mContext == null)
                 this.mContext = mContext;
             mList = new ArrayList<Advisory>();
@@ -108,7 +101,7 @@ public class HomeFragment extends Fragment {
         }
 
         @Override
-        protected List<Advisory> doInBackground(Void... voids) {
+        protected Boolean doInBackground(Void... voids) {
             try {
                 FetchInputStream is = new FetchInputStream(mContext);
                 InputStream in = is.connectToApi(ApiStringBuilder.getBSA());
@@ -117,26 +110,34 @@ public class HomeFragment extends Fragment {
             } catch (IOException | XmlPullParserException e) {
                 e.printStackTrace();
             }
-            return mList;
+            if(mList != null) {
+                return true;
+            }
+            return false;
         }
 
-        protected void onPostExecute(List<Advisory> list) {
-            Log.i("24hrFormatOn", Boolean.toString(mTimeBoolean));
-            String time = "";
-            for(Advisory adv : list) {
-                if(adv.getTime() != null && mBsaTimeTv != null) {
-                    if(mTimeBoolean) {
-                        time = adv.getTime();
-                        //time = TimeAndDate.format24hrTime(adv.getTime());
-                    } else {
-                        time = TimeAndDate.convertTo12Hr(adv.getTime());
+        protected void onPostExecute(Boolean result) {
+            if(result) {
+                String time = "";
+                for(Advisory adv : mList) {
+                    if(adv.getTime() != null && mBsaTimeTv != null) {
+                        if(mTimeBoolean) {
+                            //time = adv.getTime();
+                            time = TimeAndDate.format24hrTime(adv.getTime());
+                        } else {
+                            time = TimeAndDate.convertTo12Hr(adv.getTime());
+                        }
+                        String message = mMessage + " " + time;
+                        mBsaTimeTv.setText(message);
                     }
-                    String message = mMessage + " " + time;
-                    mBsaTimeTv.setText(message);
                 }
+                AdvisoryViewAdapter adapter = new AdvisoryViewAdapter(mList, mContext);
+                mBsaListView.setAdapter(adapter);
+                mProgressBar.setVisibility(View.GONE);
+            } else {
+                mBsaTimeTv.setText(getResources().getString(R.string.update_unavailable));
+                mProgressBar.setVisibility(View.GONE);
             }
-            AdvisoryViewAdapter adapter = new AdvisoryViewAdapter(list, mContext);
-            mBsaListView.setAdapter(adapter);
         }
     }
 }

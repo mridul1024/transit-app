@@ -63,10 +63,14 @@
     <string name="banner">banner</string>
 
     <!-- Phone Lines Fragment -->
-    <string name="phonesLines_lostFound">BART Lost and Found:</string>
-    <string name="phonesLines_bartComplaints">BART Comments and Complaints:</string>
-    <string name="phoneLines_bartPolice">BART Police:</string>
+    <string name="phonesLines_lostFound">Lost and Found:</string>
+    <string name="phonesLines_bartComplaints">Comments and Complaints:</string>
+    <string name="phoneLines_bartPolice">Police:</string>
     <string name="phoneLines_bartLink">For a complete list of BART phone lines, please click the link below.</string>
+    <string name="phoneLines_title">Phone Lines For BART</string>
+    <string name="phoneLines_911">For Emergencies Please Dial 911</string>
+    <string name="phoneLines_police_number">877-679-7000</string>
+
 
     <!-- Trip Fragment -->
     <string name="departure_station">Departing Station</string>
@@ -197,6 +201,18 @@
     <string name="action_delete">Delete</string>
     <string name="favorite_priority">Change Priority</string>
     <string name="deletion_success">Successfully Deleted</string>
+    <string name="phoneLines_bartComplaints_number">510-464-7134</string>
+    <string name="phoneLines_bartLostFound_number">510-464-7090</string>
+    <string name="phoneLines_bartWebsite">https://bart.gov/siteinfo/contact</string>
+    <string name="stationInfo_stationName">Station Name</string>
+    <string name="stationInfo_stationAddress">Address</string>
+    <string name="stationInfo_stationCity">City</string>
+    <string name="stationInfo_station_crossStreet">Cross Street</string>
+    <string name="stationInfo_stationLink">Link</string>
+    <string name="stationInfo_stationIntro">Intro</string>
+    <string name="stationInfo_stationAttraction">Attractions</string>
+    <string name="stationInfo_stationShopping">Shopping</string>
+    <string name="stationInfo_stationFood">Food</string>
 
 
 </resources>

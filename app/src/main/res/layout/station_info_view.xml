@@ -14,11 +14,9 @@
         android:paddingBottom="60dp">
 
         <android.support.v7.widget.CardView
+            style="@style/CardViewRiderz"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="1dp"
-            android:padding="10dp"
-            android:layout_margin="5dp">
+            android:layout_height="wrap_content">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -33,14 +31,15 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:text="Station Name" />
+                    android:text="@string/stationInfo_stationName" />
 
                 <TextView
+                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_address_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_title_textView"
-                    android:text="Address" />
+                    android:text="@string/stationInfo_stationAddress" />
 
                 <Button
                     android:id="@+id/stationInfo_map_btn"
@@ -52,21 +51,24 @@
                     android:text="@string/stationInfo_map_button" />
 
                 <TextView
+                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_city_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/stationInfo_address_textView"
-                    android:text="City"/>
+                    android:text="@string/stationInfo_stationCity"/>
 
                 <TextView
+                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_crossStreet_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_city_textView"
                     android:layout_marginTop="10dp"
-                    android:text="Cross Street" />
+                    android:text="@string/stationInfo_station_crossStreet" />
 
                 <TextView
+                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_link_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -74,17 +76,19 @@
                     android:layout_below="@+id/stationInfo_crossStreet_textView"
                     android:textColor="@color/mp_primary"
                     android:autoLink="web"
-                    android:text="Link" />
+                    android:text="@string/stationInfo_stationLink" />
 
                 <TextView
+                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_intro_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_link_textView"
                     android:layout_marginTop="10dp"
-                    android:text="Intro" />
+                    android:text="@string/stationInfo_stationIntro" />
 
                 <TextView
+                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_attractionTitle_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -95,13 +99,15 @@
                     />
 
                 <TextView
+                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_attraction_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_attractionTitle_textView"
-                    android:text="Attractions" />
+                    android:text="@string/stationInfo_stationAttraction" />
 
                 <TextView
+                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_shoppingTitle_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -111,13 +117,15 @@
                     android:text="@string/stationInfo_shoppingTitle" />
 
                 <TextView
+                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_shopping_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_shoppingTitle_textView"
-                    android:text="Shopping" />
+                    android:text="@string/stationInfo_stationShopping" />
 
                 <TextView
+                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_foodTitle_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -127,11 +135,12 @@
                     android:text="@string/stationInfo_foodTitle" />
 
                 <TextView
+                    style="@style/TextViewRiderz"
                     android:id="@+id/stationInfo_food_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/stationInfo_foodTitle_textView"
-                    android:text="Food" />
+                    android:text="@string/stationInfo_stationFood" />
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
@@ -141,7 +150,6 @@
             style="@style/ButtonAppTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:text="@string/stationInfo_return_button" />
 
     </LinearLayout>

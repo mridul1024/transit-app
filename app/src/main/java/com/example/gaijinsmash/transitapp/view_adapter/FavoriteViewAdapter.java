@@ -3,7 +3,6 @@ package com.example.gaijinsmash.transitapp.view_adapter;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,7 +41,7 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
     private ListView mListView;
 
     public FavoriteViewAdapter(List<Favorite> data, Context context, ListView listView) {
-        super(context, R.layout.favorite_list_row, data);
+        super(context, R.layout.bart_favorites_list_row, data);
         this.mContext = context;
         this.mFavoriteList = data;
         this.mListView = listView;
@@ -72,7 +71,7 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
         if(convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            convertView = inflater.inflate(R.layout.favorite_list_row, parent, false);
+            convertView = inflater.inflate(R.layout.bart_favorites_list_row, parent, false);
             viewHolder.origin = (TextView) convertView.findViewById(R.id.favorite_origin_textView);
             viewHolder.destination = (TextView) convertView.findViewById(R.id.favorite_destination_textView);
             viewHolder.searchButton = (ImageButton) convertView.findViewById(R.id.favorite_search_ib);
