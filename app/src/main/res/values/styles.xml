@@ -37,15 +37,18 @@
 
     <style name="ButtonAppTheme2">
         <item name="android:background">@color/mp_primary_light</item>
+        <item name="android:padding">5dp</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:elevation">1dp</item>
         <item name="android:textColor">#000</item>
     </style>
 
     <style name="ButtonAppTheme3">
-        <item name="android:background">@color/mp_primary_light</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_margin">5dp</item>
         <item name="android:elevation">1dp</item>
-        <item name="android:textColor">#000</item>
+        <item name="android:textColor">#FF4081</item>
     </style>
 
     <!-- Text Styles -->
@@ -60,10 +63,15 @@
         <item name="android:textSize">25sp</item>
     </style>
 
-    <style name="HelpTextView">
+    <style name="TextViewRiderz">
         <item name="android:textColor"></item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="CardViewRiderz">
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:elevation">1dp</item>
     </style>
 
 </resources>

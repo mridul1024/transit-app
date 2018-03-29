@@ -7,7 +7,7 @@
         android:id="@+id/action_favorited"
         android:orderInCategory="300"
         android:title="@string/action_favorites"
-        android:icon="@drawable/ic_menu_favorited"
+        android:icon="@drawable/ic_menu_favorited_white"
         app:showAsAction="ifRoom"
         />
 </menu>

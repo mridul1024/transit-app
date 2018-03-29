@@ -30,8 +30,9 @@ import java.util.List;
 public class StationInfoFragment extends Fragment {
 
     private View mInflatedView;
-    private String mStation;
+    private String mStationAddress;
     private TextView mTitle, mAddress, mCity, mLink, mIntro, mAttraction, mCrossStreet, mShopping, mFood;
+    private Station mStationObject;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -60,8 +61,10 @@ public class StationInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                String stationAddress = ((TextView) view.findViewById(R.id.stationInfo_address_textView)).getText().toString();
-                bundle.putString("Station", stationAddress);
+                //String stationAddress = ((TextView) view.findViewById(R.id.stationInfo_address_textView)).getText().toString();
+                bundle.putString("StationTitle",mStationObject.getName());
+                bundle.putString("StationLat", String.valueOf(mStationObject.getLatitude()));
+                bundle.putString("StationLong", String.valueOf(mStationObject.getLongitude()));
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction tx = manager.beginTransaction();
                 Fragment newFrag = new GoogleMapFragment();
@@ -83,10 +86,10 @@ public class StationInfoFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
         if(bundle != null) {
-            mStation = bundle.getString("StationAddress");
+            mStationAddress = bundle.getString("StationAddress");
         }
-        if(mStation != null) {
-            new GetStationDetails(getActivity(), mStation).execute();
+        if(mStationAddress != null) {
+            new GetStationDetails(getActivity(), mStationAddress).execute();
         }
     }
 
@@ -96,7 +99,6 @@ public class StationInfoFragment extends Fragment {
     private class GetStationDetails extends AsyncTask<Void,Void,Boolean> {
         private Context mContext;
         private String mStationAddress, mStationName, mAbbr;
-        private Station mStation;
 
         public GetStationDetails(Context context, String stationAddress) {
             this.mContext = context;
@@ -117,7 +119,7 @@ public class StationInfoFragment extends Fragment {
                     e.printStackTrace();
                 }
                 if(list != null) {
-                   mStation = list.get(0);
+                    mStationObject = list.get(0);
                 }
             } else {
                 return false;
@@ -128,15 +130,15 @@ public class StationInfoFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean result) {
             if(result) {
-                mTitle.setText(mStation.getName());
-                mAddress.setText(mStation.getAddress());
-                mCity.setText(mStation.getCity());
-                mCrossStreet.setText(mStation.getCrossStreet());
-                mLink.setText(mStation.getLink());
-                mIntro.setText(mStation.getIntro());
-                mAttraction.setText(Html.fromHtml(mStation.getAttraction(), Html.FROM_HTML_MODE_LEGACY));
-                mShopping.setText(Html.fromHtml(mStation.getShopping(), Html.FROM_HTML_MODE_LEGACY));
-                mFood.setText(Html.fromHtml(mStation.getFood(), Html.FROM_HTML_MODE_LEGACY));
+                mTitle.setText(mStationObject.getName());
+                mAddress.setText(mStationObject.getAddress());
+                mCity.setText(mStationObject.getCity());
+                mCrossStreet.setText(mStationObject.getCrossStreet());
+                mLink.setText(mStationObject.getLink());
+                mIntro.setText(mStationObject.getIntro());
+                mAttraction.setText(Html.fromHtml(mStationObject.getAttraction(), Html.FROM_HTML_MODE_LEGACY));
+                mShopping.setText(Html.fromHtml(mStationObject.getShopping(), Html.FROM_HTML_MODE_LEGACY));
+                mFood.setText(Html.fromHtml(mStationObject.getFood(), Html.FROM_HTML_MODE_LEGACY));
             } else {
                 mTitle.setText(getResources().getString(R.string.stationInfo_oops));
                 mAddress.setVisibility(View.GONE);

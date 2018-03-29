@@ -29,15 +29,18 @@ import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.network.CheckInternet;
 import com.example.gaijinsmash.transitapp.network.FetchGPS;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
@@ -48,6 +51,8 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
     private View mInflatedView;
     private Bundle mBundle;
     private Button mButton;
+    private List<Marker> mMarkerList;
+
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -99,11 +104,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        String stationAddress = "";
-        mBundle = getArguments();
-        if (mBundle != null) {
-            stationAddress = mBundle.getString("StationAddress");
-        }
     }
 
     @Override
@@ -159,19 +159,18 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override // This is called when google map is initialized
     public void onMapReady(GoogleMap googleMap) {
-        GoogleMap mGoogleMap = googleMap;
 
         // GoogleMaps settings
-        initMapSettings(mGoogleMap);
+        initMapSettings(googleMap);
         try {
-            initUserLocation(getActivity(), mGoogleMap);
+            initUserLocation(getActivity(), googleMap);
         } catch (GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
         }
 
         // Populate map with all the stations (markers)
-        new GetMarkersTask(mGoogleMap, getActivity()).execute();
-        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        new GetMarkersTask(googleMap, getActivity()).execute();
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 //todo show a dialog on marker click
@@ -185,29 +184,34 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
                 return false;
             }
         });
+
+        mBundle = getArguments();
+        if(mBundle != null) {
+            String stationTitle = mBundle.getString("StationTitle");
+            Log.i("stationTitle", stationTitle);
+            LatLng latLng = new LatLng(Double.valueOf(mBundle.getString("StationLat")), Double.valueOf(mBundle.getString("StationLong")));
+            //googleMap.animateCamera(CameraUpdateFactory.zoomTo(12f));
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(14).build();
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+            // todo: uncertain if new marker replaces marker, or creates duplicate object in memory
+            Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title(stationTitle));
+            marker.showInfoWindow();
+        }
+
         mMapView.onResume();
     }
 
     public void initMapSettings(GoogleMap map) {
-        map.setMinZoomPreference(9f);
+        // Set boundary of map area
         LatLngBounds bayArea = new LatLngBounds(
                 new LatLng(37.2982, -121.5363), //southwest
                 new LatLng(38.0694, -121.8494)); //northeast
         map.setLatLngBoundsForCameraTarget(bayArea);
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        map.setMyLocationEnabled(true);
-        map.getUiSettings().setZoomControlsEnabled(false);
+        map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.getUiSettings().setZoomGesturesEnabled(true);
+        map.setMinZoomPreference(9f);
     }
 
     private void initUserLocation(Context context, GoogleMap map) throws GooglePlayServicesNotAvailableException {
@@ -248,10 +252,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
             LatLng marker = new LatLng(37.803768, -122.271450);
             map.moveCamera(CameraUpdateFactory.newLatLng(marker));
         }
-
-        // if bundle arguments are present
-        //todo : where to put this?
-
     }
 
     private List<Station> initMarkers(GoogleMap map, Context context) {
@@ -275,6 +275,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
         public GetMarkersTask(GoogleMap map, Context context) {
                 this.mContext = context;
                 this.mGoogleMap = map;
+                mMarkerList = new ArrayList<Marker>();
         }
 
         @Override
@@ -292,7 +293,14 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
             // fill map with markers
             for(Station station : list) {
                 LatLng latLng = new LatLng(station.getLatitude(), station.getLongitude());
-                mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(station.getName()));
+
+                //add marker to map
+                //mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(station.getName()));
+
+                //add marker to list
+                Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(station.getName()));
+                marker.setTag(0);
+                mMarkerList.add(marker);
             }
             mProgressBar.setVisibility(View.GONE);
         }

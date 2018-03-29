@@ -1,14 +1,13 @@
 <resources>
     <!-- Time and Date -->
 
-
     <!-- GENERAL -->
     <string name="app_name">Riderz</string>
     <string name="title_activity_main">Riderz</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
-    <string name="quote">Keep Calm and Ride On</string>
+    <string name="quote">Move Along</string>
 
     <!--Bottom Navigation -->
     <string name="bottomnav_title_0">Home</string>
@@ -31,7 +30,7 @@
     <string name="help_view_title">FAQ</string>
 
     <!-- BART Map Fragment-->
-    <string name="bart_map_button">Switch to Train Lines Map</string>
+    <string name="bart_map_button">Train Lines Map</string>
     <string name="bart_lines_map_btn">Switch To GoogleMap</string>
     <string name="bart_lines_map_description">An image of the BART Train Lines</string>
 

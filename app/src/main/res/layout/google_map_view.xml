@@ -18,7 +18,7 @@
 
     <Button
         android:id="@+id/googleMap_btn"
-        style="@style/ButtonAppTheme"
+        style="@style/ButtonAppTheme3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
