@@ -20,7 +20,7 @@ import java.util.List;
 public class StationXmlParser implements XmlParserInterface {
 
     private Context mContext = null;
-    private static final boolean DEBUG = BuildConfig.DEBUG;
+    private static final boolean DEBUG = false;
 
     // require(int type, String namespace, String name) if namespace is null, will pass when matched against any name
     private static final String ns = null;

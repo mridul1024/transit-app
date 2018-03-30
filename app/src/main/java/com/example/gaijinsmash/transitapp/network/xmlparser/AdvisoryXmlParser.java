@@ -23,7 +23,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
 
     private XmlParserAbstract xmlParserAbstract;
     private Context mContext = null;
-    private static final boolean DEBUG = BuildConfig.DEBUG;
+    private static final boolean DEBUG = false;
     private Advisory advisory = null;
 
     // require(int type, String namespace, String name) if namespace is null, will pass when matched against any name

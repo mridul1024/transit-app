@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -139,9 +140,17 @@ public class StationInfoFragment extends Fragment {
                 frag.mCrossStreet.setText(frag.mStationObject.getCrossStreet());
                 frag.mLink.setText(frag.mStationObject.getLink());
                 frag.mIntro.setText(frag.mStationObject.getIntro());
-                frag.mAttraction.setText(Html.fromHtml(frag.mStationObject.getAttraction(), Html.FROM_HTML_MODE_LEGACY));
-                frag.mShopping.setText(Html.fromHtml(frag.mStationObject.getShopping(), Html.FROM_HTML_MODE_LEGACY));
-                frag.mFood.setText(Html.fromHtml(frag.mStationObject.getFood(), Html.FROM_HTML_MODE_LEGACY));
+
+                // Check api level 23 and lower
+                if(Build.VERSION.SDK_INT >= 24) {
+                    frag.mAttraction.setText(Html.fromHtml(frag.mStationObject.getAttraction(), Html.FROM_HTML_MODE_LEGACY));
+                    frag.mShopping.setText(Html.fromHtml(frag.mStationObject.getShopping(), Html.FROM_HTML_MODE_LEGACY));
+                    frag.mFood.setText(Html.fromHtml(frag.mStationObject.getFood(), Html.FROM_HTML_MODE_LEGACY));
+                } else {
+                    frag.mAttraction.setText(Html.fromHtml(frag.mStationObject.getAttraction()));
+                    frag.mShopping.setText(Html.fromHtml(frag.mStationObject.getShopping()));
+                    frag.mFood.setText(Html.fromHtml(frag.mStationObject.getFood()));
+                }
             } else {
                 frag.mTitle.setText(frag.getResources().getString(R.string.stationInfo_oops));
                 frag.mAddress.setVisibility(View.GONE);

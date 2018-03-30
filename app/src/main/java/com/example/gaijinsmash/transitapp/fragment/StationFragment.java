@@ -111,7 +111,6 @@ public class StationFragment extends Fragment {
                 frag.mProgressBar.setVisibility(View.GONE);
             } else {
                 Toast.makeText(frag.getActivity(), frag.getResources().getString(R.string.cannot_do_this), Toast.LENGTH_LONG).show();
-                Log.e("onPostExecute()", "stationList is NULL");
                 frag.mProgressBar.setVisibility(View.GONE);
             }
         }

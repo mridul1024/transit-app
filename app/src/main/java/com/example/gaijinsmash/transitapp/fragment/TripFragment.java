@@ -70,7 +70,6 @@ public class TripFragment extends Fragment {
         // Check SharedPreferences for time setting
         SharedPreferences prefs = getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
         mIs24HrTimeOn = prefs.getBoolean("TIME_KEY", false); // false = default value if Key is not found
-        Log.i("checkbox_value is ", String.valueOf(mIs24HrTimeOn));
     }
 
     @Override
@@ -169,12 +168,10 @@ public class TripFragment extends Fragment {
                         // Returned value is always 24hr - so conversion is necessary
                         if(mIs24HrTimeOn) {
                             String formattedTime = String.format(Locale.US, "%02d:%02d", selectedHour, selectedMinute);
-                            Log.i("formattedTime",formattedTime);
                             mTimeEt.setText(formattedTime);
 
                         } else {
                             String converttedTime = TimeAndDate.convertTo12HrForTrip(selectedHour + ":" + selectedMinute);
-                            Log.i("converttedTime", converttedTime);
                             mTimeEt.setText(converttedTime);
                         }
                     }
@@ -190,9 +187,7 @@ public class TripFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String departingStation = mDepartureActv.getText().toString();
-                Log.i("departing: ", departingStation);
                 String arrivingStation = mArrivalActv.getText().toString();
-                Log.i("arriving: ", arrivingStation);
 
                 // TIME
                 String preformatTime = mTimeEt.getText().toString();
@@ -200,18 +195,15 @@ public class TripFragment extends Fragment {
 
                 if (!preformatTime.equals("Now") && mIs24HrTimeOn) {
                     String convertedTime = TimeAndDate.convertTo12Hr(preformatTime);
-                    Log.d("convertedTime : ", convertedTime);
                     departingTime = TimeAndDate.formatTime(convertedTime);
                 } else if (!preformatTime.equals("Now") && !mIs24HrTimeOn) {
                     departingTime = TimeAndDate.formatTime(preformatTime); // time=h:mm+AM/PM
                 } else {
                     departingTime = preformatTime;
                 }
-                Log.d("departingTime : ", departingTime);
 
                 // DATE
                 String departingDate = mDateEt.getText().toString();
-                Log.d("departingDate : ", departingDate);
 
                 if (departingStation.isEmpty() || arrivingStation.isEmpty() || departingDate.isEmpty() || departingTime.isEmpty()) {
                     Toast.makeText(getActivity(), getString(R.string.error_form_completion), Toast.LENGTH_LONG).show();

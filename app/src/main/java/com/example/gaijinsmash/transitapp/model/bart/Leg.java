@@ -1,10 +1,13 @@
 package com.example.gaijinsmash.transitapp.model.bart;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by ryanj on 12/1/2017.
  */
 
-public class Leg {
+public class Leg implements Parcelable {
     private String origin, destination;
 
     private int order;
@@ -64,4 +67,58 @@ public class Leg {
     public void setDestTimeDate(String destTimeDate) { this.destTimeDate = destTimeDate; }
     public void setDestTimeMin(String destTimeMin) { this.destTimeMin = destTimeMin; }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.origin);
+        dest.writeString(this.destination);
+        dest.writeInt(this.order);
+        dest.writeInt(this.transferCode);
+        dest.writeString(this.line);
+        dest.writeInt(this.bikeFlag);
+        dest.writeString(this.trainHeadStation);
+        dest.writeString(this.origTimeMin);
+        dest.writeString(this.origTimeDate);
+        dest.writeString(this.destTimeMin);
+        dest.writeString(this.destTimeDate);
+        dest.writeString(this.load);
+        dest.writeString(this.trainId);
+        dest.writeString(this.traindIdx);
+    }
+
+    public Leg() {
+    }
+
+    protected Leg(Parcel in) {
+        this.origin = in.readString();
+        this.destination = in.readString();
+        this.order = in.readInt();
+        this.transferCode = in.readInt();
+        this.line = in.readString();
+        this.bikeFlag = in.readInt();
+        this.trainHeadStation = in.readString();
+        this.origTimeMin = in.readString();
+        this.origTimeDate = in.readString();
+        this.destTimeMin = in.readString();
+        this.destTimeDate = in.readString();
+        this.load = in.readString();
+        this.trainId = in.readString();
+        this.traindIdx = in.readString();
+    }
+
+    public static final Parcelable.Creator<Leg> CREATOR = new Parcelable.Creator<Leg>() {
+        @Override
+        public Leg createFromParcel(Parcel source) {
+            return new Leg(source);
+        }
+
+        @Override
+        public Leg[] newArray(int size) {
+            return new Leg[size];
+        }
+    };
 }

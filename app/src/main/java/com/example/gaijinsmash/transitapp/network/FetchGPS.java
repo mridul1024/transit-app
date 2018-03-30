@@ -1,7 +1,6 @@
 package com.example.gaijinsmash.transitapp.network;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,28 +13,37 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.example.gaijinsmash.transitapp.dialog.NetworkPermissionDialog;
 
 
-public class FetchGPS extends Activity implements LocationListener {
+public class FetchGPS implements LocationListener {
 
     private final Context mContext;
-    boolean isGPSEnabled = false;     // flag for GPS status
-    boolean isNetworkEnabled = false;    // flag for network status
-    protected LocationManager mLocationManager;
+    private LocationManager mLocationManager;
     private Location mLocation;
-    double mLatitude;
-    double mLongitude;
+    private double mLatitude;
+    private double mLongitude;
 
     public FetchGPS(Context context) {
         this.mContext = context;
         mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-        initLocation();
+        // Define the criteria for how to select the location provider
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        String locationProvider = mLocationManager.getBestProvider(criteria, true);
+
+        if((ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+            mLocation = mLocationManager.getLastKnownLocation(locationProvider);
+        }
+
+        // Initialize the location fields
+        if(mLocation != null) {
+            onLocationChanged(mLocation);
+        } else {
+            Log.i("GPS:", "Location is not available");
+        }
+        //initLocation();
     }
 
     public Context getContext() {
@@ -62,8 +70,8 @@ public class FetchGPS extends Activity implements LocationListener {
         return result;
     }
     public void initLocation() {
-        isGPSEnabled = CheckInternet.isGPSEnabled(mContext);
-        isNetworkEnabled = CheckInternet.isNetworkEnabled(mContext);
+        boolean isGPSEnabled = CheckInternet.isGPSEnabled(mContext);
+        boolean isNetworkEnabled = CheckInternet.isNetworkEnabled(mContext);
         if (!isGPSEnabled) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
             alertDialog.setTitle("GPS Settings");
@@ -105,15 +113,13 @@ public class FetchGPS extends Activity implements LocationListener {
         if (isGPSEnabled && isNetworkEnabled) {
             // Define the criteria for how to select the location provider
             Criteria criteria = new Criteria();
-            String locationProvider = mLocationManager.NETWORK_PROVIDER;
+            String locationProvider = LocationManager.NETWORK_PROVIDER;
             if((ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
                 mLocation = mLocationManager.getLastKnownLocation(locationProvider);
-                Log.i("long", Double.toString(mLocation.getLatitude()));
             }
 
             // Initialize the location fields
             if(mLocation != null) {
-                Log.i("GPS:", "Provider " + locationProvider + " has been selected");
                 onLocationChanged(mLocation);
             } else {
                 Log.i("GPS:", "Location is not available");
@@ -124,9 +130,7 @@ public class FetchGPS extends Activity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         mLatitude = mLocation.getLatitude();
-        Log.i("Latitude", (String.valueOf(mLatitude)));
         mLongitude = mLocation.getLongitude();
-        Log.i("Longitude", (String.valueOf(mLongitude)));
     }
 
     @Override
@@ -134,11 +138,9 @@ public class FetchGPS extends Activity implements LocationListener {
 
     @Override
     public void onProviderEnabled(String s) {
-        Log.i("New Provider:", "ENABLED");
     }
 
     @Override
     public void onProviderDisabled(String s) {
-        Log.i("Provider:", "DISABLED");
     }
 } // End of Class

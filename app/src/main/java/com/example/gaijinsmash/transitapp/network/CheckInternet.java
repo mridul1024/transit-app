@@ -17,7 +17,6 @@ public class CheckInternet {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        Log.i("CheckInternet", String.valueOf(isConnected));
         return isConnected;
     }
 
@@ -26,7 +25,6 @@ public class CheckInternet {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
-        Log.i("CheckInternet", String.valueOf(isWiFi));
         return isWiFi;
     }
 

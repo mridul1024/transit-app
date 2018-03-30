@@ -1,5 +1,6 @@
 <resources>
-    <!-- Time and Date -->
+
+    <string name="filter_view_app_riderz">HTTP Intent Filter</string>
 
     <!-- GENERAL -->
     <string name="app_name">Riderz</string>
@@ -44,6 +45,8 @@
     <string name="bart_result_cashFare">Cash Fare: $</string>
     <string name="bart_result_clipperFare">Clipper Fare: $</string>
     <string name="bart_result_minutes">minutes</string>
+    <string name="bart_result_transfer">Transfer</string>
+    <string name="bart_result_transfer_cd">Train Transfer Icon</string>
 
     <!-- Favorites Fragment -->
     <string name="action_favorites">Favorites</string>
@@ -51,6 +54,15 @@
     <string name="fav_system_bart">BART</string>
     <string name="favorite_origin">Origin</string>
     <string name="favorite_destination">Destination</string>
+    <string name="contentDesc_arrow">Arrow pointing right</string>
+    <string name="contentDesc_search">Search Button</string>
+    <string name="contentDesc_options">Options Button</string>
+    <string name="favorite_search">Search</string>
+    <string name="favorite_options">Options</string>
+    <string name="favorite_color">Change Color</string>
+    <string name="action_delete">Delete</string>
+    <string name="favorite_priority">Change Priority</string>
+    <string name="deletion_success">Successfully Deleted</string>
 
     <!-- Help Fragment -->
     <string name="help_report_button">Report an Issue</string>
@@ -69,30 +81,14 @@
     <string name="phoneLines_bartLink">For a complete list of BART phone lines, please click the link below.</string>
     <string name="phoneLines_title">Phone Lines For BART</string>
     <string name="phoneLines_911">For Emergencies Please Dial 911</string>
-    <string name="phoneLines_police_number">877-679-7000</string>
-
-
-    <!-- Trip Fragment -->
-    <string name="departure_station">Departing Station</string>
-    <string name="arrival_station">Arriving Station</string>
-    <string name="departing_time">Time of Departure</string>
-    <string name="departing_date">Date of Departure</string>
-
-    <string name="schedule_button">Search</string>
-
-    <string name="date_hint">Date</string>
-    <string name="time_hint">Time</string>
-    <string name="time_title">Select Time</string>
-    <string name="date_unavailable">Date is unavailable</string>
-    <string name="time_unavailable">Time is unavailable</string>
-    <string name="update_unavailable">Updates are currently not available. Please check your network settings.</string>
-    <string name="last_update">Last checked at</string>
-    <string name="currentDate">Today</string>
-    <string name="currentTime">Now</string>
-
+    <string name="phoneLines_police_number">877–679–7000</string>
+    <string name="phoneLines_bartComplaints_number">510–464–7134</string>
+    <string name="phoneLines_bartLostFound_number">510–464–7090</string>
+    <string name="phoneLines_bartWebsite">https://bart.gov/siteinfo/contact</string>
 
     <!-- Station Fragment -->
     <string-array name="stations_list">
+        <!-- Leave first item empty so the menu defaults to empty -->
         <item></item>
         <item>12th St. Oakland City Center</item>
         <item>16th St. Mission</item>
@@ -150,6 +146,31 @@
     <string name="stationInfo_foodTitle">Food</string>
     <string name="stationInfo_shoppingTitle">Shopping</string>
     <string name="stationInfo_map_button">Map</string>
+    <string name="stationInfo_stationName">Station Name</string>
+    <string name="stationInfo_stationAddress">Address</string>
+    <string name="stationInfo_stationCity">City</string>
+    <string name="stationInfo_station_crossStreet">Cross Street</string>
+    <string name="stationInfo_stationLink">Link</string>
+    <string name="stationInfo_stationIntro">Intro</string>
+    <string name="stationInfo_stationAttraction">Attractions</string>
+    <string name="stationInfo_stationShopping">Shopping</string>
+    <string name="stationInfo_stationFood">Food</string>
+
+    <!-- Trip Fragment -->
+    <string name="departure_station">Departing Station</string>
+    <string name="arrival_station">Arriving Station</string>
+    <string name="departing_time">Time of Departure</string>
+    <string name="departing_date">Date of Departure</string>
+    <string name="schedule_button">Search</string>
+    <string name="date_hint">Date</string>
+    <string name="time_hint">Time</string>
+    <string name="time_title">Select Time</string>
+    <string name="date_unavailable">Date is unavailable</string>
+    <string name="time_unavailable">Time is unavailable</string>
+    <string name="update_unavailable">Updates are currently not available. Please check your network settings.</string>
+    <string name="last_update">Last checked at</string>
+    <string name="currentDate">Today</string>
+    <string name="currentTime">Now</string>
 
     <!-- Google Map -->
     <string name="title_activity_google_maps">Map</string>
@@ -190,31 +211,4 @@
     <string name="preference_checkbox_title2">24 Hour Format</string>
     <string name="preference_button">Save</string>
     <string name="cannot_do_this">\"Sorry, can\'t do this right now. Please try again in a bit.\"</string>
-
-    <string name="help_html"><![CDATA[![CDATA[ ...raw html data ...]] >]]></string>
-    <string name="contentDesc_arrow">Arrow pointing right</string>
-    <string name="contentDesc_search">Search Button</string>
-    <string name="contentDesc_options">Options Button</string>
-    <string name="favorite_search">Search</string>
-    <string name="favorite_options">Options</string>
-    <string name="favorite_color">Change Color</string>
-    <string name="action_delete">Delete</string>
-    <string name="favorite_priority">Change Priority</string>
-    <string name="deletion_success">Successfully Deleted</string>
-    <string name="phoneLines_bartComplaints_number">510-464-7134</string>
-    <string name="phoneLines_bartLostFound_number">510-464-7090</string>
-    <string name="phoneLines_bartWebsite">https://bart.gov/siteinfo/contact</string>
-    <string name="stationInfo_stationName">Station Name</string>
-    <string name="stationInfo_stationAddress">Address</string>
-    <string name="stationInfo_stationCity">City</string>
-    <string name="stationInfo_station_crossStreet">Cross Street</string>
-    <string name="stationInfo_stationLink">Link</string>
-    <string name="stationInfo_stationIntro">Intro</string>
-    <string name="stationInfo_stationAttraction">Attractions</string>
-    <string name="stationInfo_stationShopping">Shopping</string>
-    <string name="stationInfo_stationFood">Food</string>
-    <string name="bart_result_transfer">Transfer</string>
-    <string name="bart_result_transfer_cd">Train Transfer Icon</string>
-
-
 </resources>

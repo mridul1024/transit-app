@@ -135,17 +135,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mNavigationView.setNavigationItemSelectedListener(this)
     }
 
-    /*
-    todo: FAB
-    fun initFAB() {
-        val fab = findViewById<View>(R.id.fab) as FloatingActionButton
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
-    }
-    */
-
     // ---------------------------------------------------------------------------------------------
     // Navigation Settings
     // ---------------------------------------------------------------------------------------------
@@ -223,18 +212,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun closeDrawer() {
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
-    }
-
-    // todo: needs to be removed or implemented
-    fun shareSomething() {
-        // Create intent
-        val intent = Intent(android.content.Intent.ACTION_SEND)
-        intent.setType("text/plain")
-        //intent.setType("img")
-        val shareText = "Info from Riderz"
-        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Shared from Riderz")
-        intent.putExtra(android.content.Intent.EXTRA_TEXT, shareText)
-        startActivity(Intent.createChooser(intent, "Share via"))
     }
 }
 

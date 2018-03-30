@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.database.StationDatabase;
@@ -28,6 +30,7 @@ import com.example.gaijinsmash.transitapp.database.StationDbHelper;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.network.CheckInternet;
 import com.example.gaijinsmash.transitapp.network.FetchGPS;
+import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,17 +47,16 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
+public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private MapView mMapView;
     private ProgressBar mProgressBar;
     private View mInflatedView;
     private List<Marker> mMarkerList;
 
-
     //---------------------------------------------------------------------------------------------
-    // Lifecycle Events
+    // Lifecycle Events - MapView must be used for Fragments to prevent nested fragments.
     //---------------------------------------------------------------------------------------------
 
     @Override
@@ -68,6 +70,53 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
         setRetainInstance(true);
         if (mMapView != null)
             mMapView.onCreate(bundle);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mMapView != null)
+            mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mMapView != null)
+            mMapView.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mMapView != null)
+            mMapView.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mMapView != null)
+            mMapView.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mMapView != null)
+            mMapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if (mMapView != null)
+            mMapView.onLowMemory();
     }
 
     @Override
@@ -105,53 +154,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
         super.onActivityCreated(savedInstanceState);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mMapView != null)
-            mMapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mMapView != null)
-            mMapView.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mMapView != null)
-            mMapView.onStop();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mMapView != null)
-            mMapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        if (mMapView != null)
-            mMapView.onLowMemory();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mMapView != null)
-            mMapView.onSaveInstanceState(outState);
-    }
-
     //---------------------------------------------------------------------------------------------
     // Google Maps
     //---------------------------------------------------------------------------------------------
@@ -169,6 +171,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
 
         // Populate map with all the stations (markers)
         new GetMarkersTask(googleMap, this).execute();
+
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -187,13 +190,9 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
         Bundle mBundle = getArguments();
         if(mBundle != null) {
             String stationTitle = mBundle.getString("StationTitle");
-            Log.i("stationTitle", stationTitle);
             LatLng latLng = new LatLng(Double.valueOf(mBundle.getString("StationLat")), Double.valueOf(mBundle.getString("StationLong")));
-            //googleMap.animateCamera(CameraUpdateFactory.zoomTo(12f));
             CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(14).build();
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-            // todo: uncertain if new marker replaces marker, or creates duplicate object in memory
             Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title(stationTitle));
             marker.showInfoWindow();
         }
@@ -217,39 +216,57 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void initUserLocation(Context context, GoogleMap map) throws GooglePlayServicesNotAvailableException {
-        FetchGPS gps = new FetchGPS(context);
-        Location loc = gps.getLocation();
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            map.setMyLocationEnabled(true);
-            map.setOnMyLocationButtonClickListener((GoogleMap.OnMyLocationButtonClickListener) this);
-            map.setOnMyLocationClickListener((GoogleMap.OnMyLocationClickListener) this);
-        } else {
-            //TODO: abstract AlertDialog code
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-            alertDialog.setTitle("Location Settings");
-            alertDialog.setMessage("Location is not available. Do you want to turn it on?");
-            alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    context.startActivity(intent);
-                }
-            });
-            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            alertDialog.show();
+        FetchGPS gps = null;
+        Location loc = null;
+        try {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                gps = new FetchGPS(context);
+                loc = gps.getLocation();
+
+                map.setMyLocationEnabled(true);
+                map.setOnMyLocationButtonClickListener(this);
+                map.setOnMyLocationClickListener(this);
+            } else {
+                //TODO: abstract AlertDialog code
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+                alertDialog.setTitle("Location Settings");
+                alertDialog.setMessage("Location is not available. Do you want to turn it on?");
+                alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        context.startActivity(intent);
+                    }
+                });
+                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                alertDialog.show();
+            }
+        } catch(SecurityException e) {
+            Log.e("Exception: %s", e.getMessage());
         }
 
-        boolean gpsCheck = CheckInternet.isGPSEnabled(getActivity());
+        boolean gpsCheck = CheckInternet.isGPSEnabled(context);
         if (gpsCheck) {
-            //todo: move camera to user location
-            LatLng marker = new LatLng(37.803768, -122.231450);
-            map.moveCamera(CameraUpdateFactory.newLatLng(marker));
-        } else {
+            // move camera to user location
+            LatLng userLocation = null;
+            if(loc != null) {
+                userLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
+            }
+
+            CameraUpdate update = null;
+            if(userLocation != null) {
+                update = CameraUpdateFactory.newLatLngZoom(userLocation, 10f);
+            }
+
+            if(update != null) {
+                map.moveCamera(update);
+            }
+            } else {
             // This is the default zoom
             LatLng marker = new LatLng(37.803768, -122.271450);
             map.moveCamera(CameraUpdateFactory.newLatLng(marker));
@@ -264,6 +281,16 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback {
                 Log.e("initMarkerS()", "stationList is EMPTY");
         }
         return stationList;
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        return false;
+    }
+
+    @Override
+    public void onMyLocationClick(@NonNull Location location) {
+
     }
 
     //---------------------------------------------------------------------------------------------

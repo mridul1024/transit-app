@@ -33,7 +33,6 @@ public class SettingsFragment extends PreferenceFragment {
         mCheckBoxPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                Log.d("Preference Value Changed to: ", newValue.toString());
                 save(getActivity(), (Boolean) newValue);
                 return true;
             }
