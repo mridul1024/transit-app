@@ -62,9 +62,9 @@ public class BartResultsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mProgressBar = (ProgressBar) mInflatedView.findViewById(R.id.bart_results_progressBar);
+        mProgressBar = mInflatedView.findViewById(R.id.bart_results_progressBar);
         mProgressBar.setVisibility(View.VISIBLE);
-        mListView = (ListView) mInflatedView.findViewById(R.id.results_listView);
+        mListView = mInflatedView.findViewById(R.id.results_listView);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class BartResultsFragment extends Fragment {
             mDestination = mBundle.getString("Destination");
         }
         if(mTripList != null) {
-            TripViewAdapter adapter = new TripViewAdapter(mTripList, getActivity());
+            TripViewAdapter adapter = new TripViewAdapter(mTripList, getActivity(), mBartResultsFragment);
             mListView.setAdapter(adapter);
             mProgressBar.setVisibility(View.GONE);
         }

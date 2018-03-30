@@ -5,6 +5,7 @@ import android.util.Log;
 import android.util.Xml;
 
 import com.example.gaijinsmash.transitapp.BuildConfig;
+import com.example.gaijinsmash.transitapp.database.StationDatabase;
 import com.example.gaijinsmash.transitapp.model.bart.Fare;
 import com.example.gaijinsmash.transitapp.model.bart.FullTrip;
 import com.example.gaijinsmash.transitapp.model.bart.Leg;
@@ -86,7 +87,6 @@ public class TripXMLParser implements XmlParserInterface {
             }
             String name = parser.getName();
             if(name.equals("request")) {
-                Log.i("REQUESTS tag: ", "MATCHED");
                 tripList = readRequest(parser);
             } else {
                 XmlParserAbstract.skip(parser);
@@ -133,7 +133,6 @@ public class TripXMLParser implements XmlParserInterface {
         int eventType = parser.getEventType();
         while(eventType != XmlPullParser.END_TAG) {
             String name = parser.getName();
-            Log.i("name", name);
             if(name.equals("trip")) {
                 origin = parser.getAttributeValue(null, "origin"); // abbr
                 if (DEBUG)
@@ -167,11 +166,9 @@ public class TripXMLParser implements XmlParserInterface {
                     Log.i("co2", co2);
             }
             else if (name.equals("fares")) {
-                Log.i("FARES", "parsing");
                 fareList = readFares(parser);
             }
             else if (name.equals("leg")) {
-                Log.i("LEG", "parsing");
                 legList.add(readLegObject(parser));
             }
             else {
@@ -181,7 +178,6 @@ public class TripXMLParser implements XmlParserInterface {
         }
 
         Trip trip = new Trip();
-        // TODO: need to convert abbr to full names
         trip.setOrigin(origin);
         trip.setDestination(destination);
         trip.setFare(fare);
@@ -211,7 +207,6 @@ public class TripXMLParser implements XmlParserInterface {
             }
             String name = parser.getName();
             if(name.equals("fare")) {
-                Log.i("FARE tag: ", "MATCHED");
                 fareList.add(readFareObject(parser));
             } else {
                 XmlParserAbstract.skip(parser);
@@ -229,7 +224,6 @@ public class TripXMLParser implements XmlParserInterface {
         int eventType = parser.getEventType();
         while (eventType != XmlPullParser.END_TAG) {
             String name = parser.getName();
-            Log.i("name", name);
             if(name.equals("fare")) {
                 fareAmount = parser.getAttributeValue(null,"amount");
                 if(DEBUG){
@@ -274,7 +268,6 @@ public class TripXMLParser implements XmlParserInterface {
         int eventType = parser.getEventType();
         while (eventType != XmlPullParser.END_TAG) {
             String name = parser.getName();
-            Log.i("name", name);
             if(name.equals("leg")) {
                 order = Integer.parseInt(parser.getAttributeValue(null,"order"));
                 if(DEBUG)
@@ -335,4 +328,20 @@ public class TripXMLParser implements XmlParserInterface {
         return leg;
     }
 
+    class StationNameThread extends Thread {
+        String name;
+        String abbr;
+
+        StationNameThread(String abbr) {
+            this.abbr = abbr;
+        }
+        public void run() {
+            StationDatabase db = StationDatabase.getRoomDB(mContext);
+            name = db.getStationDAO().getStationByAbbr(abbr).getName();
+        }
+
+        public String getStationName() {
+            return name;
+        }
+    }
 }

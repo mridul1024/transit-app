@@ -50,8 +50,6 @@ public class StationDbHelper {
         Log.i("STATION NAME: ", stationName);
         StationDatabase db = StationDatabase.getRoomDB(mContext);
         Station station = db.getStationDAO().getStationByName(stationName);
-        Log.i("Station", station.getName());
-        Log.i("ABBR: ", station.getAbbreviation());
         return station.getAbbreviation();
     }
 
@@ -59,8 +57,6 @@ public class StationDbHelper {
         Log.i("STATION NAME: ", stationName);
         StationDatabase db = StationDatabase.getRoomDB(context);
         Station station = db.getStationDAO().getStationByName(stationName);
-        Log.i("Station", station.getName());
-        Log.i("ABBR: ", station.getAbbreviation());
         return station.getAbbreviation();
     }
 }

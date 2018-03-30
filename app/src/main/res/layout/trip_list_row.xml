@@ -76,21 +76,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/trip_linearLayout2">
 
-                    <TextView
-                        android:id="@+id/trip_arrivalTime_textView"
-                        style="@style/TextViewRiderz"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#000"
-                        android:text="@string/bart_result_arriveTime" />
-
-                    <TextView
-                        android:id="@+id/trip_colored_line1"
-                        android:layout_width="150dp"
-                        android:layout_height="5dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="@color/bartDefault"
-                        android:layout_weight="1"/>
 
                     <TextView
                         android:id="@+id/trip_departTime_textView"
@@ -99,6 +84,21 @@
                         android:layout_height="wrap_content"
                         android:textColor="#000"
                         android:text="@string/bart_result_departTime" />
+                    <TextView
+                        android:id="@+id/trip_colored_line1"
+                        android:layout_width="150dp"
+                        android:layout_height="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@color/bartDefault"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/trip_arrivalTime_textView"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text="@string/bart_result_arriveTime" />
+
                 </LinearLayout>
             </RelativeLayout>
 
@@ -169,21 +169,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/trip_linearLayout5">
 
-                    <TextView
-                        android:id="@+id/trip_arrivalTime_textView2"
-                        style="@style/TextViewRiderz"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#000"
-                        android:text="@string/bart_result_arriveTime" />
-
-                    <TextView
-                        android:id="@+id/trip_colored_line2"
-                        android:layout_width="150dp"
-                        android:layout_height="5dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="@color/bartDefault"
-                        android:layout_weight="1"/>
 
                     <TextView
                         android:id="@+id/trip_departTime_textView2"
@@ -192,6 +177,21 @@
                         android:layout_height="wrap_content"
                         android:textColor="#000"
                         android:text="@string/bart_result_departTime" />
+                    <TextView
+                        android:id="@+id/trip_colored_line2"
+                        android:layout_width="150dp"
+                        android:layout_height="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@color/bartDefault"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/trip_arrivalTime_textView2"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text="@string/bart_result_arriveTime" />
+
                 </LinearLayout>
             </RelativeLayout>
 
@@ -262,13 +262,12 @@
                     android:layout_below="@+id/trip_linearLayout8">
 
                     <TextView
-                        android:id="@+id/trip_arrivalTime_textView3"
+                        android:id="@+id/trip_departTime_textView3"
                         style="@style/TextViewRiderz"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#000"
-                        android:text="@string/bart_result_arriveTime" />
-
+                        android:text="@string/bart_result_departTime" />
                     <TextView
                         android:id="@+id/trip_colored_line3"
                         android:layout_width="150dp"
@@ -276,14 +275,14 @@
                         android:layout_gravity="center_vertical"
                         android:background="@color/bartDefault"
                         android:layout_weight="1"/>
-
                     <TextView
-                        android:id="@+id/trip_departTime_textView3"
+                        android:id="@+id/trip_arrivalTime_textView3"
                         style="@style/TextViewRiderz"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#000"
-                        android:text="@string/bart_result_departTime" />
+                        android:text="@string/bart_result_arriveTime" />
+
                 </LinearLayout>
             </RelativeLayout>
 
