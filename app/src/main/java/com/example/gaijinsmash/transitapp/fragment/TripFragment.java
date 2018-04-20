@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.TextInputEditText;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,7 +52,7 @@ public class TripFragment extends Fragment {
     private DatePickerDialog mDatePickerDialog;
     private SimpleDateFormat mSimpleDateFormat;
     private AutoCompleteTextView mDepartureActv, mArrivalActv;
-    private EditText mTimeEt, mDateEt;
+    private TextInputEditText mTimeEt, mDateEt;
     boolean mIs24HrTimeOn = false;
     private View mInflatedView;
     private TripFragment mTripFragment = this;
@@ -97,7 +98,10 @@ public class TripFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 TextView textView = (TextView) departureSpinner.getSelectedView();
-                String itemSelected = textView.getText().toString();
+                String itemSelected = null;
+                if (textView != null) {
+                    itemSelected = textView.getText().toString();
+                }
                 mDepartureActv.setText(itemSelected);
             }
 
@@ -109,7 +113,10 @@ public class TripFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 TextView textView = (TextView) arrivalSpinner.getSelectedView();
-                String itemSelected = textView.getText().toString();
+                String itemSelected = "";
+                if(textView != null){
+                    itemSelected = textView.getText().toString();
+                }
                 mArrivalActv.setText(itemSelected);
             }
 
@@ -241,7 +248,7 @@ public class TripFragment extends Fragment {
             // Create the API Call
             try {
                 StationDbHelper helper = new StationDbHelper(frag.getActivity());
-                helper.initStationDb(frag.getActivity());
+                helper.initStationDb();
                 mDepartAbbr = helper.getAbbrFromDb(mDepartingStn);
                 Log.i("mDepartAbbr", mDepartAbbr);
                 mArriveAbbr = helper.getAbbrFromDb(mArrivingStn);

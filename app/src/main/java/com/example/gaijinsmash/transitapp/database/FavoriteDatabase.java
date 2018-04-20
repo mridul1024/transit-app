@@ -18,8 +18,7 @@ public abstract class FavoriteDatabase extends RoomDatabase {
     public static FavoriteDatabase getRoomDB(Context context) {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), FavoriteDatabase.class, "favorite-database")
-                    //.addMigrations(MIGRATION)
-                    .fallbackToDestructiveMigration()
+                    .addMigrations(MIGRATION)
                     .build();
         }
         return INSTANCE;
@@ -31,7 +30,7 @@ public abstract class FavoriteDatabase extends RoomDatabase {
 
 
     // Edit this to create a new migration for database - and use ".addMigrations(example)
-    public static final Migration MIGRATION = new Migration(1,2) {
+    private static final Migration MIGRATION = new Migration(1,2) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE stations ADD COLUMN last_update INTEGER");

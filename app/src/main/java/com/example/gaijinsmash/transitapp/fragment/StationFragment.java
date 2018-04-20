@@ -70,6 +70,7 @@ public class StationFragment extends Fragment {
         new GetStationsTask(this).execute();
     }
 
+
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
@@ -87,7 +88,7 @@ public class StationFragment extends Fragment {
             frag.mProgressBar.setVisibility(View.VISIBLE);
             StationDbHelper helper = new StationDbHelper(frag.getActivity());
             try {
-                helper.initStationDb(frag.getActivity());
+                helper.initStationDb();
                 if(stationList == null) {
                     stationList = helper.getDb().getStationDAO().getAllStations();
                 }

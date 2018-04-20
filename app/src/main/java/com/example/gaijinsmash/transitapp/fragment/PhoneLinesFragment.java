@@ -23,11 +23,4 @@ public class PhoneLinesFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        FragmentManager fm = getFragmentManager();
-        fm.popBackStack();
-    }
 }

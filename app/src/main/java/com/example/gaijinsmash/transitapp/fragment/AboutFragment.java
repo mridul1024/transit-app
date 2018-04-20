@@ -19,10 +19,4 @@ public class AboutFragment extends Fragment {
         return inflater.inflate(R.layout.about_view, container, false);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        FragmentManager fm = getFragmentManager();
-        fm.popBackStack();
-    }
 }

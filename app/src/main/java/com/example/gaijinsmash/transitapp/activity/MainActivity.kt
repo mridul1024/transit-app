@@ -47,6 +47,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawer.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
+            val count = mFragmentManager.backStackEntryCount
+            if(count == 0) {
+                super.onBackPressed();
+                //todo: add something
+            } else {
+                val currentFrag = mFragmentManager.findFragmentById(R.id.fragmentContent)
+                if(currentFrag.tag.equals("HomeFragment")) {
+                    mBottomNavigation.currentItem = 0
+                    mFragmentManager.popBackStack()
+                }
+                if(currentFrag.tag.equals("GoogleMapFragment")) {
+                    mBottomNavigation.currentItem = 1
+                    mFragmentManager.popBackStack()
+                }
+                if(currentFrag.tag.equals("TripFragment")) {
+                    mBottomNavigation.currentItem = 2
+                    mFragmentManager.popBackStack()
+                }
+                if(currentFrag.tag.equals("FavoritesFragment")) {
+                    mBottomNavigation.currentItem = 3
+                    mFragmentManager.popBackStack()
+                }
+            }
         }
     }
     // ---------------------------------------------------------------------------------------------
@@ -77,34 +100,42 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun initHomeFragment() {
-        replaceFrag(HomeFragment(), "HomeFragment")
+        replaceFrag(HomeFragment(), "HomeFragment", true)
         mNavigationView.setCheckedItem(R.id.nav_home)
     }
 
     private fun initMapFragment() {
         if(CheckInternet.isNetworkActive(applicationContext)) {
-            replaceFrag(GoogleMapFragment(), "GoogleMapFragment")
+            replaceFrag(GoogleMapFragment(), "GoogleMapFragment", true)
         } else {
-            replaceFrag(BartMapFragment(), "BartMapFragment")
+            replaceFrag(BartMapFragment(), "BartMapFragment", true)
         }
         mNavigationView.setCheckedItem(R.id.nav_map)
     }
 
     private fun initScheduleFragment() {
-        replaceFrag(TripFragment(), "TripFragment")
+        replaceFrag(TripFragment(), "TripFragment", true)
         mNavigationView.setCheckedItem(R.id.nav_schedule)
     }
 
     private fun initFavoritesFragment() {
-        replaceFrag(FavoritesFragment(), "FavoritesFragment")
+        replaceFrag(FavoritesFragment(), "FavoritesFragment", true)
     }
 
-    private fun replaceFrag(newFrag:Fragment, tag: String) {
-        mFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragmentContent, newFrag, tag)
-                //.addToBackStack(null)
-                .commit()
+    private fun replaceFrag(newFrag:Fragment, tag: String, addToBackStack: Boolean) {
+        if(addToBackStack) {
+            mFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragmentContent, newFrag, tag)
+                    .addToBackStack(tag)
+                    .commit()
+        } else {
+            mFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragmentContent, newFrag, tag)
+                    .commit()
+        }
+
         mCurrentFragment = tag
     }
 
@@ -150,19 +181,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     closeDrawer()
                     false
                 } else {
-                    fragmentFactory(HomeFragment(), "HomeFragment", false)
+                    fragmentFactory(HomeFragment(), "HomeFragment", true)
                     mBottomNavigation.currentItem = 0
                     true
                 }
             }
             R.id.nav_map -> {
                 if(CheckInternet.isNetworkActive(applicationContext))
-                    fragmentFactory(GoogleMapFragment(), "GoogleMapFragment", false) else fragmentFactory(BartMapFragment(), "BartMapFragment", false)
+                    fragmentFactory(GoogleMapFragment(), "GoogleMapFragment", true) else fragmentFactory(BartMapFragment(), "BartMapFragment", false)
                 mBottomNavigation.currentItem = 1
                 return true
             }
             R.id.nav_schedule -> {
-                fragmentFactory(TripFragment(), "TripFragment", false)
+                fragmentFactory(TripFragment(), "TripFragment", true)
                 mBottomNavigation.currentItem = 2
                 return true
             }
@@ -172,7 +203,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_help -> {
                 fragmentFactory(HelpFragment(), "HelpFragment", true)
-                //todo: resolve setCheckedItem issue with nav menus
                 return true
             }
             R.id.nav_about -> {
@@ -187,17 +217,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    private fun fragmentFactory(fragment: Fragment, tag: String, backstackFlag: Boolean) {
-        if(backstackFlag) {
-            mFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragmentContent, fragment, tag)
-                    .addToBackStack(null)
-                    .commit()
-            mCurrentFragment = tag
-        } else {
-            replaceFrag(fragment, tag)
-        }
+    private fun fragmentFactory(fragment: Fragment, tag: String, addToBackStack: Boolean) {
+        replaceFrag(fragment, tag, addToBackStack)
         closeDrawer()
     }
 

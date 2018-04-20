@@ -1,25 +1,18 @@
 package com.example.gaijinsmash.transitapp.fragment;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.database.FavoriteDatabase;
 import com.example.gaijinsmash.transitapp.model.bart.Favorite;
 import com.example.gaijinsmash.transitapp.view_adapter.FavoriteViewAdapter;
-
-import org.w3c.dom.Text;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -38,8 +31,8 @@ public class FavoritesFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mError = (TextView) mInflatedView.findViewById(R.id.bartFavorites_error_tV);
-        mListView = (ListView) mInflatedView.findViewById(R.id.bartFavorites_listView);
+        mError = mInflatedView.findViewById(R.id.bartFavorites_error_tV);
+        mListView = mInflatedView.findViewById(R.id.bartFavorites_listView);
     }
 
     @Override
@@ -51,7 +44,6 @@ public class FavoritesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        new GetFavoritesTask(this).execute();
     }
 
     private static class GetFavoritesTask extends AsyncTask<Void, Void, Boolean> {
@@ -88,9 +80,9 @@ public class FavoritesFragment extends Fragment {
                 }
             } else {
                 // set a default view for empty favorites list
-                frag.mError.setText(frag.getResources().getString(R.string.bart_favorites_empty));
+                if(frag.isAdded())
+                    frag.mError.setText(frag.getResources().getString(R.string.bart_favorites_empty));
             }
         }
-
     }
 }

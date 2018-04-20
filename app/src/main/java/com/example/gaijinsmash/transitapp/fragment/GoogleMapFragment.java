@@ -301,7 +301,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
             GoogleMapFragment frag = mWeakRef.get();
             StationDbHelper helper = new StationDbHelper(frag.getActivity());
             try {
-                helper.initStationDb(frag.getActivity());
+                helper.initStationDb();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

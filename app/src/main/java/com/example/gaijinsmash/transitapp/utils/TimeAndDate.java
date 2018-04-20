@@ -97,7 +97,6 @@ public class TimeAndDate {
         Date date = df.getCalendar().getTime();
         df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
         String time = df.format(date);
-        Log.i("TIME HOUR", time);
         return  Integer.valueOf(time);
     }
 }

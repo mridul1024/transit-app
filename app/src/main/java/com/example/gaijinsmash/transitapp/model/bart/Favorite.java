@@ -35,6 +35,7 @@ public class Favorite {
     private int color;
 
     // Getters
+    @NonNull
     public String getTitle() { return title; }
     public String getOrigin() { return origin; }
     public String getDestination() { return destination; }
@@ -44,7 +45,7 @@ public class Favorite {
     public int getColor() { return color; }
 
     // Setters
-    public void setTitle(String title) { this.title = title; }
+    public void setTitle(@NonNull String title) { this.title = title; }
     public void setOrigin(String origin) { this.origin = origin; }
     public void setDestination(String destination) { this.destination = destination; }
     public void setSystem(String system) { this.system = system; }

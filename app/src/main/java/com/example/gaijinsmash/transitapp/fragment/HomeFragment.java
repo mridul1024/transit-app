@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +58,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        new GetAdvisoryTask(this, getText(R.string.last_update).toString()).execute();
+        new GetAdvisoryTask( this, getText(R.string.last_update).toString()).execute();
     }
 
     @Override
@@ -78,10 +80,14 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
-    //todo: add holiday info
 
     private static class GetAdvisoryTask extends AsyncTask<Void, Void, Boolean> {
         private WeakReference<HomeFragment> mHomeRef;
@@ -99,7 +105,7 @@ public class HomeFragment extends Fragment {
         protected Boolean doInBackground(Void... voids) {
             HomeFragment homeFrag = mHomeRef.get();
             // Check SharedPreferences for time setting
-            if(homeFrag != null) {
+            if(homeFrag != null && homeFrag.isAdded()) {
                 SharedPreferences prefs = homeFrag.getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
                 mTimeBoolean = prefs.getBoolean("TIME_KEY", false);
                 try {
@@ -111,8 +117,6 @@ public class HomeFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-
-
             return mList != null;
         }
 
@@ -121,9 +125,8 @@ public class HomeFragment extends Fragment {
             if(result) {
                 String time;
                 for(Advisory adv : mList) {
-                    if(adv.getTime() != null && homeFrag.mBsaTimeTv != null) {
+                    if(adv.getTime() != null && homeFrag != null) {
                         if(mTimeBoolean) {
-                            //time = adv.getTime();
                             time = TimeAndDate.format24hrTime(adv.getTime());
                         } else {
                             time = TimeAndDate.convertTo12Hr(adv.getTime());
@@ -132,12 +135,18 @@ public class HomeFragment extends Fragment {
                         homeFrag.mBsaTimeTv.setText(message);
                     }
                 }
-                AdvisoryViewAdapter adapter = new AdvisoryViewAdapter(mList, homeFrag.getActivity());
-                homeFrag.mBsaListView.setAdapter(adapter);
-                homeFrag.mProgressBar.setVisibility(View.GONE);
+
+                AdvisoryViewAdapter adapter;
+                if (homeFrag != null && homeFrag.isAdded()) {
+                    adapter = new AdvisoryViewAdapter(mList, homeFrag.getActivity());
+                    homeFrag.mBsaListView.setAdapter(adapter);
+                    homeFrag.mProgressBar.setVisibility(View.GONE);
+                }
             } else {
-                homeFrag.mBsaTimeTv.setText(homeFrag.getResources().getString(R.string.update_unavailable));
-                homeFrag.mProgressBar.setVisibility(View.GONE);
+                if(homeFrag != null && homeFrag.isAdded()) {
+                    homeFrag.mBsaTimeTv.setText(homeFrag.getResources().getString(R.string.update_unavailable));
+                    homeFrag.mProgressBar.setVisibility(View.GONE);
+                }
             }
         }
     }

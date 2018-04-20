@@ -92,13 +92,6 @@ public class StationInfoFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        FragmentManager fm = getFragmentManager();
-        fm.popBackStack();
-    }
-
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
