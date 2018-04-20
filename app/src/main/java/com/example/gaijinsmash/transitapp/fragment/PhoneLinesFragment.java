@@ -1,6 +1,7 @@
 package com.example.gaijinsmash.transitapp.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,5 +22,12 @@ public class PhoneLinesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        FragmentManager fm = getFragmentManager();
+        fm.popBackStack();
     }
 }

@@ -1,7 +1,6 @@
 package com.example.gaijinsmash.transitapp.activity
 
 import android.app.Fragment
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -20,11 +19,11 @@ import com.example.gaijinsmash.transitapp.network.CheckInternet
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    var mCurrentFragment = "HomeFragment"
-    val mFragmentManager = fragmentManager
-    lateinit var mDrawer: DrawerLayout
-    lateinit var mNavigationView: NavigationView
-    lateinit var mBottomNavigation: AHBottomNavigation
+    private var mCurrentFragment = "HomeFragment"
+    private val mFragmentManager = fragmentManager
+    private lateinit var mDrawer: DrawerLayout
+    private lateinit var mNavigationView: NavigationView
+    private lateinit var mBottomNavigation: AHBottomNavigation
 
     // ---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -42,22 +41,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    override fun onAttachFragment(fragment: Fragment) {
-        super.onAttachFragment(fragment)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun onResume() {
-        super.onResume();
-    }
-
-    override fun onPause() {
-        super.onPause();
-    }
-
     override fun onBackPressed() {
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -69,7 +52,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // ---------------------------------------------------------------------------------------------
     // Navigation
     // ---------------------------------------------------------------------------------------------
-    fun initBottomNavBar() {
+    private fun initBottomNavBar() {
         mBottomNavigation = findViewById<View>(R.id.bottom_navigation) as AHBottomNavigation
         val item1 = AHBottomNavigationItem(R.string.bottomnav_title_0, R.drawable.ic_menu_home, R.color.colorPrimaryDark)
         val item2 = AHBottomNavigationItem(R.string.bottomnav_title_1, R.drawable.ic_menu_map, R.color.colorPrimaryDark)
@@ -80,7 +63,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mBottomNavigation.addItem(item2)
         mBottomNavigation.addItem(item3)
         mBottomNavigation.addItem(item4)
-        mBottomNavigation.setCurrentItem(0)
+        mBottomNavigation.currentItem = 0
         mBottomNavigation.setOnTabSelectedListener { position, _ ->
             when(position) {
                 0 -> initHomeFragment()
@@ -93,12 +76,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mBottomNavigation.titleState = AHBottomNavigation.TitleState.ALWAYS_SHOW
     }
 
-    fun initHomeFragment() {
+    private fun initHomeFragment() {
         replaceFrag(HomeFragment(), "HomeFragment")
         mNavigationView.setCheckedItem(R.id.nav_home)
     }
 
-    fun initMapFragment() {
+    private fun initMapFragment() {
         if(CheckInternet.isNetworkActive(applicationContext)) {
             replaceFrag(GoogleMapFragment(), "GoogleMapFragment")
         } else {
@@ -107,16 +90,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mNavigationView.setCheckedItem(R.id.nav_map)
     }
 
-    fun initScheduleFragment() {
+    private fun initScheduleFragment() {
         replaceFrag(TripFragment(), "TripFragment")
         mNavigationView.setCheckedItem(R.id.nav_schedule)
     }
 
-    fun initFavoritesFragment() {
+    private fun initFavoritesFragment() {
         replaceFrag(FavoritesFragment(), "FavoritesFragment")
     }
 
-    fun replaceFrag(newFrag:Fragment, tag: String) {
+    private fun replaceFrag(newFrag:Fragment, tag: String) {
         mFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragmentContent, newFrag, tag)
@@ -125,7 +108,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mCurrentFragment = tag
     }
 
-    fun initNavigationDrawer(toolbar:Toolbar) {
+    private fun initNavigationDrawer(toolbar:Toolbar) {
         mDrawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
                 this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -163,53 +146,62 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_home -> {
-                if(mCurrentFragment.equals("HomeFragment")) {
+                return if(mCurrentFragment.equals("HomeFragment")) {
                     closeDrawer()
-                    return false
+                    false
                 } else {
-                    fragmentFactory(HomeFragment(), "HomeFragment")
-                    mBottomNavigation.setCurrentItem(0)
-                    return true
+                    fragmentFactory(HomeFragment(), "HomeFragment", false)
+                    mBottomNavigation.currentItem = 0
+                    true
                 }
             }
             R.id.nav_map -> {
                 if(CheckInternet.isNetworkActive(applicationContext))
-                    fragmentFactory(GoogleMapFragment(), "GoogleMapFragment") else fragmentFactory(BartMapFragment(), "BartMapFragment")
-                mBottomNavigation.setCurrentItem(1)
+                    fragmentFactory(GoogleMapFragment(), "GoogleMapFragment", false) else fragmentFactory(BartMapFragment(), "BartMapFragment", false)
+                mBottomNavigation.currentItem = 1
                 return true
             }
             R.id.nav_schedule -> {
-                fragmentFactory(TripFragment(), "TripFragment")
-                mBottomNavigation.setCurrentItem(2)
+                fragmentFactory(TripFragment(), "TripFragment", false)
+                mBottomNavigation.currentItem = 2
                 return true
             }
             R.id.nav_station -> {
-                fragmentFactory(StationFragment(), "StationFragment")
+                fragmentFactory(StationFragment(), "StationFragment", true)
                 return true
             }
             R.id.nav_help -> {
-                fragmentFactory(HelpFragment(), "HelpFragment")
+                fragmentFactory(HelpFragment(), "HelpFragment", true)
                 //todo: resolve setCheckedItem issue with nav menus
                 return true
             }
             R.id.nav_about -> {
-                fragmentFactory(AboutFragment(), "AboutFragment")
+                fragmentFactory(AboutFragment(), "AboutFragment", true)
                 return true
             }
             R.id.nav_phoneLines -> {
-                fragmentFactory(PhoneLinesFragment(), "PhoneLinesFragment")
+                fragmentFactory(PhoneLinesFragment(), "PhoneLinesFragment", true)
                 return true
             }
         }
         return true
     }
 
-    fun fragmentFactory(fragment: Fragment, tag: String) {
-        replaceFrag(fragment, tag)
+    private fun fragmentFactory(fragment: Fragment, tag: String, backstackFlag: Boolean) {
+        if(backstackFlag) {
+            mFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragmentContent, fragment, tag)
+                    .addToBackStack(null)
+                    .commit()
+            mCurrentFragment = tag
+        } else {
+            replaceFrag(fragment, tag)
+        }
         closeDrawer()
     }
 
-    fun closeDrawer() {
+    private fun closeDrawer() {
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
     }

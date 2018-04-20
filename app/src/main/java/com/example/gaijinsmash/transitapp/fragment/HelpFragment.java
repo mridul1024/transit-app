@@ -1,8 +1,8 @@
 package com.example.gaijinsmash.transitapp.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,5 +39,12 @@ public class HelpFragment extends Fragment {
                 startActivity(Intent.createChooser(intent, getResources().getString(R.string.help_intent_title)));
             }
         });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        FragmentManager fm = getFragmentManager();
+        fm.popBackStack();
     }
 }
