@@ -10,7 +10,6 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.widget.DrawerLayout;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,7 +56,6 @@ public class TripFragment extends Fragment {
     private View mInflatedView;
     private TripFragment mTripFragment = this;
 
-    private static boolean DEBUG = true;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -86,12 +84,12 @@ public class TripFragment extends Fragment {
         // This data adapter is to provide a station list for Spinner and AutoCompleteTextView
         Resources res = getResources();
         String[] stations = res.getStringArray(R.array.stations_list);
-        ArrayAdapter<String> textViewAdapter = new ArrayAdapter<String> (getActivity(), android.R.layout.simple_selectable_list_item, stations);
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stations);
+        ArrayAdapter<String> textViewAdapter = new ArrayAdapter<> (getActivity(), android.R.layout.simple_selectable_list_item, stations);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stations);
 
         // Spinners (Drop Down List on Touch)
-        Spinner departureSpinner = (Spinner) mInflatedView.findViewById(R.id.station_spinner1);
-        Spinner arrivalSpinner = (Spinner) mInflatedView.findViewById(R.id.station_spinner2);
+        Spinner departureSpinner = mInflatedView.findViewById(R.id.station_spinner1);
+        Spinner arrivalSpinner = mInflatedView.findViewById(R.id.station_spinner2);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         departureSpinner.setAdapter(spinnerAdapter);
@@ -119,17 +117,17 @@ public class TripFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
         // Departure UI
-        mDepartureActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView);
+        mDepartureActv = mInflatedView.findViewById(R.id.schedule_autoCompleteTextView);
         mDepartureActv.setThreshold(1); // will start working from first character
         mDepartureActv.setAdapter(textViewAdapter);
 
         // Arrival UI
-        mArrivalActv = (AutoCompleteTextView) mInflatedView.findViewById(R.id.schedule_autoCompleteTextView2);
+        mArrivalActv = mInflatedView.findViewById(R.id.schedule_autoCompleteTextView2);
         mArrivalActv.setThreshold(1);
         mArrivalActv.setAdapter(textViewAdapter);
 
         // Date UI
-        mDateEt = (EditText) mInflatedView.findViewById(R.id.date_editText);
+        mDateEt = mInflatedView.findViewById(R.id.date_editText);
         mDateEt.setText(getText(R.string.currentDate));
         mDateEt.setInputType(InputType.TYPE_NULL);
         mDateEt.requestFocus();
@@ -151,7 +149,7 @@ public class TripFragment extends Fragment {
         });
 
         // Time UI
-        mTimeEt = (EditText) mInflatedView.findViewById(R.id.time_editText);
+        mTimeEt = mInflatedView.findViewById(R.id.time_editText);
         mTimeEt.setText(getText(R.string.currentTime));
         mTimeEt.setInputType(InputType.TYPE_NULL);
         mTimeEt.requestFocus();
@@ -184,7 +182,7 @@ public class TripFragment extends Fragment {
         });
 
         // Submit Button
-        Button searchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
+        Button searchBtn = mInflatedView.findViewById(R.id.schedule_button);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -234,12 +232,6 @@ public class TripFragment extends Fragment {
             mArrivingStn = arrivingStn;
             mDate = date;
             mTime = time;
-            if(DEBUG) {
-                Log.i("depart", mDepartingStn);
-                Log.i("arrive", mArrivingStn);
-                Log.i("date", mDate);
-                Log.i("time", mTime);
-            }
         }
 
         @Override

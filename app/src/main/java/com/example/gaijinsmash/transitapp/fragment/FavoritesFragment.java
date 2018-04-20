@@ -81,7 +81,7 @@ public class FavoritesFragment extends Fragment {
             if(result) {
                 // set view
                 if(mFavoritesList != null) {
-                    FavoriteViewAdapter adapter = new FavoriteViewAdapter(mFavoritesList, frag.getActivity(), frag.mListView);
+                    FavoriteViewAdapter adapter = new FavoriteViewAdapter(mFavoritesList, frag.getActivity(), frag);
                     frag.mListView.setAdapter(adapter);
                 } else {
                     frag.mError.setText(frag.getResources().getString(R.string.bart_favorites_empty));

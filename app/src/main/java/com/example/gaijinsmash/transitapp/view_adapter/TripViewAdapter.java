@@ -31,7 +31,7 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
 
     private BartResultsFragment mFragment;
     private Context mContext;
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     public TripViewAdapter(List<FullTrip> data, Context context, BartResultsFragment fragment) {
         super(context, R.layout.trip_list_row, data);
@@ -126,7 +126,7 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
             viewHolder.tripTime =      convertView.findViewById(R.id.trip_totalTime_textView);
 
             view = convertView;
-            convertView.setTag(viewHolder);
+            view.setTag(viewHolder);
         } else {
             viewHolder = (TripViewAdapter.ViewHolder) convertView.getTag();
             view = convertView;
@@ -137,14 +137,14 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
             viewHolder.tripTime.setText(fullTrip.getTrip().getTripTime());
             viewHolder.clipper.setText(fullTrip.getFareList().get(0).getFareAmount());
             viewHolder.fare.setText(fullTrip.getFareList().get(1).getFareAmount());
-            setTripViews2(fullTrip, viewHolder);
+            setTripViews(fullTrip, viewHolder);
         } else {
             Toast.makeText(mContext, mContext.getResources().getString(R.string.error_try_again), Toast.LENGTH_SHORT).show();
         }
-        return convertView;
+        return view;
     }
 
-    private void setTripViews2(FullTrip fullTrip, ViewHolder viewHolder) {
+    private void setTripViews(FullTrip fullTrip, ViewHolder viewHolder) {
         int length = fullTrip.getLegList().size();
         Log.i("length of leg list", String.valueOf(length));
         if(length > 0) {
@@ -182,58 +182,6 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
             viewHolder.coloredBar3.setVisibility(View.GONE);
             viewHolder.departTitle3.setVisibility(View.GONE);
             viewHolder.arriveTitle3.setVisibility(View.GONE);
-        }
-    }
-
-    private void setTripViews(FullTrip fullTrip, ViewHolder viewHolder) {
-        int length = fullTrip.getLegList().size();
-
-        if(length == 1) {
-            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 1).execute();
-            setColoredBar(fullTrip.getLegList().get(0).getLine(), viewHolder, 1);
-
-            // Remove Views
-            viewHolder.imageView1.setVisibility(View.GONE);
-            viewHolder.origin2.setVisibility(View.GONE);
-            viewHolder.destination2.setVisibility(View.GONE);
-            viewHolder.origTimeMin2.setVisibility(View.GONE);
-            viewHolder.destTimeMin2.setVisibility(View.GONE);
-            viewHolder.coloredBar2.setVisibility(View.GONE);
-            viewHolder.departTitle2.setVisibility(View.GONE);
-            viewHolder.arriveTitle2.setVisibility(View.GONE);
-
-            viewHolder.imageView2.setVisibility(View.GONE);
-            viewHolder.origin3.setVisibility(View.GONE);
-            viewHolder.destination3.setVisibility(View.GONE);
-            viewHolder.origTimeMin3.setVisibility(View.GONE);
-            viewHolder.destTimeMin3.setVisibility(View.GONE);
-            viewHolder.coloredBar3.setVisibility(View.GONE);
-            viewHolder.departTitle3.setVisibility(View.GONE);
-            viewHolder.arriveTitle3.setVisibility(View.GONE);
-        }
-        if(length == 2) {
-            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 1).execute();
-            setColoredBar(fullTrip.getLegList().get(0).getLine(), viewHolder, 1);
-            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 2).execute();
-            setColoredBar(fullTrip.getLegList().get(1).getLine(), viewHolder, 2);
-
-            // Remove Views
-            viewHolder.imageView2.setVisibility(View.GONE);
-            viewHolder.origin3.setVisibility(View.GONE);
-            viewHolder.destination3.setVisibility(View.GONE);
-            viewHolder.origTimeMin3.setVisibility(View.GONE);
-            viewHolder.destTimeMin3.setVisibility(View.GONE);
-            viewHolder.coloredBar3.setVisibility(View.GONE);
-            viewHolder.departTitle3.setVisibility(View.GONE);
-            viewHolder.arriveTitle3.setVisibility(View.GONE);
-        }
-        if(length == 3) {
-            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 1).execute();
-            setColoredBar(fullTrip.getLegList().get(0).getLine(), viewHolder, 1);
-            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 2).execute();
-            setColoredBar(fullTrip.getLegList().get(1).getLine(), viewHolder, 2);
-            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 3).execute();
-            setColoredBar(fullTrip.getLegList().get(2).getLine(), viewHolder, 3);
         }
     }
 
@@ -357,7 +305,7 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
 
         @Override
         protected Boolean doInBackground(Void...voids) {
-            BartResultsFragment context = mWeakRef.get(); //todo: should i use the context of the tripfragment?
+            BartResultsFragment context = mWeakRef.get();
             mOriginAbbr = mFullTrip.getLegList().get(mLeg - 1).getOrigin();
             mDestAbbr = mFullTrip.getLegList().get(mLeg - 1).getDestination();
             StationDatabase db = StationDatabase.getRoomDB(context.getActivity());

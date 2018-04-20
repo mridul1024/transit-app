@@ -46,16 +46,16 @@ public class StationInfoFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mTitle = (TextView) mInflatedView.findViewById(R.id.stationInfo_title_textView);
-        mAddress = (TextView) mInflatedView.findViewById(R.id.stationInfo_address_textView);
-        mCity = (TextView) mInflatedView.findViewById(R.id.stationInfo_city_textView);
-        mCrossStreet = (TextView) mInflatedView.findViewById(R.id.stationInfo_crossStreet_textView);
-        mLink = (TextView) mInflatedView.findViewById(R.id.stationInfo_link_textView);
-        mIntro = (TextView) mInflatedView.findViewById(R.id.stationInfo_intro_textView);
-        mAttraction = (TextView) mInflatedView.findViewById(R.id.stationInfo_attraction_textView);
-        mShopping = (TextView) mInflatedView.findViewById(R.id.stationInfo_shopping_textView);
-        mFood = (TextView) mInflatedView.findViewById(R.id.stationInfo_food_textView);
-        Button mapButton = (Button) mInflatedView.findViewById(R.id.stationInfo_map_btn);
+        mTitle = mInflatedView.findViewById(R.id.stationInfo_title_textView);
+        mAddress = mInflatedView.findViewById(R.id.stationInfo_address_textView);
+        mCity = mInflatedView.findViewById(R.id.stationInfo_city_textView);
+        mCrossStreet = mInflatedView.findViewById(R.id.stationInfo_crossStreet_textView);
+        mLink = mInflatedView.findViewById(R.id.stationInfo_link_textView);
+        mIntro = mInflatedView.findViewById(R.id.stationInfo_intro_textView);
+        mAttraction = mInflatedView.findViewById(R.id.stationInfo_attraction_textView);
+        mShopping = mInflatedView.findViewById(R.id.stationInfo_shopping_textView);
+        mFood = mInflatedView.findViewById(R.id.stationInfo_food_textView);
+        Button mapButton = mInflatedView.findViewById(R.id.stationInfo_map_btn);
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +71,7 @@ public class StationInfoFragment extends Fragment {
                 tx.replace(R.id.fragmentContent, newFrag).addToBackStack(null).commit();
             }
         });
-        Button returnButton = (Button) mInflatedView.findViewById(R.id.stationInfo_return_btn);
+        Button returnButton = mInflatedView.findViewById(R.id.stationInfo_return_btn);
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +97,7 @@ public class StationInfoFragment extends Fragment {
     //---------------------------------------------------------------------------------------------
     private static class GetStationDetails extends AsyncTask<Void,Void,Boolean> {
         private WeakReference<StationInfoFragment> mWeakRef;
-        private String mStationAddress, mStationName, mAbbr;
+        private String mStationAddress, mAbbr;
 
         private GetStationDetails(StationInfoFragment context, String stationAddress) {
             mWeakRef = new WeakReference<>(context);

@@ -182,7 +182,9 @@ public class BartResultsFragment extends Fragment {
                 IS_FAVORITED_ON = true;
                 frag.mFavoritedIcon.setVisible(true);
                 frag.mFavoriteIcon.setVisible(false);
-                Toast.makeText(frag.getActivity(), frag.getResources().getString(R.string.favorite_added), Toast.LENGTH_SHORT).show();
+                if(mStatus == 1) {
+                    Toast.makeText(frag.getActivity(), frag.getResources().getString(R.string.favorite_added), Toast.LENGTH_SHORT).show();
+                }
             } else {
                 IS_FAVORITED_ON = false;
                 frag.mFavoriteIcon.setVisible(true);
