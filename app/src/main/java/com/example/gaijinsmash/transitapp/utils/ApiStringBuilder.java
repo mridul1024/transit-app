@@ -3,7 +3,6 @@ package com.example.gaijinsmash.transitapp.utils;
 public class ApiStringBuilder {
     private static final String API_KEY = "&key=Q7Z9-PZ53-9QXT-DWE9";
     private static final String BASE_URI = "http://api.bart.gov/api/";
-    private static final String TEST_URI = "http://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V";
 
     public static String getAllStations() {
         String stations = "stn.aspx?cmd=stns";
@@ -28,9 +27,7 @@ public class ApiStringBuilder {
     }
 
     public static String getRoute(String stationA, String stationB) {
-        String origin = null;
-        String dest = null;
-        return BASE_URI + "sched.aspx?cmd=depart&orig=" + origin + "&dest=" + dest + API_KEY;
+        return BASE_URI + "sched.aspx?cmd=depart&orig=" + stationA + "&dest=" + stationB + API_KEY;
     }
 
     public static String getSpecialSchedule() {

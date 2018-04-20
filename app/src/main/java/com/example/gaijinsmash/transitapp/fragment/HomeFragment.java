@@ -1,11 +1,10 @@
 package com.example.gaijinsmash.transitapp.fragment;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,10 +61,10 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mProgressBar = (ProgressBar) mInflatedView.findViewById(R.id.home_progressBar);
-        mBsaTimeTv = (TextView) mInflatedView.findViewById(R.id.home_view_timeTv);
+        mProgressBar = mInflatedView.findViewById(R.id.home_progressBar);
+        mBsaTimeTv = mInflatedView.findViewById(R.id.home_view_timeTv);
         mBsaListView = mInflatedView.findViewById(R.id.advisory_listView);
-        ImageView imageView = (ImageView) mInflatedView.findViewById(R.id.home_banner_imageView);
+        ImageView imageView = mInflatedView.findViewById(R.id.home_banner_imageView);
 
         // Beach picture is shown by default
         int hour = TimeAndDate.getCurrentHour();
@@ -91,7 +90,7 @@ public class HomeFragment extends Fragment {
         private boolean mTimeBoolean;
 
         private GetAdvisoryTask(HomeFragment context, String message) {
-            mList = new ArrayList<Advisory>();
+            mList = new ArrayList<>();
             mMessage = message;
             mHomeRef = new WeakReference<>(context);
         }
@@ -103,26 +102,24 @@ public class HomeFragment extends Fragment {
             if(homeFrag != null) {
                 SharedPreferences prefs = homeFrag.getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
                 mTimeBoolean = prefs.getBoolean("TIME_KEY", false);
+                try {
+                    FetchInputStream is = new FetchInputStream(homeFrag.getActivity());
+                    InputStream in = is.connectToApi(ApiStringBuilder.getBSA());
+                    AdvisoryXmlParser parser = new AdvisoryXmlParser(homeFrag.getActivity());
+                    mList = parser.parse(in); //todo: fix this
+                } catch (IOException | XmlPullParserException e) {
+                    e.printStackTrace();
+                }
             }
 
-            try {
-                FetchInputStream is = new FetchInputStream(homeFrag.getActivity());
-                InputStream in = is.connectToApi(ApiStringBuilder.getBSA());
-                AdvisoryXmlParser parser = new AdvisoryXmlParser(homeFrag.getActivity());
-                mList = parser.parse(in);
-            } catch (IOException | XmlPullParserException e) {
-                e.printStackTrace();
-            }
-            if(mList != null) {
-                return true;
-            }
-            return false;
+
+            return mList != null;
         }
 
         protected void onPostExecute(Boolean result) {
             HomeFragment homeFrag = mHomeRef.get();
             if(result) {
-                String time = "";
+                String time;
                 for(Advisory adv : mList) {
                     if(adv.getTime() != null && homeFrag.mBsaTimeTv != null) {
                         if(mTimeBoolean) {

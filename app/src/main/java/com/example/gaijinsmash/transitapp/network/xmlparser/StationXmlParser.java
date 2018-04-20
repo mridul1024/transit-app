@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
-import com.example.gaijinsmash.transitapp.BuildConfig;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 
@@ -58,7 +57,7 @@ public class StationXmlParser implements XmlParserInterface {
         if(DEBUG)
             Log.i("readFeed():", "***BEGINNING***");
 
-        List<Station> stationList = new ArrayList<Station>();
+        List<Station> stationList = new ArrayList<>();
         parser.require(XmlPullParser.START_TAG, ns, "root");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -81,7 +80,7 @@ public class StationXmlParser implements XmlParserInterface {
         if(DEBUG)
             Log.i("readStations()", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "stations");
-        List<Station> stationList = new ArrayList<Station>();
+        List<Station> stationList = new ArrayList<>();
         while (parser.next() != XmlPullParser.END_TAG) {
             if(parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -121,73 +120,76 @@ public class StationXmlParser implements XmlParserInterface {
                 continue;
             }
             String name = parser.getName();
-            if(name.equals("name")) {
-                mName = readName(parser);
-                if(DEBUG)
-                    Log.i("mName", mName);
-            }
-            else if (name.equals("abbr")) {
-                mAbbreviation = readAbbr(parser);
-                if(DEBUG)
-                    Log.i("abbreviation", mAbbreviation);
-            }
-            else if (name.equals("gtfs_latitude")) {
-                mLatitude = readLatitude(parser);
-                if(DEBUG)
-                    Log.i("latitude", mLatitude);
-            }
-            else if (name.equals("gtfs_longitude")) {
-                mLongitude = readLongitude(parser);
-                if(DEBUG)
-                    Log.i("longitude", mLongitude);
-            }
-            else if (name.equals("address")) {
-                mAddress = readAddress(parser);
-                if(DEBUG)
-                    Log.i("address", mAddress);
-            }
-            else if (name.equals("city")) {
-                mCity = readCity(parser);
-                if(DEBUG)
-                    Log.i("city", mCity);
-            }
-            else if (name.equals("county")) {
-                mCounty = readCounty(parser);
-                if(DEBUG)
-                    Log.i("county", mCounty);
-            }
-            else if (name.equals("state")) {
-                mState = readState(parser);
-                if(DEBUG)
-                    Log.i("state", mState);
-            }
-            else if (name.equals("zipcode")) {
-                mZipcode = readZipcode(parser);
-                if(DEBUG)
-                    Log.i("zipcode", mZipcode);
-            }
-            else if (name.equals("platform_info")) {
-                mPlatformInfo = readPlatformInfo(parser);
-            }
-            else if (name.equals("intro")) {
-                mIntro = readIntro(parser);
-            }
-            else if (name.equals("cross_street")) {
-                mCrossStreet = readCrossStreet(parser);
-            }
-            else if (name.equals("food")) {
-                mFood = readFood(parser);
-            }
-            else if (name.equals("shopping")) {
-                mShopping = readShopping(parser);
-            }
-            else if (name.equals("attraction")) {
-                mAttraction = readAttraction(parser);
-            }
-            else if (name.equals("link")) {
-                mLink = readLink(parser);
-            } else {
-                XmlParserAbstract.skip(parser);
+            switch (name) {
+                case "name":
+                    mName = readName(parser);
+                    if (DEBUG)
+                        Log.i("mName", mName);
+                    break;
+                case "abbr":
+                    mAbbreviation = readAbbr(parser);
+                    if (DEBUG)
+                        Log.i("abbreviation", mAbbreviation);
+                    break;
+                case "gtfs_latitude":
+                    mLatitude = readLatitude(parser);
+                    if (DEBUG)
+                        Log.i("latitude", mLatitude);
+                    break;
+                case "gtfs_longitude":
+                    mLongitude = readLongitude(parser);
+                    if (DEBUG)
+                        Log.i("longitude", mLongitude);
+                    break;
+                case "address":
+                    mAddress = readAddress(parser);
+                    if (DEBUG)
+                        Log.i("address", mAddress);
+                    break;
+                case "city":
+                    mCity = readCity(parser);
+                    if (DEBUG)
+                        Log.i("city", mCity);
+                    break;
+                case "county":
+                    mCounty = readCounty(parser);
+                    if (DEBUG)
+                        Log.i("county", mCounty);
+                    break;
+                case "state":
+                    mState = readState(parser);
+                    if (DEBUG)
+                        Log.i("state", mState);
+                    break;
+                case "zipcode":
+                    mZipcode = readZipcode(parser);
+                    if (DEBUG)
+                        Log.i("zipcode", mZipcode);
+                    break;
+                case "platform_info":
+                    mPlatformInfo = readPlatformInfo(parser);
+                    break;
+                case "intro":
+                    mIntro = readIntro(parser);
+                    break;
+                case "cross_street":
+                    mCrossStreet = readCrossStreet(parser);
+                    break;
+                case "food":
+                    mFood = readFood(parser);
+                    break;
+                case "shopping":
+                    mShopping = readShopping(parser);
+                    break;
+                case "attraction":
+                    mAttraction = readAttraction(parser);
+                    break;
+                case "link":
+                    mLink = readLink(parser);
+                    break;
+                default:
+                    XmlParserAbstract.skip(parser);
+                    break;
             }
         }
 
@@ -229,8 +231,6 @@ public class StationXmlParser implements XmlParserInterface {
     private String readAddress(XmlPullParser parser) throws IOException, XmlPullParserException {
         if(DEBUG)
             Log.i("readAddress()", "***BEGINNING***");
-
-
         parser.require(XmlPullParser.START_TAG, ns, "address");
         String address = XmlParserAbstract.readText(parser);
         address.replaceAll("International", "Int'l");

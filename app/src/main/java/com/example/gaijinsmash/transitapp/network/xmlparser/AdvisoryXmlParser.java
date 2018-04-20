@@ -1,16 +1,12 @@
 package com.example.gaijinsmash.transitapp.network.xmlparser;
 
 import android.content.Context;
-import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.util.Xml;
 
-import com.example.gaijinsmash.transitapp.BuildConfig;
 import com.example.gaijinsmash.transitapp.model.bart.Advisory;
-import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.network.FetchInputStream;
 
-import org.w3c.dom.Document;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -21,17 +17,15 @@ import java.util.List;
 
 public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInterface {
 
-    private XmlParserAbstract xmlParserAbstract;
-    private Context mContext = null;
+    private Context mContext;
     private static final boolean DEBUG = false;
-    private Advisory advisory = null;
+    private Advisory advisory;
 
     // require(int type, String namespace, String name) if namespace is null, will pass when matched against any name
     private static final String ns = null;
 
-    public AdvisoryXmlParser(Context mContext) {
-        if(mContext == null)
-            this.mContext = mContext;
+    public AdvisoryXmlParser(Context context) {
+        mContext = context;
         advisory = new Advisory();
     }
 
@@ -39,7 +33,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
         if(DEBUG)
             Log.i("makeCall()", "with " + call);
         InputStream is = new FetchInputStream(mContext).connectToApi(call);
-        List<Advisory> results = parse(is);
+        List<Advisory> results = parse(is); //todo: fix this
         is.close();
         return results;
     }
@@ -65,9 +59,9 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
             Log.i("readFeed():", "***BEGINNING***");
         }
         parser.require(XmlPullParser.START_TAG, ns, "root");
-        List<Advisory> list = new ArrayList<Advisory>();
-        String mDate = null;
-        String mTime = null;
+        List<Advisory> list = new ArrayList<>();
+        String mDate;
+        String mTime;
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -76,27 +70,29 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
             String name = parser.getName();
             // Starts by looking for the first tag
             // todo: change to switch statements
-            if(name.equals("date")) {
-                mDate = readDate(parser);
-                if(mDate != null)
-                    advisory.setDate(mDate); // breaks here
-                if(DEBUG)
-                    Log.i("mDate", mDate);
-            }
-            else if(name.equals("time")) {
-                mTime = readTime(parser);
-                if(mTime != null)
-                    advisory.setTime(mTime);
-                if(DEBUG)
-                    Log.i("mTime", mTime);
-            }
-            else if (name.equals("bsa")) {
-                if(DEBUG)
-                    Log.i("BSA tag: ", "MATCHED");
-                list.add(readAdvisoryObject(parser));
-            }
-            else {
-                XmlParserAbstract.skip(parser);
+            switch (name) {
+                case "date":
+                    mDate = readDate(parser);
+                    if (mDate != null)
+                        advisory.setDate(mDate); // breaks here
+                    if (DEBUG)
+                        Log.i("mDate", mDate);
+                    break;
+                case "time":
+                    mTime = readTime(parser);
+                    if (mTime != null)
+                        advisory.setTime(mTime);
+                    if (DEBUG)
+                        Log.i("mTime", mTime);
+                    break;
+                case "bsa":
+                    if (DEBUG)
+                        Log.i("BSA tag: ", "MATCHED");
+                    list.add(readAdvisoryObject(parser));
+                    break;
+                default:
+                    XmlParserAbstract.skip(parser);
+                    break;
             }
         }
         list.add(advisory);
@@ -112,20 +108,22 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
             if(parser.getEventType() != XmlPullParser.START_TAG)
                 continue;
             String name = parser.getName();
-            if(name.equals("station")) {
-                mStation = readStation(parser);
-                if(DEBUG)
-                    Log.i("station", mStation);
-            }
-            else if(name.equals("type")) {
-                mType = readType(parser);
-                if(DEBUG)
-                    Log.i("type", mType);
-            }
-            else if(name.equals("description")) {
-                mDescription = readDescription(parser);
-                if(DEBUG)
-                    Log.i("description", mDescription);
+            switch (name) {
+                case "station":
+                    mStation = readStation(parser);
+                    if (DEBUG)
+                        Log.i("station", mStation);
+                    break;
+                case "type":
+                    mType = readType(parser);
+                    if (DEBUG)
+                        Log.i("type", mType);
+                    break;
+                case "description":
+                    mDescription = readDescription(parser);
+                    if (DEBUG)
+                        Log.i("description", mDescription);
+                    break;
             }
         }
         Advisory mAdvisory = new Advisory();

@@ -39,13 +39,11 @@ import java.util.List;
 public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.OnClickListener {
 
     private Context mContext;
-    private List<Favorite> mFavoriteList;
     private FavoritesFragment mFragment;
 
     public FavoriteViewAdapter(List<Favorite> data, Context context, FavoritesFragment fragment) {
         super(context, R.layout.bart_favorites_list_row, data);
         this.mContext = context;
-        this.mFavoriteList = data;
         this.mFragment = fragment;
     }
 
@@ -58,9 +56,6 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
 
     @Override
     public void onClick(View v) {
-        int position = (Integer) v.getTag();
-        Object object = getItem(position);
-        Favorite favorite = (Favorite) object;
     }
 
     @NonNull
@@ -100,7 +95,6 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
                     PopupMenu popup = new PopupMenu(mContext, viewHolder.optionsButton);
                     popup.getMenuInflater().inflate(R.menu.favorite_options, popup.getMenu());
                     popup.show();
-
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
@@ -122,7 +116,7 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
             });
 
             view = convertView;
-            convertView.setTag(viewHolder);
+            view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
             view = convertView;
@@ -138,7 +132,7 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
         }
         viewHolder.origin.setText(origin);
         viewHolder.destination.setText(destination);
-        return convertView;
+        return view;
     }
 
     //---------------------------------------------------------------------------------------------
@@ -186,7 +180,7 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
                 // Switch to BartResultsFragment
                 Fragment newFrag = new BartResultsFragment();
                 newFrag.setArguments(bundle);
-                FragmentManager manager = ((Activity) frag.getActivity()).getFragmentManager();
+                FragmentManager manager = (frag.getActivity()).getFragmentManager();
                 manager.beginTransaction()
                         .replace(R.id.fragmentContent, newFrag)
                         .addToBackStack(null)

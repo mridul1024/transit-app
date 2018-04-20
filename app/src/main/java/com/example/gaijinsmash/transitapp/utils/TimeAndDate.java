@@ -5,8 +5,6 @@ import android.util.Log;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -21,7 +19,7 @@ public class TimeAndDate {
         int month = c.get(Calendar.MONTH);
         int year = c.get(Calendar.YEAR);
         c.set(year, month, day);
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
         return sdf.format(c.getTime());
     }
 
@@ -39,15 +37,15 @@ public class TimeAndDate {
 
     // Format date for api string - mm/dd/yyyy
     public static String formatDate(String input) {
-        String output = "";
+        String output;
         Date date = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
         try {
             date = sdf.parse(input);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        sdf = new SimpleDateFormat("mm/dd/yyyy");
+        sdf = new SimpleDateFormat("mm/dd/yyyy", Locale.US);
         output = sdf.format(date);
         return output;
     }
@@ -55,7 +53,7 @@ public class TimeAndDate {
     // Remove am/pm from 24hour time
     public static String format24hrTime(String input) {
         Date date = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss a z");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss a z", Locale.US);
         try {
             date = sdf.parse(input);
         } catch (ParseException e) {
@@ -74,22 +72,22 @@ public class TimeAndDate {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        DateFormat printFormat = new SimpleDateFormat("hh:mm a z");
+        DateFormat printFormat = new SimpleDateFormat("hh:mm a z", Locale.US);
         printFormat.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
         return printFormat.format(date);
     }
 
     //todo: check if time is returning properly to API call
     public static String convertTo12HrForTrip(String input) {
-        String output = "";
+        String output;
         Date date = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
         try {
             date = sdf.parse(input);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        sdf = new SimpleDateFormat("hh:mm a");
+        sdf = new SimpleDateFormat("hh:mm a", Locale.US);
         output = sdf.format(date);
         return output;
     }

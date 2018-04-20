@@ -112,7 +112,7 @@ public class StationInfoFragment extends Fragment {
             if(mAbbr != null) {
                 String uri = ApiStringBuilder.getStationInfo(mAbbr);
                 StationXmlParser parser = new StationXmlParser(frag.getActivity());
-                List<Station> list = new ArrayList<Station>();
+                List<Station> list = new ArrayList<>();
                 try {
                     list = parser.getList(uri);
                 } catch (IOException | XmlPullParserException e) {

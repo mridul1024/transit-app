@@ -111,8 +111,6 @@ public class FetchGPS implements LocationListener {
             alertDialog.show();
         }
         if (isGPSEnabled && isNetworkEnabled) {
-            // Define the criteria for how to select the location provider
-            Criteria criteria = new Criteria();
             String locationProvider = LocationManager.NETWORK_PROVIDER;
             if((ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
                 mLocation = mLocationManager.getLastKnownLocation(locationProvider);

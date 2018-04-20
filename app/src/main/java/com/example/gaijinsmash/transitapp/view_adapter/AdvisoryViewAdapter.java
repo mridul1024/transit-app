@@ -1,6 +1,7 @@
 package com.example.gaijinsmash.transitapp.view_adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,23 +11,19 @@ import android.widget.TextView;
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.model.bart.Advisory;
 
+import java.util.List;
+
 /**
  * Custom adapters create special layouts for data. Check a corresponding "~list_row.xml" to view
  * the design.
  */
 
-import java.util.List;
-
-//TODO: many to one relationship with Stations
-
 public class AdvisoryViewAdapter extends ArrayAdapter<Advisory> implements View.OnClickListener {
 
-    private List<Advisory> mAdvisoryList = null;
     private Context mContext;
 
     public AdvisoryViewAdapter(List<Advisory> data, Context context) {
         super(context, R.layout.station_list_row, data);
-        this.mAdvisoryList = data;
         this.mContext = context;
     }
 
@@ -38,19 +35,11 @@ public class AdvisoryViewAdapter extends ArrayAdapter<Advisory> implements View.
 
     @Override
     public void onClick(View view) {
-        int position  = (Integer) view.getTag();
-        Object object = getItem(position);
-        Advisory advisory = (Advisory) object;
-
-        switch (view.getId()) {
-            // TODO: do something on click?
-        }
     }
 
-    private int lastPosition = -1;
-
+    @NonNull
     @Override
-    public View getView(int position, View convertView , ViewGroup parent) {
+    public View getView(int position, View convertView , @NonNull ViewGroup parent) {
         Advisory advisory = getItem(position);
         ViewHolder viewHolder;
         final View view;
@@ -59,19 +48,21 @@ public class AdvisoryViewAdapter extends ArrayAdapter<Advisory> implements View.
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(R.layout.advisory_list_row, parent, false);
-            viewHolder.stationName = (TextView) convertView.findViewById(R.id.bsa_station_textView);
-            viewHolder.bsaType = (TextView) convertView.findViewById(R.id.bsa_type_textView);
-            viewHolder.bsaDescription = (TextView) convertView.findViewById(R.id.bsa_description_textView);
+            viewHolder.stationName = convertView.findViewById(R.id.bsa_station_textView);
+            viewHolder.bsaType = convertView.findViewById(R.id.bsa_type_textView);
+            viewHolder.bsaDescription = convertView.findViewById(R.id.bsa_description_textView);
             view = convertView;
-            convertView.setTag(viewHolder);
+            view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
             view = convertView;
         }
-        viewHolder.stationName.setText(advisory.getDate());
-        viewHolder.bsaType.setText(advisory.getType());
-        viewHolder.bsaDescription.setText(advisory.getDescription());
-        return convertView;
+        if (advisory != null) {
+            viewHolder.stationName.setText(advisory.getDate());
+            viewHolder.bsaType.setText(advisory.getType());
+            viewHolder.bsaDescription.setText(advisory.getDescription());
+        }
+        return view;
     }
 }
 

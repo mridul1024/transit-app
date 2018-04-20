@@ -1,11 +1,9 @@
 package com.example.gaijinsmash.transitapp.view_adapter;
 
-import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.text.style.TtsSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +15,9 @@ import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.database.StationDatabase;
-import com.example.gaijinsmash.transitapp.database.StationDbHelper;
 import com.example.gaijinsmash.transitapp.fragment.BartResultsFragment;
 import com.example.gaijinsmash.transitapp.model.bart.FullTrip;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -146,7 +140,6 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
 
     private void setTripViews(FullTrip fullTrip, ViewHolder viewHolder) {
         int length = fullTrip.getLegList().size();
-        Log.i("length of leg list", String.valueOf(length));
         if(length > 0) {
             new SetResultViewsTask(mFragment, viewHolder, fullTrip, 1).execute();
             setColoredBar(fullTrip.getLegList().get(0).getLine(), viewHolder, 1);

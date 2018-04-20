@@ -30,7 +30,6 @@ import java.util.List;
 public class BartResultsFragment extends Fragment {
 
     private ListView mListView;
-    private Bundle mBundle;
     private List<FullTrip> mFullTripList;
     private ProgressBar mProgressBar;
     private View mInflatedView;
@@ -71,7 +70,7 @@ public class BartResultsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mBundle = getArguments();
+        Bundle mBundle = getArguments();
         if(mBundle != null) {
             mFullTripList = mBundle.getParcelableArrayList("FullTripList");
             mOrigin = mBundle.getString("Origin");
@@ -155,7 +154,6 @@ public class BartResultsFragment extends Fragment {
             FavoriteDatabase db = FavoriteDatabase.getRoomDB(frag.getActivity());
             switch(mStatus) {
                 case 0:
-                    Log.i("Switch", "0");
                     return initFavorites(db, frag.mFavoriteObject);
                 case 1:
                     addToFavorites(db, frag.mFavoriteObject);
@@ -165,11 +163,9 @@ public class BartResultsFragment extends Fragment {
                     favoriteReversed.setOrigin(frag.mDestination);
                     favoriteReversed.setDestination(frag.mOrigin);
                     addToFavorites(db, favoriteReversed);
-                    Log.i("Switch", "1");
                     return true;
                 case 2:
                     removeFromFavorites(db, frag.mFavoriteObject);
-                    Log.i("Switch", "2");
                     return false;
             }
             return false;

@@ -26,11 +26,9 @@ public class FetchInputStream {
         int responseCode = httpURLConnection.getResponseCode();
 
         if(responseCode != HttpURLConnection.HTTP_OK) {
-            ErrorToast toast = new ErrorToast();
-            toast.networkConnectionErrorToast(mContext, responseCode);
+            ErrorToast.networkConnectionErrorToast(mContext, responseCode);
         }
 
-        InputStream in = httpURLConnection.getInputStream();
-        return in;
+        return httpURLConnection.getInputStream();
     }
 }

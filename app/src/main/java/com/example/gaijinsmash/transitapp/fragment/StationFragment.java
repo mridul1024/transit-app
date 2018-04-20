@@ -1,12 +1,10 @@
 package com.example.gaijinsmash.transitapp.fragment;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
-import com.example.gaijinsmash.transitapp.database.StationDatabase;
 import com.example.gaijinsmash.transitapp.database.StationDbHelper;
-import com.example.gaijinsmash.transitapp.view_adapter.StationViewAdapter;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
+import com.example.gaijinsmash.transitapp.view_adapter.StationViewAdapter;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -72,7 +66,7 @@ public class StationFragment extends Fragment {
                         .addToBackStack(null).commit();
             }
         });
-        mProgressBar = (ProgressBar) mInflatedView.findViewById(R.id.station_progress_bar);
+        mProgressBar = mInflatedView.findViewById(R.id.station_progress_bar);
         new GetStationsTask(this).execute();
     }
 

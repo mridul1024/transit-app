@@ -2,6 +2,7 @@ package com.example.gaijinsmash.transitapp.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -11,10 +12,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.database.StationDatabase;
@@ -30,8 +28,6 @@ import com.example.gaijinsmash.transitapp.database.StationDbHelper;
 import com.example.gaijinsmash.transitapp.model.bart.Station;
 import com.example.gaijinsmash.transitapp.network.CheckInternet;
 import com.example.gaijinsmash.transitapp.network.FetchGPS;
-import com.example.gaijinsmash.transitapp.network.FetchInputStream;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,7 +40,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
@@ -127,7 +122,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        Button mButton = (Button) mInflatedView.findViewById(R.id.googleMap_btn);
+        Button mButton = mInflatedView.findViewById(R.id.googleMap_btn);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,10 +132,10 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
                 tx.replace(R.id.fragmentContent, newFrag).addToBackStack(null).commit();
             }
         });
-        mProgressBar = (ProgressBar) mInflatedView.findViewById(R.id.googleMap_progress_bar);
+        mProgressBar = mInflatedView.findViewById(R.id.googleMap_progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
         try {
-            mMapView = (MapView) mInflatedView.findViewById(R.id.googleMap_mapView);
+            mMapView = mInflatedView.findViewById(R.id.googleMap_mapView);
             mMapView.onCreate(savedInstanceState);
             mMapView.getMapAsync(this);
         } catch (Exception e) {
@@ -162,11 +157,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
 
         // GoogleMaps settings
         initMapSettings(googleMap);
-        try {
-            initUserLocation(getActivity(), googleMap);
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-        }
+        initUserLocation(getActivity(), googleMap);
 
         // Populate map with all the stations (markers)
         new GetMarkersTask(googleMap, this).execute();
@@ -214,8 +205,8 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         map.setMinZoomPreference(9f);
     }
 
-    private void initUserLocation(Context context, GoogleMap map) throws GooglePlayServicesNotAvailableException {
-        FetchGPS gps = null;
+    private void initUserLocation(Context context, GoogleMap map) {
+        FetchGPS gps;
         Location loc = null;
         try {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -272,7 +263,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         }
     }
 
-    private static List<Station> initMarkers(GoogleMap map, Context context) {
+    private static List<Station> initMarkers(Context context) {
         StationDatabase db = StationDatabase.getRoomDB(context);
         List<Station> stationList = db.getStationDAO().getAllStations();
         if(DEBUG) {
@@ -316,7 +307,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
             } finally {
                 helper.getDb().close();
             }
-            return initMarkers(mGoogleMap, frag.getActivity());
+            return initMarkers(frag.getActivity());
         }
 
         @Override
