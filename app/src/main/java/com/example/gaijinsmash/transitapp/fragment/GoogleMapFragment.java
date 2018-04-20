@@ -53,7 +53,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     private MapView mMapView;
     private ProgressBar mProgressBar;
     private View mInflatedView;
-    private List<Marker> mMarkerList;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events - MapView must be used for Fragments to prevent nested fragments.
@@ -309,10 +308,13 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         @Override
         protected List<Station> doInBackground(Void...voids) {
             GoogleMapFragment frag = mWeakRef.get();
+            StationDbHelper helper = new StationDbHelper(frag.getActivity());
             try {
-                StationDbHelper.initStationDb(frag.getActivity());
+                helper.initStationDb(frag.getActivity());
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                helper.getDb().close();
             }
             return initMarkers(mGoogleMap, frag.getActivity());
         }

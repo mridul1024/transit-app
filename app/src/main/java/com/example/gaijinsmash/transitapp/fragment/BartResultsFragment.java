@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.example.gaijinsmash.transitapp.R;
 import com.example.gaijinsmash.transitapp.database.FavoriteDatabase;
@@ -30,7 +31,7 @@ public class BartResultsFragment extends Fragment {
 
     private ListView mListView;
     private Bundle mBundle;
-    private List<FullTrip> mTripList;
+    private List<FullTrip> mFullTripList;
     private ProgressBar mProgressBar;
     private View mInflatedView;
     private String mOrigin, mDestination;
@@ -72,12 +73,12 @@ public class BartResultsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mBundle = getArguments();
         if(mBundle != null) {
-            mTripList = mBundle.getParcelableArrayList("TripList");
+            mFullTripList = mBundle.getParcelableArrayList("FullTripList");
             mOrigin = mBundle.getString("Origin");
             mDestination = mBundle.getString("Destination");
         }
-        if(mTripList != null) {
-            TripViewAdapter adapter = new TripViewAdapter(mTripList, getActivity(), mBartResultsFragment);
+        if(mFullTripList != null) {
+            TripViewAdapter adapter = new TripViewAdapter(mFullTripList, getActivity(), mBartResultsFragment);
             mListView.setAdapter(adapter);
             mProgressBar.setVisibility(View.GONE);
         }
@@ -181,6 +182,7 @@ public class BartResultsFragment extends Fragment {
                 IS_FAVORITED_ON = true;
                 frag.mFavoritedIcon.setVisible(true);
                 frag.mFavoriteIcon.setVisible(false);
+                Toast.makeText(frag.getActivity(), frag.getResources().getString(R.string.favorite_added), Toast.LENGTH_SHORT).show();
             } else {
                 IS_FAVORITED_ON = false;
                 frag.mFavoriteIcon.setVisible(true);

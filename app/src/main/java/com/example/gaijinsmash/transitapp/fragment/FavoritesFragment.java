@@ -29,8 +29,6 @@ public class FavoritesFragment extends Fragment {
     private TextView mError;
     private ListView mListView;
 
-    private Button mSearchButton;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

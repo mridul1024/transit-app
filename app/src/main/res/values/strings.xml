@@ -63,6 +63,7 @@
     <string name="action_delete">Delete</string>
     <string name="favorite_priority">Change Priority</string>
     <string name="deletion_success">Successfully Deleted</string>
+    <string name="favorite_added">Added to Favorites!</string>
 
     <!-- Help Fragment -->
     <string name="help_report_button">Report an Issue</string>

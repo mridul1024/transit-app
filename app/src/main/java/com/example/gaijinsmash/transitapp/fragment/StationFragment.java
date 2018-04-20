@@ -91,11 +91,11 @@ public class StationFragment extends Fragment {
         protected List<Station> doInBackground(Void... voids) {
             StationFragment frag = mWeakRef.get();
             frag.mProgressBar.setVisibility(View.VISIBLE);
+            StationDbHelper helper = new StationDbHelper(frag.getActivity());
             try {
-                StationDbHelper.initStationDb(frag.getActivity());
+                helper.initStationDb(frag.getActivity());
                 if(stationList == null) {
-                    StationDatabase db = StationDatabase.getRoomDB(frag.getActivity());
-                    stationList = db.getStationDAO().getAllStations();
+                    stationList = helper.getDb().getStationDAO().getAllStations();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

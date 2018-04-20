@@ -57,6 +57,8 @@ public class TripFragment extends Fragment {
     private View mInflatedView;
     private TripFragment mTripFragment = this;
 
+    private static boolean DEBUG = true;
+
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
     //---------------------------------------------------------------------------------------------
@@ -182,8 +184,8 @@ public class TripFragment extends Fragment {
         });
 
         // Submit Button
-        Button mSearchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
-        mSearchBtn.setOnClickListener(new View.OnClickListener() {
+        Button searchBtn = (Button) mInflatedView.findViewById(R.id.schedule_button);
+        searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String departingStation = mDepartureActv.getText().toString();
@@ -222,16 +224,22 @@ public class TripFragment extends Fragment {
 
     private static class GetTripTask extends AsyncTask<Void, Void, Boolean> {
         private WeakReference<TripFragment> mWeakRef;
-        private TripXMLParser routeXMLParser = null;
-        private List<FullTrip> mTripList = null;
+        private TripXMLParser tripXMLParser = null;
+        private List<FullTrip> mFullTripList = null;
         private String mDepartingStn, mArrivingStn, mDepartAbbr, mArriveAbbr, mDate, mTime;
 
         private GetTripTask(TripFragment context, String departingStn, String arrivingStn, String date, String time) {
             mWeakRef = new WeakReference<>(context);
-            mDate = date;
-            mTime = time;
             mDepartingStn = departingStn;
             mArrivingStn = arrivingStn;
+            mDate = date;
+            mTime = time;
+            if(DEBUG) {
+                Log.i("depart", mDepartingStn);
+                Log.i("arrive", mArrivingStn);
+                Log.i("date", mDate);
+                Log.i("time", mTime);
+            }
         }
 
         @Override
@@ -240,22 +248,24 @@ public class TripFragment extends Fragment {
             boolean result = false;
             // Create the API Call
             try {
-                StationDbHelper.initStationDb(frag.getActivity());
-                mDepartAbbr = StationDbHelper.getAbbrFromDb(mDepartingStn, frag.getActivity());
-                mArriveAbbr = StationDbHelper.getAbbrFromDb(mArrivingStn, frag.getActivity());
+                StationDbHelper helper = new StationDbHelper(frag.getActivity());
+                helper.initStationDb(frag.getActivity());
+                mDepartAbbr = helper.getAbbrFromDb(mDepartingStn);
+                Log.i("mDepartAbbr", mDepartAbbr);
+                mArriveAbbr = helper.getAbbrFromDb(mArrivingStn);
+                Log.i("mArriveAbbr", mArriveAbbr);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             String uri = ApiStringBuilder.getDetailedRoute(mDepartAbbr, mArriveAbbr, mDate, mTime);
             try {
-                routeXMLParser = new TripXMLParser(frag.getActivity());
-                mTripList = routeXMLParser.getList(uri);
+                tripXMLParser = new TripXMLParser(frag.getActivity());
+                mFullTripList = tripXMLParser.getList(uri);
             } catch (IOException | XmlPullParserException e){
                 e.printStackTrace();
                 Toast.makeText(frag.getActivity(), frag.getResources().getText(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
-            if (mTripList != null) {
+            if (mFullTripList != null) {
                 result = true;
             }
             return result;
@@ -267,14 +277,15 @@ public class TripFragment extends Fragment {
             if (result) {
                 // add list to parcelable bundle
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("TripList", (ArrayList<? extends Parcelable>) mTripList);
+                bundle.putParcelableArrayList("FullTripList", (ArrayList<? extends Parcelable>) mFullTripList);
                 bundle.putString("Origin", mDepartAbbr);
                 bundle.putString("Destination", mArriveAbbr);
+
                 // Switch to BartResultsFragment
                 Fragment newFrag = new BartResultsFragment();
                 newFrag.setArguments(bundle);
                 FragmentManager fm = frag.getFragmentManager();
-                fm.beginTransaction().replace(R.id.fragmentContent, newFrag).commit();
+                fm.beginTransaction().replace(R.id.fragmentContent, newFrag).addToBackStack(null).commit();
             } else {
                 Toast.makeText(frag.getActivity(),frag.getResources().getString(R.string.error_try_again),Toast.LENGTH_SHORT).show();
             }

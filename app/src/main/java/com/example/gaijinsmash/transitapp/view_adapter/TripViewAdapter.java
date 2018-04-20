@@ -1,10 +1,11 @@
 package com.example.gaijinsmash.transitapp.view_adapter;
 
-import android.app.Fragment;
+import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.text.style.TtsSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,23 +20,23 @@ import com.example.gaijinsmash.transitapp.database.StationDatabase;
 import com.example.gaijinsmash.transitapp.database.StationDbHelper;
 import com.example.gaijinsmash.transitapp.fragment.BartResultsFragment;
 import com.example.gaijinsmash.transitapp.model.bart.FullTrip;
-import com.example.gaijinsmash.transitapp.model.bart.Station;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnClickListener {
+
     private BartResultsFragment mFragment;
     private Context mContext;
+    private static final boolean DEBUG = true;
 
     public TripViewAdapter(List<FullTrip> data, Context context, BartResultsFragment fragment) {
         super(context, R.layout.trip_list_row, data);
-        this.mContext = context;
-        this.mFragment = fragment;
+        mContext = context;
+        mFragment = fragment;
     }
 
     private static class ViewHolder {
@@ -80,16 +81,12 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
         //FullTrip trip = (FullTrip) object;
     }
 
-    private int lastPosition = -1;
-
     @NonNull
     @Override
     public View getView(int position, View convertView , @NonNull ViewGroup parent) {
         FullTrip fullTrip = getItem(position);
         TripViewAdapter.ViewHolder viewHolder;
         final View view;
-
-        //TODO REVIEW NULL CHECKS - may be causing infinite loop.
 
         if(convertView == null) {
             viewHolder = new TripViewAdapter.ViewHolder();
@@ -134,25 +131,114 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
             viewHolder = (TripViewAdapter.ViewHolder) convertView.getTag();
             view = convertView;
         }
-        if (fullTrip != null && fullTrip.getTrip() != null) {
+
+        if (fullTrip != null) {
             viewHolder.origTimeDate.setText(fullTrip.getTrip().getOrigTimeDate());
             viewHolder.tripTime.setText(fullTrip.getTrip().getTripTime());
+            viewHolder.clipper.setText(fullTrip.getFareList().get(0).getFareAmount());
+            viewHolder.fare.setText(fullTrip.getFareList().get(1).getFareAmount());
+            setTripViews2(fullTrip, viewHolder);
+        } else {
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.error_try_again), Toast.LENGTH_SHORT).show();
         }
-        if (fullTrip != null) {
+        return convertView;
+    }
 
-            viewHolder.origin.setText(fullTrip.getLegList().get(0).getOrigin());
-            viewHolder.destination.setText(fullTrip.getLegList().get(0).getDestination());
+    private void setTripViews2(FullTrip fullTrip, ViewHolder viewHolder) {
+        int length = fullTrip.getLegList().size();
+        Log.i("length of leg list", String.valueOf(length));
+        if(length > 0) {
+            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 1).execute();
+            setColoredBar(fullTrip.getLegList().get(0).getLine(), viewHolder, 1);
+        }
+        if(length > 1) {
+            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 2).execute();
+            setColoredBar(fullTrip.getLegList().get(1).getLine(), viewHolder, 2);
+        } else {
+            if(DEBUG) {
+                Log.i("Leg 2", "skipped");
+            }
+            viewHolder.imageView1.setVisibility(View.GONE);
+            viewHolder.origin2.setVisibility(View.GONE);
+            viewHolder.destination2.setVisibility(View.GONE);
+            viewHolder.origTimeMin2.setVisibility(View.GONE);
+            viewHolder.destTimeMin2.setVisibility(View.GONE);
+            viewHolder.coloredBar2.setVisibility(View.GONE);
+            viewHolder.departTitle2.setVisibility(View.GONE);
+            viewHolder.arriveTitle2.setVisibility(View.GONE);
+        }
+        if(length > 2) {
+            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 3).execute();
+            setColoredBar(fullTrip.getLegList().get(2).getLine(), viewHolder, 3);
+        } else {
+            if(DEBUG) {
+                Log.i("Leg 3", "skipped");
+            }
+            viewHolder.imageView2.setVisibility(View.GONE);
+            viewHolder.origin3.setVisibility(View.GONE);
+            viewHolder.destination3.setVisibility(View.GONE);
+            viewHolder.origTimeMin3.setVisibility(View.GONE);
+            viewHolder.destTimeMin3.setVisibility(View.GONE);
+            viewHolder.coloredBar3.setVisibility(View.GONE);
+            viewHolder.departTitle3.setVisibility(View.GONE);
+            viewHolder.arriveTitle3.setVisibility(View.GONE);
+        }
+    }
 
-            //new GetStationNameFromDBTask(mFragment, fullTrip.getLegList().get(0).getOrigin(),
-              //      fullTrip.getLegList().get(0).getDestination(), 1).execute();
-        }
-        if (fullTrip != null) {
-            viewHolder.origTimeMin.setText(fullTrip.getLegList().get(0).getOrigTimeMin());
-        }
-        if (fullTrip != null) {
-            viewHolder.destTimeMin.setText(fullTrip.getLegList().get(0).getDestTimeMin());
-        }
+    private void setTripViews(FullTrip fullTrip, ViewHolder viewHolder) {
+        int length = fullTrip.getLegList().size();
 
+        if(length == 1) {
+            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 1).execute();
+            setColoredBar(fullTrip.getLegList().get(0).getLine(), viewHolder, 1);
+
+            // Remove Views
+            viewHolder.imageView1.setVisibility(View.GONE);
+            viewHolder.origin2.setVisibility(View.GONE);
+            viewHolder.destination2.setVisibility(View.GONE);
+            viewHolder.origTimeMin2.setVisibility(View.GONE);
+            viewHolder.destTimeMin2.setVisibility(View.GONE);
+            viewHolder.coloredBar2.setVisibility(View.GONE);
+            viewHolder.departTitle2.setVisibility(View.GONE);
+            viewHolder.arriveTitle2.setVisibility(View.GONE);
+
+            viewHolder.imageView2.setVisibility(View.GONE);
+            viewHolder.origin3.setVisibility(View.GONE);
+            viewHolder.destination3.setVisibility(View.GONE);
+            viewHolder.origTimeMin3.setVisibility(View.GONE);
+            viewHolder.destTimeMin3.setVisibility(View.GONE);
+            viewHolder.coloredBar3.setVisibility(View.GONE);
+            viewHolder.departTitle3.setVisibility(View.GONE);
+            viewHolder.arriveTitle3.setVisibility(View.GONE);
+        }
+        if(length == 2) {
+            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 1).execute();
+            setColoredBar(fullTrip.getLegList().get(0).getLine(), viewHolder, 1);
+            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 2).execute();
+            setColoredBar(fullTrip.getLegList().get(1).getLine(), viewHolder, 2);
+
+            // Remove Views
+            viewHolder.imageView2.setVisibility(View.GONE);
+            viewHolder.origin3.setVisibility(View.GONE);
+            viewHolder.destination3.setVisibility(View.GONE);
+            viewHolder.origTimeMin3.setVisibility(View.GONE);
+            viewHolder.destTimeMin3.setVisibility(View.GONE);
+            viewHolder.coloredBar3.setVisibility(View.GONE);
+            viewHolder.departTitle3.setVisibility(View.GONE);
+            viewHolder.arriveTitle3.setVisibility(View.GONE);
+        }
+        if(length == 3) {
+            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 1).execute();
+            setColoredBar(fullTrip.getLegList().get(0).getLine(), viewHolder, 1);
+            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 2).execute();
+            setColoredBar(fullTrip.getLegList().get(1).getLine(), viewHolder, 2);
+            new SetResultViewsTask(mFragment, viewHolder, fullTrip, 3).execute();
+            setColoredBar(fullTrip.getLegList().get(2).getLine(), viewHolder, 3);
+        }
+    }
+
+    private void setColoredBar(String route, ViewHolder viewHolder, int leg) {
+        // Train Route Colors
         int blueLine = ContextCompat.getColor(mContext, R.color.bartBlueLine); //#0099cc
         int redLine = ContextCompat.getColor(mContext, R.color.bartRedLine); //#ff0000
         int greenLine = ContextCompat.getColor(mContext, R.color.bartGreenLine); //#339933
@@ -161,168 +247,133 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
         int grayLine = ContextCompat.getColor(mContext, R.color.bartOakAirport);
         int defaultLine = ContextCompat.getColor(mContext, R.color.bartDefault);
 
-        if (fullTrip != null) {
-            switch(fullTrip.getLegList().get(0).getLine()) {
+        if(leg == 1) {
+            switch(route) {
                 case "ROUTE 1": viewHolder.coloredBar1.setBackgroundColor(yellowLine);
-                                break;
+                    break;
                 case "ROUTE 2": viewHolder.coloredBar1.setBackgroundColor(yellowLine);
-                                break;
+                    break;
                 case "ROUTE 3": viewHolder.coloredBar1.setBackgroundColor(orangeLine);
-                                break;
+                    break;
                 case "ROUTE 4": viewHolder.coloredBar1.setBackgroundColor(orangeLine);
-                                break;
+                    break;
                 case "ROUTE 5": viewHolder.coloredBar1.setBackgroundColor(greenLine);
-                                break;
+                    break;
                 case "ROUTE 6": viewHolder.coloredBar1.setBackgroundColor(greenLine);
-                                break;
+                    break;
                 case "ROUTE 7": viewHolder.coloredBar1.setBackgroundColor(redLine);
-                                break;
+                    break;
                 case "ROUTE 8":  viewHolder.coloredBar1.setBackgroundColor(redLine);
-                                break;
+                    break;
                 case "ROUTE 11": viewHolder.coloredBar1.setBackgroundColor(blueLine);
-                                break;
+                    break;
                 case "ROUTE 12": viewHolder.coloredBar1.setBackgroundColor(blueLine);
-                                break;
+                    break;
                 case "ROUTE 19": viewHolder.coloredBar1.setBackgroundColor(grayLine);
-                                break;
+                    break;
                 case "ROUTE 20": viewHolder.coloredBar1.setBackgroundColor(grayLine);
-                                break;
+                    break;
                 default:        viewHolder.coloredBar1.setBackgroundColor(defaultLine);
-                                break;
+                    break;
             }
         }
-
-        if (fullTrip != null) {
-            if (fullTrip.getLegList().size() == 2) {
-                //viewHolder.origin2.setText(fullTrip.getLegList().get(1).getOrigin());
-                //viewHolder.destination2.setText(fullTrip.getLegList().get(1).getDestination());
-                //new GetStationNameFromDBTask(mFragment, fullTrip.getLegList().get(1).getOrigin(),
-                       // fullTrip.getLegList().get(1).getDestination(), 2).execute();
-                viewHolder.origin2.setText(fullTrip.getLegList().get(1).getOrigin());
-                viewHolder.destination2.setText(fullTrip.getLegList().get(1).getDestination());
-                viewHolder.origTimeMin2.setText(fullTrip.getLegList().get(1).getOrigTimeMin());
-                viewHolder.destTimeMin2.setText(fullTrip.getLegList().get(1).getDestTimeMin());
-                switch(fullTrip.getLegList().get(1).getLine()) {
-                    case "ROUTE 1": viewHolder.coloredBar2.setBackgroundColor(yellowLine);
-                        break;
-                    case "ROUTE 2": viewHolder.coloredBar2.setBackgroundColor(yellowLine);
-                        break;
-                    case "ROUTE 3": viewHolder.coloredBar2.setBackgroundColor(orangeLine);
-                        break;
-                    case "ROUTE 4": viewHolder.coloredBar2.setBackgroundColor(orangeLine);
-                        break;
-                    case "ROUTE 5": viewHolder.coloredBar2.setBackgroundColor(greenLine);
-                        break;
-                    case "ROUTE 6": viewHolder.coloredBar2.setBackgroundColor(greenLine);
-                        break;
-                    case "ROUTE 7": viewHolder.coloredBar2.setBackgroundColor(redLine);
-                        break;
-                    case "ROUTE 8":  viewHolder.coloredBar2.setBackgroundColor(redLine);
-                        break;
-                    case "ROUTE 11": viewHolder.coloredBar2.setBackgroundColor(blueLine);
-                        break;
-                    case "ROUTE 12": viewHolder.coloredBar2.setBackgroundColor(blueLine);
-                        break;
-                    case "ROUTE 19": viewHolder.coloredBar2.setBackgroundColor(grayLine);
-                        break;
-                    case "ROUTE 20": viewHolder.coloredBar2.setBackgroundColor(grayLine);
-                        break;
-                    default:        viewHolder.coloredBar2.setBackgroundColor(defaultLine);
-                        break;
-                }
-            } else { // Hide Text Views if no data is present, bottom textviews will automatically move up because of LinearLayout behavior
-                viewHolder.imageView1.setVisibility(View.GONE);
-                viewHolder.origin2.setVisibility(View.GONE);
-                viewHolder.destination2.setVisibility(View.GONE);
-                viewHolder.origTimeMin2.setVisibility(View.GONE);
-                viewHolder.destTimeMin2.setVisibility(View.GONE);
-                viewHolder.coloredBar2.setVisibility(View.GONE);
-                viewHolder.departTitle2.setVisibility(View.GONE);
-                viewHolder.arriveTitle2.setVisibility(View.GONE);
+        if(leg == 2) {
+            switch(route) {
+                case "ROUTE 1": viewHolder.coloredBar2.setBackgroundColor(yellowLine);
+                    break;
+                case "ROUTE 2": viewHolder.coloredBar2.setBackgroundColor(yellowLine);
+                    break;
+                case "ROUTE 3": viewHolder.coloredBar2.setBackgroundColor(orangeLine);
+                    break;
+                case "ROUTE 4": viewHolder.coloredBar2.setBackgroundColor(orangeLine);
+                    break;
+                case "ROUTE 5": viewHolder.coloredBar2.setBackgroundColor(greenLine);
+                    break;
+                case "ROUTE 6": viewHolder.coloredBar2.setBackgroundColor(greenLine);
+                    break;
+                case "ROUTE 7": viewHolder.coloredBar2.setBackgroundColor(redLine);
+                    break;
+                case "ROUTE 8":  viewHolder.coloredBar2.setBackgroundColor(redLine);
+                    break;
+                case "ROUTE 11": viewHolder.coloredBar2.setBackgroundColor(blueLine);
+                    break;
+                case "ROUTE 12": viewHolder.coloredBar2.setBackgroundColor(blueLine);
+                    break;
+                case "ROUTE 19": viewHolder.coloredBar2.setBackgroundColor(grayLine);
+                    break;
+                case "ROUTE 20": viewHolder.coloredBar2.setBackgroundColor(grayLine);
+                    break;
+                default:        viewHolder.coloredBar2.setBackgroundColor(defaultLine);
+                    break;
             }
         }
-
-        if (fullTrip != null) {
-            if (fullTrip.getLegList().size() == 3) {
-                //viewHolder.origin2.setText(fullTrip.getLegList().get(2).getOrigin());
-                //viewHolder.destination2.setText(fullTrip.getLegList().get(2).getDestination());
-                //new GetStationNameFromDBTask(mFragment, fullTrip.getLegList().get(2).getOrigin(),
-                      //  fullTrip.getLegList().get(2).getDestination(), 3).execute();
-                viewHolder.origin3.setText(fullTrip.getLegList().get(2).getOrigin());
-                viewHolder.destination3.setText(fullTrip.getLegList().get(2).getDestination());
-                viewHolder.origTimeMin2.setText(fullTrip.getLegList().get(2).getOrigTimeMin());
-                viewHolder.destTimeMin2.setText(fullTrip.getLegList().get(2).getDestTimeMin());
-                switch(fullTrip.getLegList().get(2).getLine()) {
-                    case "ROUTE 1": viewHolder.coloredBar3.setBackgroundColor(yellowLine);
-                        break;
-                    case "ROUTE 2": viewHolder.coloredBar3.setBackgroundColor(yellowLine);
-                        break;
-                    case "ROUTE 3": viewHolder.coloredBar3.setBackgroundColor(orangeLine);
-                        break;
-                    case "ROUTE 4": viewHolder.coloredBar3.setBackgroundColor(orangeLine);
-                        break;
-                    case "ROUTE 5": viewHolder.coloredBar3.setBackgroundColor(greenLine);
-                        break;
-                    case "ROUTE 6": viewHolder.coloredBar3.setBackgroundColor(greenLine);
-                        break;
-                    case "ROUTE 7": viewHolder.coloredBar3.setBackgroundColor(redLine);
-                        break;
-                    case "ROUTE 8":  viewHolder.coloredBar3.setBackgroundColor(redLine);
-                        break;
-                    case "ROUTE 11": viewHolder.coloredBar3.setBackgroundColor(blueLine);
-                        break;
-                    case "ROUTE 12": viewHolder.coloredBar3.setBackgroundColor(blueLine);
-                        break;
-                    case "ROUTE 19": viewHolder.coloredBar3.setBackgroundColor(grayLine);
-                        break;
-                    case "ROUTE 20": viewHolder.coloredBar3.setBackgroundColor(grayLine);
-                        break;
-                    default:        viewHolder.coloredBar3.setBackgroundColor(defaultLine);
-                        break;
-                }
-            } else { // Hide Text Views if no data is present and  move bottom TextViews up
-                viewHolder.imageView2.setVisibility(View.GONE);
-                viewHolder.origin3.setVisibility(View.GONE);
-                viewHolder.destination3.setVisibility(View.GONE);
-                viewHolder.origTimeMin3.setVisibility(View.GONE);
-                viewHolder.destTimeMin3.setVisibility(View.GONE);
-                viewHolder.coloredBar3.setVisibility(View.GONE);
-                viewHolder.departTitle3.setVisibility(View.GONE);
-                viewHolder.arriveTitle3.setVisibility(View.GONE);
+        if(leg == 3) {
+            switch(route) {
+                case "ROUTE 1": viewHolder.coloredBar3.setBackgroundColor(yellowLine);
+                    break;
+                case "ROUTE 2": viewHolder.coloredBar3.setBackgroundColor(yellowLine);
+                    break;
+                case "ROUTE 3": viewHolder.coloredBar3.setBackgroundColor(orangeLine);
+                    break;
+                case "ROUTE 4": viewHolder.coloredBar3.setBackgroundColor(orangeLine);
+                    break;
+                case "ROUTE 5": viewHolder.coloredBar3.setBackgroundColor(greenLine);
+                    break;
+                case "ROUTE 6": viewHolder.coloredBar3.setBackgroundColor(greenLine);
+                    break;
+                case "ROUTE 7": viewHolder.coloredBar3.setBackgroundColor(redLine);
+                    break;
+                case "ROUTE 8":  viewHolder.coloredBar3.setBackgroundColor(redLine);
+                    break;
+                case "ROUTE 11": viewHolder.coloredBar3.setBackgroundColor(blueLine);
+                    break;
+                case "ROUTE 12": viewHolder.coloredBar3.setBackgroundColor(blueLine);
+                    break;
+                case "ROUTE 19": viewHolder.coloredBar3.setBackgroundColor(grayLine);
+                    break;
+                case "ROUTE 20": viewHolder.coloredBar3.setBackgroundColor(grayLine);
+                    break;
+                default:        viewHolder.coloredBar3.setBackgroundColor(defaultLine);
+                    break;
             }
         }
-
-        if (fullTrip != null) {
-            viewHolder.fare.setText(fullTrip.getFareList().get(1).getFareAmount());
-            viewHolder.clipper.setText(fullTrip.getFareList().get(0).getFareAmount());
-        }
-        return convertView;
     }
 
-    private static class GetStationNameFromDBTask extends AsyncTask<Void, Void, Boolean> {
+    private static class SetResultViewsTask extends AsyncTask<Void, Void, Boolean> {
         private WeakReference<BartResultsFragment> mWeakRef;
         private String mOriginAbbr, mDestAbbr;
         private String mOriginResult, mDestResult;
-        private int mTextViewGroup = 0;
+        private int mLeg;
+        private FullTrip mFullTrip;
+        private ViewHolder mViewHolder;
 
-        private GetStationNameFromDBTask(BartResultsFragment context, String originAbbr, String destAbbr, int textViewGroup) {
-            mWeakRef = new WeakReference<>(context);
-            this.mOriginAbbr = originAbbr;
-            this.mDestAbbr = destAbbr;
-            this.mTextViewGroup = textViewGroup;
+
+        private SetResultViewsTask(BartResultsFragment context, ViewHolder viewHolder, FullTrip fullTrip, int leg) {
+            this.mWeakRef = new WeakReference<>(context);
+            this.mFullTrip = fullTrip;
+            this.mViewHolder = viewHolder;
+            this.mLeg = leg;
         }
 
         @Override
         protected Boolean doInBackground(Void...voids) {
-            BartResultsFragment context = mWeakRef.get();
+            BartResultsFragment context = mWeakRef.get(); //todo: should i use the context of the tripfragment?
+            mOriginAbbr = mFullTrip.getLegList().get(mLeg - 1).getOrigin();
+            mDestAbbr = mFullTrip.getLegList().get(mLeg - 1).getDestination();
             StationDatabase db = StationDatabase.getRoomDB(context.getActivity());
 
-            /*
-            mOriginResult = db.getStationDAO().getStationByAbbr(mOriginAbbr).getName();
-            Log.i("ORIGIN", mOriginResult);
-            mDestResult = db.getStationDAO().getStationByAbbr(mDestAbbr).getName();
-            Log.i("DESTINATION", mDestResult);
-            */
+            //StationDbHelper helper = new StationDbHelper(context.getActivity());
+            try {
+                mOriginResult = db.getStationDAO().getStationByAbbr(mOriginAbbr).getName();
+                mDestResult = db.getStationDAO().getStationByAbbr(mDestAbbr).getName();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                db.close();
+            }
+            Log.i("Async ORIGIN", mOriginResult);
+            Log.i("Async DESTINATION", mDestResult);
+
             return mOriginResult != null && mDestResult != null;
         }
 
@@ -330,28 +381,28 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
         protected void onPostExecute(Boolean result) {
             BartResultsFragment context = mWeakRef.get();
             if(result) {
-                TextView origin = null;
-                TextView destination = null;
-
-                switch(mTextViewGroup) {
+                switch(mLeg) {
                     case 1:
-                        origin = context.getActivity().findViewById(R.id.trip_origin_textView);
-                        destination = context.getActivity().findViewById(R.id.trip_destination_textView);
-                        origin.setText(mOriginResult);
-                        destination.setText(mDestResult);
+                        mViewHolder.origin.setText(mOriginResult);
+                        mViewHolder.destination.setText(mDestResult);
+                        mViewHolder.origTimeMin.setText(mFullTrip.getLegList().get(0).getOrigTimeMin());
+                        mViewHolder.destTimeMin.setText(mFullTrip.getLegList().get(0).getDestTimeMin());
+                        break;
                     case 2:
-                        origin = context.getActivity().findViewById(R.id.trip_origin_textView2);
-                        destination = context.getActivity().findViewById(R.id.trip_destination_textView2);
-                        origin.setText(mOriginResult);
-                        destination.setText(mDestResult);
+                        mViewHolder.origin2.setText(mOriginResult);
+                        mViewHolder.destination2.setText(mDestResult);
+                        mViewHolder.origTimeMin2.setText(mFullTrip.getLegList().get(1).getOrigTimeMin());
+                        mViewHolder.destTimeMin2.setText(mFullTrip.getLegList().get(1).getDestTimeMin());
+                        break;
                     case 3:
-                        origin = context.getActivity().findViewById(R.id.trip_origin_textView3);
-                        destination = context.getActivity().findViewById(R.id.trip_destination_textView3);
-                        origin.setText(mOriginResult);
-                        destination.setText(mDestResult);
+                        mViewHolder.origin3.setText(mOriginResult);
+                        mViewHolder.destination3.setText(mDestResult);
+                        mViewHolder.origTimeMin3.setText(mFullTrip.getLegList().get(2).getOrigTimeMin());
+                        mViewHolder.destTimeMin3.setText(mFullTrip.getLegList().get(2).getDestTimeMin());
+                        break;
                 }
             } else {
-                Toast.makeText(context.getActivity(), context.getResources().getString(R.string.error_try_again), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context.getActivity(), context.getString(R.string.error_try_again), Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -28,6 +28,14 @@ public class TripXMLParser implements XmlParserInterface {
     // require(int type, String namespace, String name) if namespace is null, will pass when matched against any name
     private static final String ns = null;
 
+    /**
+     *
+     * NOTE: All station names are returned abbreviated and they will be stored as such
+     *          in the FullTrip objects. Therefore, you will need to make a call to the
+     *          StationDatabase to fetch the full names later on.
+     *
+     */
+
     public TripXMLParser(Context mContext) {
         if(this.mContext == null)
             this.mContext = mContext;
@@ -326,22 +334,5 @@ public class TripXMLParser implements XmlParserInterface {
         leg.setOrigin(origin);
         leg.setDestination(destination);
         return leg;
-    }
-
-    class StationNameThread extends Thread {
-        String name;
-        String abbr;
-
-        StationNameThread(String abbr) {
-            this.abbr = abbr;
-        }
-        public void run() {
-            StationDatabase db = StationDatabase.getRoomDB(mContext);
-            name = db.getStationDAO().getStationByAbbr(abbr).getName();
-        }
-
-        public String getStationName() {
-            return name;
-        }
     }
 }

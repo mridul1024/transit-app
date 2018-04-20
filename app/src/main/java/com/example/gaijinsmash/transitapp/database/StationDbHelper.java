@@ -14,25 +14,24 @@ import java.util.List;
 
 public class StationDbHelper {
 
-    private StationDatabase mDatabase;
     private Context mContext;
+    StationDatabase mDatabase;
 
     public StationDbHelper(Context context) {
         this.mContext = context;
-        if(mDatabase == null) {
-            mDatabase = StationDatabase.getRoomDB(mContext);
-        }
+        mDatabase = StationDatabase.getRoomDB(context);
     }
 
-    public static void initStationDb(Context context) throws Exception {
+    public StationDatabase getDb() { return mDatabase; }
+
+    public void initStationDb(Context context) throws Exception {
         Log.i("init db", "Station DB");
-        StationDatabase db = StationDatabase.getRoomDB(context);
-        if(db.getStationDAO().countStations() == 0) {
+        if(mDatabase.getStationDAO().countStations() == 0) {
             List<Station> stationList = null;
             StationXmlParser parser = new StationXmlParser(context);
             stationList = parser.getList(ApiStringBuilder.getAllStations());
             for(Station x : stationList) {
-                db.getStationDAO().addStation(x);
+                mDatabase.getStationDAO().addStation(x);
             }
         } else {
             Log.i("initStationDB", "SKIPPING");
@@ -40,23 +39,20 @@ public class StationDbHelper {
     }
 
     public String getNameFromAbbr(String abbr) throws XmlPullParserException, IOException {
-        StationDatabase db = StationDatabase.getRoomDB(mContext);
-        Station station = db.getStationDAO().getStationByAbbr(abbr);
+        Station station = mDatabase.getStationDAO().getStationByAbbr(abbr);
         Log.i("getNameFromAbbr()", station.getName());
         return station.getName();
     }
 
     public String getAbbrFromName(String stationName) throws XmlPullParserException, IOException {
         Log.i("STATION NAME: ", stationName);
-        StationDatabase db = StationDatabase.getRoomDB(mContext);
-        Station station = db.getStationDAO().getStationByName(stationName);
+        Station station = mDatabase.getStationDAO().getStationByName(stationName);
         return station.getAbbreviation();
     }
 
-    public static String getAbbrFromDb(String stationName, Context context) throws XmlPullParserException, IOException {
+    public String getAbbrFromDb(String stationName) throws XmlPullParserException, IOException {
         Log.i("STATION NAME: ", stationName);
-        StationDatabase db = StationDatabase.getRoomDB(context);
-        Station station = db.getStationDAO().getStationByName(stationName);
+        Station station = mDatabase.getStationDAO().getStationByName(stationName);
         return station.getAbbreviation();
     }
 }
