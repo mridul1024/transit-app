@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/fragment_map_container">
+    android:id="@+id/fragment_map_container"
+    android:paddingBottom="50dp">
         <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -12,8 +13,6 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/bart_lines_map_description"
                     android:elevation="1dp"
-                    android:scaleType="matrix"
-                    android:src="@drawable/bart_map"
-                    />
+                    android:scaleType="matrix" />
         </HorizontalScrollView>
 </ScrollView>
