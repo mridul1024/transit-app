@@ -19,16 +19,6 @@ public class CheckInternet {
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
-    // Check if wifi is active
-    public static boolean isWifiActive(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = null;
-        if (cm != null) {
-            activeNetwork = cm.getActiveNetworkInfo();
-        }
-        return activeNetwork != null && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
-    }
-
     public static boolean isGPSEnabled(Context context) {
         LocationManager lm = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         return lm != null && lm.isProviderEnabled(LocationManager.GPS_PROVIDER);

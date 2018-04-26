@@ -33,7 +33,7 @@ public class HelpFragment extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("message/rfc822")
                         .putExtra(Intent.EXTRA_EMAIL, new String[] {"zuk0.hack@gmail.com"})
-                        .putExtra(Intent.EXTRA_SUBJECT, "BUG REPORT")
+                        .putExtra(Intent.EXTRA_SUBJECT, "***RIDERZ BUG REPORT***")
                         .putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.help_intent_text));
                 startActivity(Intent.createChooser(intent, getResources().getString(R.string.help_intent_title)));
             }

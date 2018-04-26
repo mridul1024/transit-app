@@ -52,7 +52,7 @@ public class TripFragment extends Fragment {
     private SimpleDateFormat mSimpleDateFormat;
     private AutoCompleteTextView mDepartureActv, mArrivalActv;
     private TextInputEditText mTimeEt, mDateEt;
-    boolean mIs24HrTimeOn = false;
+    private boolean mIs24HrTimeOn = false;
     private View mInflatedView;
     private TripFragment mTripFragment;
 
@@ -121,12 +121,12 @@ public class TripFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
         // Departure UI
-        mDepartureActv = mInflatedView.findViewById(R.id.schedule_autoCompleteTextView);
+        mDepartureActv = mInflatedView.findViewById(R.id.trip_autoCompleteTextView);
         mDepartureActv.setThreshold(1); // will start working from first character
         mDepartureActv.setAdapter(textViewAdapter);
 
         // Arrival UI
-        mArrivalActv = mInflatedView.findViewById(R.id.schedule_autoCompleteTextView2);
+        mArrivalActv = mInflatedView.findViewById(R.id.trip_autoCompleteTextView2);
         mArrivalActv.setThreshold(1);
         mArrivalActv.setAdapter(textViewAdapter);
 
@@ -186,7 +186,7 @@ public class TripFragment extends Fragment {
         });
 
         // Submit Button
-        Button searchBtn = mInflatedView.findViewById(R.id.schedule_button);
+        Button searchBtn = mInflatedView.findViewById(R.id.trip_button);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

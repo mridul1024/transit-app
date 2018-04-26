@@ -16,8 +16,8 @@ import com.zuk0.gaijinsmash.riderz.R;
 
 public class SettingsFragment extends PreferenceFragment {
 
-    public static String PREFS_NAME = "TIME_PREFS";
-    public static String PREFS_KEY = "TIME_KEY";
+    private static String PREFS_NAME = "TIME_PREFS";
+    private static String PREFS_KEY = "TIME_KEY";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
-    public void save(Context context, boolean result) {
+    private void save(Context context, boolean result) {
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(PREFS_KEY, result);

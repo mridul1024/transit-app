@@ -95,6 +95,7 @@
         <item>16th St. Mission</item>
         <item>19th St. Oakland</item>
         <item>24th St. Mission</item>
+        <item>Antioch</item>
         <item>Ashby</item>
         <item>Balboa Park</item>
         <item>Bay Fair</item>
@@ -123,6 +124,7 @@
         <item>Oakland International Airport</item>
         <item>Orinda</item>
         <item>Pittsburg/Bay Point</item>
+        <item>Pittsburg Center</item>
         <item>Pleasant Hill/Contra Costa Centre</item>
         <item>Powell St.</item>
         <item>Richmond</item>
@@ -212,4 +214,13 @@
     <string name="preference_checkbox_title2">24 Hour Format</string>
     <string name="preference_button">Save</string>
     <string name="cannot_do_this">\"Sorry, can\'t do this right now. Please try again in a bit.\"</string>
+    <string name="help_q1">Q: Will there be features added in the future?</string>
+    <string name="help_a1">A: Yes! Next up is MUNI :)</string>
+    <string name="help_q2">Q: Will this app be on iOS soon?</string>
+    <string name="help_a2">A: Unfortunately not at the moment, but it will be considered if demand is high enough.</string>
+    <string name="help_q3">Q: Is this app open source?</string>
+    <string name="help_a3">A: Yes! This is a non-profit, open source app. Developers can go to this link below for more information.</string>
+    <string name="help_url">https://github.com/rjsuzuki/transit-app</string>
+    <string name="help_q4">Q: What if I found a problem?</string>
+    <string name="help_a4">A: If you have found an application problem that you would like to report, please click the button just below and send us an email :)</string>
 </resources>

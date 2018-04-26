@@ -60,7 +60,6 @@ public class StationInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                //String stationAddress = ((TextView) view.findViewById(R.id.stationInfo_address_textView)).getText().toString();
                 bundle.putString("StationTitle",mStationObject.getName());
                 bundle.putString("StationLat", String.valueOf(mStationObject.getLatitude()));
                 bundle.putString("StationLong", String.valueOf(mStationObject.getLongitude()));

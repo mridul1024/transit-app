@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             super.onBackPressed()
             val count = mFragmentManager.backStackEntryCount
             if(count == 0) {
-                super.onBackPressed();
+                super.onBackPressed()
                 //todo: add something
             } else {
                 val currentFrag = mFragmentManager.findFragmentById(R.id.fragmentContent)

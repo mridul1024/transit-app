@@ -189,7 +189,7 @@ public class BartResultsFragment extends Fragment {
     //---------------------------------------------------------------------------------------------
     // Helper Methods
     //---------------------------------------------------------------------------------------------
-    public static boolean initFavorites(FavoriteDatabase db, Favorite favorite) {
+    private static boolean initFavorites(FavoriteDatabase db, Favorite favorite) {
         if(db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin()) != null) {
             //if found, check what destination is
             List<Favorite> list = db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin());
@@ -203,11 +203,11 @@ public class BartResultsFragment extends Fragment {
         return false;
     }
 
-    public static void addToFavorites(FavoriteDatabase db, Favorite favorite) {
+    private static void addToFavorites(FavoriteDatabase db, Favorite favorite) {
         db.getFavoriteDAO().addStation(favorite);
     }
 
-    public static void removeFromFavorites(FavoriteDatabase db, Favorite favorite) {
+    private static void removeFromFavorites(FavoriteDatabase db, Favorite favorite) {
         db.getFavoriteDAO().delete(favorite);
     }
 }

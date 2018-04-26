@@ -193,7 +193,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     // Helpers
     //---------------------------------------------------------------------------------------------
 
-    public void initMapSettings(GoogleMap map) {
+    private void initMapSettings(GoogleMap map) {
         // Set boundary of map area
         LatLngBounds bayArea = new LatLngBounds(
                 new LatLng(37.2982, -121.5363), //southwest

@@ -34,11 +34,11 @@ public class FullTrip implements Parcelable {
     public FullTrip() {
     }
 
-    protected FullTrip(Parcel in) {
+    private FullTrip(Parcel in) {
         this.trip = in.readParcelable(Trip.class.getClassLoader());
-        this.fareList = new ArrayList<Fare>();
+        this.fareList = new ArrayList<>();
         in.readList(this.fareList, Fare.class.getClassLoader());
-        this.legList = new ArrayList<Leg>();
+        this.legList = new ArrayList<>();
         in.readList(this.legList, Leg.class.getClassLoader());
     }
 

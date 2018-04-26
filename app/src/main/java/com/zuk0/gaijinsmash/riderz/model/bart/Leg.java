@@ -93,7 +93,7 @@ public class Leg implements Parcelable {
     public Leg() {
     }
 
-    protected Leg(Parcel in) {
+    private Leg(Parcel in) {
         this.origin = in.readString();
         this.destination = in.readString();
         this.order = in.readInt();

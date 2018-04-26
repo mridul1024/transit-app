@@ -2,10 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    android:id="@+id/trip_container">
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
+        android:id="@+id/trip_linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -16,12 +17,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <AutoCompleteTextView
-                android:id="@+id/schedule_autoCompleteTextView"
+                android:id="@+id/trip_autoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/departure_station"
-                android:labelFor="@id/schedule_autoCompleteTextView" />
+                android:labelFor="@id/trip_autoCompleteTextView" />
         </android.support.design.widget.TextInputLayout>
         <Spinner
             android:id="@+id/station_spinner1"
@@ -31,10 +32,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/trip_linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout1"
+        android:layout_below="@+id/trip_linearLayout1"
         android:layout_marginTop="20dp"
         android:orientation="horizontal">
         <android.support.design.widget.TextInputLayout
@@ -42,12 +43,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <AutoCompleteTextView
-                android:id="@+id/schedule_autoCompleteTextView2"
+                android:id="@+id/trip_autoCompleteTextView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/arrival_station"
-                android:labelFor="@id/schedule_autoCompleteTextView2" />
+                android:labelFor="@id/trip_autoCompleteTextView2" />
         </android.support.design.widget.TextInputLayout>
         <Spinner
             android:id="@+id/station_spinner2"
@@ -56,10 +57,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/trip_linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout2"
+        android:layout_below="@+id/trip_linearLayout2"
         android:layout_marginTop="20dp"
         android:orientation="horizontal" android:baselineAligned="false">
         <android.support.design.widget.TextInputLayout
@@ -93,10 +94,10 @@
 
     <Button
         style="@style/ButtonAppTheme"
-        android:id="@+id/schedule_button"
+        android:id="@+id/trip_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/schedule_button"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/linearLayout3" />
+        android:layout_below="@+id/trip_linearLayout3" />
 </RelativeLayout>

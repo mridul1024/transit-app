@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.StationDatabase;
-import com.zuk0.gaijinsmash.riderz.database.StationDatabase_Impl;
 import com.zuk0.gaijinsmash.riderz.fragment.BartResultsFragment;
 import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
 

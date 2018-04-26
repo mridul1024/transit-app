@@ -28,7 +28,7 @@ public class Fare implements Parcelable {
     public Fare() {
     }
 
-    protected Fare(Parcel in) {
+    private Fare(Parcel in) {
         this.fareAmount = in.readString();
         this.fareClass = in.readString();
         this.fareName = in.readString();

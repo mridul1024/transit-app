@@ -21,7 +21,7 @@ public class Trip implements Parcelable {
 
     public Trip() { }
 
-    protected Trip(Parcel in) {
+    private Trip(Parcel in) {
         origin = in.readString();
         destination = in.readString();
         fare = in.readString();

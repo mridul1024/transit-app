@@ -43,7 +43,7 @@ public class TimeAndDate {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        sdf = new SimpleDateFormat("mm/dd/yyyy", Locale.US);
+        sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
         output = sdf.format(date);
         return output;
     }

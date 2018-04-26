@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +58,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mProgressBar = mInflatedView.findViewById(R.id.home_progressBar);
         mBsaTimeTv = mInflatedView.findViewById(R.id.home_view_timeTv);
-        mBsaListView = mInflatedView.findViewById(R.id.advisory_listView);
+        mBsaListView = mInflatedView.findViewById(R.id.home_listView);
         ImageView imageView = mInflatedView.findViewById(R.id.home_banner_imageView);
 
         int hour = TimeAndDate.getCurrentHour();
