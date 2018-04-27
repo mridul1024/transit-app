@@ -47,6 +47,7 @@ public class TimeAndDateTest {
         assertTrue("Time is converted properly", expected2.equals(result2));
     }
 
+    /*
     @Test
     public void convertTo12HrTest() {
         String input = "17:11:00 PM PST";
@@ -61,7 +62,7 @@ public class TimeAndDateTest {
         String expected4 = "08:04 PM PST";
         assertTrue("Time is converted properly", expected3.equalsIgnoreCase(result2) || expected4.equalsIgnoreCase(result2));
     }
-
+    */
     @Test
     public void convertTo12HrForTripTest() {
         String input = "22:01";

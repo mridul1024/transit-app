@@ -38,7 +38,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
         return results;
     }
 
-    public List parse(InputStream in) throws IOException, XmlPullParserException {
+    public List<Advisory> parse(InputStream in) throws IOException, XmlPullParserException {
         if(DEBUG) {
             Log.i("parse()", "***BEGINNING***");
         }
@@ -53,7 +53,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
         }
     }
 
-    public List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+    public List<Advisory> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         if(DEBUG) {
             Log.i("readFeed():", "***BEGINNING***");
         }

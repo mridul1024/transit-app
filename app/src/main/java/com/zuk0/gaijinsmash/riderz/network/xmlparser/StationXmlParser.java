@@ -38,7 +38,7 @@ public class StationXmlParser implements XmlParserInterface {
         return results;
     }
 
-    private List<Station> parse(InputStream is) throws XmlPullParserException, IOException {
+    public List<Station> parse(InputStream is) throws XmlPullParserException, IOException {
         if(DEBUG)
             Log.i("parse()", "***BEGINNING***");
 
