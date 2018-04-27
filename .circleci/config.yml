@@ -33,7 +33,7 @@ jobs:
       # run tests!
       - run:
           name: Run tests
-          command: ./gradlew clean lint test'
+          command: ./gradlew clean lint test
       - store_artifacts:
           path: app/build/reports
           destination: reports
