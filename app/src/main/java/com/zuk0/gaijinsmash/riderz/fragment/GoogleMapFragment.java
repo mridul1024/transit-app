@@ -166,17 +166,11 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
             @Override
             public boolean onMarkerClick(Marker marker) {
                 //todo show a dialog on marker click
-
-                // start here
-
-                // end here
-
-                // then move to results page with trip query results
-
                 return false;
             }
         });
 
+        // Move camera to specified Station if intended
         Bundle mBundle = getArguments();
         if(mBundle != null) {
             String stationTitle = mBundle.getString("StationTitle");
@@ -186,7 +180,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
             Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title(stationTitle));
             marker.showInfoWindow();
         }
-
         mMapView.onResume();
     }
     //---------------------------------------------------------------------------------------------
@@ -194,6 +187,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     //---------------------------------------------------------------------------------------------
 
     private void initMapSettings(GoogleMap map) {
+        Log.i("initMapSettings", "googlemap");
         // Set boundary of map area
         LatLngBounds bayArea = new LatLngBounds(
                 new LatLng(37.2982, -121.5363), //southwest
@@ -241,26 +235,23 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         }
 
         boolean gpsCheck = CheckInternet.isGPSEnabled(context);
-        if (gpsCheck) {
+        Log.i("gpsCheck", String.valueOf(gpsCheck));
+        if (gpsCheck && loc != null) {
             // move camera to user location
             LatLng userLocation = null;
-            if(loc != null) {
-                userLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
-            }
-
+            userLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
             CameraUpdate update = null;
-            if(userLocation != null) {
-                update = CameraUpdateFactory.newLatLngZoom(userLocation, 10f);
-            }
-
-            if(update != null) {
-                map.moveCamera(update);
-            }
-            } else {
-            // This is the default zoom
-            LatLng marker = new LatLng(37.803768, -122.271450);
-            map.moveCamera(CameraUpdateFactory.newLatLng(marker));
+            update = CameraUpdateFactory.newLatLngZoom(userLocation, 5f);
+            map.moveCamera(update);
+        } else {
+            initDefaultLocation(map);
         }
+    }
+    
+    private void initDefaultLocation(GoogleMap map) {
+        Log.i("defaultZoom", "enabled");
+        LatLng defaultLocation = new LatLng(37.73659478, -122.19683306);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 6f));
     }
 
     private static List<Station> initMarkers(Context context) {
@@ -280,7 +271,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
-
     }
 
     //---------------------------------------------------------------------------------------------
@@ -313,14 +303,9 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         @Override
         protected void onPostExecute(List<Station> list) {
             GoogleMapFragment frag = mWeakRef.get();
-            // fill map with markers
+            // populate map with markers
             for(Station station : list) {
                 LatLng latLng = new LatLng(station.getLatitude(), station.getLongitude());
-
-                //add marker to map
-                //mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(station.getName()));
-
-                //add marker to list
                 mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(station.getName()));
             }
             frag.mProgressBar.setVisibility(View.GONE);
