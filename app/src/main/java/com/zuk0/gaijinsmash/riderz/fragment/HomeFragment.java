@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.zuk0.gaijinsmash.riderz.R;
+import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
 import com.zuk0.gaijinsmash.riderz.model.bart.Advisory;
 import com.zuk0.gaijinsmash.riderz.network.FetchInputStream;
 import com.zuk0.gaijinsmash.riderz.network.xmlparser.AdvisoryXmlParser;
@@ -132,12 +133,14 @@ public class HomeFragment extends Fragment {
                     if(adv.getTime() != null && homeFrag != null) {
                         if(mTimeBoolean) {
                             time = TimeAndDate.format24hrTime(adv.getTime());
-                            Log.i("getTime", adv.getTime());
-                            Log.i("new time", time);
+                            if(MyDebug.LOG_I)
+                                Log.i("getTime", adv.getTime());
+                                Log.i("new time", time);
                         } else {
                             time = TimeAndDate.convertTo12Hr(adv.getTime());
-                            Log.i("getTime", adv.getTime());
-                            Log.i("new time", time);
+                            if(MyDebug.LOG_I)
+                                Log.i("getTime", adv.getTime());
+                                Log.i("new time", time);
                         }
                         String message = homeFrag.getResources().getString(R.string.last_update) + " " + time;
                         homeFrag.mBsaTimeTv.setText(message);

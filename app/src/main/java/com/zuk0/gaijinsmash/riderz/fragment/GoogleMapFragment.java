@@ -25,6 +25,7 @@ import android.widget.ProgressBar;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.database.StationDbHelper;
+import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
 import com.zuk0.gaijinsmash.riderz.model.bart.Station;
 import com.zuk0.gaijinsmash.riderz.network.CheckInternet;
 import com.zuk0.gaijinsmash.riderz.network.FetchGPS;
@@ -44,7 +45,6 @@ import java.util.List;
 
 public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
-    private static final boolean DEBUG = false;
     private MapView mMapView;
     private ProgressBar mProgressBar;
     private View mInflatedView;
@@ -231,11 +231,11 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
                 alertDialog.show();
             }
         } catch(SecurityException e) {
-            Log.e("Exception: %s", e.getMessage());
+            if(MyDebug.LOG_E)
+                Log.e("Exception: %s", e.getMessage());
         }
 
         boolean gpsCheck = CheckInternet.isGPSEnabled(context);
-        Log.i("gpsCheck", String.valueOf(gpsCheck));
         if (gpsCheck && loc != null) {
             // move camera to user location
             LatLng userLocation = null;
@@ -247,21 +247,15 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
             initDefaultLocation(map);
         }
     }
-    
+
     private void initDefaultLocation(GoogleMap map) {
-        Log.i("defaultZoom", "enabled");
         LatLng defaultLocation = new LatLng(37.73659478, -122.19683306);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 6f));
     }
 
     private static List<Station> initMarkers(Context context) {
         StationDatabase db = StationDatabase.getRoomDB(context);
-        List<Station> stationList = db.getStationDAO().getAllStations();
-        if(DEBUG) {
-            if(stationList.isEmpty())
-                Log.e("initMarkerS()", "stationList is EMPTY");
-        }
-        return stationList;
+        return db.getStationDAO().getAllStations();
     }
 
     @Override

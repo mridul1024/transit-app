@@ -3,6 +3,7 @@ package com.zuk0.gaijinsmash.riderz.database;
 import android.content.Context;
 import android.util.Log;
 
+import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
 import com.zuk0.gaijinsmash.riderz.model.bart.Station;
 import com.zuk0.gaijinsmash.riderz.network.xmlparser.StationXmlParser;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
@@ -27,7 +28,8 @@ public class StationDbHelper {
     public void initStationDb() throws Exception {
         int numOfStations = 48; // Change this value as new stations are constructed
         int count = mDatabase.getStationDAO().countStations();
-        Log.i("count", String.valueOf(count));
+        if(MyDebug.DEBUG)
+            Log.i("count", String.valueOf(count));
         if(count == 0 || count < numOfStations) {
             List<Station> stationList;
             StationXmlParser parser = new StationXmlParser(mContext);

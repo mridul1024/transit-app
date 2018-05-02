@@ -28,6 +28,9 @@ public abstract class StationDatabase extends RoomDatabase {
     }
 
     public static void destroyInstance() {
+        if(INSTANCE.isOpen()) {
+            INSTANCE.close();
+        }
         INSTANCE = null;
     }
 

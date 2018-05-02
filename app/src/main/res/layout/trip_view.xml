@@ -21,6 +21,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:hint="@string/departure_station"
                 android:labelFor="@id/trip_autoCompleteTextView" />
         </android.support.design.widget.TextInputLayout>
@@ -47,6 +49,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:hint="@string/arrival_station"
                 android:labelFor="@id/trip_autoCompleteTextView2" />
         </android.support.design.widget.TextInputLayout>
@@ -73,6 +77,8 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/date_hint"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:inputType="date"
                 android:labelFor="@id/date_editText" />
         </android.support.design.widget.TextInputLayout>
@@ -86,6 +92,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:hint="@string/time_hint"
                 android:inputType="time"
                 android:labelFor="@id/time_editText" />
