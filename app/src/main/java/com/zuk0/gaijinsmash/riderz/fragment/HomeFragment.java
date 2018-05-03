@@ -19,10 +19,10 @@ import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
 import com.zuk0.gaijinsmash.riderz.model.bart.Advisory;
 import com.zuk0.gaijinsmash.riderz.network.FetchInputStream;
-import com.zuk0.gaijinsmash.riderz.network.xmlparser.AdvisoryXmlParser;
+import com.zuk0.gaijinsmash.riderz.xml_adapter.advisory.AdvisoryXmlParser;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
 import com.zuk0.gaijinsmash.riderz.utils.TimeAndDate;
-import com.zuk0.gaijinsmash.riderz.view_adapter.AdvisoryViewAdapter;
+import com.zuk0.gaijinsmash.riderz.xml_adapter.advisory.AdvisoryViewAdapter;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -61,7 +61,12 @@ public class HomeFragment extends Fragment {
         mBsaTimeTv = mInflatedView.findViewById(R.id.home_view_timeTv);
         mBsaListView = mInflatedView.findViewById(R.id.home_listView);
         ImageView imageView = mInflatedView.findViewById(R.id.home_banner_imageView);
+        initTimeAndPic(imageView);
+        // todo: add priority favorites to home screen
 
+    }
+
+    private void initTimeAndPic(ImageView imageView) {
         int hour = TimeAndDate.getCurrentHour();
         if(hour < 6 || hour >= 21) {
             // show night picture

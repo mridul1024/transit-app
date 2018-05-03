@@ -19,7 +19,7 @@ import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.model.bart.Favorite;
 import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
-import com.zuk0.gaijinsmash.riderz.view_adapter.TripViewAdapter;
+import com.zuk0.gaijinsmash.riderz.xml_adapter.trip.TripViewAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

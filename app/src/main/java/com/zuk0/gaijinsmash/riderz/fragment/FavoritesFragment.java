@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.model.bart.Favorite;
-import com.zuk0.gaijinsmash.riderz.view_adapter.FavoriteViewAdapter;
+import com.zuk0.gaijinsmash.riderz.xml_adapter.favorite.FavoriteViewAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

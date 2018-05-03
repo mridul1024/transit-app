@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.model.bart.Station;
-import com.zuk0.gaijinsmash.riderz.network.xmlparser.StationXmlParser;
+import com.zuk0.gaijinsmash.riderz.xml_adapter.station.StationXmlParser;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
 
 import org.xmlpull.v1.XmlPullParserException;

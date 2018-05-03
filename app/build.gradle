@@ -11,8 +11,8 @@ android {
         applicationId 'com.zuk0.gaijinsmash.riderz'
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 2
-        versionName "1.1-beta"
+        versionCode 3
+        versionName "1.2-beta"
         multiDexEnabled false
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

@@ -29,7 +29,7 @@ import android.widget.Toast;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.StationDbHelper;
 import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
-import com.zuk0.gaijinsmash.riderz.network.xmlparser.TripXMLParser;
+import com.zuk0.gaijinsmash.riderz.xml_adapter.trip.TripXMLParser;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
 import com.zuk0.gaijinsmash.riderz.utils.TimeAndDate;
 

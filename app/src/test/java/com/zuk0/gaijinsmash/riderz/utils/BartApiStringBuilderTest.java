@@ -1,5 +1,7 @@
 package com.zuk0.gaijinsmash.riderz.utils;
 
+import android.util.Log;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,5 +31,12 @@ public class BartApiStringBuilderTest {
         String expected = "http://api.bart.gov/api/bsa.aspx?cmd=bsa&key=Q7Z9-PZ53-9QXT-DWE9";
         String actual = BartApiStringBuilder.getBSA();
         assertTrue("Method returns proper url string", expected.equals(actual));
+    }
+
+    @Test
+    public void getRealTimeEstimateTest() {
+        String expected = "http://api.bart.gov/api/etd.aspx?cmd=etd&orig=RICH&dir=n&key=Q7Z9-PZ53-9QXT-DWE9";
+        String actual = BartApiStringBuilder.getRealTimeEstimate("RICH", "n");
+        assertTrue("Method  returns proper API string", expected.equals(actual));
     }
 }

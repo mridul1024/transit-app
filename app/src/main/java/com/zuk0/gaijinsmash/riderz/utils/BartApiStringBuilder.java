@@ -63,4 +63,10 @@ public class BartApiStringBuilder {
         String cmd = "bsa.aspx?cmd=bsa";
         return BASE_URI + cmd + API_KEY;
     }
+
+    // valid directions are 'n' for Northbound and 's' for Southbound
+    public static String getRealTimeEstimate(String origin, String direction) {
+        String cmd = "etd.aspx?cmd=etd&orig=" + origin + "&dir=" + direction;
+        return BASE_URI + cmd + API_KEY;
+    }
 }
