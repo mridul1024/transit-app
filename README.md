@@ -72,7 +72,8 @@ I will begin posting instructions for the next module soon, but in the mean time
 1. Use the appropriate XML files for Strings, Colors, and Styles
 2. Elevation = 1dp
 3. Use containers
-4. Use the Material Pallete colors implemented in the colors.xml 
+4. Use the Material Pallete colors implemented in the colors.xml
+5. Please follow conventional [Material Design](https://material.io/design) guidelines for all future changes.
 
 
 ## Other
