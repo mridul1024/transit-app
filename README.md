@@ -6,11 +6,12 @@
 --------------------------------------------------------------------------------
 
 ## Screenshots
-![home-screen](https://i.imgur.com/RNqOXCjm.png)
+![home-screen](https://i.imgur.com/e3NTiAl.png)
 ![trip-screen](https://i.imgur.com/YVE99ELm.png)
-![results-screen](https://i.imgur.com/P9HThYLm.png)
-![nav-screen](https://i.imgur.com/eR66b9Mm.png)
+![results-screen](https://i.imgur.com/I4vrgVy.png)
+![nav-screen](https://i.imgur.com/reVF8BC.png)
 ![map-screen](https://i.imgur.com/DvNsHQGm.png)
+![fav-screen](https://i.imgur.com/xz0mMTj.png)
 
 ## Table of Contents
 
