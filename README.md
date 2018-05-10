@@ -31,8 +31,7 @@
 
 This is an open-source android application that was originally built with Android Studio 3.0 and GenYMotion Emulator.
 I chose Android Studio Canary edition because it provides Kotlin support from the get go.
-There is a simple test and build pipeline with Jenkins hosted on a Raspberry Pi 3 headless server that I created at home. 
-Considering to dockerize the app as well.
+There is a simple test and build pipeline with CircleCI and you can review the current status up above.
 
 I hope you all enjoy using and contributing to this application.
 
