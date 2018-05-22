@@ -9,5 +9,6 @@
         android:title="@string/action_favorites"
         android:icon="@drawable/ic_menu_favorite"
         app:showAsAction="ifRoom"
+        android:visible="false"
         />
 </menu>

@@ -2,10 +2,11 @@ package com.zuk0.gaijinsmash.riderz.utils;
 
 import android.util.Log;
 
+import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
+
 public class BartApiStringBuilder {
     private static final String API_KEY = "&key=Q7Z9-PZ53-9QXT-DWE9";
     private static final String BASE_URI = "http://api.bart.gov/api/";
-    private static final boolean DEBUG = true;
 
     public static String getAllStations() {
         String stations = "stn.aspx?cmd=stns";
@@ -53,20 +54,30 @@ public class BartApiStringBuilder {
     */
     public static String getDetailedRoute(String origin, String arrival, String date, String time) {
          String cmd = "sched.aspx?cmd=depart&orig=" + origin + "&dest=" + arrival + "&date=" + date + "&time=" + time + "&b=0&a=4";
-         if(DEBUG) {
+         if(MyDebug.DEBUG)
              Log.i("getDetailedRoute", BASE_URI + cmd + API_KEY);
-         }
          return BASE_URI + cmd + API_KEY;
     }
 
     public static String getBSA() {
         String cmd = "bsa.aspx?cmd=bsa";
+        if(MyDebug.DEBUG)
+            Log.i("getBSA", BASE_URI+cmd+API_KEY);
         return BASE_URI + cmd + API_KEY;
     }
 
     // valid directions are 'n' for Northbound and 's' for Southbound
-    public static String getRealTimeEstimate(String origin, String direction) {
+    public static String getRealTimeEstimateByDirection(String origin, String direction) {
         String cmd = "etd.aspx?cmd=etd&orig=" + origin + "&dir=" + direction;
+        if(MyDebug.DEBUG)
+            Log.i("EstimateByDirection", BASE_URI+cmd+API_KEY);
+        return BASE_URI + cmd + API_KEY;
+    }
+
+    public static String getRealTimeEstimates(String origin) {
+        String cmd = "etd.aspx?cmd=etd&orig=" + origin;
+        if(MyDebug.DEBUG)
+            Log.i("getRealTimeEstimates", BASE_URI+cmd+API_KEY);
         return BASE_URI + cmd + API_KEY;
     }
 }

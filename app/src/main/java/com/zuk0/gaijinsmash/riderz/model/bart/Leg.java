@@ -12,7 +12,7 @@ public class Leg implements Parcelable {
 
     private int order;
     private int transferCode;
-    private String line; //todo: how to interpret lines?
+    private String line;
     private int bikeFlag;
     private String trainHeadStation;
 

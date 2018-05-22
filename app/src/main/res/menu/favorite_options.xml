@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
-        android:id="@+id/action_favorite_priority"
+        android:id="@+id/action_favorite_setPriority"
         android:orderInCategory="1"
-        android:title="@string/favorite_priority"
+        android:title="@string/favorite_setPriority"
+        android:visible="false"
         app:showAsAction="never" />
-    <!--
     <item
-        android:id="@+id/action_change_color"
+        android:id="@+id/action_favorite_deletePriority"
         android:orderInCategory="2"
-        android:title="@string/favorite_color"
+        android:title="@string/action_deletePriority"
+        android:visible="false"
         app:showAsAction="never" />
-        -->
     <item
         android:id="@+id/action_delete_favorite"
         android:orderInCategory="3"
         android:title="@string/action_delete"
+        android:visible="true"
         app:showAsAction="never" />
 </menu>

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="15dp">
         <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -108,4 +108,12 @@
         android:text="@string/schedule_button"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/trip_linearLayout3" />
+
+    <TextView
+        android:layout_below="@+id/trip_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="@string/trip_warning"/>
 </RelativeLayout>

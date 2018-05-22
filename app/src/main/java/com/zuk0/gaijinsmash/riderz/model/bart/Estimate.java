@@ -1,11 +1,7 @@
 package com.zuk0.gaijinsmash.riderz.model.bart;
 
-public class RealTimeEstimate {
+public class Estimate {
 
-    private String origin;
-    private String originAbbr;
-    private String destination;
-    private String destAbbr;
     private String minutes; // can be 'leaving'
     private int platform;
     private String direction;
@@ -13,38 +9,7 @@ public class RealTimeEstimate {
     private String color;
     private String hexcolor;
     private int bikeflag;
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public String getOriginAbbr() {
-        return originAbbr;
-    }
-
-    public void setOriginAbbr(String originAbbr) {
-        this.originAbbr = originAbbr;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-
-    public String getDestAbbr() {
-        return destAbbr;
-    }
-
-    public void setDestAbbr(String destAbbr) {
-        this.destAbbr = destAbbr;
-    }
+    private int delay;
 
     public String getMinutes() {
         return minutes;
@@ -110,5 +75,23 @@ public class RealTimeEstimate {
         this.delay = delay;
     }
 
-    private int delay;
+    @Override
+    public boolean equals(Object o) {
+        if(o == this) return true;
+        if(!(o instanceof Trip)) {
+            return false;
+        }
+        Estimate estimate = (Estimate) o;
+        return estimate.direction.equals(direction) && estimate.minutes.equals(minutes) &&
+                estimate.color.equals(color);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + direction.hashCode();
+        result = 31 * result + color.hashCode();
+        result = 31 * result + minutes.hashCode();
+        return result;
+    }
 }

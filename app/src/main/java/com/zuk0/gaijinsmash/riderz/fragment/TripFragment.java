@@ -4,8 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,9 +27,10 @@ import android.widget.Toast;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.StationDbHelper;
 import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
-import com.zuk0.gaijinsmash.riderz.xml_adapter.trip.TripXMLParser;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
+import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesHelper;
 import com.zuk0.gaijinsmash.riderz.utils.TimeAndDate;
+import com.zuk0.gaijinsmash.riderz.xml_adapter.trip.TripXMLParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -65,9 +64,7 @@ public class TripFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         // Initialize data here
-        // Check SharedPreferences for time setting
-        SharedPreferences prefs = getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
-        mIs24HrTimeOn = prefs.getBoolean("TIME_KEY", false); // false = default value if Key is not found
+        mIs24HrTimeOn = SharedPreferencesHelper.getTimePreference(getActivity());
     }
 
     @Override
@@ -211,6 +208,7 @@ public class TripFragment extends Fragment {
                 // DATE
                 String departingDate = mDateEt.getText().toString();
 
+                //todo: check if whitespace is at end of string before continuing
                 if (departingStation.isEmpty() || arrivingStation.isEmpty() || departingDate.isEmpty() || departingTime.isEmpty()) {
                     Toast.makeText(getActivity(), getString(R.string.error_form_completion), Toast.LENGTH_LONG).show();
                 } else if (departingStation.equals(arrivingStation)) {

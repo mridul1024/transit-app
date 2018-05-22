@@ -2,17 +2,24 @@ package com.zuk0.gaijinsmash.riderz.model.bart;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverter;
+import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
+
+import com.zuk0.gaijinsmash.riderz.database.Converters;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity(tableName = "favorites")
 public class Favorite {
 
-    // title = origin + destination
-    @PrimaryKey
-    @ColumnInfo(name = "title")
-    @NonNull
-    private String title;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
 
     @ColumnInfo(name = "origin")
     private String origin; // abbreviated
@@ -20,36 +27,55 @@ public class Favorite {
     @ColumnInfo(name = "destination")
     private String destination; // abbreviated
 
-    // System = BART, MUNI, etc.
+    // todo: convert to enum: System = BART, MUNI, etc.
     @ColumnInfo(name = "system")
     private String system;
 
     @ColumnInfo(name = "description")
     private String description;
 
+    @TypeConverters(Converters.class)
     @ColumnInfo(name = "priority")
-    private int priority;
+    private Priority priority;
 
     // Hexadecimal color codes
-    @ColumnInfo(name = "color")
-    private int color;
+    @TypeConverters(Converters.class)
+    @ColumnInfo(name = "colors")
+    private HashSet<String> colors;
+
+    public enum Priority {
+        ON(1), OFF(0);
+
+        private int value;
+
+        Priority(int value) {
+            this.value = value;
+        }
+
+        public int getValue() { return value; }
+    }
+
+    public Favorite() {}
 
     // Getters
-    @NonNull
-    public String getTitle() { return title; }
+    public int getId() { return id; }
     public String getOrigin() { return origin; }
     public String getDestination() { return destination; }
     public String getSystem() { return system; }
     public String getDescription() { return description; }
-    public int getPriority() { return priority; }
-    public int getColor() { return color; }
+    public Priority getPriority() { return priority; }
+    public HashSet<String> getColors() {
+        return colors;
+    }
 
     // Setters
-    public void setTitle(@NonNull String title) { this.title = title; }
+    public void setId(int id) { this.id = id; }
     public void setOrigin(String origin) { this.origin = origin; }
     public void setDestination(String destination) { this.destination = destination; }
     public void setSystem(String system) { this.system = system; }
     public void setDescription(String description) { this.description = description; }
-    public void setPriority(int priority) { this.priority = priority; }
-    public void setColor(int color) { this.color = color; }
+    public void setPriority(Priority priority) { this.priority = priority; }
+    public void setColors(HashSet<String> colors) {
+        this.colors = colors;
+    }
 }

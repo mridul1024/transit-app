@@ -33,4 +33,20 @@ public interface FavoriteDAO {
 
     @Query("SELECT * from favorites where origin = :origin and destination = :destination")
     public Favorite getFavorite(String origin, String destination);
+
+    //Get selected priority
+    @Query("SELECT * from favorites where priority = :priority")
+    public List<Favorite> getAllFavoritesByPriority(Favorite.Priority priority);
+
+    @Query("SELECT priority from favorites where id = :id")
+    public int getPriorityById(int id);
+
+    //Update a priority favorite
+    @Query("Update favorites set priority = :priority where id = :id")
+    public void setPriorityById(int id, Favorite.Priority priority);
+
+    //Update priority to null
+    @Query("Update favorites set priority = 0 where id = :id")
+    public void removePriorityById(int id);
+
 }

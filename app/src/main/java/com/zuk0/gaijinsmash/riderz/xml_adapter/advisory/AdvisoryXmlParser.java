@@ -35,15 +35,14 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
         if(MyDebug.DEBUG)
             Log.i("makeCall()", "with " + call);
         InputStream is = new FetchInputStream(mContext).connectToApi(call);
-        List<Advisory> results = parse(is); //todo: fix this
+        List<Advisory> results = parse(is);
         is.close();
         return results;
     }
 
     public List<Advisory> parse(InputStream in) throws IOException, XmlPullParserException {
-        if(MyDebug.DEBUG) {
+        if(MyDebug.DEBUG)
             Log.i("parse()", "***BEGINNING***");
-        }
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -56,9 +55,8 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
     }
 
     public List<Advisory> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(MyDebug.DEBUG) {
+        if(MyDebug.DEBUG)
             Log.i("readFeed():", "***BEGINNING***");
-        }
         parser.require(XmlPullParser.START_TAG, ns, "root");
         List<Advisory> list = new ArrayList<>();
         String date;

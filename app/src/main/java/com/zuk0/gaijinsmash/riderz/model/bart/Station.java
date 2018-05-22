@@ -2,8 +2,11 @@ package com.zuk0.gaijinsmash.riderz.model.bart;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
+
+import java.util.List;
 
 @Entity(tableName = "stations")
 public class Station  {
@@ -58,10 +61,11 @@ public class Station  {
     @ColumnInfo(name = "link")
     private String link;
 
+
     public Station () {}
 
     // Setters
-    public void setName(String name) { this.name = name; }
+    public void setName(@NonNull String name) { this.name = name; }
     public void setAddress(String address) { this.address = address; }
     public void setLatitude(double latitude) { this.latitude = latitude; }
     public void setLongitude(double longitude) { this.longitude = longitude; }
@@ -79,6 +83,7 @@ public class Station  {
     public void setAbbreviation(String abbreviation) { this.abbreviation = abbreviation; }
 
     // Getters
+    @NonNull
     public String getName() {
         return name;
     }

@@ -1,5 +1,10 @@
 package com.zuk0.gaijinsmash.riderz.utils;
 
+import android.content.Context;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.widget.TextView;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.TimerTask;
 
 public class TimeAndDate {
 
@@ -96,4 +102,6 @@ public class TimeAndDate {
         String time = df.format(date);
         return  Integer.valueOf(time);
     }
+
+
 }

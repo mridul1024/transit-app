@@ -214,6 +214,7 @@
     <string name="preference_checkbox_title2">24 Hour Format</string>
     <string name="preference_button">Save</string>
     <string name="cannot_do_this">\"Sorry, can\'t do this right now. Please try again in a bit.\"</string>
+
     <string name="help_q1">Q: Will there be features added in the future?</string>
     <string name="help_a1">A: Yes! Next up is MUNI :)</string>
     <string name="help_q2">Q: Will this app be on iOS soon?</string>
@@ -223,4 +224,15 @@
     <string name="help_url">https://github.com/rjsuzuki/transit-app</string>
     <string name="help_q4">Q: What if I found a problem?</string>
     <string name="help_a4">A: If you have found an application problem that you would like to report, please click the button just below and send us an email :)</string>
+
+    <string name="trip_warning">Please be aware that BART schedules and real time estimates may differ. Accuracy relies on BART\'s system and therefore may not always be exact.
+    As a precaution, we encourage you to get to the platform at least a few minutes ahead of schedule. \n We apologize in advanced if this causes any inconveniences.</string>
+
+    <string name="action_deletePriority">Remove Priority</string>
+    <string name="favorite_setPriority">Set as Priority</string>
+    <string name="priority_set">Set as a priority</string>
+    <string name="priority_deleted">Removed as a priority</string>
+
+    <string name="estimate_not_available">Currently unavailable. \n Either the network is down or you may need to add a trip to your favorites menu.</string>
+    <string name="real_time_estimates">Real Time Estimates</string>
 </resources>

@@ -16,13 +16,22 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.zuk0.gaijinsmash.riderz.R;
+import com.zuk0.gaijinsmash.riderz.database.FavoriteDatabase;
+import com.zuk0.gaijinsmash.riderz.database.FavoriteDbHelper;
 import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
 import com.zuk0.gaijinsmash.riderz.model.bart.Advisory;
+import com.zuk0.gaijinsmash.riderz.model.bart.Estimate;
+import com.zuk0.gaijinsmash.riderz.model.bart.Favorite;
+import com.zuk0.gaijinsmash.riderz.model.bart.Trip;
 import com.zuk0.gaijinsmash.riderz.network.FetchInputStream;
+import com.zuk0.gaijinsmash.riderz.utils.BartRoutes;
+import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesHelper;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.advisory.AdvisoryXmlParser;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
 import com.zuk0.gaijinsmash.riderz.utils.TimeAndDate;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.advisory.AdvisoryViewAdapter;
+import com.zuk0.gaijinsmash.riderz.xml_adapter.estimate.EstimateViewAdapter;
+import com.zuk0.gaijinsmash.riderz.xml_adapter.estimate.EstimateXmlParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -30,14 +39,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    private TextView mBsaTimeTv = null;
-    private ListView mBsaListView;
+    private TextView mBsaTimeTv, mEstimateErrorTv, mEtdTitle;
+    private ListView mBsaListView, mEstimateListView;
     private View mInflatedView;
-    private ProgressBar mProgressBar;
+    private ProgressBar mEtdProgressBar;
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -57,13 +68,28 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mProgressBar = mInflatedView.findViewById(R.id.home_progressBar);
+        mEtdProgressBar = mInflatedView.findViewById(R.id.home_etd_progressBar);
         mBsaTimeTv = mInflatedView.findViewById(R.id.home_view_timeTv);
-        mBsaListView = mInflatedView.findViewById(R.id.home_listView);
+        mBsaListView = mInflatedView.findViewById(R.id.home_bsa_listView);
+        mEstimateListView = mInflatedView.findViewById(R.id.home_etd_listView);
+        mEstimateErrorTv = mInflatedView.findViewById(R.id.home_etd_error);
+        mEtdTitle = mInflatedView.findViewById(R.id.home_etd_title);
         ImageView imageView = mInflatedView.findViewById(R.id.home_banner_imageView);
         initTimeAndPic(imageView);
-        // todo: add priority favorites to home screen
+    }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setRetainInstance(true);
+        new GetAdvisoryTask( this).execute();
+        new GetFavoritesTask(this).execute();
+        mEtdProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void initTimeAndPic(ImageView imageView) {
@@ -84,27 +110,107 @@ public class HomeFragment extends Fragment {
                     .into(imageView);
         }
     }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setRetainInstance(true);
-        new GetAdvisoryTask( this).execute();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
+    //TODO: need to save state onPause(), etc to prevent too many calls everytime the app opens.
 
-    private static class GetAdvisoryTask extends AsyncTask<Void, Void, Boolean> {
+    private static class GetFavoritesTask extends AsyncTask<Void, Void, Boolean> {
+        private WeakReference<HomeFragment> mHomeRef;
+        private List<Trip> mFinalList;
+
+        private GetFavoritesTask(HomeFragment context) {
+            mHomeRef = new WeakReference<>(context);
+            mFinalList = new ArrayList<>();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void...voids) {
+            if (MyDebug.DEBUG) Log.i("GetFavoritesTask", "STARTING");
+            HomeFragment homeFrag = mHomeRef.get();
+            List<Trip> tripList = new ArrayList<>();
+            if(homeFrag != null && homeFrag.isAdded()) {
+                tripList = getTripList(homeFrag.getActivity());
+            }
+            return tripList.size() > 0;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            HomeFragment homeFrag = mHomeRef.get();
+            homeFrag.mEtdTitle.setVisibility(View.VISIBLE);
+            if(result) {
+                homeFrag.mEstimateListView.setVisibility(View.VISIBLE);
+                EstimateViewAdapter adapter = new EstimateViewAdapter(mFinalList, homeFrag.getActivity(), homeFrag);
+                homeFrag.mEstimateListView.setAdapter(adapter);
+            } else {
+                homeFrag.mEstimateErrorTv.setVisibility(View.VISIBLE);
+                homeFrag.mEstimateErrorTv.setText(homeFrag.getResources().getString(R.string.estimate_not_available));
+            }
+
+            if(homeFrag.isAdded()){
+                Log.i("visibility", "gone");
+                homeFrag.mEtdProgressBar.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    //todo : refactor
+    public static List<Trip> getConsolidatedTripList(Context context, List<Favorite> favoritesList) {
+        List<Trip> finalTripList = new ArrayList<>();
+        EstimateXmlParser parser = new EstimateXmlParser(context);
+        for(Favorite fav : favoritesList) {
+            String url = BartApiStringBuilder.getRealTimeEstimates(fav.getOrigin());
+            List<Trip> tempTripList = new ArrayList<>();
+            try {
+                // make call to api and store results in list
+                tempTripList = parser.getList(url);
+
+                // stores colors in HashSet
+                HashSet<String> colorsSet = fav.getColors();
+                if(MyDebug.DEBUG) Log.i("colorSet", colorsSet.toString());
+
+                //PARSE estimate list and modify each trip object
+                List<Trip> tripRemovalList = new ArrayList<>();
+                for(Trip trip : tempTripList) {
+                    List<Estimate> estimateList = trip.getEstimateList();
+
+                    // for each estimate object, check if route colors are matching
+                    List<Estimate> removalList = new ArrayList<>();
+                    for(Estimate estimate : estimateList) {
+                        if(!colorsSet.contains(estimate.getColor())) removalList.add(estimate);
+                    }
+                    trip.getEstimateList().removeAll(removalList);
+
+                    // remove any trips that don't have an estimate list to prevent NPE in adapter
+                    if(trip.getEstimateList().size() == 0) {
+                        tripRemovalList.add(trip);
+                    }
+                }
+                tempTripList.removeAll(tripRemovalList);
+            } catch (IOException | XmlPullParserException e) {
+                Log.e("Exception", e.toString());
+            }
+            finalTripList.addAll(tempTripList);
+        }
+        return finalTripList;
+    }
+
+    public static List<Trip> getTripList(Context context) {
+        List<Trip> tripList = new ArrayList<>();
+        int count = FavoriteDbHelper.getFavoritesCount(context);
+        if(count > 0) {
+            // should return a max of 2 favorite objects
+            List<Favorite> favoritesList = FavoriteDbHelper.getFavoritesByPriority(context);
+            tripList = getConsolidatedTripList(context, favoritesList);
+        }
+        return tripList;
+    }
+
+    private static class GetAdvisoryTask extends AsyncTask<Void, Integer, Boolean> {
         private WeakReference<HomeFragment> mHomeRef;
         private List<Advisory> mList;
-        private boolean mTimeBoolean;
+        private boolean mIs24HrTimeOn;
 
         private GetAdvisoryTask(HomeFragment context) {
             mList = new ArrayList<>();
@@ -114,15 +220,13 @@ public class HomeFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Void... voids) {
             HomeFragment homeFrag = mHomeRef.get();
-            // Check SharedPreferences for time setting
             if(homeFrag != null && homeFrag.isAdded()) {
-                SharedPreferences prefs = homeFrag.getActivity().getSharedPreferences("TIME_PREFS", Context.MODE_PRIVATE);
-                mTimeBoolean = prefs.getBoolean("TIME_KEY", false);
+                mIs24HrTimeOn = SharedPreferencesHelper.getTimePreference(homeFrag.getActivity());
                 try {
                     FetchInputStream is = new FetchInputStream(homeFrag.getActivity());
                     InputStream in = is.connectToApi(BartApiStringBuilder.getBSA());
                     AdvisoryXmlParser parser = new AdvisoryXmlParser(homeFrag.getActivity());
-                    mList = parser.parse(in); //todo: fix this
+                    mList = parser.parse(in);
                 } catch (IOException | XmlPullParserException e) {
                     e.printStackTrace();
                 }
@@ -133,20 +237,9 @@ public class HomeFragment extends Fragment {
         protected void onPostExecute(Boolean result) {
             HomeFragment homeFrag = mHomeRef.get();
             if(result) {
-                String time;
                 for(Advisory adv : mList) {
                     if(adv.getTime() != null && homeFrag != null) {
-                        if(mTimeBoolean) {
-                            time = TimeAndDate.format24hrTime(adv.getTime());
-                            if(MyDebug.LOG_I)
-                                Log.i("getTime", adv.getTime());
-                                Log.i("new time", time);
-                        } else {
-                            time = TimeAndDate.convertTo12Hr(adv.getTime());
-                            if(MyDebug.LOG_I)
-                                Log.i("getTime", adv.getTime());
-                                Log.i("new time", time);
-                        }
+                        String time = getFormattedTime(adv, mIs24HrTimeOn);
                         String message = homeFrag.getResources().getString(R.string.last_update) + " " + time;
                         homeFrag.mBsaTimeTv.setText(message);
                     }
@@ -156,14 +249,23 @@ public class HomeFragment extends Fragment {
                 if (homeFrag != null && homeFrag.isAdded()) {
                     adapter = new AdvisoryViewAdapter(mList, homeFrag.getActivity());
                     homeFrag.mBsaListView.setAdapter(adapter);
-                    homeFrag.mProgressBar.setVisibility(View.GONE);
                 }
             } else {
                 if(homeFrag != null && homeFrag.isAdded()) {
                     homeFrag.mBsaTimeTv.setText(homeFrag.getResources().getString(R.string.update_unavailable));
-                    homeFrag.mProgressBar.setVisibility(View.GONE);
                 }
             }
         }
     }
+
+    public static String getFormattedTime(Advisory adv, boolean is24HrTimeOn) {
+        String time;
+        if(is24HrTimeOn) {
+            time = TimeAndDate.format24hrTime(adv.getTime());
+        } else {
+            time = TimeAndDate.convertTo12Hr(adv.getTime());
+        }
+        return time;
+    }
+
 }

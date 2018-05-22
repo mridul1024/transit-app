@@ -3,6 +3,7 @@
     <color name="colorPrimary">#6b8aff</color>
     <color name="colorPrimaryDark">#843636</color>
     <color name="colorAccent">#ff0000</color>
+    <color name="white">#FFFFFF</color>
 
     <!-- Logo Background color -->
     <color name="logo_background">#212120</color>
@@ -43,4 +44,7 @@
     <color name="bartOrangeLine">#ff9933</color>
     <color name="bartOakAirport">#d5cfa3</color>
     <color name="bartDefault">#000000</color>
+
+
+
 </resources>

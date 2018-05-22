@@ -2,9 +2,9 @@ package com.zuk0.gaijinsmash.riderz.fragment;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,12 +17,23 @@ import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.FavoriteDatabase;
+import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
 import com.zuk0.gaijinsmash.riderz.model.bart.Favorite;
 import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
+import com.zuk0.gaijinsmash.riderz.model.bart.Trip;
+import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
+import com.zuk0.gaijinsmash.riderz.utils.BartRoutes;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.trip.TripViewAdapter;
+import com.zuk0.gaijinsmash.riderz.xml_adapter.trip.TripXMLParser;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class BartResultsFragment extends Fragment {
 
@@ -80,10 +91,20 @@ public class BartResultsFragment extends Fragment {
         }
         if(mOrigin != null && mDestination != null) {
             mFavoriteObject = new Favorite();
-            mFavoriteObject.setTitle(mOrigin + mDestination);
+
+            //check db if first entry
+            mFavoriteObject.setPriority(Favorite.Priority.ON);
             mFavoriteObject.setOrigin(mOrigin);
             mFavoriteObject.setDestination(mDestination);
             mFavoriteObject.setSystem(BART);
+
+            HashSet<String> colors = new HashSet<>();
+            for(FullTrip fullTrip : mFullTripList) {
+                // get the first leg object
+                String line = fullTrip.getLegList().get(0).getLine();
+                colors.add(BartRoutes.lineToColor(line));
+            }
+            mFavoriteObject.setColors(colors);
         }
 
         // Checks database and displays appropriate view in toolbar
@@ -93,7 +114,6 @@ public class BartResultsFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-
         inflater.inflate(R.menu.favorite, menu);
         inflater.inflate(R.menu.favorited, menu);
         mFavoriteIcon = menu.findItem(R.id.action_favorite);
@@ -111,18 +131,8 @@ public class BartResultsFragment extends Fragment {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                 alertDialog.setTitle("Remove Favorite");
                 alertDialog.setMessage("Are you sure you want to remove this favorite?");
-                alertDialog.setPositiveButton(getResources().getString(R.string.alert_dialog_yes), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        new SetFavoritesTask(mBartResultsFragment, 2).execute();
-                    }
-                });
-                alertDialog.setNegativeButton(getResources().getString(R.string.alert_dialog_no), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                alertDialog.setPositiveButton(getResources().getString(R.string.alert_dialog_yes), (dialog, which) -> new SetFavoritesTask(mBartResultsFragment, 2).execute());
+                alertDialog.setNegativeButton(getResources().getString(R.string.alert_dialog_no), (dialog, which) -> dialog.cancel());
                 alertDialog.show();
                 return true;
         }
@@ -151,14 +161,40 @@ public class BartResultsFragment extends Fragment {
             FavoriteDatabase db = FavoriteDatabase.getRoomDB(frag.getActivity());
             switch(mStatus) {
                 case 0:
-                    return initFavorites(db, frag.mFavoriteObject);
+                    return isCurrentTripFavorited(db, frag.mFavoriteObject);
                 case 1:
+                    // todo: check if favorite object is first two entries - abstract later
+                    if (db.getFavoriteDAO().countFavorites() < 2) {
+                        frag.mFavoriteObject.setPriority(Favorite.Priority.ON);
+                    };
+
                     addToFavorites(db, frag.mFavoriteObject);
+
                     // This adds the inverse of the Trip
                     Favorite favoriteReversed = new Favorite();
-                    favoriteReversed.setTitle(frag.mDestination + frag.mOrigin);
                     favoriteReversed.setOrigin(frag.mDestination);
                     favoriteReversed.setDestination(frag.mOrigin);
+                    if (db.getFavoriteDAO().countFavorites() < 2) {
+                        favoriteReversed.setPriority(Favorite.Priority.ON);
+                    };
+                    String url = BartApiStringBuilder.getDetailedRoute(frag.mDestination, frag.mOrigin, "TODAY", "NOW");
+                    List<FullTrip> tripList = new ArrayList<>();
+                    try {
+                        TripXMLParser parser = new TripXMLParser(frag.getActivity());
+                        tripList = parser.getList(url);
+                    } catch (IOException | XmlPullParserException e) {
+                        Log.e("Exception", e.toString());
+                    }
+
+                    HashSet<String> routes = new HashSet<>();
+                    for(FullTrip fullTrip : tripList) {
+                        String line = fullTrip.getLegList().get(0).getLine();
+                        routes.add(BartRoutes.lineToColor(line));
+                    }
+                    favoriteReversed.setColors(routes);
+
+                    if(MyDebug.DEBUG)
+                        Log.d("reversedFav", frag.mDestination +"/"+frag.mOrigin);
                     addToFavorites(db, favoriteReversed);
                     return true;
                 case 2:
@@ -189,7 +225,7 @@ public class BartResultsFragment extends Fragment {
     //---------------------------------------------------------------------------------------------
     // Helper Methods
     //---------------------------------------------------------------------------------------------
-    private static boolean initFavorites(FavoriteDatabase db, Favorite favorite) {
+    private static boolean isCurrentTripFavorited(FavoriteDatabase db, Favorite favorite) {
         if(db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin()) != null) {
             //if found, check what destination is
             List<Favorite> list = db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin());

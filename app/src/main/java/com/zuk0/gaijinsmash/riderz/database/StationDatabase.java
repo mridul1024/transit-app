@@ -17,10 +17,10 @@ public abstract class StationDatabase extends RoomDatabase {
 
     public abstract StationDAO getStationDAO();
 
-    // Room Builder
+    //todo: add synchronized?
     public static StationDatabase getRoomDB(Context context) {
         if(INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), StationDatabase.class, "station-database")
+            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), StationDatabase.class, "stations")
                     .addMigrations(MIGRATION)
                     .build();
         }

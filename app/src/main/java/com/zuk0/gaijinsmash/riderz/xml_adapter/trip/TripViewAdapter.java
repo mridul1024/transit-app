@@ -3,7 +3,6 @@ package com.zuk0.gaijinsmash.riderz.xml_adapter.trip;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,29 +14,28 @@ import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.StationDatabase;
+import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
 import com.zuk0.gaijinsmash.riderz.fragment.BartResultsFragment;
+import com.zuk0.gaijinsmash.riderz.utils.BartRoutes;
 import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnClickListener {
+public class TripViewAdapter extends ArrayAdapter<FullTrip> implements View.OnClickListener {
 
     private BartResultsFragment mFragment;
-    private Context mContext;
-    private static final boolean DEBUG = false;
 
     public TripViewAdapter(List<FullTrip> data, Context context, BartResultsFragment fragment) {
         super(context, R.layout.trip_list_row, data);
-        mContext = context;
         mFragment = fragment;
     }
 
     private static class ViewHolder {
-        TextView origin;
-        TextView destination;
-        TextView origTimeMin;
-        TextView destTimeMin;
+        TextView origin1;
+        TextView destination1;
+        TextView origTimeMin1;
+        TextView destTimeMin1;
 
         TextView origin2;
         TextView destination2;
@@ -84,19 +82,22 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
 
         if(convertView == null) {
             viewHolder = new TripViewAdapter.ViewHolder();
-            LayoutInflater inflater = LayoutInflater.from(mContext);
+            LayoutInflater inflater = LayoutInflater.from(mFragment.getActivity());
             convertView = inflater.inflate(R.layout.trip_list_row, parent, false);
 
             viewHolder.origTimeDate =  convertView.findViewById(R.id.trip_date_textView);
 
-            viewHolder.origin =        convertView.findViewById(R.id.trip_origin_textView);
-            viewHolder.destination =   convertView.findViewById(R.id.trip_destination_textView);
-            viewHolder.origTimeMin =   convertView.findViewById(R.id.trip_departTime_textView);
+            // First Leg
+            viewHolder.origin1 =        convertView.findViewById(R.id.trip_origin_textView);
+            viewHolder.destination1 =   convertView.findViewById(R.id.trip_destination_textView);
+            viewHolder.origTimeMin1 =   convertView.findViewById(R.id.trip_departTime_textView);
             viewHolder.coloredBar1 =   convertView.findViewById(R.id.trip_colored_line1);
-            viewHolder.destTimeMin =   convertView.findViewById(R.id.trip_arrivalTime_textView);
+            viewHolder.destTimeMin1 =   convertView.findViewById(R.id.trip_arrivalTime_textView);
 
+            // Transfer Icon
             viewHolder.imageView1  =   convertView.findViewById(R.id.trip_imageView1);
 
+            // Second Leg
             viewHolder.departTitle2 =  convertView.findViewById(R.id.trip_departTitle2);
             viewHolder.arriveTitle2 =  convertView.findViewById(R.id.trip_arriveTitle2);
             viewHolder.origin2 =       convertView.findViewById(R.id.trip_origin_textView2);
@@ -105,8 +106,10 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
             viewHolder.coloredBar2 =   convertView.findViewById(R.id.trip_colored_line2);
             viewHolder.destTimeMin2 =  convertView.findViewById(R.id.trip_arrivalTime_textView2);
 
+            // Transfer Icon
             viewHolder.imageView2  =   convertView.findViewById(R.id.trip_imageView2);
 
+            // Third Leg
             viewHolder.departTitle3 =  convertView.findViewById(R.id.trip_departTitle3);
             viewHolder.arriveTitle3 =  convertView.findViewById(R.id.trip_arriveTitle3);
             viewHolder.origin3 =       convertView.findViewById(R.id.trip_origin_textView3);
@@ -132,8 +135,6 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
             viewHolder.clipper.setText(fullTrip.getFareList().get(0).getFareAmount());
             viewHolder.fare.setText(fullTrip.getFareList().get(1).getFareAmount());
             setTripViews(fullTrip, viewHolder);
-        } else {
-            Toast.makeText(mContext, mContext.getResources().getString(R.string.error_try_again), Toast.LENGTH_SHORT).show();
         }
         return view;
     }
@@ -148,7 +149,7 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
             new SetResultViewsTask(mFragment, viewHolder, fullTrip, 2).execute();
             setColoredBar(fullTrip.getLegList().get(1).getLine(), viewHolder, 2);
         } else {
-            if(DEBUG) {
+            if(MyDebug.DEBUG) {
                 Log.i("Leg 2", "skipped");
             }
             viewHolder.imageView1.setVisibility(View.GONE);
@@ -164,7 +165,7 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
             new SetResultViewsTask(mFragment, viewHolder, fullTrip, 3).execute();
             setColoredBar(fullTrip.getLegList().get(2).getLine(), viewHolder, 3);
         } else {
-            if(DEBUG) {
+            if(MyDebug.DEBUG) {
                 Log.i("Leg 3", "skipped");
             }
             viewHolder.imageView2.setVisibility(View.GONE);
@@ -179,104 +180,14 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
     }
 
     private void setColoredBar(String route, ViewHolder viewHolder, int leg) {
-        // Train Route Colors
-        int blueLine = ContextCompat.getColor(mContext, R.color.bartBlueLine); //#0099cc
-        int redLine = ContextCompat.getColor(mContext, R.color.bartRedLine); //#ff0000
-        int greenLine = ContextCompat.getColor(mContext, R.color.bartGreenLine); //#339933
-        int yellowLine = ContextCompat.getColor(mContext, R.color.bartYellowLine); //#ffff33
-        int orangeLine = ContextCompat.getColor(mContext, R.color.bartOrangeLine); //#ff9933
-        int grayLine = ContextCompat.getColor(mContext, R.color.bartOakAirport);
-        int defaultLine = ContextCompat.getColor(mContext, R.color.bartDefault);
-
         if(leg == 1) {
-            switch(route) {
-                case "ROUTE 1": viewHolder.coloredBar1.setBackgroundColor(yellowLine);
-                    break;
-                case "ROUTE 2": viewHolder.coloredBar1.setBackgroundColor(yellowLine);
-                    break;
-                case "ROUTE 3": viewHolder.coloredBar1.setBackgroundColor(orangeLine);
-                    break;
-                case "ROUTE 4": viewHolder.coloredBar1.setBackgroundColor(orangeLine);
-                    break;
-                case "ROUTE 5": viewHolder.coloredBar1.setBackgroundColor(greenLine);
-                    break;
-                case "ROUTE 6": viewHolder.coloredBar1.setBackgroundColor(greenLine);
-                    break;
-                case "ROUTE 7": viewHolder.coloredBar1.setBackgroundColor(redLine);
-                    break;
-                case "ROUTE 8":  viewHolder.coloredBar1.setBackgroundColor(redLine);
-                    break;
-                case "ROUTE 11": viewHolder.coloredBar1.setBackgroundColor(blueLine);
-                    break;
-                case "ROUTE 12": viewHolder.coloredBar1.setBackgroundColor(blueLine);
-                    break;
-                case "ROUTE 19": viewHolder.coloredBar1.setBackgroundColor(grayLine);
-                    break;
-                case "ROUTE 20": viewHolder.coloredBar1.setBackgroundColor(grayLine);
-                    break;
-                default:        viewHolder.coloredBar1.setBackgroundColor(defaultLine);
-                    break;
-            }
+            BartRoutes.setLineBarByRoute(mFragment.getActivity(), route, viewHolder.coloredBar1);
         }
         if(leg == 2) {
-            switch(route) {
-                case "ROUTE 1": viewHolder.coloredBar2.setBackgroundColor(yellowLine);
-                    break;
-                case "ROUTE 2": viewHolder.coloredBar2.setBackgroundColor(yellowLine);
-                    break;
-                case "ROUTE 3": viewHolder.coloredBar2.setBackgroundColor(orangeLine);
-                    break;
-                case "ROUTE 4": viewHolder.coloredBar2.setBackgroundColor(orangeLine);
-                    break;
-                case "ROUTE 5": viewHolder.coloredBar2.setBackgroundColor(greenLine);
-                    break;
-                case "ROUTE 6": viewHolder.coloredBar2.setBackgroundColor(greenLine);
-                    break;
-                case "ROUTE 7": viewHolder.coloredBar2.setBackgroundColor(redLine);
-                    break;
-                case "ROUTE 8":  viewHolder.coloredBar2.setBackgroundColor(redLine);
-                    break;
-                case "ROUTE 11": viewHolder.coloredBar2.setBackgroundColor(blueLine);
-                    break;
-                case "ROUTE 12": viewHolder.coloredBar2.setBackgroundColor(blueLine);
-                    break;
-                case "ROUTE 19": viewHolder.coloredBar2.setBackgroundColor(grayLine);
-                    break;
-                case "ROUTE 20": viewHolder.coloredBar2.setBackgroundColor(grayLine);
-                    break;
-                default:        viewHolder.coloredBar2.setBackgroundColor(defaultLine);
-                    break;
-            }
+            BartRoutes.setLineBarByRoute(mFragment.getActivity(), route, viewHolder.coloredBar2);
         }
         if(leg == 3) {
-            switch(route) {
-                case "ROUTE 1": viewHolder.coloredBar3.setBackgroundColor(yellowLine);
-                    break;
-                case "ROUTE 2": viewHolder.coloredBar3.setBackgroundColor(yellowLine);
-                    break;
-                case "ROUTE 3": viewHolder.coloredBar3.setBackgroundColor(orangeLine);
-                    break;
-                case "ROUTE 4": viewHolder.coloredBar3.setBackgroundColor(orangeLine);
-                    break;
-                case "ROUTE 5": viewHolder.coloredBar3.setBackgroundColor(greenLine);
-                    break;
-                case "ROUTE 6": viewHolder.coloredBar3.setBackgroundColor(greenLine);
-                    break;
-                case "ROUTE 7": viewHolder.coloredBar3.setBackgroundColor(redLine);
-                    break;
-                case "ROUTE 8":  viewHolder.coloredBar3.setBackgroundColor(redLine);
-                    break;
-                case "ROUTE 11": viewHolder.coloredBar3.setBackgroundColor(blueLine);
-                    break;
-                case "ROUTE 12": viewHolder.coloredBar3.setBackgroundColor(blueLine);
-                    break;
-                case "ROUTE 19": viewHolder.coloredBar3.setBackgroundColor(grayLine);
-                    break;
-                case "ROUTE 20": viewHolder.coloredBar3.setBackgroundColor(grayLine);
-                    break;
-                default:        viewHolder.coloredBar3.setBackgroundColor(defaultLine);
-                    break;
-            }
+            BartRoutes.setLineBarByRoute(mFragment.getActivity(), route, viewHolder.coloredBar3);
         }
     }
 
@@ -319,10 +230,10 @@ public class TripViewAdapter  extends ArrayAdapter<FullTrip> implements View.OnC
             if(result) {
                 switch(mLeg) {
                     case 1:
-                        mViewHolder.origin.setText(mOriginResult);
-                        mViewHolder.destination.setText(mDestResult);
-                        mViewHolder.origTimeMin.setText(mFullTrip.getLegList().get(0).getOrigTimeMin());
-                        mViewHolder.destTimeMin.setText(mFullTrip.getLegList().get(0).getDestTimeMin());
+                        mViewHolder.origin1.setText(mOriginResult);
+                        mViewHolder.destination1.setText(mDestResult);
+                        mViewHolder.origTimeMin1.setText(mFullTrip.getLegList().get(0).getOrigTimeMin());
+                        mViewHolder.destTimeMin1.setText(mFullTrip.getLegList().get(0).getDestTimeMin());
                         break;
                     case 2:
                         mViewHolder.origin2.setText(mOriginResult);

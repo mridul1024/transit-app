@@ -4,21 +4,25 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
 import com.zuk0.gaijinsmash.riderz.model.bart.Favorite;
 
-@Database(entities = {Favorite.class}, version = 4, exportSchema = false)
+@Database(entities = {Favorite.class}, version = 12, exportSchema = false)
+@TypeConverters({Converters.class})
 public abstract class FavoriteDatabase extends RoomDatabase {
 
     private static FavoriteDatabase INSTANCE;
     public abstract FavoriteDAO getFavoriteDAO();
 
+    //todo: add synchronized?
     public static FavoriteDatabase getRoomDB(Context context) {
         if(INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), FavoriteDatabase.class, "favorite-database")
+            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), FavoriteDatabase.class, "favorites")
                     .addMigrations(MIGRATION)
+                    .fallbackToDestructiveMigration()
                     .build();
         }
         return INSTANCE;
@@ -28,12 +32,11 @@ public abstract class FavoriteDatabase extends RoomDatabase {
         INSTANCE = null;
     }
 
-
-    // Edit this to create a new migration for database - and use ".addMigrations(example)
-    private static final Migration MIGRATION = new Migration(1,2) {
+    // Edit this to create a new migration for database
+    private static final Migration MIGRATION = new Migration(12,13) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE stations ADD COLUMN last_update INTEGER");
+            database.execSQL("ALTER TABLE favorites ADD COLUMN last_update INTEGER");
         }
     };
 }

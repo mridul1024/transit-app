@@ -24,8 +24,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_alignParentTop="true"
-                    android:text="02/13/2018" />
+                    android:layout_alignParentTop="true" />
 
                 <LinearLayout
                     android:id="@+id/trip_linearLayout1"
@@ -45,8 +44,7 @@
                         android:id="@+id/trip_origin_textView"
                         style="@style/TextViewRiderz"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="origin" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -66,8 +64,7 @@
                         android:id="@+id/trip_destination_textView"
                         style="@style/TextViewRiderz"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="destination" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -86,7 +83,7 @@
                         android:text="@string/bart_result_departTime" />
                     <TextView
                         android:id="@+id/trip_colored_line1"
-                        android:layout_width="150dp"
+                        android:layout_width="0dp"
                         android:layout_height="5dp"
                         android:layout_gravity="center_vertical"
                         android:background="@color/bartDefault"
@@ -138,8 +135,7 @@
                         android:id="@+id/trip_origin_textView2"
                         style="@style/TextViewRiderz"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="origin" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -159,8 +155,7 @@
                         android:id="@+id/trip_destination_textView2"
                         style="@style/TextViewRiderz"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="destination" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -179,7 +174,7 @@
                         android:text="@string/bart_result_departTime" />
                     <TextView
                         android:id="@+id/trip_colored_line2"
-                        android:layout_width="150dp"
+                        android:layout_width="0dp"
                         android:layout_height="5dp"
                         android:layout_gravity="center_vertical"
                         android:background="@color/bartDefault"
@@ -230,8 +225,7 @@
                         android:id="@+id/trip_origin_textView3"
                         style="@style/TextViewRiderz"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="origin" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -251,8 +245,7 @@
                         android:id="@+id/trip_destination_textView3"
                         style="@style/TextViewRiderz"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="destination" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -270,7 +263,7 @@
                         android:text="@string/bart_result_departTime" />
                     <TextView
                         android:id="@+id/trip_colored_line3"
-                        android:layout_width="150dp"
+                        android:layout_width="0dp"
                         android:layout_height="5dp"
                         android:layout_gravity="center_vertical"
                         android:background="@color/bartDefault"
@@ -310,8 +303,7 @@
                         android:id="@+id/trip_clipper_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="1" />
+                        android:layout_weight="1" />
 
                     <TextView
                         style="@style/TextViewRiderz"
@@ -326,7 +318,6 @@
                         android:id="@+id/trip_fare_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1"
                         android:layout_weight="1"/>
                 </LinearLayout>
 
@@ -347,8 +338,7 @@
                         android:id="@+id/trip_totalTime_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingRight="2dp"
-                        android:text="12" />
+                        android:paddingEnd="2dp" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

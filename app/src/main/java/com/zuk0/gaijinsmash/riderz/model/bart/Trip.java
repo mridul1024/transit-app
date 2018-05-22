@@ -3,10 +3,13 @@ package com.zuk0.gaijinsmash.riderz.model.bart;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 public class Trip implements Parcelable {
 
 
-    // NOTE: origin and destination will return the Abbreviation of a Station.
+    // NOTE: origin and destination will return the Abbreviation of a Station,
+    // because of the way BART API returns results.
     //          Will need to convert to the full name.
     private String origin;
     private String destination;
@@ -18,6 +21,7 @@ public class Trip implements Parcelable {
     private String clipper;
     private String tripTime;
     private String co2;
+    private List<Estimate> estimateList;
 
     public Trip() { }
 
@@ -56,6 +60,13 @@ public class Trip implements Parcelable {
     public String getClipper() { return clipper; }
     public String getTripTime() { return tripTime; }
     public String getCo2() { return co2; }
+    public List<Estimate> getEstimateList() {
+        return estimateList;
+    }
+
+    public void setEstimateList(List<Estimate> estimateList) {
+        this.estimateList = estimateList;
+    }
     public void setOrigin(String origin) {
         this.origin = origin;
     }
@@ -90,5 +101,24 @@ public class Trip implements Parcelable {
         dest.writeString(this.clipper);
         dest.writeString(this.tripTime);
         dest.writeString(this.co2);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == this) return true;
+        if(!(o instanceof Trip)) {
+            return false;
+        }
+        Trip trip = (Trip) o;
+        return trip.origin.equals(origin) &&
+                trip.destination.equals(destination);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + origin.hashCode();
+        result = 31 * result + destination.hashCode();
+        return result;
     }
 }

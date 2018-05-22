@@ -38,4 +38,11 @@ public class TripFragmentTest {
         onView(withId(R.id.trip_container)).check(matches((isDisplayed())));
     }
 
+    // Use case: User selects a station and then hits spacebar, then pushes button -
+
+    // Use case: User uses keyboard and pushes characters/symbols that don't equal to a known Station.
+
+
+
+
 }
