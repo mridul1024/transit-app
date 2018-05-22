@@ -231,6 +231,7 @@ public class TripFragment extends Fragment {
     // AsyncTask
     //---------------------------------------------------------------------------------------------
 
+    //TODO : create validator for Origin and Destination TextViews to prevent NPEs
     private static class GetTripTask extends AsyncTask<Void, Void, Boolean> {
         private WeakReference<TripFragment> mWeakRef;
         private TripXMLParser tripXMLParser = null;

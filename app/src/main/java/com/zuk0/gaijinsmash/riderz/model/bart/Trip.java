@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Trip implements Parcelable {
 
-
     // NOTE: origin and destination will return the Abbreviation of a Station,
     // because of the way BART API returns results.
     //          Will need to convert to the full name.

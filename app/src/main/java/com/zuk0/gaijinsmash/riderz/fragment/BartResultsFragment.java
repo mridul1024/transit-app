@@ -2,6 +2,7 @@ package com.zuk0.gaijinsmash.riderz.fragment;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,11 +17,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.database.FavoriteDatabase;
-import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
+import com.zuk0.gaijinsmash.riderz.database.FavoriteDbHelper;
 import com.zuk0.gaijinsmash.riderz.model.bart.Favorite;
 import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
-import com.zuk0.gaijinsmash.riderz.model.bart.Trip;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutes;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.trip.TripViewAdapter;
@@ -33,7 +32,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class BartResultsFragment extends Fragment {
 
@@ -97,14 +95,7 @@ public class BartResultsFragment extends Fragment {
             mFavoriteObject.setOrigin(mOrigin);
             mFavoriteObject.setDestination(mDestination);
             mFavoriteObject.setSystem(BART);
-
-            HashSet<String> colors = new HashSet<>();
-            for(FullTrip fullTrip : mFullTripList) {
-                // get the first leg object
-                String line = fullTrip.getLegList().get(0).getLine();
-                colors.add(BartRoutes.lineToColor(line));
-            }
-            mFavoriteObject.setColors(colors);
+            mFavoriteObject.setColors(getColorsSet(mFullTripList));
         }
 
         // Checks database and displays appropriate view in toolbar
@@ -124,81 +115,69 @@ public class BartResultsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_favorite:
-                new SetFavoritesTask(this, 1).execute();
+                new SetFavoritesTask(this, FavoritesTask.ADD_FAVORITE).execute();
                 return true;
             case R.id.action_favorited:
-                //todo: abstract dialog to a separate file.
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                alertDialog.setTitle("Remove Favorite");
-                alertDialog.setMessage("Are you sure you want to remove this favorite?");
-                alertDialog.setPositiveButton(getResources().getString(R.string.alert_dialog_yes), (dialog, which) -> new SetFavoritesTask(mBartResultsFragment, 2).execute());
-                alertDialog.setNegativeButton(getResources().getString(R.string.alert_dialog_no), (dialog, which) -> dialog.cancel());
-                alertDialog.show();
+                initAlertDialog();
                 return true;
         }
         return false;
     }
 
+    public void initAlertDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle("Remove Favorite");
+        alertDialog.setMessage("Are you sure you want to remove this favorite?");
+        alertDialog.setPositiveButton(getResources().getString(R.string.alert_dialog_yes), (dialog, which) -> new SetFavoritesTask(mBartResultsFragment, FavoritesTask.DELETE_FAVORITE).execute());
+        alertDialog.setNegativeButton(getResources().getString(R.string.alert_dialog_no), (dialog, which) -> dialog.cancel());
+        alertDialog.show();
+    }
+
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
+    private enum FavoritesTask {
+        CHECK_CURRENT_TRIP, ADD_FAVORITE, DELETE_FAVORITE
+    }
+
     private static class SetFavoritesTask extends AsyncTask<Void, Void, Boolean> {
         private WeakReference<BartResultsFragment> mWeakRef;
-        private int mStatus = 0;
+        private FavoritesTask mTask;
 
         private SetFavoritesTask(BartResultsFragment context) {
             mWeakRef = new WeakReference<>(context);
         }
 
-        private SetFavoritesTask(BartResultsFragment context, int status) {
+        private SetFavoritesTask(BartResultsFragment context, FavoritesTask task) {
             mWeakRef = new WeakReference<>(context);
-            this.mStatus = status;
+            mTask = task;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
             BartResultsFragment frag = mWeakRef.get();
-            FavoriteDatabase db = FavoriteDatabase.getRoomDB(frag.getActivity());
-            switch(mStatus) {
-                case 0:
-                    return isCurrentTripFavorited(db, frag.mFavoriteObject);
-                case 1:
-                    // todo: check if favorite object is first two entries - abstract later
-                    if (db.getFavoriteDAO().countFavorites() < 2) {
+            switch(mTask) {
+                case CHECK_CURRENT_TRIP:
+                    return FavoriteDbHelper.isCurrentTripFavorited(frag.getActivity(), frag.mFavoriteObject);
+                case ADD_FAVORITE:
+                    if (FavoriteDbHelper.getFavoritesCount(frag.getActivity()) < 2) {
                         frag.mFavoriteObject.setPriority(Favorite.Priority.ON);
-                    };
+                    }
+                    FavoriteDbHelper.addToFavorites(frag.getActivity(), frag.mFavoriteObject);
 
-                    addToFavorites(db, frag.mFavoriteObject);
-
-                    // This adds the inverse of the Trip
+                    // This adds the inverse of the Trip object
                     Favorite favoriteReversed = new Favorite();
                     favoriteReversed.setOrigin(frag.mDestination);
                     favoriteReversed.setDestination(frag.mOrigin);
-                    if (db.getFavoriteDAO().countFavorites() < 2) {
+                    if (FavoriteDbHelper.getFavoritesCount(frag.getActivity())< 2) {
                         favoriteReversed.setPriority(Favorite.Priority.ON);
-                    };
-                    String url = BartApiStringBuilder.getDetailedRoute(frag.mDestination, frag.mOrigin, "TODAY", "NOW");
-                    List<FullTrip> tripList = new ArrayList<>();
-                    try {
-                        TripXMLParser parser = new TripXMLParser(frag.getActivity());
-                        tripList = parser.getList(url);
-                    } catch (IOException | XmlPullParserException e) {
-                        Log.e("Exception", e.toString());
                     }
-
-                    HashSet<String> routes = new HashSet<>();
-                    for(FullTrip fullTrip : tripList) {
-                        String line = fullTrip.getLegList().get(0).getLine();
-                        routes.add(BartRoutes.lineToColor(line));
-                    }
-                    favoriteReversed.setColors(routes);
-
-                    if(MyDebug.DEBUG)
-                        Log.d("reversedFav", frag.mDestination +"/"+frag.mOrigin);
-                    addToFavorites(db, favoriteReversed);
+                    List<FullTrip> tripList = getFullTripList(frag.getActivity(), frag.mDestination, frag.mOrigin);
+                    favoriteReversed.setColors(getColorsSet(tripList));
+                    FavoriteDbHelper.addToFavorites(frag.getActivity(), favoriteReversed);
                     return true;
-                case 2:
-                    removeFromFavorites(db, frag.mFavoriteObject);
+                case DELETE_FAVORITE:
+                    FavoriteDbHelper.removeFromFavorites(frag.getActivity(), frag.mFavoriteObject);
                     return false;
             }
             return false;
@@ -211,13 +190,16 @@ public class BartResultsFragment extends Fragment {
                 IS_FAVORITED_ON = true;
                 frag.mFavoritedIcon.setVisible(true);
                 frag.mFavoriteIcon.setVisible(false);
-                if(mStatus == 1) {
+                if(mTask == FavoritesTask.ADD_FAVORITE) {
                     Toast.makeText(frag.getActivity(), frag.getResources().getString(R.string.favorite_added), Toast.LENGTH_SHORT).show();
                 }
             } else {
                 IS_FAVORITED_ON = false;
                 frag.mFavoriteIcon.setVisible(true);
                 frag.mFavoritedIcon.setVisible(false);
+                if(mTask == FavoritesTask.DELETE_FAVORITE) {
+                    Toast.makeText(frag.getActivity(), frag.getResources().getString(R.string.favorite_deleted), Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
@@ -225,25 +207,25 @@ public class BartResultsFragment extends Fragment {
     //---------------------------------------------------------------------------------------------
     // Helper Methods
     //---------------------------------------------------------------------------------------------
-    private static boolean isCurrentTripFavorited(FavoriteDatabase db, Favorite favorite) {
-        if(db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin()) != null) {
-            //if found, check what destination is
-            List<Favorite> list = db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin());
-            // search for matching favorite object
-            for(Favorite x : list) {
-                if(x.getDestination().equals(favorite.getDestination())) {
-                    return true;
-                }
-            }
+    private static List<FullTrip> getFullTripList(Context context, String origin, String destination) {
+        String url = BartApiStringBuilder.getDetailedRoute(origin, destination, "TODAY", "NOW");
+        List<FullTrip> tripList = new ArrayList<>();
+        try {
+            TripXMLParser parser = new TripXMLParser(context);
+            tripList = parser.getList(url);
+        } catch (IOException | XmlPullParserException e) {
+            Log.e("Exception", e.toString());
         }
-        return false;
+        return tripList;
     }
 
-    private static void addToFavorites(FavoriteDatabase db, Favorite favorite) {
-        db.getFavoriteDAO().addStation(favorite);
-    }
-
-    private static void removeFromFavorites(FavoriteDatabase db, Favorite favorite) {
-        db.getFavoriteDAO().delete(favorite);
+    private static HashSet<String> getColorsSet(List<FullTrip> fullTripList) {
+        HashSet<String> colors = new HashSet<>();
+        for(FullTrip fullTrip : fullTripList) {
+            // get the first leg object only
+            String line = fullTrip.getLegList().get(0).getLine();
+            colors.add(BartRoutes.lineToColor(line));
+        }
+        return colors;
     }
 }

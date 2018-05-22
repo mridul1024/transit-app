@@ -23,4 +23,33 @@ public class FavoriteDbHelper {
         db.close();
         return favoritesList;
     }
+
+    public static boolean isCurrentTripFavorited(Context context, Favorite favorite) {
+        FavoriteDatabase db = FavoriteDatabase.getRoomDB(context);
+        boolean result = false;
+        if(db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin()) != null) {
+            List<Favorite> list = db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin());
+            // search for matching favorite object
+            //todo - can probably refactor into a better sql query
+            for(Favorite x : list) {
+                if(x.getDestination().equals(favorite.getDestination())) {
+                    result = true;
+                }
+            }
+        }
+        db.close();
+        return result;
+    }
+
+    public static void addToFavorites(Context context, Favorite favorite) {
+        FavoriteDatabase db = FavoriteDatabase.getRoomDB(context);
+        db.getFavoriteDAO().addStation(favorite);
+        db.close();
+    }
+
+    public static void removeFromFavorites(Context context, Favorite favorite) {
+        FavoriteDatabase db = FavoriteDatabase.getRoomDB(context);
+        db.getFavoriteDAO().delete(favorite);
+        db.close();
+    }
 }
