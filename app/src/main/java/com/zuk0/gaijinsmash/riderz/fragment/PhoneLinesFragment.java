@@ -14,7 +14,7 @@ public class PhoneLinesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mInflatedView = inflater.inflate(R.layout.phone_lines_view, container, false);
+        mInflatedView = inflater.inflate(R.layout.view_phone_lines, container, false);
         return mInflatedView;
     }
 

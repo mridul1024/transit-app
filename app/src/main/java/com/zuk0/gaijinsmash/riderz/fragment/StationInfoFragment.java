@@ -40,7 +40,7 @@ public class StationInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mInflatedView = inflater.inflate(R.layout.station_info_view, container, false);
+        mInflatedView = inflater.inflate(R.layout.view_station_info, container, false);
         return mInflatedView;
     }
 

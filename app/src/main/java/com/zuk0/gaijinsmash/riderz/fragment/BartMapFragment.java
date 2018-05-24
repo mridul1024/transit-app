@@ -23,7 +23,7 @@ public class BartMapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mInflatedView = inflater.inflate(R.layout.bart_map_view, container, false);
+        mInflatedView = inflater.inflate(R.layout.view_bart_map, container, false);
         return mInflatedView;
     }
 

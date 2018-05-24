@@ -1,6 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.debug;
 
-public class MyDebug {
+public class DebugController {
 
     /*
        static values to turn various Logs on or off for the entire project

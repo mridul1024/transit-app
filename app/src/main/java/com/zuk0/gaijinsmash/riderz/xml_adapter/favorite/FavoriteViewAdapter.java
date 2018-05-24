@@ -42,7 +42,7 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
     private FavoritesFragment mFragment;
 
     public FavoriteViewAdapter(List<Favorite> data, Context context, FavoritesFragment fragment) {
-        super(context, R.layout.bart_favorites_list_row, data);
+        super(context, R.layout.list_row_bart_favorites, data);
         this.mContext = context;
         this.mFragment = fragment;
     }
@@ -68,7 +68,7 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
         if(convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            convertView = inflater.inflate(R.layout.bart_favorites_list_row, parent, false);
+            convertView = inflater.inflate(R.layout.list_row_bart_favorites, parent, false);
             viewHolder.origin = convertView.findViewById(R.id.favorite_origin_textView);
             viewHolder.destination = convertView.findViewById(R.id.favorite_destination_textView);
             viewHolder.searchButton = convertView.findViewById(R.id.favorite_search_ib);

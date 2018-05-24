@@ -96,4 +96,5 @@ public class TimeAndDate {
         String time = df.format(date);
         return  Integer.valueOf(time);
     }
+
 }

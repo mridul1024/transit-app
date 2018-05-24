@@ -40,7 +40,7 @@ public class StationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mInflatedView = inflater.inflate(R.layout.station_view, container, false);
+        mInflatedView = inflater.inflate(R.layout.view_station, container, false);
         return mInflatedView;
     }
 
@@ -74,13 +74,12 @@ public class StationFragment extends Fragment {
         new GetStationsTask(this).execute();
     }
 
-
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
     private static class GetStationsTask extends AsyncTask<Void, Void, List<Station>> {
         private WeakReference<StationFragment> mWeakRef;
-        private List<Station> stationList = null;
+        private List<Station> mStationList = null;
 
         private GetStationsTask(StationFragment context) {
             mWeakRef = new WeakReference<>(context);
@@ -90,22 +89,14 @@ public class StationFragment extends Fragment {
         protected List<Station> doInBackground(Void... voids) {
             StationFragment frag = mWeakRef.get();
             frag.mProgressBar.setVisibility(View.VISIBLE);
-            StationDbHelper helper = new StationDbHelper(frag.getActivity());
-            try {
-                helper.initStationDb();
-                if(stationList == null) {
-                    stationList = helper.getDb().getStationDAO().getAllStations();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return stationList;
+            mStationList = StationDbHelper.getAllStations(frag.getActivity());
+            return mStationList;
         }
 
         protected void onPostExecute(List<Station> stations) {
             StationFragment frag = mWeakRef.get();
-            if(stationList != null) {
-                StationViewAdapter adapter = new StationViewAdapter(stationList, frag.getActivity());
+            if(mStationList != null) {
+                StationViewAdapter adapter = new StationViewAdapter(mStationList, frag.getActivity());
                 frag.mListView.setAdapter(adapter);
                 frag.mProgressBar.setVisibility(View.GONE);
             } else {

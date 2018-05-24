@@ -4,11 +4,10 @@ import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
-import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
+import com.zuk0.gaijinsmash.riderz.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.model.bart.Estimate;
 import com.zuk0.gaijinsmash.riderz.model.bart.Trip;
 import com.zuk0.gaijinsmash.riderz.network.FetchInputStream;
-import com.zuk0.gaijinsmash.riderz.utils.BartRoutes;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.XmlParserAbstract;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.XmlParserInterface;
 
@@ -35,7 +34,7 @@ public class EstimateXmlParser implements XmlParserInterface {
 
     @Override
     public List<Trip> getList(String url) throws IOException, XmlPullParserException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("makeCall()", "with " + url);
         InputStream is = new FetchInputStream(mContext).connectToApi(url);
         List<Trip> results = parse(is);
@@ -44,7 +43,7 @@ public class EstimateXmlParser implements XmlParserInterface {
     }
 
     private List<Trip> parse(InputStream is) throws XmlPullParserException, IOException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.d("parse()", "***BEGINNING***");
         try {
             XmlPullParser parser = Xml.newPullParser();
@@ -59,7 +58,7 @@ public class EstimateXmlParser implements XmlParserInterface {
 
     @Override
     public List<Trip> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.d("readFeed", "***BEGINNING***");
         List<Trip>  tripList = new ArrayList<>();
         parser.require(XmlPullParser.START_TAG, ns, "root");
@@ -71,7 +70,7 @@ public class EstimateXmlParser implements XmlParserInterface {
 
             switch(name) {
                 case "station":
-                    if(MyDebug.DEBUG) Log.d("station tag", "MATCHED");
+                    if(DebugController.DEBUG) Log.d("station tag", "MATCHED");
                     tripList = readStation(parser);
                     break;
                 default:
@@ -94,12 +93,12 @@ public class EstimateXmlParser implements XmlParserInterface {
             switch (name) {
                 case "name":
                     mOrigin = readName(parser);
-                    if(MyDebug.DEBUG) Log.d("name tag", "MATCHED");
+                    if(DebugController.DEBUG) Log.d("name tag", "MATCHED");
                     break;
                 case "etd":
                     //create a new Trip Object and add to TripList
                     tripList.add(readEtd(parser));
-                    if(MyDebug.DEBUG) Log.d("etd tag", "MATCHED");
+                    if(DebugController.DEBUG) Log.d("etd tag", "MATCHED");
                     break;
                 default:
                     XmlParserAbstract.skip(parser);
@@ -122,10 +121,10 @@ public class EstimateXmlParser implements XmlParserInterface {
             switch (name) {
                 case "destination":
                     destination = readDestination(parser);
-                    if(MyDebug.DEBUG) Log.d("destination tag", "MATCHED");
+                    if(DebugController.DEBUG) Log.d("destination tag", "MATCHED");
                     break;
                 case "estimate":
-                    if(MyDebug.DEBUG) Log.d("estimate tag", "MATCHED");
+                    if(DebugController.DEBUG) Log.d("estimate tag", "MATCHED");
                     estimateList.add(readEstimateObject(parser));
                     break;
                 default:
@@ -157,32 +156,32 @@ public class EstimateXmlParser implements XmlParserInterface {
             switch (name) {
                 case "minutes":
                     minutes = readMinutes(parser);
-                    if(MyDebug.DEBUG)
+                    if(DebugController.DEBUG)
                         Log.d("minutes", minutes);
                     break;
                 case "platform":
                     platform = readPlatform(parser);
-                    if(MyDebug.DEBUG)
+                    if(DebugController.DEBUG)
                         Log.d("platform", platform);
                     break;
                 case "direction":
                     direction = readDirection(parser);
-                    if(MyDebug.DEBUG)
+                    if(DebugController.DEBUG)
                         Log.d("direction", direction);
                     break;
                 case "color":
                     color = readColor(parser);
-                    if(MyDebug.DEBUG)
+                    if(DebugController.DEBUG)
                         Log.d("color", color);
                     break;
                 case "hexcolor":
                     hexcolor = readHexcolor(parser);
-                    if(MyDebug.DEBUG)
+                    if(DebugController.DEBUG)
                         Log.d("hexcolor", hexcolor);
                     break;
                 case "bikeflag":
                     bikeflag = readBikeflag(parser);
-                    if(MyDebug.DEBUG)
+                    if(DebugController.DEBUG)
                         Log.d("bikeflag", bikeflag);
                     break;
                 default:

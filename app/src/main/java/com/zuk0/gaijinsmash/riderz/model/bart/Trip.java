@@ -102,22 +102,4 @@ public class Trip implements Parcelable {
         dest.writeString(this.co2);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if(o == this) return true;
-        if(!(o instanceof Trip)) {
-            return false;
-        }
-        Trip trip = (Trip) o;
-        return trip.origin.equals(origin) &&
-                trip.destination.equals(destination);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = 17;
-        result = 31 * result + origin.hashCode();
-        result = 31 * result + destination.hashCode();
-        return result;
-    }
 }

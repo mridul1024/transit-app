@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.TextInputEditText;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
@@ -42,8 +39,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import static android.app.DatePickerDialog.OnDateSetListener;
-
 public class TripFragment extends Fragment {
 
     private TimePickerDialog mTimePickerDialog;
@@ -54,7 +49,6 @@ public class TripFragment extends Fragment {
     private boolean mIs24HrTimeOn = false;
     private View mInflatedView;
     private TripFragment mTripFragment;
-
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -70,7 +64,7 @@ public class TripFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mInflatedView = inflater.inflate(R.layout.trip_view, container, false);
+        mInflatedView = inflater.inflate(R.layout.view_trip, container, false);
         return mInflatedView;
     }
 
@@ -83,16 +77,14 @@ public class TripFragment extends Fragment {
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stations);
 
         // Spinners (Drop Down List on Touch)
-        Spinner departureSpinner = mInflatedView.findViewById(R.id.station_spinner1);
-        Spinner arrivalSpinner = mInflatedView.findViewById(R.id.station_spinner2);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-
+        Spinner departureSpinner = mInflatedView.findViewById(R.id.station_spinner1);
         departureSpinner.setAdapter(spinnerAdapter);
         departureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 TextView textView = (TextView) departureSpinner.getSelectedView();
-                String itemSelected = null;
+                String itemSelected = "";
                 if (textView != null) {
                     itemSelected = textView.getText().toString();
                 }
@@ -102,6 +94,7 @@ public class TripFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
+        Spinner arrivalSpinner = mInflatedView.findViewById(R.id.station_spinner2);
         arrivalSpinner.setAdapter(spinnerAdapter);
         arrivalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -117,6 +110,7 @@ public class TripFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
+
         // Departure UI
         mDepartureActv = mInflatedView.findViewById(R.id.trip_autoCompleteTextView);
         mDepartureActv.setThreshold(1); // will start working from first character
@@ -132,21 +126,15 @@ public class TripFragment extends Fragment {
         mDateEt.setText(getText(R.string.currentDate));
         mDateEt.setInputType(InputType.TYPE_NULL);
         mDateEt.requestFocus();
-        mDateEt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar newCalendar = Calendar.getInstance();
-                mDatePickerDialog = new DatePickerDialog(getActivity(), new OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int day) {
-                        Calendar newDate = Calendar.getInstance();
-                        newDate.set(year, month, day);
-                        mSimpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-                        mDateEt.setText(mSimpleDateFormat.format(newDate.getTime()));
-                    }
-                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-                mDatePickerDialog.show();
-            }
+        mDateEt.setOnClickListener(view1 -> {
+            Calendar newCalendar = Calendar.getInstance();
+            mDatePickerDialog = new DatePickerDialog(getActivity(), (view11, year, month, day) -> {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, month, day);
+                mSimpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+                mDateEt.setText(mSimpleDateFormat.format(newDate.getTime()));
+            }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+            mDatePickerDialog.show();
         });
 
         // Time UI
@@ -154,69 +142,41 @@ public class TripFragment extends Fragment {
         mTimeEt.setText(getText(R.string.currentTime));
         mTimeEt.setInputType(InputType.TYPE_NULL);
         mTimeEt.requestFocus();
-        mTimeEt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Current time is default value
-                Calendar currentTime = Calendar.getInstance();
-                int hour = currentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = currentTime.get(Calendar.MINUTE);
+        mTimeEt.setOnClickListener(view12 -> {
+            // Current time is default value
+            Calendar currentTime = Calendar.getInstance();
+            int hour = currentTime.get(Calendar.HOUR_OF_DAY);
+            int minute = currentTime.get(Calendar.MINUTE);
 
-                // Create and return a new instance of TimePickerDialog
-                mTimePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
-                        // Returned value is always 24hr - so conversion is necessary
-                        if(mIs24HrTimeOn) {
-                            String formattedTime = String.format(Locale.US, "%02d:%02d", selectedHour, selectedMinute);
-                            mTimeEt.setText(formattedTime);
-
-                        } else {
-                            String converttedTime = TimeAndDate.convertTo12HrForTrip(selectedHour + ":" + selectedMinute);
-                            mTimeEt.setText(converttedTime);
-                        }
-                    }
-                }, hour,minute,mIs24HrTimeOn); //True = 24 hour format on TimePicker only
-                mTimePickerDialog.setTitle(getString(R.string.time_title));
-                mTimePickerDialog.show();
-            }
+            // Create and return a new instance of TimePickerDialog
+            mTimePickerDialog = new TimePickerDialog(getActivity(), (view121, selectedHour, selectedMinute) -> {
+                // Returned value is always 24hr so conversion is necessary
+                if(mIs24HrTimeOn) {
+                    String formattedTime = String.format(Locale.US, "%02d:%02d", selectedHour, selectedMinute);
+                    mTimeEt.setText(formattedTime);
+                } else {
+                    String convertedTime = TimeAndDate.convertTo12HrForTrip(selectedHour + ":" + selectedMinute);
+                    mTimeEt.setText(convertedTime);
+                }
+            }, hour,minute,mIs24HrTimeOn); //True = 24 hour format on TimePicker only
+            mTimePickerDialog.setTitle(getString(R.string.time_title));
+            mTimePickerDialog.show();
         });
 
         // Submit Button
         Button searchBtn = mInflatedView.findViewById(R.id.trip_button);
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String departingStation = mDepartureActv.getText().toString();
-                String arrivingStation = mArrivalActv.getText().toString();
+        searchBtn.setOnClickListener(view13 -> {
+            String departingStation = mDepartureActv.getText().toString();
+            String arrivingStation = mArrivalActv.getText().toString();
 
-                // TIME
-                String preformatTime = mTimeEt.getText().toString();
-                String departingTime;
+            // TIME
+            String preformatTime = mTimeEt.getText().toString();
+            String departingTime = getTimeForTripSearch(preformatTime);
 
-                if (!preformatTime.equals("Now") && mIs24HrTimeOn) {
-                    String convertedTime = TimeAndDate.convertTo12HrForTrip(preformatTime);
-                    departingTime = TimeAndDate.formatTime(convertedTime);
-                    Log.i("time", preformatTime);
-                } else if (!preformatTime.equals("Now") && !mIs24HrTimeOn) {
-                    departingTime = TimeAndDate.formatTime(preformatTime); // time=h:mm+AM/PM
-                    Log.i("time", preformatTime);
-                } else {
-                    departingTime = preformatTime;
-                }
+            // DATE
+            String departingDate = mDateEt.getText().toString();
 
-                // DATE
-                String departingDate = mDateEt.getText().toString();
-
-                //todo: check if whitespace is at end of string before continuing
-                if (departingStation.isEmpty() || arrivingStation.isEmpty() || departingDate.isEmpty() || departingTime.isEmpty()) {
-                    Toast.makeText(getActivity(), getString(R.string.error_form_completion), Toast.LENGTH_LONG).show();
-                } else if (departingStation.equals(arrivingStation)) {
-                    Toast.makeText(getActivity(), getString(R.string.error_form_completion2), Toast.LENGTH_LONG).show();
-                } else {
-                    new GetTripTask(mTripFragment, departingStation, arrivingStation, departingDate, departingTime).execute();
-                }
-            }
+            attemptTripSearch(departingTime, departingDate, departingStation, arrivingStation);
         });
     }
 
@@ -228,10 +188,65 @@ public class TripFragment extends Fragment {
     }
 
     //---------------------------------------------------------------------------------------------
+    // Helpers
+    //---------------------------------------------------------------------------------------------
+
+    private String getTimeForTripSearch(String preformatTime) {
+        String result;
+        if (!preformatTime.equals("Now") && mIs24HrTimeOn) {
+            String convertedTime = TimeAndDate.convertTo12HrForTrip(preformatTime);
+            result = TimeAndDate.formatTime(convertedTime);
+        } else if (!preformatTime.equals("Now") && !mIs24HrTimeOn) {
+            result = TimeAndDate.formatTime(preformatTime); // time=h:mm+AM/PM
+        } else {
+            result = preformatTime;
+        }
+        return result;
+    }
+
+    public void attemptTripSearch(String time, String date, String origin, String destination) {
+        if(validateUserInput(time, date, origin, destination)) {
+            new GetTripTask(mTripFragment, origin, destination, date, time).execute();
+        }
+    }
+
+    public boolean doesStationExist(String station) {
+        String[] stations = getResources().getStringArray(R.array.stations_list);
+        for(String x : stations) {
+            if(station.equals(x)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean validateUserInput(String departingTime, String departingDate, String departingStation, String arrivingStation) {
+        //todo : show error field on screen instead of toast
+        //todo: check if whitespace is at end of string before continuing
+        // check if all fields are filled
+        if (departingStation.isEmpty() || arrivingStation.isEmpty() || departingDate.isEmpty() || departingTime.isEmpty()) {
+            Toast.makeText(getActivity(), getString(R.string.error_form_completion), Toast.LENGTH_LONG).show();
+            return false;
+        }
+        // check if origin and destination are different
+        else if (departingStation.equals(arrivingStation)) {
+            Toast.makeText(getActivity(), getString(R.string.error_form_completion2), Toast.LENGTH_LONG).show();
+            return false;
+        }
+        //check if both stations are matching in strings resource
+        else if (!doesStationExist(departingStation) || !doesStationExist(arrivingStation)) {
+            Toast.makeText(getActivity(), getString(R.string.error_station_not_found), Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
 
-    //TODO : create validator for Origin and Destination TextViews to prevent NPEs
     private static class GetTripTask extends AsyncTask<Void, Void, Boolean> {
         private WeakReference<TripFragment> mWeakRef;
         private TripXMLParser tripXMLParser = null;
@@ -252,12 +267,9 @@ public class TripFragment extends Fragment {
             boolean result = false;
             // Create the API Call
             try {
-                StationDbHelper helper;
                 if (frag != null) {
-                    helper = new StationDbHelper(frag.getActivity());
-                    helper.initStationDb();
-                    mDepartAbbr = helper.getAbbrFromDb(mDepartingStn);
-                    mArriveAbbr = helper.getAbbrFromDb(mArrivingStn);
+                    mDepartAbbr = StationDbHelper.getAbbrFromDb(frag.getActivity(), mDepartingStn);
+                    mArriveAbbr = StationDbHelper.getAbbrFromDb(frag.getActivity(), mArrivingStn);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -294,7 +306,6 @@ public class TripFragment extends Fragment {
                 if (frag != null) {
                     fm = frag.getFragmentManager();
                     fm.beginTransaction().replace(R.id.fragmentContent, newFrag).addToBackStack(null).commit();
-
                 }
             } else {
                 if (frag != null) {

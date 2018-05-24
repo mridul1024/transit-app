@@ -21,7 +21,7 @@ public class EstimateViewAdapter extends ArrayAdapter<Trip> {
     private HomeFragment mFragment;
 
     public EstimateViewAdapter(List<Trip> data, Context context, HomeFragment fragment) {
-        super(context, R.layout.home_etd_list_row, data);
+        super(context, R.layout.list_row_estimate, data);
         this.mFragment = fragment;
     }
 
@@ -42,7 +42,7 @@ public class EstimateViewAdapter extends ArrayAdapter<Trip> {
         if(convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(mFragment.getActivity());
-            convertView = inflater.inflate(R.layout.home_etd_list_row, parent, false);
+            convertView = inflater.inflate(R.layout.list_row_estimate, parent, false);
             viewHolder.origin = convertView.findViewById(R.id.etd_originTv);
             viewHolder.destination = convertView.findViewById(R.id.etd_destinationTv);
             viewHolder.minutes = convertView.findViewById(R.id.etd_minutesTv);

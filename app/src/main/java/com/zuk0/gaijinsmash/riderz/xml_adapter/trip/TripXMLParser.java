@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
-import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
+import com.zuk0.gaijinsmash.riderz.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.model.bart.Fare;
 import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
 import com.zuk0.gaijinsmash.riderz.model.bart.Leg;
@@ -42,14 +42,14 @@ public class TripXMLParser implements XmlParserInterface {
     }
 
     public List<FullTrip> getList(String url) throws IOException, XmlPullParserException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("makeCall()", "with " + url);
         InputStream is = new FetchInputStream(mContext).connectToApi(url);
         return parse(is);
     }
 
     private List<FullTrip> parse(InputStream in) throws XmlPullParserException, IOException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("parse()", "***BEGINNING***");
         try {
             XmlPullParser parser = Xml.newPullParser();
@@ -63,7 +63,7 @@ public class TripXMLParser implements XmlParserInterface {
     }
 
     public List<FullTrip> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("readFeed():", "***BEGINNING***");
         List<FullTrip> tripList = new ArrayList<>();
         parser.require(XmlPullParser.START_TAG, ns, "root");
@@ -74,7 +74,7 @@ public class TripXMLParser implements XmlParserInterface {
             String name = parser.getName();
             // Starts by looking for the first tag
             if (name.equals("schedule")) {
-                if(MyDebug.DEBUG)
+                if(DebugController.DEBUG)
                     Log.i("SCHEDULE tag: ", "MATCHED");
                 tripList = readSchedule(parser);
             } else {
@@ -85,7 +85,7 @@ public class TripXMLParser implements XmlParserInterface {
     }
 
     private List<FullTrip> readSchedule(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("readSchedule()", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "schedule");
         List<FullTrip> tripList = new ArrayList<>();
@@ -104,7 +104,7 @@ public class TripXMLParser implements XmlParserInterface {
     }
 
     private List<FullTrip> readRequest(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("readRequest()", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "request");
         List<FullTrip> tripList = new ArrayList<>();
@@ -145,36 +145,36 @@ public class TripXMLParser implements XmlParserInterface {
                 case "trip":
                     origin = parser.getAttributeValue(null, "origin"); // abbr
 
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("origin", origin);
                     destination = parser.getAttributeValue(null, "destination"); // abbr
 
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("destination", destination);
                     fare = parser.getAttributeValue(null, "fare"); // BigDecimal or Currency
 
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("fare: ", fare);
                     origTimeMin = parser.getAttributeValue(null, "origTimeMin");
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("origTimeMin", origTimeMin);
                     origTimeDate = parser.getAttributeValue(null, "origTimeDate");
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("origTimeDate", origTimeDate);
                     destTimeMin = parser.getAttributeValue(null, "destTimeMin");
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("destTimeMin", destTimeMin);
                     destTimeDate = parser.getAttributeValue(null, "destTimeDate");
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("destTimeDate", destTimeDate);
                     clipper = parser.getAttributeValue(null, "clipper");
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("clipper", clipper);
                     tripTime = parser.getAttributeValue(null, "tripTime");
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("tripTime", tripTime);
                     co2 = parser.getAttributeValue(null, "co2");
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("co2", co2);
                     break;
                 case "fares":
@@ -210,7 +210,7 @@ public class TripXMLParser implements XmlParserInterface {
     }
 
     private List<Fare> readFares(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("readFares()", "***BEGINNING***");
         List<Fare> fareList = new ArrayList<>();
         parser.require(XmlPullParser.START_TAG, ns, "fares");
@@ -239,15 +239,15 @@ public class TripXMLParser implements XmlParserInterface {
             String name = parser.getName();
             if(name.equals("fare")) {
                 fareAmount = parser.getAttributeValue(null,"amount");
-                if(MyDebug.DEBUG){
+                if(DebugController.DEBUG){
                     Log.i("amount", fareAmount);
                 }
                 fareClass = parser.getAttributeValue(null, "class");
-                if(MyDebug.DEBUG){
+                if(DebugController.DEBUG){
                     Log.i("class", fareClass);
                 }
                 fareName = parser.getAttributeValue(null, "name");
-                if(MyDebug.DEBUG) {
+                if(DebugController.DEBUG) {
                     Log.i("name", fareName);
                 }
             }
@@ -283,41 +283,41 @@ public class TripXMLParser implements XmlParserInterface {
             String name = parser.getName();
             if(name.equals("leg")) {
                 order = Integer.parseInt(parser.getAttributeValue(null,"order"));
-                if(MyDebug.DEBUG)
+                if(DebugController.DEBUG)
                     Log.i("order", String.valueOf(order));
                 /*
                 if(!parser.getAttributeValue(null,"transfercode").equals("")) {
                     transferCode = Integer.parseInt(parser.getAttributeValue(null, "transfercode"));
-                    if(MyDebug.DEBUG)
+                    if(DebugController.DEBUG)
                         Log.i("transferCode", String.valueOf(transferCode));
                 }
                 */
                 line = parser.getAttributeValue(null, "line");
-                if(MyDebug.DEBUG)
+                if(DebugController.DEBUG)
                     Log.i("line", String.valueOf(line));
                 bikeFlag = Integer.parseInt(parser.getAttributeValue(null, "bikeflag"));
-                if(MyDebug.DEBUG)
+                if(DebugController.DEBUG)
                     Log.i("bikeFlag", String.valueOf(bikeFlag));
                 trainHeadStation = parser.getAttributeValue(null,"trainHeadStation");
-                if(MyDebug.DEBUG)
+                if(DebugController.DEBUG)
                     Log.i("trainHeadStation", trainHeadStation);
                 origTimeDate = parser.getAttributeValue(null, "origTimeDate");
-                if(MyDebug.DEBUG)
+                if(DebugController.DEBUG)
                     Log.i("origTimeDate", origTimeDate);
                 origTimeMin = parser.getAttributeValue(null,"origTimeMin");
-                if(MyDebug.DEBUG)
+                if(DebugController.DEBUG)
                     Log.i("origTimeMin", origTimeMin);
                 destTimeDate = parser.getAttributeValue(null,"destTimeDate");
-                if(MyDebug.DEBUG)
+                if(DebugController.DEBUG)
                     Log.i("destTimeDate", destTimeDate);
                 destTimeMin = parser.getAttributeValue(null, "destTimeMin");
-                if(MyDebug.DEBUG)
+                if(DebugController.DEBUG)
                     Log.i("destTimeMin", destTimeMin);
                 origin = parser.getAttributeValue(null,"origin");
-                if(MyDebug.DEBUG)
+                if(DebugController.DEBUG)
                     Log.i("origin", origin);
                 destination = parser.getAttributeValue(null, "destination");
-                if(MyDebug.DEBUG)
+                if(DebugController.DEBUG)
                     Log.i("destination", destination);
             }
             else {

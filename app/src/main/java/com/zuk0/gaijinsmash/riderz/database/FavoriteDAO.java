@@ -49,4 +49,7 @@ public interface FavoriteDAO {
     @Query("Update favorites set priority = 0 where id = :id")
     public void removePriorityById(int id);
 
+    @Query("SELECT * from favorites where origin = :origin and destination = :destination")
+    public boolean isTripFavorited(String origin, String destination);
+
 }

@@ -61,7 +61,7 @@ public class BartResultsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mInflatedView = inflater.inflate(R.layout.results_view, container, false);
+        mInflatedView = inflater.inflate(R.layout.view_results, container, false);
         return mInflatedView;
     }
 
@@ -158,7 +158,7 @@ public class BartResultsFragment extends Fragment {
             BartResultsFragment frag = mWeakRef.get();
             switch(mTask) {
                 case CHECK_CURRENT_TRIP:
-                    return FavoriteDbHelper.isCurrentTripFavorited(frag.getActivity(), frag.mFavoriteObject);
+                    return FavoriteDbHelper.doesFavoriteExistAlready(frag.getActivity(), frag.mFavoriteObject);
                 case ADD_FAVORITE:
                     if (FavoriteDbHelper.getFavoritesCount(frag.getActivity()) < 2) {
                         frag.mFavoriteObject.setPriority(Favorite.Priority.ON);

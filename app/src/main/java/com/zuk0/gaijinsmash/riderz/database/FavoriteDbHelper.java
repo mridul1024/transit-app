@@ -24,19 +24,10 @@ public class FavoriteDbHelper {
         return favoritesList;
     }
 
-    public static boolean isCurrentTripFavorited(Context context, Favorite favorite) {
+    public static boolean doesFavoriteExistAlready(Context context, Favorite favorite) {
+        boolean result;
         FavoriteDatabase db = FavoriteDatabase.getRoomDB(context);
-        boolean result = false;
-        if(db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin()) != null) {
-            List<Favorite> list = db.getFavoriteDAO().getFavoritesByOrigin(favorite.getOrigin());
-            // search for matching favorite object
-            //todo - can probably refactor into a better sql query
-            for(Favorite x : list) {
-                if(x.getDestination().equals(favorite.getDestination())) {
-                    result = true;
-                }
-            }
-        }
+        result = db.getFavoriteDAO().isTripFavorited(favorite.getOrigin(), favorite.getDestination());
         db.close();
         return result;
     }

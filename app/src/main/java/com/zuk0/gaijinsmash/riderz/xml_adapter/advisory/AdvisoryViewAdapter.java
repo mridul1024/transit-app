@@ -23,7 +23,7 @@ public class AdvisoryViewAdapter extends ArrayAdapter<Advisory> implements View.
     private Context mContext;
 
     public AdvisoryViewAdapter(List<Advisory> data, Context context) {
-        super(context, R.layout.station_list_row, data);
+        super(context, R.layout.list_row_station, data);
         this.mContext = context;
     }
 
@@ -47,7 +47,7 @@ public class AdvisoryViewAdapter extends ArrayAdapter<Advisory> implements View.
         if(convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            convertView = inflater.inflate(R.layout.advisory_list_row, parent, false);
+            convertView = inflater.inflate(R.layout.list_row_advisory, parent, false);
             viewHolder.stationName = convertView.findViewById(R.id.bsa_station_textView);
             viewHolder.bsaType = convertView.findViewById(R.id.bsa_type_textView);
             viewHolder.bsaDescription = convertView.findViewById(R.id.bsa_description_textView);

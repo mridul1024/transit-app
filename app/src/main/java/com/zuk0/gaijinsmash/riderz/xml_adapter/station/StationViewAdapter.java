@@ -23,7 +23,7 @@ public class StationViewAdapter extends ArrayAdapter<Station> implements View.On
     private Context mContext;
 
     public StationViewAdapter(List<Station> data, Context context) {
-        super(context, R.layout.station_list_row, data);
+        super(context, R.layout.list_row_station, data);
         this.mContext = context;
     }
 
@@ -48,7 +48,7 @@ public class StationViewAdapter extends ArrayAdapter<Station> implements View.On
         if(convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            convertView = inflater.inflate(R.layout.station_list_row, parent, false);
+            convertView = inflater.inflate(R.layout.list_row_station, parent, false);
             viewHolder.stationName = convertView.findViewById(R.id.stationName_textView);
             viewHolder.stationAddress = convertView.findViewById(R.id.stationAddress_textView);
             viewHolder.stationCity = convertView.findViewById(R.id.stationCity_textView);

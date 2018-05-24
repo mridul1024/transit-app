@@ -6,7 +6,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -22,13 +21,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.database.StationDatabase;
-import com.zuk0.gaijinsmash.riderz.database.StationDbHelper;
-import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
-import com.zuk0.gaijinsmash.riderz.model.bart.Station;
-import com.zuk0.gaijinsmash.riderz.network.CheckInternet;
-import com.zuk0.gaijinsmash.riderz.network.FetchGPS;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,6 +31,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.zuk0.gaijinsmash.riderz.R;
+import com.zuk0.gaijinsmash.riderz.database.StationDatabase;
+import com.zuk0.gaijinsmash.riderz.debug.DebugController;
+import com.zuk0.gaijinsmash.riderz.model.bart.Station;
+import com.zuk0.gaijinsmash.riderz.network.CheckInternet;
+import com.zuk0.gaijinsmash.riderz.network.FetchGPS;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -115,21 +113,18 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mInflatedView = inflater.inflate(R.layout.google_map_view, container, false);
+        mInflatedView = inflater.inflate(R.layout.view_google_map, container, false);
         return mInflatedView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         Button mButton = mInflatedView.findViewById(R.id.googleMap_btn);
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager manager = getFragmentManager();
-                FragmentTransaction tx = manager.beginTransaction();
-                Fragment newFrag = new BartMapFragment();
-                tx.replace(R.id.fragmentContent, newFrag).addToBackStack(null).commit();
-            }
+        mButton.setOnClickListener(v -> {
+            FragmentManager manager = getFragmentManager();
+            FragmentTransaction tx = manager.beginTransaction();
+            Fragment newFrag = new BartMapFragment();
+            tx.replace(R.id.fragmentContent, newFrag).addToBackStack(null).commit();
         });
         mProgressBar = mInflatedView.findViewById(R.id.googleMap_progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
@@ -162,12 +157,9 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         // Populate map with all the stations (markers)
         new GetMarkersTask(googleMap, this).execute();
 
-        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                //todo show a dialog on marker click
-                return false;
-            }
+        googleMap.setOnMarkerClickListener(marker -> {
+            //todo show a dialog on marker click
+            return false;
         });
 
         // Move camera to specified Station if intended
@@ -215,32 +207,24 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                 alertDialog.setTitle("Location Settings");
                 alertDialog.setMessage("Location is not available. Do you want to turn it on?");
-                alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        context.startActivity(intent);
-                    }
+                alertDialog.setPositiveButton("Settings", (dialog, which) -> {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    context.startActivity(intent);
                 });
-                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                 alertDialog.show();
             }
         } catch(SecurityException e) {
-            if(MyDebug.LOG_E)
+            if(DebugController.LOG_E)
                 Log.e("Exception: %s", e.getMessage());
         }
 
         boolean gpsCheck = CheckInternet.isGPSEnabled(context);
         if (gpsCheck && loc != null) {
             // move camera to user location
-            LatLng userLocation = null;
+            LatLng userLocation;
             userLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
-            CameraUpdate update = null;
+            CameraUpdate update;
             update = CameraUpdateFactory.newLatLngZoom(userLocation, 5f);
             map.moveCamera(update);
         } else {
@@ -283,14 +267,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         @Override
         protected List<Station> doInBackground(Void...voids) {
             GoogleMapFragment frag = mWeakRef.get();
-            StationDbHelper helper = new StationDbHelper(frag.getActivity());
-            try {
-                helper.initStationDb();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                helper.getDb().close();
-            }
             return initMarkers(frag.getActivity());
         }
 

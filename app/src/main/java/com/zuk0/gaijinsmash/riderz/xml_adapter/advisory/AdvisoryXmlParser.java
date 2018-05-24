@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
-import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
+import com.zuk0.gaijinsmash.riderz.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.model.bart.Advisory;
 import com.zuk0.gaijinsmash.riderz.network.FetchInputStream;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.XmlParserAbstract;
@@ -32,7 +32,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
     }
 
     public List<Advisory> getList(String call) throws IOException, XmlPullParserException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("makeCall()", "with " + call);
         InputStream is = new FetchInputStream(mContext).connectToApi(call);
         List<Advisory> results = parse(is);
@@ -41,7 +41,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
     }
 
     public List<Advisory> parse(InputStream in) throws IOException, XmlPullParserException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("parse()", "***BEGINNING***");
         try {
             XmlPullParser parser = Xml.newPullParser();
@@ -55,7 +55,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
     }
 
     public List<Advisory> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("readFeed():", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "root");
         List<Advisory> list = new ArrayList<>();
@@ -73,18 +73,18 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
                     date = readDate(parser);
                     if (date != null)
                         mAdvisory.setDate(date); // breaks here
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("mDate", date);
                     break;
                 case "time":
                     time = readTime(parser);
                     if (time != null)
                         mAdvisory.setTime(time);
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("mTime", time);
                     break;
                 case "bsa":
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("BSA tag: ", "MATCHED");
                     list.add(readAdvisoryObject(parser));
                     break;
@@ -109,17 +109,17 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
             switch (name) {
                 case "station":
                     mStation = readStation(parser);
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("station", mStation);
                     break;
                 case "type":
                     mType = readType(parser);
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("type", mType);
                     break;
                 case "description":
                     mDescription = readDescription(parser);
-                    if (MyDebug.DEBUG)
+                    if (DebugController.DEBUG)
                         Log.i("description", mDescription);
                     break;
             }
@@ -133,7 +133,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
     //----------------------------------------------------------------------------------------------
     // Processes name tags in the BSA feed
     private String readDate(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("readDate():", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "date");
@@ -143,7 +143,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
     }
 
     private String readTime(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("readTime():", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "time");
@@ -153,7 +153,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
     }
 
     private String readStation(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("readStation():", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "station");
@@ -163,7 +163,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
     }
 
     private String readType(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("readType():", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "type");
@@ -173,7 +173,7 @@ public class AdvisoryXmlParser extends XmlParserAbstract implements XmlParserInt
     }
 
     private String readDescription(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(MyDebug.DEBUG)
+        if(DebugController.DEBUG)
             Log.i("readDescription():", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "description");

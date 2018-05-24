@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.StationDatabase;
-import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
+import com.zuk0.gaijinsmash.riderz.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.fragment.BartResultsFragment;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutes;
 import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
@@ -27,7 +27,7 @@ public class TripViewAdapter extends ArrayAdapter<FullTrip> implements View.OnCl
     private BartResultsFragment mFragment;
 
     public TripViewAdapter(List<FullTrip> data, Context context, BartResultsFragment fragment) {
-        super(context, R.layout.trip_list_row, data);
+        super(context, R.layout.list_row_trip, data);
         mFragment = fragment;
     }
 
@@ -83,7 +83,7 @@ public class TripViewAdapter extends ArrayAdapter<FullTrip> implements View.OnCl
         if(convertView == null) {
             viewHolder = new TripViewAdapter.ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(mFragment.getActivity());
-            convertView = inflater.inflate(R.layout.trip_list_row, parent, false);
+            convertView = inflater.inflate(R.layout.list_row_trip, parent, false);
 
             viewHolder.origTimeDate =  convertView.findViewById(R.id.trip_date_textView);
 
@@ -149,7 +149,7 @@ public class TripViewAdapter extends ArrayAdapter<FullTrip> implements View.OnCl
             new SetResultViewsTask(mFragment, viewHolder, fullTrip, 2).execute();
             setColoredBar(fullTrip.getLegList().get(1).getLine(), viewHolder, 2);
         } else {
-            if(MyDebug.DEBUG) {
+            if(DebugController.DEBUG) {
                 Log.i("Leg 2", "skipped");
             }
             viewHolder.imageView1.setVisibility(View.GONE);
@@ -165,7 +165,7 @@ public class TripViewAdapter extends ArrayAdapter<FullTrip> implements View.OnCl
             new SetResultViewsTask(mFragment, viewHolder, fullTrip, 3).execute();
             setColoredBar(fullTrip.getLegList().get(2).getLine(), viewHolder, 3);
         } else {
-            if(MyDebug.DEBUG) {
+            if(DebugController.DEBUG) {
                 Log.i("Leg 3", "skipped");
             }
             viewHolder.imageView2.setVisibility(View.GONE);

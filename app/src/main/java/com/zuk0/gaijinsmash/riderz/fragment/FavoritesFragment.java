@@ -1,20 +1,18 @@
 package com.zuk0.gaijinsmash.riderz.fragment;
 
 import android.app.Fragment;
-import android.content.ClipData;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.FavoriteDatabase;
-import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
+import com.zuk0.gaijinsmash.riderz.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.model.bart.Favorite;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.favorite.FavoriteViewAdapter;
 
@@ -29,7 +27,7 @@ public class FavoritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mInflatedView = inflater.inflate(R.layout.bart_favorites_view, container, false);
+        mInflatedView = inflater.inflate(R.layout.view_bart_favorites, container, false);
         return mInflatedView;
     }
 
@@ -65,7 +63,7 @@ public class FavoritesFragment extends Fragment {
             // connect to DB
             FavoriteDatabase db = FavoriteDatabase.getRoomDB(frag.getActivity());
             int numberOfFavorites = db.getFavoriteDAO().countFavorites();
-            if(MyDebug.DEBUG){
+            if(DebugController.DEBUG){
                 Log.d("Favorite Count", String.valueOf(numberOfFavorites));
             }
             if(numberOfFavorites > 0) {

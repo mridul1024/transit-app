@@ -2,7 +2,6 @@ package com.zuk0.gaijinsmash.riderz.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,15 +15,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.database.FavoriteDbHelper;
-import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
+import com.zuk0.gaijinsmash.riderz.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.model.bart.Advisory;
 import com.zuk0.gaijinsmash.riderz.model.bart.Estimate;
 import com.zuk0.gaijinsmash.riderz.model.bart.Favorite;
 import com.zuk0.gaijinsmash.riderz.model.bart.Trip;
 import com.zuk0.gaijinsmash.riderz.network.FetchInputStream;
-import com.zuk0.gaijinsmash.riderz.utils.BartRoutes;
 import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesHelper;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.advisory.AdvisoryXmlParser;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
@@ -40,7 +37,6 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -62,7 +58,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mInflatedView = inflater.inflate(R.layout.home_view, container, false);
+        mInflatedView = inflater.inflate(R.layout.view_home, container, false);
         return mInflatedView;
     }
 
@@ -126,13 +122,12 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Boolean doInBackground(Void...voids) {
-            if (MyDebug.DEBUG) Log.i("GetFavoritesTask", "STARTING");
+            if (DebugController.DEBUG) Log.i("GetFavoritesTask", "STARTING");
             HomeFragment homeFrag = mHomeRef.get();
-            List<Trip> tripList = new ArrayList<>();
             if(homeFrag != null && homeFrag.isAdded()) {
-                tripList = getTripList(homeFrag.getActivity());
+                mFinalList = getTripList(homeFrag.getActivity());
             }
-            return tripList.size() > 0;
+            return mFinalList.size() > 0;
         }
 
         @Override
@@ -155,7 +150,24 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    //todo : refactor
+    public static List<Trip> getTripList(Context context) {
+        List<Trip> tripList = new ArrayList<>();
+        int count = FavoriteDbHelper.getFavoritesCount(context);
+        if(count > 0) {
+            // should return a max of 2 favorite objects
+            List<Favorite> favoritesList = FavoriteDbHelper.getFavoritesByPriority(context);
+            tripList = getConsolidatedTripList(context, favoritesList);
+        }
+        return tripList;
+    }
+
+    public static List<Trip> getListFromApi(Context context) {
+        List<Trip> tripList = new ArrayList<>();
+        EstimateXmlParser parser = new EstimateXmlParser(context);
+
+        return null;
+    }
+
     public static List<Trip> getConsolidatedTripList(Context context, List<Favorite> favoritesList) {
         List<Trip> finalTripList = new ArrayList<>();
         EstimateXmlParser parser = new EstimateXmlParser(context);
@@ -168,7 +180,7 @@ public class HomeFragment extends Fragment {
 
                 // stores colors in HashSet
                 HashSet<String> colorsSet = fav.getColors();
-                if(MyDebug.DEBUG) Log.i("colorSet", colorsSet.toString());
+                if(DebugController.DEBUG) Log.i("colorSet", colorsSet.toString());
 
                 //PARSE estimate list and modify each trip object
                 List<Trip> tripRemovalList = new ArrayList<>();
@@ -178,10 +190,15 @@ public class HomeFragment extends Fragment {
                     // for each estimate object, check if route colors are matching
                     List<Estimate> removalList = new ArrayList<>();
                     for(Estimate estimate : estimateList) {
-                        if(!colorsSet.contains(estimate.getColor())) removalList.add(estimate);
+                        Log.i("est color", estimate.getColor());
+                        if(!colorsSet.contains(estimate.getColor())) {
+                            removalList.add(estimate);
+                            Log.i("etd removal size", String.valueOf(removalList.size()));
+                        }
                     }
-                    trip.getEstimateList().removeAll(removalList);
 
+                    estimateList.removeAll(removalList);
+                    Log.i("estimateList new size", String.valueOf(estimateList.size()));
                     // remove any trips that don't have an estimate list to prevent NPE in adapter
                     if(trip.getEstimateList().size() == 0) {
                         tripRemovalList.add(trip);
@@ -192,19 +209,9 @@ public class HomeFragment extends Fragment {
                 Log.e("Exception", e.toString());
             }
             finalTripList.addAll(tempTripList);
+            Log.i("finalTripList", String.valueOf(finalTripList.size()));
         }
         return finalTripList;
-    }
-
-    public static List<Trip> getTripList(Context context) {
-        List<Trip> tripList = new ArrayList<>();
-        int count = FavoriteDbHelper.getFavoritesCount(context);
-        if(count > 0) {
-            // should return a max of 2 favorite objects
-            List<Favorite> favoritesList = FavoriteDbHelper.getFavoritesByPriority(context);
-            tripList = getConsolidatedTripList(context, favoritesList);
-        }
-        return tripList;
     }
 
     private static class GetAdvisoryTask extends AsyncTask<Void, Integer, Boolean> {

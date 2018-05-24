@@ -75,23 +75,5 @@ public class Estimate {
         this.delay = delay;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if(o == this) return true;
-        if(!(o instanceof Trip)) {
-            return false;
-        }
-        Estimate estimate = (Estimate) o;
-        return estimate.direction.equals(direction) && estimate.minutes.equals(minutes) &&
-                estimate.color.equals(color);
-    }
 
-    @Override
-    public int hashCode() {
-        int result = 17;
-        result = 31 * result + direction.hashCode();
-        result = 31 * result + color.hashCode();
-        result = 31 * result + minutes.hashCode();
-        return result;
-    }
 }

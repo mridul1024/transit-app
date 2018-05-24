@@ -15,7 +15,7 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.about_view, container, false);
+        return inflater.inflate(R.layout.view_about, container, false);
     }
 
     @Override

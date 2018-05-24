@@ -3,10 +3,10 @@ package com.zuk0.gaijinsmash.riderz.database;
 import android.content.Context;
 import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.debug.MyDebug;
+import com.zuk0.gaijinsmash.riderz.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.model.bart.Station;
-import com.zuk0.gaijinsmash.riderz.xml_adapter.station.StationXmlParser;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
+import com.zuk0.gaijinsmash.riderz.xml_adapter.station.StationXmlParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -15,33 +15,44 @@ import java.util.List;
 
 public class StationDbHelper {
 
-    private Context mContext;
-    private StationDatabase mDatabase;
+    // Update this number when new Stations are built
+    private static final int mNumOfBartStations = 48;
 
-    public StationDbHelper(Context context) {
-        this.mContext = context;
-        mDatabase = StationDatabase.getRoomDB(context);
-    }
-
-    public StationDatabase getDb() { return mDatabase; }
-
-    public void initStationDb() throws Exception {
-        int numOfStations = 48; // Change this value as new stations are constructed
-        int count = mDatabase.getStationDAO().countStations();
-        if(MyDebug.DEBUG)
-            Log.i("count", String.valueOf(count));
-        if(count == 0 || count < numOfStations) {
+    public static void initStationDb(Context context) throws IOException, XmlPullParserException {
+        int count = getStationCount(context);
+        if(count == 0 || count < mNumOfBartStations) {
             List<Station> stationList;
-            StationXmlParser parser = new StationXmlParser(mContext);
+            StationXmlParser parser = new StationXmlParser(context);
             stationList = parser.getList(BartApiStringBuilder.getAllStations());
+
+            StationDatabase db = StationDatabase.getRoomDB(context);
             for(Station x : stationList) {
-                mDatabase.getStationDAO().addStation(x);
+                db.getStationDAO().addStation(x);
             }
+            db.close();
         }
     }
 
-    public String getAbbrFromDb(String stationName) throws XmlPullParserException, IOException {
-        Station station = mDatabase.getStationDAO().getStationByName(stationName);
+    private static int getStationCount(Context context) {
+        StationDatabase db = StationDatabase.getRoomDB(context);
+        int count = db.getStationDAO().countStations();
+        if(DebugController.DEBUG)
+            Log.i("count", String.valueOf(count));
+        db.close();
+        return count;
+    }
+
+    public static List<Station> getAllStations(Context context) {
+        StationDatabase db = StationDatabase.getRoomDB(context);
+        List<Station> stations = db.getStationDAO().getAllStations();
+        db.close();
+        return stations;
+    }
+
+    public static String getAbbrFromDb(Context context, String stationName) {
+        StationDatabase db = StationDatabase.getRoomDB(context);
+        Station station = db.getStationDAO().getStationByName(stationName);
+        db.close();
         return station.getAbbreviation();
     }
 }
