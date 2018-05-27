@@ -21,7 +21,7 @@ import com.zuk0.gaijinsmash.riderz.database.FavoriteDbHelper;
 import com.zuk0.gaijinsmash.riderz.model.bart.Favorite;
 import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
-import com.zuk0.gaijinsmash.riderz.utils.BartRoutes;
+import com.zuk0.gaijinsmash.riderz.utils.BartRoutesHelper;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.trip.TripViewAdapter;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.trip.TripXMLParser;
 
@@ -30,7 +30,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class BartResultsFragment extends Fragment {
@@ -40,6 +39,7 @@ public class BartResultsFragment extends Fragment {
     private ProgressBar mProgressBar;
     private View mInflatedView;
     private String mOrigin, mDestination;
+    private ArrayList<String> mTrainHeaders;
 
     private MenuItem mFavoriteIcon, mFavoritedIcon;
     private Favorite mFavoriteObject;
@@ -78,9 +78,10 @@ public class BartResultsFragment extends Fragment {
         setRetainInstance(true);
         Bundle mBundle = getArguments();
         if(mBundle != null) {
-            mFullTripList = mBundle.getParcelableArrayList("FullTripList");
-            mOrigin = mBundle.getString("Origin");
-            mDestination = mBundle.getString("Destination");
+            mFullTripList = mBundle.getParcelableArrayList(TripFragment.TripBundle.FULLTRIP_LIST.getValue());
+            mOrigin = mBundle.getString(TripFragment.TripBundle.ORIGIN.getValue());
+            mDestination = mBundle.getString(TripFragment.TripBundle.DESTINATION.getValue());
+            mTrainHeaders = mBundle.getStringArrayList(TripFragment.TripBundle.TRAIN_HEADERS.getValue());
         }
         if(mFullTripList != null) {
             TripViewAdapter adapter = new TripViewAdapter(mFullTripList, getActivity(), mBartResultsFragment);
@@ -95,11 +96,12 @@ public class BartResultsFragment extends Fragment {
             mFavoriteObject.setOrigin(mOrigin);
             mFavoriteObject.setDestination(mDestination);
             mFavoriteObject.setSystem(BART);
-            mFavoriteObject.setColors(getColorsSet(mFullTripList));
+            mFavoriteObject.setColors(BartRoutesHelper.getColorsSetFromFullTrip(mFullTripList));
+            mFavoriteObject.setTrainHeaderStations(mTrainHeaders);
         }
 
         // Checks database and displays appropriate view in toolbar
-        new SetFavoritesTask(this).execute();
+        new SetFavoritesTask(this, FavoritesTask.CHECK_CURRENT_TRIP).execute();
     }
 
     @Override
@@ -144,10 +146,6 @@ public class BartResultsFragment extends Fragment {
         private WeakReference<BartResultsFragment> mWeakRef;
         private FavoritesTask mTask;
 
-        private SetFavoritesTask(BartResultsFragment context) {
-            mWeakRef = new WeakReference<>(context);
-        }
-
         private SetFavoritesTask(BartResultsFragment context, FavoritesTask task) {
             mWeakRef = new WeakReference<>(context);
             mTask = task;
@@ -156,30 +154,33 @@ public class BartResultsFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Void... voids) {
             BartResultsFragment frag = mWeakRef.get();
+            FavoriteDbHelper db = new FavoriteDbHelper(frag.getActivity());
             switch(mTask) {
                 case CHECK_CURRENT_TRIP:
-                    return FavoriteDbHelper.doesFavoriteExistAlready(frag.getActivity(), frag.mFavoriteObject);
+                    return db.doesFavoriteExistAlready(frag.mFavoriteObject);
                 case ADD_FAVORITE:
-                    if (FavoriteDbHelper.getFavoritesCount(frag.getActivity()) < 2) {
+                    if (db.getFavoritesCount() < 2) {
                         frag.mFavoriteObject.setPriority(Favorite.Priority.ON);
                     }
-                    FavoriteDbHelper.addToFavorites(frag.getActivity(), frag.mFavoriteObject);
+                    db.addToFavorites(frag.mFavoriteObject);
 
                     // This adds the inverse of the Trip object
                     Favorite favoriteReversed = new Favorite();
                     favoriteReversed.setOrigin(frag.mDestination);
                     favoriteReversed.setDestination(frag.mOrigin);
-                    if (FavoriteDbHelper.getFavoritesCount(frag.getActivity())< 2) {
+                    if (db.getFavoritesCount()< 2) {
                         favoriteReversed.setPriority(Favorite.Priority.ON);
                     }
                     List<FullTrip> tripList = getFullTripList(frag.getActivity(), frag.mDestination, frag.mOrigin);
-                    favoriteReversed.setColors(getColorsSet(tripList));
-                    FavoriteDbHelper.addToFavorites(frag.getActivity(), favoriteReversed);
+                    favoriteReversed.setColors(BartRoutesHelper.getColorsSetFromFullTrip(tripList));
+                    favoriteReversed.setTrainHeaderStations(BartRoutesHelper.getTrainHeadersListFromFullTrip(tripList));
+                    db.addToFavorites(favoriteReversed);
                     return true;
                 case DELETE_FAVORITE:
-                    FavoriteDbHelper.removeFromFavorites(frag.getActivity(), frag.mFavoriteObject);
+                    db.removeFromFavorites(frag.mFavoriteObject);
                     return false;
             }
+            db.closeDb();
             return false;
         }
 
@@ -219,13 +220,5 @@ public class BartResultsFragment extends Fragment {
         return tripList;
     }
 
-    private static HashSet<String> getColorsSet(List<FullTrip> fullTripList) {
-        HashSet<String> colors = new HashSet<>();
-        for(FullTrip fullTrip : fullTripList) {
-            // get the first leg object only
-            String line = fullTrip.getLegList().get(0).getLine();
-            colors.add(BartRoutes.lineToColor(line));
-        }
-        return colors;
-    }
+
 }

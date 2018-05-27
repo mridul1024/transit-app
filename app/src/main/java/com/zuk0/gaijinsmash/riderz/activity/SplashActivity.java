@@ -39,8 +39,9 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             SplashActivity ref = mWeakRef.get();
+            StationDbHelper db = new StationDbHelper(ref.getApplicationContext());
             try {
-                StationDbHelper.initStationDb(ref.getApplicationContext());
+                db.initStationDb(ref.getApplicationContext());
             } catch (IOException | XmlPullParserException e) {
                 Log.e("Splash Activity", e.toString());
             }

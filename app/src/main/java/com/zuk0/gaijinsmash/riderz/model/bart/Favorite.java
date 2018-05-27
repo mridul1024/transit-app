@@ -2,18 +2,15 @@ package com.zuk0.gaijinsmash.riderz.model.bart;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverter;
 import android.arch.persistence.room.TypeConverters;
-import android.support.annotation.NonNull;
 
 import com.zuk0.gaijinsmash.riderz.database.Converters;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity(tableName = "favorites")
 public class Favorite {
@@ -26,6 +23,10 @@ public class Favorite {
 
     @ColumnInfo(name = "destination")
     private String destination; // abbreviated
+
+    @TypeConverters(Converters.class)
+    @ColumnInfo(name = "trainHeaderStations") //abbreviated
+    private ArrayList<String> trainHeaderStations;
 
     // todo: convert to enum: System = BART, MUNI, etc.
     @ColumnInfo(name = "system")
@@ -67,6 +68,7 @@ public class Favorite {
     public HashSet<String> getColors() {
         return colors;
     }
+    public ArrayList<String> getTrainHeaderStations() { return trainHeaderStations; }
 
     // Setters
     public void setId(int id) { this.id = id; }
@@ -78,4 +80,6 @@ public class Favorite {
     public void setColors(HashSet<String> colors) {
         this.colors = colors;
     }
+    public void setTrainHeaderStations(ArrayList<String> trainHeaderStations) { this.trainHeaderStations = trainHeaderStations; }
+
 }

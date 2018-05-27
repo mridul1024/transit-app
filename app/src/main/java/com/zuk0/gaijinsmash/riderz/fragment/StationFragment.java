@@ -89,7 +89,9 @@ public class StationFragment extends Fragment {
         protected List<Station> doInBackground(Void... voids) {
             StationFragment frag = mWeakRef.get();
             frag.mProgressBar.setVisibility(View.VISIBLE);
-            mStationList = StationDbHelper.getAllStations(frag.getActivity());
+            StationDbHelper db = new StationDbHelper(frag.getActivity());
+            mStationList = db.getAllStations();
+            db.closeDb();
             return mStationList;
         }
 

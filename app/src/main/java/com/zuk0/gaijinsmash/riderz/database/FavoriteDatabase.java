@@ -10,7 +10,7 @@ import android.content.Context;
 
 import com.zuk0.gaijinsmash.riderz.model.bart.Favorite;
 
-@Database(entities = {Favorite.class}, version = 12, exportSchema = false)
+@Database(entities = {Favorite.class}, version = 13, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class FavoriteDatabase extends RoomDatabase {
 
@@ -33,7 +33,7 @@ public abstract class FavoriteDatabase extends RoomDatabase {
     }
 
     // Edit this to create a new migration for database
-    private static final Migration MIGRATION = new Migration(12,13) {
+    private static final Migration MIGRATION = new Migration(13,14) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE favorites ADD COLUMN last_update INTEGER");

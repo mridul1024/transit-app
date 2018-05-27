@@ -10,6 +10,8 @@ public class Trip implements Parcelable {
     // NOTE: origin and destination will return the Abbreviation of a Station,
     // because of the way BART API returns results.
     //          Will need to convert to the full name.
+
+    //todo: remove unused variables - fare, clipper co2?
     private String origin;
     private String destination;
     private String fare;
@@ -20,7 +22,10 @@ public class Trip implements Parcelable {
     private String clipper;
     private String tripTime;
     private String co2;
+
+    // only used for real time estimates
     private List<Estimate> estimateList;
+    private String destinationAbbr;
 
     public Trip() { }
 
@@ -62,6 +67,7 @@ public class Trip implements Parcelable {
     public List<Estimate> getEstimateList() {
         return estimateList;
     }
+    public String getDestinationAbbr() { return  destinationAbbr; }
 
     public void setEstimateList(List<Estimate> estimateList) {
         this.estimateList = estimateList;
@@ -82,6 +88,7 @@ public class Trip implements Parcelable {
     public void setClipper(String clipper) { this.clipper = clipper; }
     public void setTripTime(String tripTime) { this.tripTime = tripTime; }
     public void setCo2(String co2) { this.co2 = co2; }
+    public void setDestinationAbbr(String abbr) { this.destinationAbbr = abbr; }
 
     @Override
     public int describeContents() {

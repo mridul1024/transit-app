@@ -1,11 +1,18 @@
 package com.zuk0.gaijinsmash.riderz.utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
+import com.zuk0.gaijinsmash.riderz.debug.DebugController;
+import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
 
-public class BartRoutes {
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+public class BartRoutesHelper {
 
     public static void setLineBarByRoute(Context context, String route, TextView coloredBar) {
         switch(route) {
@@ -75,7 +82,22 @@ public class BartRoutes {
         return "BLACK";
     }
 
-    public static void setRoute(String origin, String destination) {
-        // if east
+    public static HashSet<String> getColorsSetFromFullTrip(List<FullTrip> fullTripList) {
+        HashSet<String> colors = new HashSet<>();
+        for(FullTrip fullTrip : fullTripList) {
+            // get the first leg object only
+            String line = fullTrip.getLegList().get(0).getLine();
+            colors.add(BartRoutesHelper.lineToColor(line));
+        }
+        return colors;
+    }
+
+    public static ArrayList<String> getTrainHeadersListFromFullTrip(List<FullTrip> list) {
+        ArrayList<String> headers = new ArrayList<>();
+        for(FullTrip fullTrip : list) {
+            headers.add(fullTrip.getLegList().get(0).getTrainHeadStation());
+            if(DebugController.DEBUG) Log.d("trainHeader added", fullTrip.getLegList().get(0).getTrainHeadStation());
+        }
+        return headers;
     }
 }

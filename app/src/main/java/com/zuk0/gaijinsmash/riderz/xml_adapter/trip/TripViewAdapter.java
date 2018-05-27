@@ -16,7 +16,7 @@ import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.fragment.BartResultsFragment;
-import com.zuk0.gaijinsmash.riderz.utils.BartRoutes;
+import com.zuk0.gaijinsmash.riderz.utils.BartRoutesHelper;
 import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
 
 import java.lang.ref.WeakReference;
@@ -181,13 +181,13 @@ public class TripViewAdapter extends ArrayAdapter<FullTrip> implements View.OnCl
 
     private void setColoredBar(String route, ViewHolder viewHolder, int leg) {
         if(leg == 1) {
-            BartRoutes.setLineBarByRoute(mFragment.getActivity(), route, viewHolder.coloredBar1);
+            BartRoutesHelper.setLineBarByRoute(mFragment.getActivity(), route, viewHolder.coloredBar1);
         }
         if(leg == 2) {
-            BartRoutes.setLineBarByRoute(mFragment.getActivity(), route, viewHolder.coloredBar2);
+            BartRoutesHelper.setLineBarByRoute(mFragment.getActivity(), route, viewHolder.coloredBar2);
         }
         if(leg == 3) {
-            BartRoutes.setLineBarByRoute(mFragment.getActivity(), route, viewHolder.coloredBar3);
+            BartRoutesHelper.setLineBarByRoute(mFragment.getActivity(), route, viewHolder.coloredBar3);
         }
     }
 

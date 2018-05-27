@@ -12,7 +12,9 @@ import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.fragment.HomeFragment;
 import com.zuk0.gaijinsmash.riderz.model.bart.Estimate;
 import com.zuk0.gaijinsmash.riderz.model.bart.Trip;
-import com.zuk0.gaijinsmash.riderz.utils.BartRoutes;
+import com.zuk0.gaijinsmash.riderz.utils.BartRoutesHelper;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class EstimateViewAdapter extends ArrayAdapter<Trip> {
         TextView destination;
         TextView minutes;
         TextView line;
+        TextView tag;
     }
 
     @NonNull
@@ -47,6 +50,7 @@ public class EstimateViewAdapter extends ArrayAdapter<Trip> {
             viewHolder.destination = convertView.findViewById(R.id.etd_destinationTv);
             viewHolder.minutes = convertView.findViewById(R.id.etd_minutesTv);
             viewHolder.line = convertView.findViewById(R.id.etd_colored_line);
+            viewHolder.tag = convertView.findViewById(R.id.etd_minutes_tag_tV);
 
             view = convertView;
             view.setTag(viewHolder);
@@ -63,11 +67,13 @@ public class EstimateViewAdapter extends ArrayAdapter<Trip> {
             String color = estimate.getColor();
             viewHolder.origin.setText(origin);
             viewHolder.destination.setText(destination);
+            if(minutes.equals("Leaving")) {
+                // remove minutes tag
+                viewHolder.tag.setText(R.string.now);
+            }
             viewHolder.minutes.setText(minutes);
-            BartRoutes.setLineBarByColor(mFragment.getActivity(), color, viewHolder.line);
+            BartRoutesHelper.setLineBarByColor(mFragment.getActivity(), color, viewHolder.line);
         }
         return view;
     }
-
-
 }

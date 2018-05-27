@@ -110,7 +110,8 @@ public class EstimateXmlParser implements XmlParserInterface {
     private Trip readEtd(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "etd");
         Trip trip = new Trip();
-        String destination = "";
+        String destination = null;
+        String abbr = null;
         List<Estimate> estimateList = new ArrayList<>();
 
         while(parser.next() != XmlPullParser.END_TAG) {
@@ -122,6 +123,10 @@ public class EstimateXmlParser implements XmlParserInterface {
                 case "destination":
                     destination = readDestination(parser);
                     if(DebugController.DEBUG) Log.d("destination tag", "MATCHED");
+                    break;
+                case "abbreviation":
+                    if(DebugController.DEBUG) Log.d("abbr tag", "MATCHED");
+                    abbr = readAbbr(parser);
                     break;
                 case "estimate":
                     if(DebugController.DEBUG) Log.d("estimate tag", "MATCHED");
@@ -135,6 +140,7 @@ public class EstimateXmlParser implements XmlParserInterface {
         trip.setOrigin(mOrigin);          // full name, not abbr
         trip.setDestination(destination); // full name, not abbr
         trip.setEstimateList(estimateList);
+        trip.setDestinationAbbr(abbr);
         return trip;
     }
 
@@ -209,6 +215,12 @@ public class EstimateXmlParser implements XmlParserInterface {
         String destination = XmlParserAbstract.readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "destination");
         return destination;
+    }
+    private String readAbbr(XmlPullParser parser) throws XmlPullParserException, IOException {
+        parser.require(XmlPullParser.START_TAG, ns, "abbreviation");
+        String abbr = XmlParserAbstract.readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "abbreviation");
+        return abbr;
     }
     private String readMinutes(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "minutes");

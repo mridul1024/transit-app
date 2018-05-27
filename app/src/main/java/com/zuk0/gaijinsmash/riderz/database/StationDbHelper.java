@@ -15,44 +15,43 @@ import java.util.List;
 
 public class StationDbHelper {
 
+    private StationDatabase mDatabase;
     // Update this number when new Stations are built
     private static final int mNumOfBartStations = 48;
 
-    public static void initStationDb(Context context) throws IOException, XmlPullParserException {
-        int count = getStationCount(context);
+    public StationDbHelper(Context context) {
+        mDatabase = StationDatabase.getRoomDB(context);
+    }
+
+    public void closeDb() {
+        mDatabase.close();
+    }
+
+    public void initStationDb(Context context) throws IOException, XmlPullParserException {
+        int count = getStationCount();
         if(count == 0 || count < mNumOfBartStations) {
             List<Station> stationList;
             StationXmlParser parser = new StationXmlParser(context);
             stationList = parser.getList(BartApiStringBuilder.getAllStations());
-
-            StationDatabase db = StationDatabase.getRoomDB(context);
             for(Station x : stationList) {
-                db.getStationDAO().addStation(x);
+                mDatabase.getStationDAO().addStation(x);
             }
-            db.close();
         }
     }
 
-    private static int getStationCount(Context context) {
-        StationDatabase db = StationDatabase.getRoomDB(context);
-        int count = db.getStationDAO().countStations();
+    private int getStationCount() {
+        int count = mDatabase.getStationDAO().countStations();
         if(DebugController.DEBUG)
             Log.i("count", String.valueOf(count));
-        db.close();
         return count;
     }
 
-    public static List<Station> getAllStations(Context context) {
-        StationDatabase db = StationDatabase.getRoomDB(context);
-        List<Station> stations = db.getStationDAO().getAllStations();
-        db.close();
-        return stations;
+    public List<Station> getAllStations() {
+        return mDatabase.getStationDAO().getAllStations();
     }
 
-    public static String getAbbrFromDb(Context context, String stationName) {
-        StationDatabase db = StationDatabase.getRoomDB(context);
-        Station station = db.getStationDAO().getStationByName(stationName);
-        db.close();
+    public String getAbbrFromDb(String stationName) {
+        Station station = mDatabase.getStationDAO().getStationByName(stationName);
         return station.getAbbreviation();
     }
 }

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.TextInputEditText;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.StationDbHelper;
+import com.zuk0.gaijinsmash.riderz.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
 import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesHelper;
@@ -247,11 +249,22 @@ public class TripFragment extends Fragment {
     // AsyncTask
     //---------------------------------------------------------------------------------------------
 
+    public enum TripBundle {
+        ORIGIN("Origin"), DESTINATION("Destination"), FULLTRIP_LIST("FullTripList"), TRAIN_HEADERS("TrainHeaders");
+        private String value;
+
+        TripBundle(String value) {
+            this.value = value;
+        }
+
+        public String getValue() { return value; }
+    }
     private static class GetTripTask extends AsyncTask<Void, Void, Boolean> {
         private WeakReference<TripFragment> mWeakRef;
         private TripXMLParser tripXMLParser = null;
         private List<FullTrip> mFullTripList = null;
         private String mDepartingStn, mArrivingStn, mDepartAbbr, mArriveAbbr, mDate, mTime;
+        private List<String> mTrainHeaders;
 
         private GetTripTask(TripFragment context, String departingStn, String arrivingStn, String date, String time) {
             mWeakRef = new WeakReference<>(context);
@@ -266,20 +279,19 @@ public class TripFragment extends Fragment {
             TripFragment frag = mWeakRef.get();
             boolean result = false;
             // Create the API Call
+            StationDbHelper db = new StationDbHelper(frag.getActivity());
             try {
-                if (frag != null) {
-                    mDepartAbbr = StationDbHelper.getAbbrFromDb(frag.getActivity(), mDepartingStn);
-                    mArriveAbbr = StationDbHelper.getAbbrFromDb(frag.getActivity(), mArrivingStn);
-                }
+                mDepartAbbr = db.getAbbrFromDb(mDepartingStn);
+                mArriveAbbr = db.getAbbrFromDb(mArrivingStn);
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                db.closeDb();
             }
             String uri = BartApiStringBuilder.getDetailedRoute(mDepartAbbr, mArriveAbbr, mDate, mTime);
             try {
-                if (frag != null) {
-                    tripXMLParser = new TripXMLParser(frag.getActivity());
-                    mFullTripList = tripXMLParser.getList(uri);
-                }
+                tripXMLParser = new TripXMLParser(frag.getActivity());
+                mFullTripList = tripXMLParser.getList(uri);
             } catch (IOException | XmlPullParserException e){
                 e.printStackTrace();
             }
@@ -295,10 +307,17 @@ public class TripFragment extends Fragment {
             if (result) {
                 // add list to parcelable bundle
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("FullTripList", (ArrayList<? extends Parcelable>) mFullTripList);
-                bundle.putString("Origin", mDepartAbbr);
-                bundle.putString("Destination", mArriveAbbr);
+                bundle.putParcelableArrayList(TripBundle.FULLTRIP_LIST.getValue(), (ArrayList<? extends Parcelable>) mFullTripList);
+                bundle.putString(TripBundle.ORIGIN.getValue(), mDepartAbbr);
+                bundle.putString(TripBundle.DESTINATION.getValue(), mArriveAbbr);
 
+                mTrainHeaders = new ArrayList<>();
+
+                for(FullTrip fullTrip : mFullTripList) {
+                    mTrainHeaders.add(fullTrip.getLegList().get(0).getTrainHeadStation());
+                    if(DebugController.DEBUG) Log.d("trainHeader added", fullTrip.getLegList().get(0).getTrainHeadStation());
+                }
+                bundle.putStringArrayList(TripBundle.TRAIN_HEADERS.getValue(), (ArrayList<String>) mTrainHeaders);
                 // Switch to BartResultsFragment
                 Fragment newFrag = new BartResultsFragment();
                 newFrag.setArguments(bundle);

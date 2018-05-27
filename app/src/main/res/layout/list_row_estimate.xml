@@ -1,63 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="5dp"
-    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:orientation="horizontal">
+<android.support.constraint.ConstraintLayout android:background="@color/mp_primary_light"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
         <TextView
             android:id="@+id/etd_originTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingStart="2dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:paddingEnd="2dp"
-            android:text="Walnut Creek"/>
+            android:paddingStart="2dp"
+            android:text="Origin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/etd_destinationTv"
+            app:layout_constraintHorizontal_bias="0.025"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.4" />
+
         <TextView
             android:id="@+id/etd_colored_line"
             android:layout_width="0dp"
             android:layout_height="5dp"
-            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="40dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="7dp"
+            android:layout_weight="1"
             android:background="@color/bartDefault"
-            android:layout_weight="1"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/etd_destinationTv"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/etd_originTv"
+            app:layout_constraintTop_toTopOf="@id/etd_originTv"
+            app:layout_constraintVertical_bias="1.0" />
+
         <TextView
             android:id="@+id/etd_destinationTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingStart="2dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:paddingEnd="2dp"
-            android:text="Embarcadero"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+            android:paddingStart="2dp"
+            android:text="Destination"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.972"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.25" />
+
 
         <TextView
+            android:id="@+id/etd_departure_notice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/etd_originTv"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
             android:paddingEnd="2dp"
             android:paddingStart="2dp"
-            android:text="Train will leave in:" />
+            android:text="Train will leave in:"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etd_originTv"
+            app:layout_constraintVertical_bias="1.0" />
+
         <TextView
             android:id="@+id/etd_minutesTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="2dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_toEndOf="@+id/etd_departure_notice"
             android:paddingEnd="2dp"
-            android:text="5"/>
+            android:paddingStart="2dp"
+            android:text="5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.37"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
         <TextView
+            android:id="@+id/etd_minutes_tag_tV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="2dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="180dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:paddingEnd="2dp"
-            android:text="minutes"/>
-    </LinearLayout>
-</LinearLayout>
+            android:paddingStart="14dp"
+            android:text="@string/minutes"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.727"
+            app:layout_constraintStart_toEndOf="@+id/etd_minutesTv"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+    </android.support.constraint.ConstraintLayout>
+

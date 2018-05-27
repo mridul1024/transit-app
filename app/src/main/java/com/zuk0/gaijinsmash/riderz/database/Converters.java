@@ -7,12 +7,34 @@ import com.google.gson.reflect.TypeToken;
 import com.zuk0.gaijinsmash.riderz.model.bart.Favorite;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import static com.zuk0.gaijinsmash.riderz.model.bart.Favorite.Priority.OFF;
 import static com.zuk0.gaijinsmash.riderz.model.bart.Favorite.Priority.ON;
 
 public class Converters {
+
+    @TypeConverter
+    public static ArrayList<String> toStringList(String value) {
+        if(value ==null) {
+            return new ArrayList<String>();
+        } else {
+            Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+            return new Gson().fromJson(value, listType);
+        }
+    }
+
+    @TypeConverter
+    public static String arrayListToString(ArrayList<String> list) {
+        if(list.size() == 0) {
+            return "";
+        } else {
+            Gson gson = new Gson();
+            return gson.toJson(list);
+        }
+    }
 
     @TypeConverter
     public static int toInt(Favorite.Priority priority) {
@@ -47,7 +69,7 @@ public class Converters {
     }
 
     @TypeConverter
-    public static String toString(HashSet<String> set) {
+    public static String hashSetToString(HashSet<String> set) {
         if(set.size() == 0) {
             return "";
         } else {
