@@ -8,15 +8,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.model.bart.Estimate;
-import com.zuk0.gaijinsmash.riderz.model.bart.Trip;
+import com.zuk0.gaijinsmash.riderz.model.bart.etd_response.Estimate;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesHelper;
 
 import java.util.List;
 
 public class EstimateAdapter extends RecyclerView.Adapter<EstimateAdapter.ViewHolder>{
 
-    private List<Trip> mTripList;
+    private List<Estimate> mEstimateList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView origin;
@@ -35,7 +34,7 @@ public class EstimateAdapter extends RecyclerView.Adapter<EstimateAdapter.ViewHo
         }
     }
 
-    public EstimateAdapter(List<Trip> tripList) { mTripList = tripList; }
+    public EstimateAdapter(List<Estimate> estimateList) { mEstimateList = estimateList; }
 
     @NonNull
     @Override
@@ -46,18 +45,15 @@ public class EstimateAdapter extends RecyclerView.Adapter<EstimateAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Trip trip = mTripList.get(position);
+        Estimate estimate = mEstimateList.get(position);
+        holder.origin.setText(estimate.getOrigin());
+        holder.destination.setText(estimate.getDestination());
 
-        holder.origin.setText(trip.getOrigin());
-        holder.destination.setText(trip.getDestination());
-
-        Estimate estimate = trip.getEstimateList().get(0); // only returns the most recent estimate
         String minutes = estimate.getMinutes();
         holder.minutes.setText(minutes);
         if(minutes.equals("Leaving")) {
             holder.tag.setText(R.string.now);
         }
-        holder.minutes.setText(minutes);
         BartRoutesHelper.setLineBarByColor(holder.line.getContext(), estimate.getColor(), holder.line);
     }
 

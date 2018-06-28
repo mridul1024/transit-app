@@ -3,6 +3,8 @@ package com.zuk0.gaijinsmash.riderz.model.bart;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.zuk0.gaijinsmash.riderz.model.bart.etd_response.Estimate;
+
 import java.util.List;
 
 public class Trip implements Parcelable {

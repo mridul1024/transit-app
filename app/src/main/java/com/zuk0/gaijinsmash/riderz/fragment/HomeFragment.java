@@ -4,7 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,22 +14,25 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.database.FavoriteDbHelper;
-import com.zuk0.gaijinsmash.riderz.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.model.bart.Advisory;
 import com.zuk0.gaijinsmash.riderz.model.bart.Favorite;
-import com.zuk0.gaijinsmash.riderz.model.bart.Trip;
+import com.zuk0.gaijinsmash.riderz.model.bart.etd_response.Estimate;
+import com.zuk0.gaijinsmash.riderz.model.bart.etd_response.Etd;
+import com.zuk0.gaijinsmash.riderz.model.bart.etd_response.EtdXmlResponse;
 import com.zuk0.gaijinsmash.riderz.network.FetchInputStream;
+import com.zuk0.gaijinsmash.riderz.network.retrofit.ApiUtils;
+import com.zuk0.gaijinsmash.riderz.network.retrofit.RetrofitService;
+import com.zuk0.gaijinsmash.riderz.network.rxjava.EstimateCall;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
 import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesHelper;
 import com.zuk0.gaijinsmash.riderz.utils.TimeAndDate;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.advisory.AdvisoryViewAdapter;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.advisory.AdvisoryXmlParser;
-import com.zuk0.gaijinsmash.riderz.xml_adapter.estimate.EstimateAdapter;
-import com.zuk0.gaijinsmash.riderz.xml_adapter.estimate.EstimateXmlParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -39,6 +42,11 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeFragment extends Fragment {
 
     private TextView mBsaTimeTv, mEstimateErrorTv, mEtdTitle;
@@ -46,6 +54,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView mEstimateRecyclerView;
     private View mInflatedView;
     private ProgressBar mEtdProgressBar;
+
+    private static final String TAG = "HOME FRAGMENT";
 
     //---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -81,7 +91,7 @@ public class HomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         setRetainInstance(true);
         new GetAdvisoryTask( this).execute();
-        new GetFavoritesTask(this).execute();
+        new RealTimeEstimateTask(this).execute();
         mEtdProgressBar.setVisibility(View.VISIBLE);
     }
 
@@ -108,94 +118,84 @@ public class HomeFragment extends Fragment {
                     .into(imageView);
         }
     }
+
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
-    //TODO: need to save state onPause(), etc to prevent too many calls everytime the app opens.
+    //TODO: implement ViewModel component
 
-    private static class GetFavoritesTask extends AsyncTask<Void, Void, Boolean> {
+    private static class RealTimeEstimateTask extends AsyncTask<Void, Void, Boolean> {
         private WeakReference<HomeFragment> mHomeRef;
-        private List<Trip> mFinalList;
+        private static List<Favorite> mFavoriteList;
 
-        private GetFavoritesTask(HomeFragment context) {
+        private RealTimeEstimateTask(HomeFragment context) {
             mHomeRef = new WeakReference<>(context);
-            mFinalList = new ArrayList<>();
+            mFavoriteList = new ArrayList<>();
         }
 
         @Override
         protected Boolean doInBackground(Void...voids) {
-            if (DebugController.DEBUG) Log.i("GetFavoritesTask", "STARTING");
             HomeFragment homeFrag = mHomeRef.get();
             if(homeFrag != null && homeFrag.isAdded()) {
-                mFinalList = getTripList(homeFrag.getActivity());
+                FavoriteDbHelper db = new FavoriteDbHelper(homeFrag.getActivity());
+                int count = db.getFavoritesCount();
+                if(count > 0) {
+                    mFavoriteList = db.getFavoritesByPriority();
+                }
+                db.closeDb();
             }
-            return mFinalList.size() > 0;
+            return mFavoriteList.size() > 0;
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
             HomeFragment homeFrag = mHomeRef.get();
             homeFrag.mEtdTitle.setVisibility(View.VISIBLE);
+
             if(result) {
-                homeFrag.mEstimateListView.setVisibility(View.VISIBLE);
-
-
-                //EstimateViewAdapter adapter = new EstimateViewAdapter(mFinalList, homeFrag.getActivity(), homeFrag);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(homeFrag.getActivity());
-                homeFrag.mEstimateRecyclerView.setLayoutManager(layoutManager);
-                EstimateAdapter adapter = new EstimateAdapter(mFinalList);
-                homeFrag.mEstimateRecyclerView.setAdapter(adapter);
-                //homeFrag.mEstimateListView.setAdapter(adapter);
+                //make retrofit call
+                startRetrofitCall(homeFrag.getActivity(), mFavoriteList, homeFrag.mEstimateRecyclerView);
             } else {
                 homeFrag.mEstimateErrorTv.setVisibility(View.VISIBLE);
                 homeFrag.mEstimateErrorTv.setText(homeFrag.getResources().getString(R.string.estimate_not_available));
             }
 
             if(homeFrag.isAdded()){
-                Log.i("visibility", "gone");
+                Log.i("progress bar", "gone");
                 homeFrag.mEtdProgressBar.setVisibility(View.GONE);
             }
         }
     }
 
-    public static List<Trip> getTripList(Context context) {
-        List<Trip> tripList = new ArrayList<>();
-        FavoriteDbHelper db = new FavoriteDbHelper(context);
-        int count = db.getFavoritesCount();
-        if(count > 0) {
-            // should return a max of 2 favorite objects
-            List<Favorite> favoritesList = db.getFavoritesByPriority();
-            tripList = getConsolidatedTripList(context, favoritesList);
-        }
-        db.closeDb();
-        return tripList;
-    }
 
-    public static List<Trip> getConsolidatedTripList(Context context, List<Favorite> favoritesList) {
-        List<Trip> finalTripList = new ArrayList<>();
-        EstimateXmlParser parser = new EstimateXmlParser(context);
-        for(Favorite favorite : favoritesList) {
-            String url = BartApiStringBuilder.getRealTimeEstimates(favorite.getOrigin());
-            List<Trip> tempTripList = new ArrayList<>();
-            try {
-                tempTripList = parser.getList(url);
-                // each trip has its own dest abbr
-                List<Trip> tripRemovalList = new ArrayList<>();
-                for(Trip trip : tempTripList) {
-                    if(!favorite.getTrainHeaderStations().contains(trip.getDestinationAbbr())) {
-                        //add to removal list
-                        tripRemovalList.add(trip);
-                        Log.d("trip removed", trip.getDestination());
+    public static void startRetrofitCall(Context context, List<Favorite> favList, RecyclerView view) {
+        RetrofitService service = ApiUtils.getBartApiService();
+        List<Estimate> estimateList = new ArrayList<>();
+        for(Favorite fav : favList) {
+            Call<EtdXmlResponse> call = service.getEtd(fav.getOrigin());
+            call.enqueue(new Callback<EtdXmlResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<EtdXmlResponse> call, @NonNull Response<EtdXmlResponse> response) {
+                    List<Etd> etdList = response.body().getStation().getEtdList();
+                    for(Etd etd : etdList) {
+                        List<Estimate> estimates = etd.getEstimateList();
+                        estimateList.addAll(estimates);
+                        Log.i("size", String.valueOf(estimateList.size()));
                     }
                 }
-                tempTripList.removeAll(tripRemovalList);
-            } catch (IOException | XmlPullParserException e) {
-                Log.e("List<Trip> error", e.toString());
-            }
-            finalTripList.addAll(tempTripList);
+
+                @Override
+                public void onFailure(@NonNull Call<EtdXmlResponse> call, @NonNull Throwable t) {
+                    Toast.makeText(context, "Something went wrong.", Toast.LENGTH_SHORT).show();
+                    Log.i("onFailure", t.getMessage());
+                }
+            });
         }
-        return finalTripList;
     }
+
+    //---------------------------------------------------------------------------------------------
+    // AsyncTask
+    //---------------------------------------------------------------------------------------------
 
     private static class GetAdvisoryTask extends AsyncTask<Void, Integer, Boolean> {
         private WeakReference<HomeFragment> mHomeRef;
@@ -257,5 +257,4 @@ public class HomeFragment extends Fragment {
         }
         return time;
     }
-
 }

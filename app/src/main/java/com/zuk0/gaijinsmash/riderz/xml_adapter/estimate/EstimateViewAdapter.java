@@ -10,11 +10,9 @@ import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.fragment.HomeFragment;
-import com.zuk0.gaijinsmash.riderz.model.bart.Estimate;
+import com.zuk0.gaijinsmash.riderz.model.bart.etd_response.Estimate;
 import com.zuk0.gaijinsmash.riderz.model.bart.Trip;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesHelper;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 

@@ -6,6 +6,11 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.zuk0.gaijinsmash.riderz.model.bart.etd_response.Etd;
+
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+
 import java.util.List;
 
 @Entity(tableName = "stations")
@@ -61,6 +66,9 @@ public class Station  {
     @ColumnInfo(name = "link")
     private String link;
 
+    @Ignore
+    @ElementList(name="etd", inline=true)
+    private List<Etd> etdList;
 
     public Station () {}
 
@@ -109,4 +117,11 @@ public class Station  {
     public String getIntro() { return intro; }
     public String getPlatformInfo() { return platformInfo; }
 
+    public List<Etd> getEtdList() {
+        return etdList;
+    }
+
+    public void setEtdList(List<Etd> etdList) {
+        this.etdList = etdList;
+    }
 }
