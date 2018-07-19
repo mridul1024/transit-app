@@ -1,14 +1,15 @@
 package com.zuk0.gaijinsmash.riderz.xml_adapter.favorite;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,11 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.database.FavoriteDatabase;
-import com.zuk0.gaijinsmash.riderz.fragment.BartResultsFragment;
-import com.zuk0.gaijinsmash.riderz.fragment.FavoritesFragment;
-import com.zuk0.gaijinsmash.riderz.model.bart.Favorite;
-import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
+import com.zuk0.gaijinsmash.riderz.data.database.FavoriteDatabase;
+import com.zuk0.gaijinsmash.riderz.view.fragment.BartResultsFragment;
+import com.zuk0.gaijinsmash.riderz.view.fragment.FavoritesFragment;
+import com.zuk0.gaijinsmash.riderz.data.model.Favorite;
+import com.zuk0.gaijinsmash.riderz.data.model.FullTrip;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.trip.TripXMLParser;
 
@@ -194,7 +195,8 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
                 newFrag.setArguments(bundle);
                 FragmentManager manager = null;
                 if (frag != null)
-                    manager = (frag.getActivity()).getFragmentManager();
+                    manager =
+                    manager = (frag.getActivity()).getSupportFragmentManager(); //todo: check this for null
                 if (manager != null)
                     manager.beginTransaction()
                             .replace(R.id.fragmentContent, newFrag)

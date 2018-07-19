@@ -5,8 +5,8 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
+import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
+import com.zuk0.gaijinsmash.riderz.data.model.FullTrip;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -6,8 +6,8 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.zuk0.gaijinsmash.riderz.activity.MainActivity;
-import com.zuk0.gaijinsmash.riderz.fragment.HelpFragment;
+import com.zuk0.gaijinsmash.riderz.view.activity.MainActivity;
+import com.zuk0.gaijinsmash.riderz.view.fragment.HelpFragment;
 
 import org.junit.Before;
 import org.junit.Rule;

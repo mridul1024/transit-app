@@ -77,6 +77,8 @@ public class TimeAndDate {
         return sdf.format(date);
     }
 
+
+    // For Trip api calls
     public static String convertTo12HrForTrip(String input) {
         Date date = null;
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
@@ -97,4 +99,14 @@ public class TimeAndDate {
         return  Integer.valueOf(time);
     }
 
+    // This is for home screen
+    public static String getFormattedTime(Advisory adv, boolean is24HrTimeOn) {
+        String time;
+        if(is24HrTimeOn) {
+            time = TimeAndDate.format24hrTime(adv.getTime());
+        } else {
+            time = TimeAndDate.convertTo12Hr(adv.getTime());
+        }
+        return time;
+    }
 }

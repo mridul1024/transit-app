@@ -7,8 +7,8 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.zuk0.gaijinsmash.riderz.activity.MainActivity;
-import com.zuk0.gaijinsmash.riderz.fragment.SettingsFragment;
+import com.zuk0.gaijinsmash.riderz.view.activity.MainActivity;
+import com.zuk0.gaijinsmash.riderz.view.fragment.SettingsFragment;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;

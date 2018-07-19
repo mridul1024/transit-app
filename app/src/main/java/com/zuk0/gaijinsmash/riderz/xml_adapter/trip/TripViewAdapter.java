@@ -13,11 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.database.StationDatabase;
-import com.zuk0.gaijinsmash.riderz.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.fragment.BartResultsFragment;
+import com.zuk0.gaijinsmash.riderz.data.database.StationDatabase;
+import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
+import com.zuk0.gaijinsmash.riderz.view.fragment.BartResultsFragment;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesHelper;
-import com.zuk0.gaijinsmash.riderz.model.bart.FullTrip;
+import com.zuk0.gaijinsmash.riderz.data.model.FullTrip;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

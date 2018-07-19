@@ -27,7 +27,7 @@
 
         <!-- Splash -->
         <activity
-            android:name=".activity.SplashActivity"
+            android:name="com.zuk0.gaijinsmash.riderz.view.activity.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -38,7 +38,7 @@
 
         <!-- Main -->
         <activity
-            android:name=".activity.MainActivity"
+            android:name="com.zuk0.gaijinsmash.riderz.view.activity.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">

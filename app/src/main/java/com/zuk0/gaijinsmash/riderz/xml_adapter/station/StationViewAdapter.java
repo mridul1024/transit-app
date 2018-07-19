@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.model.bart.Station;
+import com.zuk0.gaijinsmash.riderz.data.model.Station;
 
 import java.util.List;
 

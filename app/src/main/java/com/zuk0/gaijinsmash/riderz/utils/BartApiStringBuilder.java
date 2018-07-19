@@ -2,7 +2,7 @@ package com.zuk0.gaijinsmash.riderz.utils;
 
 import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.debug.DebugController;
+import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 
 public class BartApiStringBuilder {
     private static final String API_KEY = "&key=Q7Z9-PZ53-9QXT-DWE9";
