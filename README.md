@@ -6,11 +6,13 @@
 --------------------------------------------------------------------------------
 
 ## Screenshots
-![home-screen](https://i.imgur.com/RNqOXCjm.png)
-![trip-screen](https://i.imgur.com/YVE99ELm.png)
-![results-screen](https://i.imgur.com/P9HThYLm.png)
-![nav-screen](https://i.imgur.com/eR66b9Mm.png)
-![map-screen](https://i.imgur.com/DvNsHQGm.png)
+![home](https://i.imgur.com/CqBJupym.png)
+![nav](https://i.imgur.com/4f0wkpfm.png)
+![trip](https://i.imgur.com/p8Lefx9m.png)
+![results](https://i.imgur.com/JA1IHqzm.png)
+![favorites](https://i.imgur.com/bspIbBsm.png)
+![gmap](https://i.imgur.com/DvNsHQGm.png)
+![bartmap](https://i.imgur.com/0c0D4WKm.png)
 
 ## Table of Contents
 
@@ -29,8 +31,7 @@
 
 This is an open-source android application that was originally built with Android Studio 3.0 and GenYMotion Emulator.
 I chose Android Studio Canary edition because it provides Kotlin support from the get go.
-There is a simple test and build pipeline with Jenkins hosted on a Raspberry Pi 3 headless server that I created at home. 
-Considering to dockerize the app as well.
+There is a simple test and build pipeline with CircleCI and you can review the current status up above.
 
 I hope you all enjoy using and contributing to this application.
 
@@ -70,7 +71,8 @@ I will begin posting instructions for the next module soon, but in the mean time
 1. Use the appropriate XML files for Strings, Colors, and Styles
 2. Elevation = 1dp
 3. Use containers
-4. Use the Material Pallete colors implemented in the colors.xml 
+4. Use the Material Pallete colors implemented in the colors.xml
+5. Please follow conventional [Material Design](https://material.io/design) guidelines for all future changes.
 
 
 ## Other
