@@ -5,7 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 
-import com.zuk0.gaijinsmash.riderz.data.database.Converters;
+import com.zuk0.gaijinsmash.riderz.data.local.database.Converters;
 
 import java.util.ArrayList;
 import java.util.HashSet;

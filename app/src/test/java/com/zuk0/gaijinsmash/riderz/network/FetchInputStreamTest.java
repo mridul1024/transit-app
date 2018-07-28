@@ -2,6 +2,8 @@ package com.zuk0.gaijinsmash.riderz.network;
 
 import android.content.Context;
 
+import com.zuk0.gaijinsmash.riderz.utils.FetchInputStream;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

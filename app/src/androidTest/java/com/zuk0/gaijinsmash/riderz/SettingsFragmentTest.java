@@ -7,8 +7,8 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.zuk0.gaijinsmash.riderz.view.activity.MainActivity;
-import com.zuk0.gaijinsmash.riderz.view.fragment.SettingsFragment;
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.SettingsFragment;
 
 import org.junit.Before;
 import org.junit.Rule;

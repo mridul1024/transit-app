@@ -4,10 +4,10 @@ import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
-import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
+import com.zuk0.gaijinsmash.riderz.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.data.model.etd_response.Estimate;
 import com.zuk0.gaijinsmash.riderz.data.model.Trip;
-import com.zuk0.gaijinsmash.riderz.network.FetchInputStream;
+import com.zuk0.gaijinsmash.riderz.utils.FetchInputStream;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.XmlParserAbstract;
 import com.zuk0.gaijinsmash.riderz.xml_adapter.XmlParserInterface;
 

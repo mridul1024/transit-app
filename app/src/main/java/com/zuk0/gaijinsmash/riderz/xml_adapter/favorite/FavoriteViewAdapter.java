@@ -22,9 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.data.database.FavoriteDatabase;
-import com.zuk0.gaijinsmash.riderz.view.fragment.BartResultsFragment;
-import com.zuk0.gaijinsmash.riderz.view.fragment.FavoritesFragment;
+import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.BartResultsFragment;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.FavoritesFragment;
 import com.zuk0.gaijinsmash.riderz.data.model.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.model.FullTrip;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;

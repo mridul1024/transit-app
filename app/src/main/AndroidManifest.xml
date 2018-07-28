@@ -14,7 +14,7 @@
         android:required="true" />
 
     <application
-        android:fullBackupContent="@xml/riderz_backup_file"
+        android:name=".RiderzApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -27,7 +27,7 @@
 
         <!-- Splash -->
         <activity
-            android:name="com.zuk0.gaijinsmash.riderz.view.activity.SplashActivity"
+            android:name="com.zuk0.gaijinsmash.riderz.ui.activity.splash.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -38,7 +38,7 @@
 
         <!-- Main -->
         <activity
-            android:name="com.zuk0.gaijinsmash.riderz.view.activity.MainActivity"
+            android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
