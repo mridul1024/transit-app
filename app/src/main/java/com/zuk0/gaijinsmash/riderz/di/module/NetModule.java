@@ -53,7 +53,7 @@ public class NetModule {
         client.cache(cache);
         return client.build();
     }
-
+/*
     @Provides
     @Singleton
     Retrofit provideRetrofitJson(Gson gson, OkHttpClient okHttpClient) {
@@ -63,7 +63,7 @@ public class NetModule {
                 .client(okHttpClient)
                 .build();
     }
-
+*/
     @Provides
     @Singleton
     Retrofit provideRetrofitXml(OkHttpClient okHttpClient) {

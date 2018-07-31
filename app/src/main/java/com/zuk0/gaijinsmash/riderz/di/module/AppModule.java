@@ -1,9 +1,15 @@
 package com.zuk0.gaijinsmash.riderz.di.module;
 
 import android.app.Application;
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 
-import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivityComponent;
+import com.zuk0.gaijinsmash.riderz.data.local.database.BsaDao;
+import com.zuk0.gaijinsmash.riderz.data.local.database.BsaDatabase;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.inject.Singleton;
 
@@ -12,12 +18,30 @@ import dagger.Provides;
 /*
     This module will provide the dependencies for the overall application level
  */
-@Module(subcomponents = {MainActivityComponent.class})
+@Module
 public class AppModule {
 
     @Provides
     @Singleton
     Context provideApplication(Application application) {
         return application;
+    }
+
+    @Provides
+    @Singleton
+    BsaDatabase provideBsaDatabase(Context context) {
+        return BsaDatabase.getRoomDb(context);
+    }
+
+    @Provides
+    @Singleton
+    BsaDao provideBsaDao(BsaDatabase db) {
+        return db.getBsaDAO();
+    }
+
+    @Provides
+    @Singleton
+    Executor provideExecutor() {
+        return Executors.newSingleThreadExecutor();
     }
 }

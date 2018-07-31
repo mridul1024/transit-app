@@ -18,8 +18,19 @@ import com.zuk0.gaijinsmash.riderz.data.remote.network.CheckInternet
 import com.zuk0.gaijinsmash.riderz.ui.fragment.*
 import com.zuk0.gaijinsmash.riderz.ui.fragment.home.HomeFragment
 import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasFragmentInjector
+import dagger.android.support.HasSupportFragmentInjector
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, HasSupportFragmentInjector{
+    @Inject
+    lateinit var fragmentInjector : DispatchingAndroidInjector<Fragment>
+
+    override fun supportFragmentInjector(): DispatchingAndroidInjector<Fragment>? {
+        return fragmentInjector
+    }
 
     private var mCurrentFragment = "HomeFragment"
     private val mFragmentManager = supportFragmentManager

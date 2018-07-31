@@ -34,7 +34,7 @@ public class BsaRepository {
     private final Executor executor;
 
     @Inject
-    public BsaRepository(RetrofitInterface service, BsaDao bsaDao, Executor executor) {
+    BsaRepository(RetrofitInterface service, BsaDao bsaDao, Executor executor) {
         this.service = service;
         this.bsaDao = bsaDao; // for caching
         this.executor = executor; // for executing on thread?

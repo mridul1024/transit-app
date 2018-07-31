@@ -28,14 +28,14 @@ import butterknife.ButterKnife;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.DaggerFragment;
 import dagger.android.support.HasSupportFragmentInjector;
 
 // must use android.support.v4.app.Fragment for ViewModelProvider compatibility
-public class HomeFragment extends Fragment implements HasSupportFragmentInjector {
-    @Inject
-    DispatchingAndroidInjector<Fragment> mFragmentInjector;
+public class HomeFragment extends Fragment  {
 
-    private HomeViewModel mViewModel;
+    @Inject
+    HomeViewModel mViewModel;
 
     @BindView(R.id.home_bsa_recyclerView) RecyclerView mAdvisoryRecyclerView;
     @BindView(R.id.home_etd_recyclerView) RecyclerView mEstimateRecyclerView;
@@ -69,7 +69,6 @@ public class HomeFragment extends Fragment implements HasSupportFragmentInjector
         super.onActivityCreated(savedInstanceState);
         setRetainInstance(true);  //todo: check behavior of lifecycle for this
         mEtdProgressBar.setVisibility(View.VISIBLE);
-        mViewModel = ViewModelProviders.of(this, new ViewModelProviderFactory(this)).get(HomeViewModel.class);
 
         // Display image of bay bridge
         mViewModel.initPic(getActivity(), mViewModel.getHour(), mImageView);
@@ -101,8 +100,4 @@ public class HomeFragment extends Fragment implements HasSupportFragmentInjector
         super.onResume();
     }
 
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return mFragmentInjector;
-    }
 }

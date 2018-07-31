@@ -4,10 +4,11 @@ package com.zuk0.gaijinsmash.riderz.di.component;
 import android.app.Application;
 
 import com.zuk0.gaijinsmash.riderz.RiderzApplication;
-import com.zuk0.gaijinsmash.riderz.di.module.ActivityModule;
+import com.zuk0.gaijinsmash.riderz.di.module.ActivityBuilder;
 import com.zuk0.gaijinsmash.riderz.di.module.AppModule;
-import com.zuk0.gaijinsmash.riderz.di.module.FragmentModule;
 import com.zuk0.gaijinsmash.riderz.di.module.NetModule;
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.home.HomeFragment;
 
 import javax.inject.Singleton;
 
@@ -24,13 +25,12 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @Component(modules = {
         AndroidSupportInjectionModule.class,
         AndroidInjectionModule.class,
-        ActivityModule.class,
-        FragmentModule.class,
+        ActivityBuilder.class,
         AppModule.class,
-        NetModule.class}
-)
-
+        NetModule.class})
 public interface AppComponent {
+
+    void inject(RiderzApplication application);
 
     @Component.Builder
     interface Builder{
@@ -40,6 +40,4 @@ public interface AppComponent {
 
         AppComponent build();
     }
-
-    void inject(RiderzApplication application);
 }
