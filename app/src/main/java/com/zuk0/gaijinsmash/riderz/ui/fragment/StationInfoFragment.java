@@ -15,9 +15,9 @@ import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
-import com.zuk0.gaijinsmash.riderz.data.model.Station;
-import com.zuk0.gaijinsmash.riderz.xml_adapter.station.StationXmlParser;
-import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.Station;
+import com.zuk0.gaijinsmash.riderz.ui.adapter.station.StationXmlParser;
+import com.zuk0.gaijinsmash.riderz.utils.BartApiUtils;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -110,7 +110,7 @@ public class StationInfoFragment extends Fragment {
             StationDatabase db = StationDatabase.getRoomDB(frag.getActivity());
             mAbbr = db.getStationDAO().getStationByAddress(mStationAddress).getAbbreviation();
             if(mAbbr != null) {
-                String uri = BartApiStringBuilder.getStationInfo(mAbbr);
+                String uri = BartApiUtils.getStationInfo(mAbbr);
                 StationXmlParser parser = new StationXmlParser(frag.getActivity());
                 List<Station> list = new ArrayList<>();
                 try {

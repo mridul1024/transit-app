@@ -8,7 +8,8 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
-import com.zuk0.gaijinsmash.riderz.data.model.Station;
+import com.zuk0.gaijinsmash.riderz.data.local.dao.StationDAO;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.Station;
 
 @Database(entities = {Station.class}, version = 3, exportSchema = false)
 public abstract class StationDatabase extends RoomDatabase {

@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
-import com.zuk0.gaijinsmash.riderz.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.data.model.Favorite;
-import com.zuk0.gaijinsmash.riderz.xml_adapter.favorite.FavoriteViewAdapter;
+import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
+import com.zuk0.gaijinsmash.riderz.ui.adapter.favorite.FavoriteViewAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

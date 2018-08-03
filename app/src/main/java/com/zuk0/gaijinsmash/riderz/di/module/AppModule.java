@@ -1,11 +1,10 @@
 package com.zuk0.gaijinsmash.riderz.di.module;
 
 import android.app.Application;
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Room;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 
-import com.zuk0.gaijinsmash.riderz.data.local.database.BsaDao;
+import com.zuk0.gaijinsmash.riderz.data.local.dao.BsaDao;
 import com.zuk0.gaijinsmash.riderz.data.local.database.BsaDatabase;
 
 import java.util.concurrent.Executor;
@@ -43,5 +42,11 @@ public class AppModule {
     @Singleton
     Executor provideExecutor() {
         return Executors.newSingleThreadExecutor();
+    }
+
+    @Provides
+    @Singleton
+    ViewModelProvider.Factory provideViewModelFactory() {
+        return new ViewModelProvider.NewInstanceFactory();
     }
 }

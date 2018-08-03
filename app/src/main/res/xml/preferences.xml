@@ -1,0 +1,15 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/root_title">
+
+    <PreferenceCategory
+        android:title="@string/preference_category_title">
+
+        <CheckBoxPreference
+            android:key="TIME_KEY"
+            android:title="@string/preference_checkbox_title"
+            android:summary="@string/preference_checkbox_time_summary"
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

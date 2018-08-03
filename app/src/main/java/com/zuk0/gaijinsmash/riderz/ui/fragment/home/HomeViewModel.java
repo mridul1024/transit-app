@@ -1,5 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.home;
 
+import android.animation.TimeAnimator;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
@@ -8,12 +9,10 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.data.model.bsa_response.BsaXmlResponse;
-import com.zuk0.gaijinsmash.riderz.data.remote.repository.BsaRepository;
-import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesHelper;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
+import com.zuk0.gaijinsmash.riderz.data.repository.BsaRepository;
+import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesUtils;
 import com.zuk0.gaijinsmash.riderz.utils.TimeDateUtils;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -32,26 +31,17 @@ public class HomeViewModel extends ViewModel {
     //Constructor for AndroidViewModel must have ONLY one parameter, which is Application.
     // Therefore, must create ViewModelProviderFactory to bypass this limitation
     @Inject
-    public HomeViewModel(BsaRepository bsaRepository) {
+    HomeViewModel(BsaRepository bsaRepository) {
         mBsaRepository = bsaRepository;
-        if(mBsaRepository == null) {
-            Log.wtf("***HomeViewModel***","repo is null");
-        } else {
-            Log.wtf("WORKIN MOFO!","YAY");
-        }
-        initializeData();
+        initData();
     }
 
     // Only perform initialization once per app lifetime.
-    private synchronized void initializeData() {
+    private synchronized void initData() {
         if(bsaLiveData == null) {
             bsaLiveData = mBsaRepository.getBsa();
         }
         //todo: init favorites and call
-    }
-
-    public BsaRepository getBsaRepo() {
-        return mBsaRepository;
     }
 
     public LiveData<BsaXmlResponse> getBsaLiveData() {
@@ -60,21 +50,21 @@ public class HomeViewModel extends ViewModel {
 
     // Create message for Advisory Time and Date
     public boolean is24HrTimeOn(Context context) {
-        return SharedPreferencesHelper.getTimePreference(context);
+        return SharedPreferencesUtils.getTimePreference(context);
     }
 
-    public String initTime(boolean is24HrTimeOn, LiveData<BsaXmlResponse> data) {
-        String time;
+    private String initTime(boolean is24HrTimeOn, String time) {
+        String result;
         if(is24HrTimeOn) {
-            time = Objects.requireNonNull(data.getValue()).getTime();
+            result = TimeDateUtils.format24hrTime(time);
         } else {
-            time = TimeDateUtils.convertTo12Hr(Objects.requireNonNull(data.getValue()).getTime());
+            result = TimeDateUtils.convertTo12Hr(time);
         }
-        return time;
+        return result;
     }
 
-    public String initMessage(String time) {
-        return R.string.last_update + " " + time;
+    public String initMessage(Context context, boolean is24HrTimeOn, String time) {
+        return context.getResources().getString(R.string.last_update) + " " + initTime(is24HrTimeOn, time);
     }
 
     // For the home screen banner picture

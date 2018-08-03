@@ -18,12 +18,12 @@ import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDbHelper;
-import com.zuk0.gaijinsmash.riderz.data.model.Favorite;
-import com.zuk0.gaijinsmash.riderz.data.model.FullTrip;
-import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
-import com.zuk0.gaijinsmash.riderz.utils.BartRoutesHelper;
-import com.zuk0.gaijinsmash.riderz.xml_adapter.trip.TripViewAdapter;
-import com.zuk0.gaijinsmash.riderz.xml_adapter.trip.TripXMLParser;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.FullTrip;
+import com.zuk0.gaijinsmash.riderz.utils.BartApiUtils;
+import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils;
+import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripViewAdapter;
+import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripXMLParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -96,7 +96,7 @@ public class BartResultsFragment extends Fragment {
             mFavoriteObject.setOrigin(mOrigin);
             mFavoriteObject.setDestination(mDestination);
             mFavoriteObject.setSystem(BART);
-            mFavoriteObject.setColors(BartRoutesHelper.getColorsSetFromFullTrip(mFullTripList));
+            mFavoriteObject.setColors(BartRoutesUtils.getColorsSetFromFullTrip(mFullTripList));
             mFavoriteObject.setTrainHeaderStations(mTrainHeaders);
         }
 
@@ -172,8 +172,8 @@ public class BartResultsFragment extends Fragment {
                         favoriteReversed.setPriority(Favorite.Priority.ON);
                     }
                     List<FullTrip> tripList = getFullTripList(frag.getActivity(), frag.mDestination, frag.mOrigin);
-                    favoriteReversed.setColors(BartRoutesHelper.getColorsSetFromFullTrip(tripList));
-                    favoriteReversed.setTrainHeaderStations(BartRoutesHelper.getTrainHeadersListFromFullTrip(tripList));
+                    favoriteReversed.setColors(BartRoutesUtils.getColorsSetFromFullTrip(tripList));
+                    favoriteReversed.setTrainHeaderStations(BartRoutesUtils.getTrainHeadersListFromFullTrip(tripList));
                     db.addToFavorites(favoriteReversed);
                     return true;
                 case DELETE_FAVORITE:
@@ -209,7 +209,7 @@ public class BartResultsFragment extends Fragment {
     // Helper Methods
     //---------------------------------------------------------------------------------------------
     private static List<FullTrip> getFullTripList(Context context, String origin, String destination) {
-        String url = BartApiStringBuilder.getDetailedRoute(origin, destination, "TODAY", "NOW");
+        String url = BartApiUtils.getDetailedRoute(origin, destination, "TODAY", "NOW");
         List<FullTrip> tripList = new ArrayList<>();
         try {
             TripXMLParser parser = new TripXMLParser(context);

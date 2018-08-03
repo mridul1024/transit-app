@@ -5,9 +5,9 @@ import android.app.Application;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.zuk0.gaijinsmash.riderz.data.remote.network.retrofit.ApiKeyInterceptor;
-import com.zuk0.gaijinsmash.riderz.data.remote.network.retrofit.RetrofitClient;
-import com.zuk0.gaijinsmash.riderz.data.remote.network.retrofit.RetrofitInterface;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.ApiKeyInterceptor;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitClient;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
 
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
@@ -53,22 +53,13 @@ public class NetModule {
         client.cache(cache);
         return client.build();
     }
-/*
-    @Provides
-    @Singleton
-    Retrofit provideRetrofitJson(Gson gson, OkHttpClient okHttpClient) {
-        return new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .baseUrl(BASE_URL)
-                .client(okHttpClient)
-                .build();
-    }
-*/
+
     @Provides
     @Singleton
     Retrofit provideRetrofitXml(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(new Persister(new AnnotationStrategy())))
+                .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(BASE_URL)
                 .client(okHttpClient)
                 .build();

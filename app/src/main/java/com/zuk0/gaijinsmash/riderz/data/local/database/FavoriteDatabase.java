@@ -8,7 +8,9 @@ import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
-import com.zuk0.gaijinsmash.riderz.data.model.Favorite;
+import com.zuk0.gaijinsmash.riderz.data.local.converter.Converters;
+import com.zuk0.gaijinsmash.riderz.data.local.dao.FavoriteDAO;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 
 @Database(entities = {Favorite.class}, version = 13, exportSchema = false)
 @TypeConverters({Converters.class})

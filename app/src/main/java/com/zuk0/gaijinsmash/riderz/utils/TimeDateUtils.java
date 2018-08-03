@@ -1,6 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.utils;
 
-import com.zuk0.gaijinsmash.riderz.data.model.bsa_response.BsaXmlResponse;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -11,7 +11,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class TimeDateUtils {
-
 
     public static String getTodaysDate() {
         Calendar c = Calendar.getInstance();

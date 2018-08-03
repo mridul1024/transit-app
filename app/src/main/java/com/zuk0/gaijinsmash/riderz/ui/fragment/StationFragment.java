@@ -16,8 +16,8 @@ import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDbHelper;
-import com.zuk0.gaijinsmash.riderz.data.model.Station;
-import com.zuk0.gaijinsmash.riderz.xml_adapter.station.StationViewAdapter;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.Station;
+import com.zuk0.gaijinsmash.riderz.ui.adapter.station.StationViewAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

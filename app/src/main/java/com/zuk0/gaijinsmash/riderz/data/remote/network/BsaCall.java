@@ -1,8 +1,8 @@
 package com.zuk0.gaijinsmash.riderz.data.remote.network;
 
-import com.zuk0.gaijinsmash.riderz.data.model.bsa_response.BsaXmlResponse;
-import com.zuk0.gaijinsmash.riderz.data.remote.network.retrofit.ApiUtils;
-import com.zuk0.gaijinsmash.riderz.data.remote.network.retrofit.RetrofitInterface;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.ApiUtils;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
 
 import io.reactivex.Single;
 

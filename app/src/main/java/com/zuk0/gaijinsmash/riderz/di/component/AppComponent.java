@@ -27,7 +27,8 @@ import dagger.android.support.AndroidSupportInjectionModule;
         AndroidInjectionModule.class,
         ActivityBuilder.class,
         AppModule.class,
-        NetModule.class})
+        NetModule.class
+})
 public interface AppComponent {
 
     void inject(RiderzApplication application);

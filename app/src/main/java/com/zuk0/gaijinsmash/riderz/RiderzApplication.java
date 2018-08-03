@@ -4,15 +4,12 @@ import android.app.Activity;
 import android.app.Application;
 import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.di.component.AppComponent;
 import com.zuk0.gaijinsmash.riderz.di.component.DaggerAppComponent;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
-import dagger.android.support.DaggerApplication;
 
 /*
     This will create Dagger object

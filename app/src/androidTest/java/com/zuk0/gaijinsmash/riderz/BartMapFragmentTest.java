@@ -7,7 +7,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.BartMapFragment;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment;
 
 import org.junit.Before;
 import org.junit.Rule;

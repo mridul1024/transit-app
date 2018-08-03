@@ -7,7 +7,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.AboutFragment;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.about.AboutFragment;
 
 import org.junit.Before;
 import org.junit.Rule;

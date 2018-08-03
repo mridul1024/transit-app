@@ -2,9 +2,9 @@ package com.zuk0.gaijinsmash.riderz.data.remote.network;
 
 import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.data.model.etd_response.EtdXmlResponse;
-import com.zuk0.gaijinsmash.riderz.data.remote.network.retrofit.ApiUtils;
-import com.zuk0.gaijinsmash.riderz.data.remote.network.retrofit.RetrofitInterface;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.ApiUtils;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
 
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;

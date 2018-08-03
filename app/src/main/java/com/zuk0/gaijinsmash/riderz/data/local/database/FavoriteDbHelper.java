@@ -3,7 +3,7 @@ package com.zuk0.gaijinsmash.riderz.data.local.database;
 import android.content.Context;
 import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.data.model.Favorite;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 
 import java.util.List;
 

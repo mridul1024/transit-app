@@ -3,10 +3,10 @@ package com.zuk0.gaijinsmash.riderz.data.local.database;
 import android.content.Context;
 import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.data.model.Station;
-import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
-import com.zuk0.gaijinsmash.riderz.xml_adapter.station.StationXmlParser;
+import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.Station;
+import com.zuk0.gaijinsmash.riderz.utils.BartApiUtils;
+import com.zuk0.gaijinsmash.riderz.ui.adapter.station.StationXmlParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -32,7 +32,7 @@ public class StationDbHelper {
         if(count == 0 || count < mNumOfBartStations) {
             List<Station> stationList;
             StationXmlParser parser = new StationXmlParser(context);
-            stationList = parser.getList(BartApiStringBuilder.getAllStations());
+            stationList = parser.getList(BartApiUtils.getAllStations());
             for(Station x : stationList) {
                 mDatabase.getStationDAO().addStation(x);
             }

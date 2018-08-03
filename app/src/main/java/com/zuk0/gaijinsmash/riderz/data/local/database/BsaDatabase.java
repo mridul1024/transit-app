@@ -8,7 +8,9 @@ import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
-import com.zuk0.gaijinsmash.riderz.data.model.bsa_response.BsaXmlResponse;
+import com.zuk0.gaijinsmash.riderz.data.local.converter.Converters;
+import com.zuk0.gaijinsmash.riderz.data.local.dao.BsaDao;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
 
 @Database(entities = {BsaXmlResponse.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})

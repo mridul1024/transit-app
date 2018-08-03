@@ -25,11 +25,11 @@ import android.widget.Toast;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDbHelper;
 import com.zuk0.gaijinsmash.riderz.utils.TimeDateUtils;
-import com.zuk0.gaijinsmash.riderz.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.data.model.FullTrip;
-import com.zuk0.gaijinsmash.riderz.utils.BartApiStringBuilder;
-import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesHelper;
-import com.zuk0.gaijinsmash.riderz.xml_adapter.trip.TripXMLParser;
+import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.FullTrip;
+import com.zuk0.gaijinsmash.riderz.utils.BartApiUtils;
+import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesUtils;
+import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripXMLParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -60,7 +60,7 @@ public class TripFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         // Initialize data here
-        mIs24HrTimeOn = SharedPreferencesHelper.getTimePreference(getActivity());
+        mIs24HrTimeOn = SharedPreferencesUtils.getTimePreference(getActivity());
     }
 
     @Override
@@ -288,7 +288,7 @@ public class TripFragment extends Fragment {
             } finally {
                 db.closeDb();
             }
-            String uri = BartApiStringBuilder.getDetailedRoute(mDepartAbbr, mArriveAbbr, mDate, mTime);
+            String uri = BartApiUtils.getDetailedRoute(mDepartAbbr, mArriveAbbr, mDate, mTime);
             try {
                 tripXMLParser = new TripXMLParser(frag.getActivity());
                 mFullTripList = tripXMLParser.getList(uri);

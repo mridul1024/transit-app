@@ -33,10 +33,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
-import com.zuk0.gaijinsmash.riderz.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.data.model.Station;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment;
+import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.Station;
 import com.zuk0.gaijinsmash.riderz.data.remote.network.CheckInternet;
-import com.zuk0.gaijinsmash.riderz.utils.FetchGPS;
+import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -192,11 +193,11 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     }
 
     private void initUserLocation(Context context, GoogleMap map) {
-        FetchGPS gps;
+        GpsUtils gps;
         Location loc = null;
         try {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                gps = new FetchGPS(context);
+                gps = new GpsUtils(context);
                 loc = gps.getLocation();
 
                 map.setMyLocationEnabled(true);

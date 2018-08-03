@@ -2,7 +2,7 @@ package com.zuk0.gaijinsmash.riderz.network;
 
 import android.content.Context;
 
-import com.zuk0.gaijinsmash.riderz.utils.FetchInputStream;
+import com.zuk0.gaijinsmash.riderz.utils.InputStreamUtils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,13 +19,13 @@ import static junit.framework.Assert.assertTrue;
 public class FetchInputStreamTest {
 
     private static final String TEST_URI = "http://api.bart.gov/api/bsa.aspx?cmd=bsa&key=Q7Z9-PZ53-9QXT-DWE9";
-    private FetchInputStream mFis;
+    private InputStreamUtils mFis;
     @Mock
     private Context mContext;
 
     @Before
     public void setUp() throws Exception {
-        mFis = new FetchInputStream(mContext);
+        mFis = new InputStreamUtils(mContext);
     }
 
     @Test

@@ -73,8 +73,8 @@
 
     <!-- Home Fragment -->
     <string name="home_title">Welcome to the BART App!</string>
-    <string name="home_alerts">Recent Updates</string>
-    <string name="banner">banner</string>
+    <string name="home_alerts">Welcome, friend!</string>
+    <string name="banner">Image of San Francisco</string>
 
     <!-- Phone Lines Fragment -->
     <string name="phonesLines_lostFound">Lost and Found:</string>
@@ -172,7 +172,7 @@
     <string name="date_unavailable">Date is unavailable</string>
     <string name="time_unavailable">Time is unavailable</string>
     <string name="update_unavailable">Updates are currently not available. Please check your network settings.</string>
-    <string name="last_update">Last checked at</string>
+    <string name="last_update">Last update at</string>
     <string name="currentDate">Today</string>
     <string name="currentTime">Now</string>
 
@@ -207,7 +207,7 @@
     <string name="preference_edittext_title">Your Daily Commute</string>
     <string name="preference_edittext_summary">Click here to create your most common trip</string>
     <string name="preference_edittext_dialog">Dialog Title</string>
-    <string name="preference_category_title">Time Format</string>
+    <string name="preference_category_title">Time Setting</string>
     <string name="preference_list_title">List Title</string>
     <string name="preference_list_dialog">Dialog Title</string>
     <string name="preference_intent_title">Intent</string>
@@ -239,4 +239,6 @@
     <string name="error_station_not_found">The station you selected was not found. Please try again.</string>
     <string name="now">now</string>
     <string name="minutes">minutes</string>
+    <string name="root_title">Settings</string>
+    <string name="preference_checkbox_time_summary">View time in 12 or 24 hour format</string>
 </resources>

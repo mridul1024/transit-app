@@ -16,11 +16,12 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.data.remote.network.CheckInternet
 import com.zuk0.gaijinsmash.riderz.ui.fragment.*
+import com.zuk0.gaijinsmash.riderz.ui.fragment.about.AboutFragment
+import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment
 import com.zuk0.gaijinsmash.riderz.ui.fragment.home.HomeFragment
+import com.zuk0.gaijinsmash.riderz.ui.fragment.settings.SettingsFragment
 import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasFragmentInjector
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
