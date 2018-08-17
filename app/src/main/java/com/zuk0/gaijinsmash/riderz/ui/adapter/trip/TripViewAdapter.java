@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.BartResultsFragment;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.FullTrip;
 
@@ -214,8 +214,8 @@ public class TripViewAdapter extends ArrayAdapter<FullTrip> implements View.OnCl
             mDestAbbr = mFullTrip.getLegList().get(mLeg - 1).getDestination();
             StationDatabase db = StationDatabase.getRoomDB(context.getActivity());
             try {
-                mOriginResult = db.getStationDAO().getStationByAbbr(mOriginAbbr).getName();
-                mDestResult = db.getStationDAO().getStationByAbbr(mDestAbbr).getName();
+                mOriginResult = db.getStationDAO().getStationByAbbr2(mOriginAbbr).getName();
+                mDestResult = db.getStationDAO().getStationByAbbr2(mDestAbbr).getName();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

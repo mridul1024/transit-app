@@ -5,7 +5,9 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 
 import com.zuk0.gaijinsmash.riderz.data.local.dao.BsaDao;
+import com.zuk0.gaijinsmash.riderz.data.local.dao.StationDAO;
 import com.zuk0.gaijinsmash.riderz.data.local.database.BsaDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -49,4 +51,12 @@ public class AppModule {
     ViewModelProvider.Factory provideViewModelFactory() {
         return new ViewModelProvider.NewInstanceFactory();
     }
+
+    @Provides
+    @Singleton
+    StationDatabase provideStationDatabase(Context context) { return StationDatabase.getRoomDB(context); }
+
+    @Provides
+    @Singleton
+    StationDAO provideStationDao(StationDatabase db) { return db.getStationDAO(); }
 }

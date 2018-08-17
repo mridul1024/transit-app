@@ -57,7 +57,7 @@ public class BsaRepository {
         return data;
     }
 
-    private void refreshBsa(final int bsaId) {
+    public void refreshBsa(final int bsaId) {
         executor.execute(() -> {
             // running in background thread
             // check if bsa was fetched recently

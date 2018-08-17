@@ -2,6 +2,8 @@ package com.zuk0.gaijinsmash.riderz.data.remote.retrofit;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
 
 import javax.inject.Singleton;
 
@@ -24,5 +26,13 @@ public interface RetrofitInterface {
 
     @GET("bsa.aspx?cmd=bsa")
     Call<BsaXmlResponse> getBsa();
+
+    //todo: test this
+    @GET("stn.aspx?cmd=stns")
+    Call<StationXmlResponse> getAllStations();
+
+    //todo: test this
+    @GET("stn.aspx?cmd=stninfo")
+    Call<StationXmlResponse> getStation(@Query("orig") String originAbbr);
 
 }

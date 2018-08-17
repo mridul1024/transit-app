@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.local.entity;
+package com.zuk0.gaijinsmash.riderz.data.local.entity.station_response;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -8,67 +8,83 @@ import android.support.annotation.NonNull;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Etd;
 
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 
 import java.util.List;
 
 @Entity(tableName = "stations")
-public class Station  {
+public class Station {
 
-
-    //todo: autogenerate int key
     @PrimaryKey
     @ColumnInfo(name = "name")
+    @Element
     @NonNull
     private String name;
 
-    @ColumnInfo(name = "zipcode")
-    private String zipcode;
-
-    @ColumnInfo(name = "city")
-    private String city;
-
-    @ColumnInfo(name = "county")
-    private String county;
-
-    @ColumnInfo(name = "state")
-    private String state;
-
-    @ColumnInfo(name = "address")
-    private String address;
+    @ColumnInfo(name = "abbr")
+    @Element(required = false)
+    private String abbr;
 
     @ColumnInfo(name = "latitude")
+    @Element(name = "gtfs_latitude")
     private double latitude;
 
     @ColumnInfo(name = "longitude")
+    @Element(name = "gtfs_longitude")
     private double longitude;
 
-    @ColumnInfo(name = "abbr")
-    private String abbreviation;
+    @ColumnInfo(name = "address")
+    @Element
+    private String address;
+
+    @ColumnInfo(name = "city")
+    @Element
+    private String city;
+
+    @ColumnInfo(name = "county")
+    @Element
+    private String county;
+
+    @ColumnInfo(name = "state")
+    @Element
+    private String state;
+
+    @ColumnInfo(name = "zipcode")
+    @Element
+    private String zipcode;
 
     @ColumnInfo(name = "platform_info")
+    @Element(name = "platform_info")
     private String platformInfo;
 
     @ColumnInfo(name = "intro")
+    @Element(data = true)
     private String intro;
 
     @ColumnInfo(name = "cross_street")
+    @Element(data = true, name="cross_street")
     private String crossStreet;
 
     @ColumnInfo(name = "food")
+    @Element(data = true, required = false)
     private String food;
 
     @ColumnInfo(name = "shopping")
+    @Element(data = true, required = false)
     private String shopping;
 
     @ColumnInfo(name = "attraction")
+    @Element(data = true, required = false)
     private String attraction;
 
     @ColumnInfo(name = "link")
+    @Element(data = true, required = false)
     private String link;
 
     @Ignore
-    @ElementList(name="etd", inline=true)
+    @ElementList(name="etd", inline=true, required = false)
     private List<Etd> etdList;
 
     public Station () {}
@@ -89,7 +105,7 @@ public class Station  {
     public void setShopping(String shopping) { this.shopping = shopping; }
     public void setAttraction(String attraction) { this.attraction = attraction; }
     public void setLink(String link) { this.link = link; }
-    public void setAbbreviation(String abbreviation) { this.abbreviation = abbreviation; }
+    public void setAbbr(String abbr) { this.abbr = abbr; }
 
     // Getters
     @NonNull
@@ -109,7 +125,7 @@ public class Station  {
     public String getCity() { return city; }
     public String getCounty() { return county; }
     public String getState() { return state; }
-    public String getAbbreviation() { return abbreviation; }
+    public String getAbbr() { return abbr; }
     public String getLink() { return link; }
     public String getAttraction() { return attraction; }
     public String getShopping() { return shopping; }

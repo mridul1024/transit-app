@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.ui;
+package com.zuk0.gaijinsmash.riderz.utils.debug;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;

@@ -46,6 +46,7 @@
                     android:layout_height="40dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignTop="@id/stationInfo_address_textView"
+                    android:drawableLeft="@drawable/ic_map_black_24dp"
                     android:text="@string/stationInfo_map_button" />
 
                 <TextView
@@ -141,13 +142,6 @@
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
-
-        <Button
-            android:id="@+id/stationInfo_return_btn"
-            style="@style/ButtonAppTheme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/stationInfo_return_button" />
 
     </LinearLayout>
 

@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        //ButterKnife.bind(this)
         initBottomNavBar()
         initNavigationDrawer(toolbar)
         if(savedInstanceState == null) {
@@ -215,7 +214,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
             R.id.nav_station -> {
-                fragmentFactory(StationFragment(), "StationFragment", true)
+                fragmentFactory(StationsFragment(), "StationsFragment", true)
                 return true
             }
             R.id.nav_help -> {

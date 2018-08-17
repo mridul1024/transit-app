@@ -35,7 +35,7 @@ import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment;
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.Station;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.remote.network.CheckInternet;
 import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
 

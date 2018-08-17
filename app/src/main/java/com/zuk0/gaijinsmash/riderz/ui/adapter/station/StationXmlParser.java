@@ -5,7 +5,7 @@ import android.util.Log;
 import android.util.Xml;
 
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.Station;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.utils.InputStreamUtils;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.XmlParserAbstract;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.XmlParserInterface;
@@ -195,7 +195,7 @@ public class StationXmlParser implements XmlParserInterface {
 
         Station station = new Station();
         station.setName(mName);
-        station.setAbbreviation(mAbbreviation);
+        station.setAbbr(mAbbreviation);
         station.setLatitude(Double.parseDouble(mLatitude));
         station.setLongitude(Double.parseDouble(mLongitude));
         station.setAddress(mAddress);

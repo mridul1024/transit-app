@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.Station;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 
 import java.util.List;
 
@@ -31,6 +31,7 @@ public class StationViewAdapter extends ArrayAdapter<Station> implements View.On
         TextView stationName;
         TextView stationAddress;
         TextView stationCity;
+        TextView stationAbbr;
     }
 
     @Override
@@ -52,6 +53,7 @@ public class StationViewAdapter extends ArrayAdapter<Station> implements View.On
             viewHolder.stationName = convertView.findViewById(R.id.stationName_textView);
             viewHolder.stationAddress = convertView.findViewById(R.id.stationAddress_textView);
             viewHolder.stationCity = convertView.findViewById(R.id.stationCity_textView);
+            viewHolder.stationAbbr = convertView.findViewById(R.id.stationAbbr_textView);
             view = convertView;
             view.setTag(viewHolder);
         } else {
@@ -67,6 +69,7 @@ public class StationViewAdapter extends ArrayAdapter<Station> implements View.On
             viewHolder.stationName.setText(newName);
             viewHolder.stationAddress.setText(station.getAddress());
             viewHolder.stationCity.setText(station.getCity());
+            viewHolder.stationAbbr.setText(station.getAbbr());
         }
         return view;
     }

@@ -32,9 +32,6 @@ import dagger.android.support.AndroidSupportInjection;
 public class HomeFragment extends Fragment  {
 
     @Inject
-    ViewModelProvider.Factory mViewModelFactory;
-
-    @Inject
     HomeViewModelFactory mHomeViewModelFactory;
 
     private HomeViewModel mViewModel;
@@ -65,6 +62,9 @@ public class HomeFragment extends Fragment  {
         super.onActivityCreated(savedInstanceState);
         this.initDagger();
         this.initViewModel();
+        initPicture(mViewModel);
+        updateAdvisories(mViewModel.getBsaLiveData());
+        updateProgressBar();
     }
 
     private void initDagger() {
@@ -73,9 +73,6 @@ public class HomeFragment extends Fragment  {
 
     private void initViewModel() {
         mViewModel = ViewModelProviders.of(this, mHomeViewModelFactory).get(HomeViewModel.class);
-        initPicture(mViewModel);
-        updateAdvisories(mViewModel.getBsaLiveData());
-        updateProgressBar();
     }
 
     private void initPicture(HomeViewModel viewModel) {

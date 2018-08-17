@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.Station;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiUtils;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.station.StationXmlParser;
 
@@ -52,6 +52,6 @@ public class StationDbHelper {
 
     public String getAbbrFromDb(String stationName) {
         Station station = mDatabase.getStationDAO().getStationByName(stationName);
-        return station.getAbbreviation();
+        return station.getAbbr();
     }
 }

@@ -1,6 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response;
 
-import com.zuk0.gaijinsmash.riderz.data.local.entity.Station;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;

@@ -10,7 +10,7 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import com.zuk0.gaijinsmash.riderz.R;
 
 import java.util.Objects;
-
+//todo: how to setup dagger with this?
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     public enum PreferenceKey {

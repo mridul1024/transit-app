@@ -20,7 +20,8 @@
         android:id="@+id/stationAbbr_textView"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
     <!-- Station Address -->
     <TextView
         android:id="@+id/stationAddress_textView"

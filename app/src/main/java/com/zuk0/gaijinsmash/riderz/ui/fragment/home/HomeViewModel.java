@@ -1,10 +1,8 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.home;
 
-import android.animation.TimeAnimator;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;

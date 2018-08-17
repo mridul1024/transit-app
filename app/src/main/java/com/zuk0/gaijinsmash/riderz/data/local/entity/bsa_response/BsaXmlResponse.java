@@ -1,5 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -9,7 +10,7 @@ import org.simpleframework.xml.Root;
 
 import java.util.List;
 
-@Entity( tableName = "advisories")
+@Entity( tableName = "advisories") //todo: finish adding @ColumnInfo to fields
 @Root(name="root", strict=false)
 public class BsaXmlResponse {
 

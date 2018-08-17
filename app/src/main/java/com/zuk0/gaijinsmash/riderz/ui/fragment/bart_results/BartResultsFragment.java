@@ -1,6 +1,7 @@
-package com.zuk0.gaijinsmash.riderz.ui.fragment;
+package com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results;
 
 import android.app.AlertDialog;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -20,6 +21,7 @@ import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDbHelper;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.FullTrip;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.TripFragment;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiUtils;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripViewAdapter;
@@ -32,17 +34,21 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+
 public class BartResultsFragment extends Fragment {
 
-    private ListView mListView;
+    @BindView(R.id.results_listView)ListView mListView;
+    @BindView(R.id.bart_results_progressBar) ProgressBar mProgressBar;
+
     private List<FullTrip> mFullTripList;
-    private ProgressBar mProgressBar;
-    private View mInflatedView;
     private String mOrigin, mDestination;
     private ArrayList<String> mTrainHeaders;
 
     private MenuItem mFavoriteIcon, mFavoritedIcon;
     private Favorite mFavoriteObject;
+
+    private View mInflatedView;
 
     private static final String BART = "BART";
     private static boolean IS_FAVORITED_ON = false;
@@ -59,23 +65,23 @@ public class BartResultsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mInflatedView = inflater.inflate(R.layout.view_results, container, false);
         return mInflatedView;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         mProgressBar = mInflatedView.findViewById(R.id.bart_results_progressBar);
         mProgressBar.setVisibility(View.VISIBLE);
-        mListView = mInflatedView.findViewById(R.id.results_listView);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setRetainInstance(true);
+        setRetainInstance(true); // todo: check this
+
         Bundle mBundle = getArguments();
         if(mBundle != null) {
             mFullTripList = mBundle.getParcelableArrayList(TripFragment.TripBundle.FULLTRIP_LIST.getValue());

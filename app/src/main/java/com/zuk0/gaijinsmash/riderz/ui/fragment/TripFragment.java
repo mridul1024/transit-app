@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDbHelper;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
 import com.zuk0.gaijinsmash.riderz.utils.TimeDateUtils;
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.FullTrip;

@@ -9,7 +9,7 @@ import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
 import com.zuk0.gaijinsmash.riderz.data.local.dao.StationDAO;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.Station;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 
 @Database(entities = {Station.class}, version = 3, exportSchema = false)
 public abstract class StationDatabase extends RoomDatabase {
