@@ -92,7 +92,7 @@ public class StationInfoFragment extends Fragment {
 
     private void handleMapButtonClick() {
         FragmentManager manager = getFragmentManager();
-        if (manager != null) {
+        if (manager != null && mStationObject != null) {
             FragmentTransaction tx = manager.beginTransaction();
             Fragment newFrag = new GoogleMapFragment();
             newFrag.setArguments(mViewModel.getBundle(mStationObject));
@@ -111,8 +111,15 @@ public class StationInfoFragment extends Fragment {
     private void initStationDetails(LiveData<StationXmlResponse> station) {
         station.observe(this, stationObject -> {
             //update the ui
-            Station station1 = stationObject.getStationList().get(0);
+            Station station1 = null;
+            if (stationObject != null) {
+                station1 = stationObject.getStationList().get(0);
+            }
             if(station1 != null) {
+                // build station object for map button
+                mStationObject = station1;
+
+                //update ui
                 mTitle.setText(station1.getName());
                 Log.i("name", station1.getName());
                 mAddress.setText(station1.getAddress());

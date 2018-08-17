@@ -184,7 +184,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         // Set boundary of map area
         LatLngBounds bayArea = new LatLngBounds(
                 new LatLng(37.2982, -121.5363), //southwest
-                new LatLng(38.0694, -121.8494)); //northeast
+                new LatLng(38.0694, -121.7438)); //northeast
         map.setLatLngBoundsForCameraTarget(bayArea);
         map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
