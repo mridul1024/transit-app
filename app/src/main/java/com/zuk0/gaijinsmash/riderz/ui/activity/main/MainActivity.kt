@@ -20,6 +20,7 @@ import com.zuk0.gaijinsmash.riderz.ui.fragment.about.AboutFragment
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment
 import com.zuk0.gaijinsmash.riderz.ui.fragment.home.HomeFragment
 import com.zuk0.gaijinsmash.riderz.ui.fragment.settings.SettingsFragment
+import com.zuk0.gaijinsmash.riderz.ui.fragment.stations.StationsFragment
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector

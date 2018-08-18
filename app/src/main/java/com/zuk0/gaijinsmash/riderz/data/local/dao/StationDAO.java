@@ -9,6 +9,7 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
 
 import java.util.List;
 
@@ -31,6 +32,9 @@ public interface StationDAO {
     // Gets all stations from the database
     @Query("SELECT * from stations")
     public List<Station> getAllStations();
+
+    @Query("SELECT * from stations")
+    LiveData<List<Station>> getStationsLiveData();
 
     // Select station by matching Longitude coordinate
     @Query("SELECT * from stations where longitude = :longitude")

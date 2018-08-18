@@ -1,5 +1,8 @@
 package com.zuk0.gaijinsmash.riderz.data.local.entity.station_response;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 

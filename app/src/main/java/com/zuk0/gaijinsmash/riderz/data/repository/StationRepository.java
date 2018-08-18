@@ -50,6 +50,23 @@ public class StationRepository  {
         return data;
     }
 
+    public LiveData<StationXmlResponse> getStations() {
+        final MutableLiveData<StationXmlResponse> data = new MutableLiveData<>();
+        service.getAllStations().enqueue(new Callback<StationXmlResponse>() {
+            @Override
+            public void onResponse(Call<StationXmlResponse> call, Response<StationXmlResponse> response) {
+                data.postValue(response.body());
+                Log.i("Stations", response.message());
+            }
+
+            @Override
+            public void onFailure(Call<StationXmlResponse> call, Throwable t) {
+                Log.wtf("StationRepository", t.getMessage());
+            }
+        });
+        return data;
+    }
+
     public void refreshStation(final String name) {
         executor.execute(() -> {
           boolean stationExists = stationDAO.getStationByName(name) != null;

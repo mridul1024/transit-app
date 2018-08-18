@@ -4,10 +4,9 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.StationsFragment;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.stations.StationsFragment;
 
 import org.junit.Before;
 import org.junit.Rule;

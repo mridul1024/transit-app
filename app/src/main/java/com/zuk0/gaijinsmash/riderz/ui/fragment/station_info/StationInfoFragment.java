@@ -108,8 +108,8 @@ public class StationInfoFragment extends Fragment {
         }
     }
 
-    private void initStationDetails(LiveData<StationXmlResponse> station) {
-        station.observe(this, stationObject -> {
+    private void initStationDetails(LiveData<StationXmlResponse> data) {
+        data.observe(this, stationObject -> {
             //update the ui
             Station station1 = null;
             if (stationObject != null) {

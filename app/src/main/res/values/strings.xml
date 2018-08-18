@@ -73,7 +73,7 @@
 
     <!-- Home Fragment -->
     <string name="home_title">Welcome to the BART App!</string>
-    <string name="home_alerts">Welcome, friend!</string>
+    <string name="home_alerts">Welcome, fellow Rider!</string>
     <string name="banner">Image of San Francisco</string>
 
     <!-- Phone Lines Fragment -->

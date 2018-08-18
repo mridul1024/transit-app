@@ -13,6 +13,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.List;
 
+//todo: remove this
 public class StationDbHelper {
 
     private StationDatabase mDatabase;
