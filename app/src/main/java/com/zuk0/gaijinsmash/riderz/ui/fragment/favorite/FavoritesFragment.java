@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.ui.fragment;
+package com.zuk0.gaijinsmash.riderz.ui.fragment.favorite;
 
 import android.support.v4.app.Fragment;
 import android.os.AsyncTask;

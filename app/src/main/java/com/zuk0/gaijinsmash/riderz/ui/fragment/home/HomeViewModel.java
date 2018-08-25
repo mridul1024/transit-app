@@ -1,16 +1,25 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.home;
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.zuk0.gaijinsmash.riderz.R;
+import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
-import com.zuk0.gaijinsmash.riderz.data.repository.BsaRepository;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
+import com.zuk0.gaijinsmash.riderz.data.remote.repository.BsaRepository;
+import com.zuk0.gaijinsmash.riderz.data.remote.repository.EtdRepository;
 import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesUtils;
 import com.zuk0.gaijinsmash.riderz.utils.TimeDateUtils;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -22,28 +31,33 @@ import javax.inject.Singleton;
 @Singleton
 public class HomeViewModel extends ViewModel {
 
-    //private LiveData<Favorite> favoriteLiveData;
-    private LiveData<BsaXmlResponse> bsaLiveData;
+    private LiveData<List<Favorite>> mFavoritesLiveData;
+    private LiveData<EtdXmlResponse> mEtdLiveData;
+    private EtdRepository mEtdRepository;
+
+    private LiveData<BsaXmlResponse> mBsaLiveData;
     private BsaRepository mBsaRepository;
 
     //Constructor for AndroidViewModel must have ONLY one parameter, which is Application.
     // Therefore, must create ViewModelProviderFactory to bypass this limitation
     @Inject
-    HomeViewModel(BsaRepository bsaRepository) {
+    HomeViewModel(BsaRepository bsaRepository, EtdRepository etdRepository) {
         mBsaRepository = bsaRepository;
+
         initData();
     }
 
     // Only perform initialization once per app lifetime.
     private synchronized void initData() {
-        if(bsaLiveData == null) {
-            bsaLiveData = mBsaRepository.getBsa();
+        if(mBsaLiveData == null) {
+            mBsaLiveData = mBsaRepository.getBsa();
         }
+
         //todo: init favorites and call
     }
 
     public LiveData<BsaXmlResponse> getBsaLiveData() {
-        return bsaLiveData;
+        return mBsaLiveData;
     }
 
     // Create message for Advisory Time and Date
@@ -88,4 +102,43 @@ public class HomeViewModel extends ViewModel {
         }
     }
 
+    // todo: get favorites, get priority favorite - top 2
+    private LiveData<List<Favorite>> getFavoritesLiveData(Context context) {
+        if(mFavoritesLiveData == null) {
+            FavoriteDatabase.getRoomDB(context).getFavoriteDAO().getAllPriorityFavorites();
+        }
+        return mFavoritesLiveData;
+    }
+
+    // todo: make call with repo
+    public LiveData<EtdXmlResponse> getEtdLiveData(Context context) {
+        if(mEtdLiveData == null) {
+            getFavoritesLiveData(context).observe((LifecycleOwner) this, favorites -> {
+                if (favorites != null) {
+                    Log.i("HomeViewModel", "fetching fav Live Data");
+                    for(Favorite favorite : favorites) {
+                        mEtdLiveData = mEtdRepository.getEtd(favorite.getOrigin());
+                        //todo: how to combine results of both
+                        //getEtdLiveData(favorite.getDestination());
+                    }
+                }
+            });
+        }
+        return mEtdLiveData;
+    }
+
+    //todo: to display the remaining time before a departure on ETD
+    public CountDownTimer initTimer(long milliUntilFinished, long countDownInterval) {
+       return new CountDownTimer(milliUntilFinished, countDownInterval) {
+           @Override
+           public void onTick(long millisUntilFinished) {
+               //mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+           }
+
+           @Override
+           public void onFinish() {
+                //mTextField.setText("done!");
+           }
+       };
+    }
 } // end of class

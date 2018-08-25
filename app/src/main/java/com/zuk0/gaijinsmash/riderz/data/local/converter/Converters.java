@@ -6,6 +6,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.Bsa;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -117,6 +119,26 @@ public class Converters {
         } else {
             Gson gson = new Gson();
             return gson.toJson(bsaList);
+        }
+    }
+
+    @TypeConverter
+    public static String stationToString(Station station) {
+        if(station == null) {
+            return "";
+        } else {
+            Gson gson = new Gson();
+            return gson.toJson(station);
+        }
+    }
+
+    @TypeConverter
+    public static Station stringToStation(String value) {
+        if(value == null || value.equals("")) {
+            return new Station();
+        } else {
+            Type listType = new TypeToken<Station>() {}.getType();
+            return new Gson().fromJson(value, listType);
         }
     }
 }

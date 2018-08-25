@@ -1,29 +1,50 @@
-package com.zuk0.gaijinsmash.riderz.data.local.entity;
+package com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Estimate;
 
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
+
 import java.util.List;
+
 
 public class Trip implements Parcelable {
 
     // NOTE: origin and destination will return the Abbreviation of a Station,
     // because of the way BART API returns results.
-    //          Will need to convert to the full name.
+    // Will need to convert to the full name.
 
-    //todo: remove unused variables - fare, clipper co2?
+    @Attribute
     private String origin;
+
+    @Attribute
     private String destination;
-    private String fare;
+
+    @Attribute
     private String origTimeMin;
+
+    @Attribute
     private String origTimeDate;
+
+    @Attribute
     private String destTimeMin;
+
+    @Attribute
     private String destTimeDate;
-    private String clipper;
+
+    @Attribute
     private String tripTime;
-    private String co2;
+
+    @Element
+    private Fare fare;
+
+    @ElementList
+    private List<Leg> legList; //todo: check this
 
     // only used for real time estimates
     private List<Estimate> estimateList;
@@ -31,17 +52,15 @@ public class Trip implements Parcelable {
 
     public Trip() { }
 
+    //todo: add fare object to parcelable?
     private Trip(Parcel in) {
         origin = in.readString();
         destination = in.readString();
-        fare = in.readString();
         origTimeMin = in.readString();
         origTimeDate = in.readString();
         destTimeMin = in.readString();
         destTimeDate = in.readString();
-        clipper = in.readString();
         tripTime = in.readString();
-        co2 = in.readString();
     }
 
     public static final Creator<Trip> CREATOR = new Creator<Trip>() {
@@ -58,18 +77,31 @@ public class Trip implements Parcelable {
 
     public String getOrigin() { return origin; }
     public String getDestination() { return destination; }
-    public String getFare() { return fare; }
     public String getOrigTimeMin() { return origTimeMin; }
     public String getOrigTimeDate() { return origTimeDate; }
     public String getDestTimeMin() { return destTimeMin; }
     public String getDestTimeDate() { return destTimeDate; }
-    public String getClipper() { return clipper; }
     public String getTripTime() { return tripTime; }
-    public String getCo2() { return co2; }
     public List<Estimate> getEstimateList() {
         return estimateList;
     }
     public String getDestinationAbbr() { return  destinationAbbr; }
+
+    public Fare getFare() {
+        return fare;
+    }
+
+    public void setFare(Fare fare) {
+        this.fare = fare;
+    }
+
+    public List<Leg> getLegList() {
+        return legList;
+    }
+
+    public void setLegList(List<Leg> legList) {
+        this.legList = legList;
+    }
 
     public void setEstimateList(List<Estimate> estimateList) {
         this.estimateList = estimateList;
@@ -80,16 +112,11 @@ public class Trip implements Parcelable {
     public void setDestination(String destination) {
         this.destination = destination;
     }
-    public void setFare(String fare) {
-        this.fare = fare;
-    }
     public void setOrigTimeMin(String origTimeMin) { this.origTimeMin = origTimeMin; }
     public void setOrigTimeDate(String origTimeDate) { this.origTimeDate = origTimeDate; }
     public void setDestTimeMin(String destTimeMin) { this.destTimeMin = destTimeMin; }
     public void setDestTimeDate(String destTimeDate) { this.destTimeDate = destTimeDate; }
-    public void setClipper(String clipper) { this.clipper = clipper; }
     public void setTripTime(String tripTime) { this.tripTime = tripTime; }
-    public void setCo2(String co2) { this.co2 = co2; }
     public void setDestinationAbbr(String abbr) { this.destinationAbbr = abbr; }
 
     @Override
@@ -101,14 +128,11 @@ public class Trip implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.origin);
         dest.writeString(this.destination);
-        dest.writeString(this.fare);
         dest.writeString(this.origTimeMin);
         dest.writeString(this.origTimeDate);
         dest.writeString(this.destTimeMin);
         dest.writeString(this.destTimeDate);
-        dest.writeString(this.clipper);
         dest.writeString(this.tripTime);
-        dest.writeString(this.co2);
     }
 
 }

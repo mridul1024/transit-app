@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.local.entity;
+package com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FullTrip implements Parcelable {
+
     private Trip trip;
     private List<Fare> fareList;
     private List<Leg> legList;

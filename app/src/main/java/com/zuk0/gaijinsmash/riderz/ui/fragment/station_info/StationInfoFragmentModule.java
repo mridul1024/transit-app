@@ -1,6 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.station_info;
 
-import com.zuk0.gaijinsmash.riderz.data.repository.StationRepository;
+import com.zuk0.gaijinsmash.riderz.data.remote.repository.StationRepository;
 
 import dagger.Module;
 import dagger.Provides;

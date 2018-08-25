@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.repository;
+package com.zuk0.gaijinsmash.riderz.data.remote.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -46,7 +46,6 @@ public class BsaRepository {
             public void onResponse(@NonNull Call<BsaXmlResponse> call, @NonNull Response<BsaXmlResponse> response) {
                 data.postValue(response.body());
                 Log.i("bsa repository", response.message());
-                Log.i("bsa response", response.body().getDate() + response.body().getTime()+response.body().getBsaList().get(0).getDescription());
             }
 
             @Override

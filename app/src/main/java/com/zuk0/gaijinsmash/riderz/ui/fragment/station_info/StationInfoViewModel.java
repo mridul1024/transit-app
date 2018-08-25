@@ -1,22 +1,16 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.station_info;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
-import com.zuk0.gaijinsmash.riderz.data.repository.StationRepository;
+import com.zuk0.gaijinsmash.riderz.data.remote.repository.StationRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import io.reactivex.Maybe;
-import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 
 @Singleton
 public class StationInfoViewModel extends ViewModel {

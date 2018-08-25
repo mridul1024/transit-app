@@ -7,7 +7,7 @@ import android.content.Context;
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
-import com.zuk0.gaijinsmash.riderz.data.repository.StationRepository;
+import com.zuk0.gaijinsmash.riderz.data.remote.repository.StationRepository;
 
 import java.util.List;
 

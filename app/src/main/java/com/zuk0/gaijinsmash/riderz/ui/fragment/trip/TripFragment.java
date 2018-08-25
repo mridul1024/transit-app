@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.ui.fragment;
+package com.zuk0.gaijinsmash.riderz.ui.fragment.trip;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -27,7 +27,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.database.StationDbHelper;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
 import com.zuk0.gaijinsmash.riderz.utils.TimeDateUtils;
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.FullTrip;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.FullTrip;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiUtils;
 import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesUtils;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripXMLParser;

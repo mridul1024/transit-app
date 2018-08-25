@@ -20,7 +20,9 @@ import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.bsa.BsaRecyclerAdapter;
+import com.zuk0.gaijinsmash.riderz.ui.adapter.estimate.EstimateRecyclerAdapter;
 
 import javax.inject.Inject;
 
@@ -64,6 +66,7 @@ public class HomeFragment extends Fragment  {
         this.initViewModel();
         initPicture(mViewModel);
         updateAdvisories(mViewModel.getBsaLiveData());
+       // updateEstimates(mViewModel.getEtdLiveData(getActivity(),));
         updateProgressBar();
     }
 
@@ -91,8 +94,14 @@ public class HomeFragment extends Fragment  {
         });
     }
 
-    private void updateFavorites() {
-        //todo: add observer here
+    private void updateEstimates(LiveData<EtdXmlResponse> etd) {
+        etd.observe(this, etdXmlResponse -> {
+            if(etdXmlResponse != null) {
+
+                EstimateRecyclerAdapter etdAdapter = new EstimateRecyclerAdapter(etdXmlResponse.getStation().getEtdList().get(0).getEstimateList());
+                mEstimateRecyclerView.setAdapter(etdAdapter);
+            }
+        });
     }
 
     private void updateProgressBar() {

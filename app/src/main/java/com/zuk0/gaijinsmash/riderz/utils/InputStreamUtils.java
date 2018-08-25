@@ -2,8 +2,6 @@ package com.zuk0.gaijinsmash.riderz.utils;
 
 import android.content.Context;
 
-import com.zuk0.gaijinsmash.riderz.utils.ErrorToast;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -26,7 +24,7 @@ public class InputStreamUtils {
         int responseCode = httpURLConnection.getResponseCode();
 
         if(responseCode != HttpURLConnection.HTTP_OK) {
-            ErrorToast.networkConnectionErrorToast(mContext, responseCode);
+            ToastUtils.networkConnectionErrorToast(mContext, responseCode);
         }
 
         return httpURLConnection.getInputStream();

@@ -1,7 +1,8 @@
-package com.zuk0.gaijinsmash.riderz.data.repository;
+package com.zuk0.gaijinsmash.riderz.data.remote.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.zuk0.gaijinsmash.riderz.data.local.dao.StationDAO;
@@ -37,13 +38,13 @@ public class StationRepository  {
         final MutableLiveData<StationXmlResponse> data = new MutableLiveData<>();
         service.getStation(abbr).enqueue(new Callback<StationXmlResponse>() {
             @Override
-            public void onResponse(Call<StationXmlResponse> call, Response<StationXmlResponse> response) {
+            public void onResponse(@NonNull Call<StationXmlResponse> call, @NonNull Response<StationXmlResponse> response) {
                 data.postValue(response.body());
                 Log.i("Station", response.message());
             }
 
             @Override
-            public void onFailure(Call<StationXmlResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<StationXmlResponse> call, @NonNull Throwable t) {
                 Log.wtf("StationRepository", t.getMessage());
             }
         });
@@ -54,13 +55,13 @@ public class StationRepository  {
         final MutableLiveData<StationXmlResponse> data = new MutableLiveData<>();
         service.getAllStations().enqueue(new Callback<StationXmlResponse>() {
             @Override
-            public void onResponse(Call<StationXmlResponse> call, Response<StationXmlResponse> response) {
+            public void onResponse(@NonNull Call<StationXmlResponse> call, @NonNull Response<StationXmlResponse> response) {
                 data.postValue(response.body());
                 Log.i("Stations", response.message());
             }
 
             @Override
-            public void onFailure(Call<StationXmlResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<StationXmlResponse> call, @NonNull Throwable t) {
                 Log.wtf("StationRepository", t.getMessage());
             }
         });

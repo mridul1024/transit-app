@@ -17,7 +17,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.FullTrip;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.FullTrip;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

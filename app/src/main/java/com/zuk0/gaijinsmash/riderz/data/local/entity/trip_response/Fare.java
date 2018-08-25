@@ -1,10 +1,22 @@
-package com.zuk0.gaijinsmash.riderz.data.local.entity;
+package com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response;
 
+import android.arch.persistence.room.Entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+
 public class Fare implements Parcelable {
-    private String fareAmount, fareClass, fareName;
+
+    @Attribute
+    private String fareAmount;
+
+    @Attribute
+    private String fareClass;
+
+    @Attribute
+    private String fareName;
 
     public void setFareAmount(String fareAmount) { this.fareAmount = fareAmount; }
     public void setFareClass(String fareClass) { this.fareClass = fareClass; }

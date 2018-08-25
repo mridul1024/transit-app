@@ -25,10 +25,6 @@ public class FavoriteDbHelper {
         return count;
     }
 
-    public  List<Favorite> getFavoritesByPriority() {
-        return mDatabase.getFavoriteDAO().getAllFavoritesByPriority(Favorite.Priority.ON);
-    }
-
     public  boolean doesFavoriteExistAlready(Favorite favorite) {
         boolean result;
         result = mDatabase.getFavoriteDAO().isTripFavorited(favorite.getOrigin(), favorite.getDestination());

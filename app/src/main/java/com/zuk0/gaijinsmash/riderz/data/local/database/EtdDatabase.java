@@ -9,19 +9,19 @@ import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
 import com.zuk0.gaijinsmash.riderz.data.local.converter.Converters;
-import com.zuk0.gaijinsmash.riderz.data.local.dao.BsaDao;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
+import com.zuk0.gaijinsmash.riderz.data.local.dao.EtdDao;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
 
-@Database(entities = {BsaXmlResponse.class}, version = 1, exportSchema = false)
+@Database(entities = {EtdXmlResponse.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
-public abstract class BsaDatabase extends RoomDatabase {
+public abstract class EtdDatabase extends RoomDatabase {
 
-    private static BsaDatabase INSTANCE;
-    public abstract BsaDao getBsaDAO();
+    private static EtdDatabase INSTANCE;
+    public abstract EtdDao getEtdDao();
 
-    public static BsaDatabase getRoomDb(Context context) {
+    public static EtdDatabase getRoomDb(Context context) {
         if(INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), BsaDatabase.class, "advisories")
+            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), EtdDatabase.class, "estimates")
                     .addMigrations(MIGRATION)
                     .build();
         }
@@ -39,8 +39,7 @@ public abstract class BsaDatabase extends RoomDatabase {
     private static final Migration MIGRATION = new Migration(1,2) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE advisories ADD COLUMN last_update INTEGER");
+            database.execSQL("ALTER TABLE estimates ADD COLUMN last_update INTEGER");
         }
     };
-
 }

@@ -52,6 +52,10 @@ public class BartApiUtils {
         a=<number> how many trips to show after specified time (0,4)
         format is mm/dd/yyyy, now, or today.
     */
+
+
+    String test = "http://api.bart.gov/api/sched.aspx?cmd=depart&orig=ashb&dest=12th&date=now&time=now&b=0&a=4&key=Q7Z9-PZ53-9QXT-DWE9";
+
     public static String getDetailedRoute(String origin, String arrival, String date, String time) {
          String cmd = "sched.aspx?cmd=depart&orig=" + origin + "&dest=" + arrival + "&date=" + date + "&time=" + time + "&b=0&a=4";
          if(DebugController.DEBUG)

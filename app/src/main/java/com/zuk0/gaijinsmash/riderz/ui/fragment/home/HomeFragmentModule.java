@@ -1,6 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.home;
 
-import com.zuk0.gaijinsmash.riderz.data.repository.BsaRepository;
+import com.zuk0.gaijinsmash.riderz.data.remote.repository.BsaRepository;
 
 import dagger.Module;
 import dagger.Provides;

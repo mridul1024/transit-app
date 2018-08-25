@@ -5,10 +5,10 @@ import android.util.Log;
 import android.util.Xml;
 
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.Fare;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.FullTrip;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.Leg;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.Trip;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Fare;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.FullTrip;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Leg;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 import com.zuk0.gaijinsmash.riderz.utils.InputStreamUtils;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.XmlParserAbstract;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.XmlParserInterface;

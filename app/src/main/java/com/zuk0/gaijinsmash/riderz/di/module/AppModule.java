@@ -5,8 +5,10 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 
 import com.zuk0.gaijinsmash.riderz.data.local.dao.BsaDao;
+import com.zuk0.gaijinsmash.riderz.data.local.dao.EtdDao;
 import com.zuk0.gaijinsmash.riderz.data.local.dao.StationDAO;
 import com.zuk0.gaijinsmash.riderz.data.local.database.BsaDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.database.EtdDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
 
 import java.util.concurrent.Executor;
@@ -59,4 +61,12 @@ public class AppModule {
     @Provides
     @Singleton
     StationDAO provideStationDao(StationDatabase db) { return db.getStationDAO(); }
+
+    @Provides
+    @Singleton
+    EtdDatabase provideEtdDatabase(Context context) { return EtdDatabase.getRoomDb(context); }
+
+    @Provides
+    @Singleton
+    EtdDao provideEtdDao(EtdDatabase db) { return db.getEtdDao(); }
 }

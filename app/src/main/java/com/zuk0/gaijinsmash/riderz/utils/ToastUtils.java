@@ -7,7 +7,7 @@ import android.widget.Toast;
  * This class handles common error messages to send to the UI
  */
 
-public class ErrorToast {
+public class ToastUtils {
 
     public static void noInternetErrorToast(Context context) {
         Toast.makeText(context, "Cannot connect to Internet.", Toast.LENGTH_LONG).show();

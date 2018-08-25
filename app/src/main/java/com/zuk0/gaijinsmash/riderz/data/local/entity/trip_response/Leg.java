@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.local.entity;
+package com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response;
 
 import android.os.Parcel;
 import android.os.Parcelable;

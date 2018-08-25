@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.FullTrip;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.FullTrip;
 
 import java.util.ArrayList;
 import java.util.HashSet;

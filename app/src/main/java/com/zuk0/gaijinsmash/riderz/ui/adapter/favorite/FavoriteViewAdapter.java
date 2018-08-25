@@ -24,9 +24,9 @@ import android.widget.Toast;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.FavoritesFragment;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.favorite.FavoritesFragment;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.FullTrip;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.FullTrip;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripXMLParser;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiUtils;
 
@@ -239,7 +239,7 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
                 case SetAsPriority:
                     if(mDatabase != null) {
                         // todo: check count of priorities
-                        List<Favorite> favList = mDatabase.getFavoriteDAO().getAllFavoritesByPriority(Favorite.Priority.ON);
+                        List<Favorite> favList = null;//mDatabase.getFavoriteDAO().(Favorite.Priority.ON);
                         if(favList.size() > 2){
                             Toast.makeText(frag.getActivity(), "Up to two Favorites may be prioritized.", Toast.LENGTH_LONG).show();
                             return false;

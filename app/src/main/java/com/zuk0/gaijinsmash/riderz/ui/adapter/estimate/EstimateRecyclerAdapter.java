@@ -15,8 +15,6 @@ import java.util.List;
 
 public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecyclerAdapter.ViewHolder>{
 
-    private List<Estimate> mEstimateList;
-
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView origin;
         TextView destination;
@@ -33,6 +31,8 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
             tag = view.findViewById(R.id.etd_minutes_tag_tV);
         }
     }
+
+    private List<Estimate> mEstimateList;
 
     public EstimateRecyclerAdapter(List<Estimate> estimateList) { mEstimateList = estimateList; }
 

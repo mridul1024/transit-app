@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Etd {
 
+
     @Element(name="destination")
     private String destination;
 
@@ -14,7 +15,7 @@ public class Etd {
     private String destinationAbbr;
 
     @ElementList(inline=true)
-    private List<Estimate> estimateList;
+    private List<Estimate> estimateList; //
 
     public String getDestination() {
         return destination;
