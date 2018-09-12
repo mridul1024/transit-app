@@ -32,16 +32,16 @@ public class TripRepository {
         this.executor = executor;
     }
 
-    public LiveData<TripXmlResponse> getTrip(String origin, String destination, String date, String time) {
+    public LiveData<TripXmlResponse> getTrip(String origin, String destination, String date, String time, int b, int a) {
         final MutableLiveData<TripXmlResponse> data = new MutableLiveData<>();
-        service.getTrip(origin, destination, date, time).enqueue(new Callback<TripXmlResponse>() {
+        service.getTrip(origin, destination, date, time, b, a).enqueue(new Callback<TripXmlResponse>() {
             @Override
-            public void onResponse(Call<TripXmlResponse> call, Response<TripXmlResponse> response) {
+            public void onResponse(@NonNull Call<TripXmlResponse> call, @NonNull Response<TripXmlResponse> response) {
                 data.postValue(response.body());
             }
 
             @Override
-            public void onFailure(Call<TripXmlResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<TripXmlResponse> call, @NonNull Throwable t) {
                 Log.wtf("Trip", t.getMessage());
             }
         });

@@ -96,7 +96,7 @@ public class StationsFragment extends Fragment {
             } else {
                 mViewModel.getListFromRepo()
                         .observe(this, data -> {
-                            StationViewAdapter adapter = null;
+                            StationViewAdapter adapter;
                             if (data != null) {
                                 adapter = new StationViewAdapter(data.getStationList(), getActivity());
                                 mListView.setAdapter(adapter);
@@ -105,7 +105,6 @@ public class StationsFragment extends Fragment {
                             }
                         });
             }
-
             mProgressBar.setVisibility(View.GONE);
         });
     }

@@ -1,5 +1,8 @@
 package com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -10,14 +13,18 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import java.util.ArrayList;
 import java.util.List;
 
-
+@Entity(tableName = "trips")
 public class Trip implements Parcelable {
 
     // NOTE: origin and destination will return the Abbreviation of a Station,
     // because of the way BART API returns results.
-    // Will need to convert to the full name.
+    // You will need to convert them to their full names
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
 
     @Attribute
     private String origin;
@@ -40,40 +47,28 @@ public class Trip implements Parcelable {
     @Attribute
     private String tripTime;
 
-    @Element
-    private Fare fare;
+    @Attribute
+    private String fare;
 
-    @ElementList
+    @ElementList(name = "fares", required = false)
+    private List<Fare> fareList;
+
+    @ElementList(inline = true)
     private List<Leg> legList; //todo: check this
 
     // only used for real time estimates
+    @ElementList(required = false)
     private List<Estimate> estimateList;
-    private String destinationAbbr;
 
     public Trip() { }
 
-    //todo: add fare object to parcelable?
-    private Trip(Parcel in) {
-        origin = in.readString();
-        destination = in.readString();
-        origTimeMin = in.readString();
-        origTimeDate = in.readString();
-        destTimeMin = in.readString();
-        destTimeDate = in.readString();
-        tripTime = in.readString();
+    public String getFare() {
+        return fare;
     }
 
-    public static final Creator<Trip> CREATOR = new Creator<Trip>() {
-        @Override
-        public Trip createFromParcel(Parcel in) {
-            return new Trip(in);
-        }
-
-        @Override
-        public Trip[] newArray(int size) {
-            return new Trip[size];
-        }
-    };
+    public void setFare(String fare) {
+        this.fare = fare;
+    }
 
     public String getOrigin() { return origin; }
     public String getDestination() { return destination; }
@@ -85,24 +80,24 @@ public class Trip implements Parcelable {
     public List<Estimate> getEstimateList() {
         return estimateList;
     }
-    public String getDestinationAbbr() { return  destinationAbbr; }
-
-    public Fare getFare() {
-        return fare;
-    }
-
-    public void setFare(Fare fare) {
-        this.fare = fare;
-    }
-
     public List<Leg> getLegList() {
         return legList;
     }
-
+    public List<Fare> getFareList() {
+        return fareList;
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void setFareList(List<Fare> fareList) {
+        this.fareList = fareList;
+    }
     public void setLegList(List<Leg> legList) {
         this.legList = legList;
     }
-
     public void setEstimateList(List<Estimate> estimateList) {
         this.estimateList = estimateList;
     }
@@ -117,7 +112,6 @@ public class Trip implements Parcelable {
     public void setDestTimeMin(String destTimeMin) { this.destTimeMin = destTimeMin; }
     public void setDestTimeDate(String destTimeDate) { this.destTimeDate = destTimeDate; }
     public void setTripTime(String tripTime) { this.tripTime = tripTime; }
-    public void setDestinationAbbr(String abbr) { this.destinationAbbr = abbr; }
 
     @Override
     public int describeContents() {
@@ -126,6 +120,7 @@ public class Trip implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
         dest.writeString(this.origin);
         dest.writeString(this.destination);
         dest.writeString(this.origTimeMin);
@@ -133,6 +128,37 @@ public class Trip implements Parcelable {
         dest.writeString(this.destTimeMin);
         dest.writeString(this.destTimeDate);
         dest.writeString(this.tripTime);
+        dest.writeString(this.fare);
+        dest.writeTypedList(this.fareList);
+        dest.writeTypedList(this.legList);
+        dest.writeList(this.estimateList);
     }
 
+    protected Trip(Parcel in) {
+        this.id = in.readInt();
+        this.origin = in.readString();
+        this.destination = in.readString();
+        this.origTimeMin = in.readString();
+        this.origTimeDate = in.readString();
+        this.destTimeMin = in.readString();
+        this.destTimeDate = in.readString();
+        this.tripTime = in.readString();
+        this.fare = in.readString();
+        this.fareList = in.createTypedArrayList(Fare.CREATOR);
+        this.legList = in.createTypedArrayList(Leg.CREATOR);
+        this.estimateList = new ArrayList<Estimate>();
+        in.readList(this.estimateList, Estimate.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Trip> CREATOR = new Parcelable.Creator<Trip>() {
+        @Override
+        public Trip createFromParcel(Parcel source) {
+            return new Trip(source);
+        }
+
+        @Override
+        public Trip[] newArray(int size) {
+            return new Trip[size];
+        }
+    };
 }

@@ -6,8 +6,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.Bsa;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Estimate;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Fare;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Leg;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -71,6 +75,7 @@ public class Converters {
             return new Gson().fromJson(value, listType);
         }
     }
+
     //todo: convert to ArraySet instead of HashSet for increased performance
     @TypeConverter
     public static String hashSetToString(HashSet<String> set) {
@@ -139,6 +144,126 @@ public class Converters {
         } else {
             Type listType = new TypeToken<Station>() {}.getType();
             return new Gson().fromJson(value, listType);
+        }
+    }
+
+    @TypeConverter
+    public static Trip stringToTrip(String value) {
+        if(value == null || value.equals("")) {
+            return new Trip();
+        } else {
+            Type listType = new TypeToken<Trip>() {}.getType();
+            return new Gson().fromJson(value, listType);
+        }
+    }
+
+    @TypeConverter
+    public static String TripToString(Trip trip) {
+        if(trip == null) {
+            return "";
+        } else {
+            Gson gson = new Gson();
+            return gson.toJson(trip);
+        }
+    }
+
+    @TypeConverter
+    public static Fare stringToFare(String value) {
+        if(value == null || value.equals("")) {
+            return new Fare();
+        } else {
+            Type listType = new TypeToken<Fare>() {}.getType();
+            return new Gson().fromJson(value, listType);
+        }
+    }
+
+    @TypeConverter
+    public static String fareToString(Fare fare) {
+        if(fare == null) {
+            return "";
+        } else {
+            Gson gson = new Gson();
+            return gson.toJson(fare);
+        }
+    }
+
+    @TypeConverter
+    public static Leg stringToLeg(String value) {
+        if(value == null || value.equals("")) {
+            return new Leg();
+        } else {
+            Type listType = new TypeToken<Leg>() {}.getType();
+            return new Gson().fromJson(value, listType);
+        }
+    }
+
+    @TypeConverter
+    public static String legToString(Leg leg) {
+        if(leg == null) {
+            return "";
+        } else {
+            Gson gson = new Gson();
+            return gson.toJson(leg);
+        }
+    }
+
+    @TypeConverter
+    public static List<Leg> stringToLegList(String value) {
+        if(value == null || value.equals("")) {
+            return new ArrayList<>();
+        } else {
+            Type listType = new TypeToken<List<Leg>>() {}.getType();
+            return new Gson().fromJson(value, listType);
+        }
+    }
+
+    @TypeConverter
+    public static String legListToString(List<Leg> legList) {
+        if(legList == null) {
+            return "";
+        } else {
+            Gson gson = new Gson();
+            return gson.toJson(legList);
+        }
+    }
+
+    @TypeConverter
+    public static List<Estimate> stringToEstimateList(String value) {
+        if(value == null || value.equals("")){
+            return new ArrayList<>();
+        } else {
+            Type listType = new TypeToken<List<Estimate>>() {}.getType();
+            return new Gson().fromJson(value, listType);
+        }
+    }
+
+    @TypeConverter
+    public static String estimateListToString(List<Estimate> estimateList) {
+        if(estimateList == null) {
+            return "";
+        } else {
+            Gson gson = new Gson();
+            return gson.toJson(estimateList);
+        }
+    }
+
+    @TypeConverter
+    public static List<Fare> stringToFareList(String value) {
+        if(value == null || value.equals("")){
+            return new ArrayList<>();
+        } else {
+            Type listType = new TypeToken<List<Fare>>() {}.getType();
+            return new Gson().fromJson(value, listType);
+        }
+    }
+
+    @TypeConverter
+    public static String fareListToString(List<Fare> fareList) {
+        if(fareList == null) {
+            return "";
+        } else {
+            Gson gson = new Gson();
+            return gson.toJson(fareList);
         }
     }
 }

@@ -27,7 +27,6 @@ import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.favorite.FavoritesFragment;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.FullTrip;
-import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripXMLParser;
 import com.zuk0.gaijinsmash.riderz.utils.BartApiUtils;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -79,14 +78,14 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
             viewHolder.searchButton.setOnClickListener(v -> {
                 String origin = viewHolder.origin.getText().toString();
                 String destination = viewHolder.destination.getText().toString();
-                new GetTripTask(mFragment, origin, destination, "Today", "Now").execute();
+                //new GetTripTask(mFragment, origin, destination, "Today", "Now").execute();
             });
 
             // onClick => open options menu with inflater
             viewHolder.optionsButton.setOnClickListener(v -> {
                 PopupMenu popupMenu = initPopupMenu(mContext, viewHolder.optionsButton, favorite);
                 popupMenu.show();
-                popupMenu.setOnMenuItemClickListener(item -> selectFavoriteAction(popupMenu, item.getItemId(), favorite));
+                //popupMenu.setOnMenuItemClickListener(item -> selectFavoriteAction(popupMenu, item.getItemId(), favorite));
             });
 
             view = convertView;
@@ -125,7 +124,7 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
         }
         return popupMenu;
     }
-
+/*
     private boolean selectFavoriteAction(PopupMenu menu, int itemId, Favorite favorite) {
         switch(itemId) {
             case R.id.action_delete_favorite:
@@ -148,6 +147,7 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
     //---------------------------------------------------------------------------------------------
     // AsyncTask
     //---------------------------------------------------------------------------------------------
+
 
     // todo: abstract this?
     private static class GetTripTask extends AsyncTask<Void, Void, Boolean> {
@@ -289,5 +289,6 @@ public class FavoriteViewAdapter extends ArrayAdapter<Favorite> implements View.
             }
         }
     }
+    */
 }
 

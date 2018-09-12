@@ -1,11 +1,11 @@
 package com.zuk0.gaijinsmash.riderz;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+
 import android.support.test.espresso.ViewAssertion;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
 
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.station_info.StationInfoFragment;
@@ -30,7 +30,7 @@ public class StationInfoFragmentTest {
     @Before
     public void init() {
         Fragment frag = new StationInfoFragment();
-        FragmentManager fm = mActivityRule.getActivity().getFragmentManager();
+        android.support.v4.app.FragmentManager fm = mActivityRule.getActivity().getSupportFragmentManager();
         fm.beginTransaction().add(R.id.fragmentContent, frag).commit();
     }
 

@@ -12,9 +12,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class BartRoutesUtils {
 
-    public static void setLineBarByRoute(Context context, String route, TextView coloredBar) {
+    @Inject
+    Context context;
+
+    public void setLineBarByRoute(String route, TextView coloredBar) {
         switch(route) {
             case "ROUTE 1": coloredBar.setBackgroundColor(context.getResources().getColor(R.color.bartYellowLine));
                 break;

@@ -55,6 +55,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         initBottomNavBar()
         initNavigationDrawer(toolbar)
+
+        //todo: check this
         if(savedInstanceState == null) {
             initHomeFragment()
         }

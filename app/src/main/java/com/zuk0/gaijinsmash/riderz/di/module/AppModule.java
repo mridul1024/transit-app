@@ -7,9 +7,11 @@ import android.content.Context;
 import com.zuk0.gaijinsmash.riderz.data.local.dao.BsaDao;
 import com.zuk0.gaijinsmash.riderz.data.local.dao.EtdDao;
 import com.zuk0.gaijinsmash.riderz.data.local.dao.StationDAO;
+import com.zuk0.gaijinsmash.riderz.data.local.dao.TripDao;
 import com.zuk0.gaijinsmash.riderz.data.local.database.BsaDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.database.EtdDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.database.TripDatabase;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -69,4 +71,12 @@ public class AppModule {
     @Provides
     @Singleton
     EtdDao provideEtdDao(EtdDatabase db) { return db.getEtdDao(); }
+
+    @Provides
+    @Singleton
+    TripDatabase provideTripDatabase(Context context) { return TripDatabase.getRoomDB(context); }
+
+    @Provides
+    @Singleton
+    TripDao provideTripDao(TripDatabase db) { return db.getTripDao(); }
 }

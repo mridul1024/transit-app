@@ -1,62 +1,56 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results;
 
 import android.app.AlertDialog;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.content.Context;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDbHelper;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.FullTrip;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
+import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripViewRecyclerAdapter;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
-import com.zuk0.gaijinsmash.riderz.utils.BartApiUtils;
-import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils;
-import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripViewAdapter;
-import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripXMLParser;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import dagger.android.support.AndroidSupportInjection;
 
 public class BartResultsFragment extends Fragment {
 
-    @BindView(R.id.results_listView)ListView mListView;
+    @BindView(R.id.results_recyclerView) RecyclerView mRecyclerView;
     @BindView(R.id.bart_results_progressBar) ProgressBar mProgressBar;
 
-    private List<FullTrip> mFullTripList;
-    private String mOrigin, mDestination;
-    private ArrayList<String> mTrainHeaders;
+    @Inject
+    BartResultsViewModelFactory mBartResultsViewModelFactory;
+
+    private BartResultsViewModel mViewModel;
+
+    //todo: save in onSavedInstance
+    private String mOrigin, mDestination, mDate, mTime;
 
     private MenuItem mFavoriteIcon, mFavoritedIcon;
     private Favorite mFavoriteObject;
-
-    private View mInflatedView;
-
-    private static final String BART = "BART";
+    //private ArrayList<String> mTrainHeaders;
     private static boolean IS_FAVORITED_ON = false;
-
-    private BartResultsFragment mBartResultsFragment = this;
-    //---------------------------------------------------------------------------------------------
-    // Lifecycle Events
-    //---------------------------------------------------------------------------------------------
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -67,47 +61,21 @@ public class BartResultsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mInflatedView = inflater.inflate(R.layout.view_results, container, false);
-        return mInflatedView;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        mProgressBar = mInflatedView.findViewById(R.id.bart_results_progressBar);
-        mProgressBar.setVisibility(View.VISIBLE);
+        View inflatedView = inflater.inflate(R.layout.view_results, container, false);
+        ButterKnife.bind(this, inflatedView);
+        return inflatedView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setRetainInstance(true); // todo: check this
-
-        Bundle mBundle = getArguments();
-        if(mBundle != null) {
-            mFullTripList = mBundle.getParcelableArrayList(TripFragment.TripBundle.FULLTRIP_LIST.getValue());
-            mOrigin = mBundle.getString(TripFragment.TripBundle.ORIGIN.getValue());
-            mDestination = mBundle.getString(TripFragment.TripBundle.DESTINATION.getValue());
-            mTrainHeaders = mBundle.getStringArrayList(TripFragment.TripBundle.TRAIN_HEADERS.getValue());
-        }
-        if(mFullTripList != null) {
-            TripViewAdapter adapter = new TripViewAdapter(mFullTripList, getActivity(), mBartResultsFragment);
-            mListView.setAdapter(adapter);
-            mProgressBar.setVisibility(View.GONE);
-        }
-        if(mOrigin != null && mDestination != null) {
-            mFavoriteObject = new Favorite();
-
-            //check db if first entry
-            mFavoriteObject.setPriority(Favorite.Priority.ON);
-            mFavoriteObject.setOrigin(mOrigin);
-            mFavoriteObject.setDestination(mDestination);
-            mFavoriteObject.setSystem(BART);
-            mFavoriteObject.setColors(BartRoutesUtils.getColorsSetFromFullTrip(mFullTripList));
-            mFavoriteObject.setTrainHeaderStations(mTrainHeaders);
-        }
-
+        initDagger();
+        initViewModel();
+        initBundleFromTripFragment();
+        initFavoriteIcon();
+        initLiveData(mOrigin, mDestination);
         // Checks database and displays appropriate view in toolbar
-        new SetFavoritesTask(this, FavoritesTask.CHECK_CURRENT_TRIP).execute();
+        //new SetFavoritesTask(this, FavoritesTask.CHECK_CURRENT_TRIP).execute();
     }
 
     @Override
@@ -132,14 +100,93 @@ public class BartResultsFragment extends Fragment {
         return false;
     }
 
-    public void initAlertDialog() {
+    private void initDagger() {
+        AndroidSupportInjection.inject(this);
+    }
+
+    private void initViewModel() {
+        mViewModel = ViewModelProviders.of(this, mBartResultsViewModelFactory).get(BartResultsViewModel.class);
+    }
+
+    private void initBundleFromTripFragment() {
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            mOrigin = bundle.getString(TripFragment.TripBundle.ORIGIN.getValue());
+            mDestination = bundle.getString(TripFragment.TripBundle.DESTINATION.getValue());
+            mDate = bundle.getString(TripFragment.TripBundle.DATE.getValue());
+            mTime = bundle.getString(TripFragment.TripBundle.TIME.getValue());
+            //mTrainHeaders = mBundle.getStringArrayList(TripFragment.TripBundle.TRAIN_HEADERS.getValue());
+        }
+    }
+
+    private void initLiveData(String origin, String destination) {
+        //the get livedata list
+        LiveData<List<Station>> liveData = mViewModel.getStationsFromDb(getActivity(), origin, destination);
+
+        liveData.observe(this, data -> {
+            String depart;
+            String arrive;
+            if (data != null) {
+                if(data.get(0).getName().equals(origin)){
+                    depart = data.get(0).getAbbr();
+                    arrive = data.get(1).getAbbr();
+                } else {
+                    depart = data.get(1).getAbbr();
+                    arrive = data.get(0).getAbbr();
+                }
+                initTripCall(depart, arrive, mDate, mTime);
+            }
+        });
+    }
+
+    private void initTripCall(String originAbbr, String destAbbr, String date, String time) {
+        mViewModel.getTrip(originAbbr, destAbbr, date, time)
+                .observe(this, tripXmlResponse -> {
+                    if(tripXmlResponse != null) {
+                        List<Trip> list = tripXmlResponse.getSchedule().getRequest().getTripList();
+                        initRecylerView(list);
+                    }
+        });
+    }
+
+    private void initRecylerView(List<Trip> tripList) {
+        if(tripList != null) {
+            TripViewRecyclerAdapter adapter = new TripViewRecyclerAdapter(tripList);
+            mRecyclerView.setAdapter(adapter);
+            mProgressBar.setVisibility(View.GONE);
+        }
+    }
+
+    private void initFavoriteIcon() {
+        if(mOrigin != null && mDestination != null) {
+            mFavoriteObject = new Favorite();
+
+            //check db if first entry
+            mFavoriteObject.setPriority(Favorite.Priority.ON);
+            mFavoriteObject.setOrigin(mOrigin);
+            mFavoriteObject.setDestination(mDestination);
+
+            //mFavoriteObject.setColors(BartRoutesUtils.getColorsSetFromFullTrip(mFullTripList));
+            //mFavoriteObject.setTrainHeaderStations(mTrainHeaders);
+        }
+    }
+
+    private void initAlertDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle("Remove Favorite");
-        alertDialog.setMessage("Are you sure you want to remove this favorite?");
-        alertDialog.setPositiveButton(getResources().getString(R.string.alert_dialog_yes), (dialog, which) -> new SetFavoritesTask(mBartResultsFragment, FavoritesTask.DELETE_FAVORITE).execute());
+        alertDialog.setTitle(getResources().getString(R.string.alert_dialog_remove_favorite_title));
+        alertDialog.setMessage(getResources().getString(R.string.alert_dialog_confirmation));
+        //alertDialog.setPositiveButton(getResources().getString(R.string.alert_dialog_yes), (dialog, which) -> new SetFavoritesTask(mBartResultsFragment, FavoritesTask.DELETE_FAVORITE).execute());
         alertDialog.setNegativeButton(getResources().getString(R.string.alert_dialog_no), (dialog, which) -> dialog.cancel());
         alertDialog.show();
     }
+
+
+
+
+
+
+
+
 
     //---------------------------------------------------------------------------------------------
     // AsyncTask
@@ -177,9 +224,9 @@ public class BartResultsFragment extends Fragment {
                     if (db.getFavoritesCount()< 2) {
                         favoriteReversed.setPriority(Favorite.Priority.ON);
                     }
-                    List<FullTrip> tripList = getFullTripList(frag.getActivity(), frag.mDestination, frag.mOrigin);
-                    favoriteReversed.setColors(BartRoutesUtils.getColorsSetFromFullTrip(tripList));
-                    favoriteReversed.setTrainHeaderStations(BartRoutesUtils.getTrainHeadersListFromFullTrip(tripList));
+                    //List<FullTrip> tripList = getFullTripList(frag.getActivity(), frag.mDestination, frag.mOrigin);
+                    //favoriteReversed.setColors(BartRoutesUtils.getColorsSetFromFullTrip(tripList));
+                    //favoriteReversed.setTrainHeaderStations(BartRoutesUtils.getTrainHeadersListFromFullTrip(tripList));
                     db.addToFavorites(favoriteReversed);
                     return true;
                 case DELETE_FAVORITE:
@@ -210,21 +257,4 @@ public class BartResultsFragment extends Fragment {
             }
         }
     }
-
-    //---------------------------------------------------------------------------------------------
-    // Helper Methods
-    //---------------------------------------------------------------------------------------------
-    private static List<FullTrip> getFullTripList(Context context, String origin, String destination) {
-        String url = BartApiUtils.getDetailedRoute(origin, destination, "TODAY", "NOW");
-        List<FullTrip> tripList = new ArrayList<>();
-        try {
-            TripXMLParser parser = new TripXMLParser(context);
-            tripList = parser.getList(url);
-        } catch (IOException | XmlPullParserException e) {
-            Log.e("Exception", e.toString());
-        }
-        return tripList;
-    }
-
-
 }

@@ -9,13 +9,13 @@ import org.simpleframework.xml.Element;
 
 public class Fare implements Parcelable {
 
-    @Attribute
+    @Attribute(name = "amount")
     private String fareAmount;
 
-    @Attribute
+    @Attribute(name = "class")
     private String fareClass;
 
-    @Attribute
+    @Attribute(name = "name")
     private String fareName;
 
     public void setFareAmount(String fareAmount) { this.fareAmount = fareAmount; }

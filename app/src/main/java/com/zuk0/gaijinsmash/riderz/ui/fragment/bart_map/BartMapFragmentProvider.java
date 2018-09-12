@@ -4,7 +4,7 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 @Module
-public abstract class BartMapProvider {
+public abstract class BartMapFragmentProvider {
     @ContributesAndroidInjector(modules = BartMapFragmentModule.class)
     abstract BartMapFragment provideBartMapFragement();
 }

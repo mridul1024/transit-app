@@ -13,7 +13,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.List;
 
-//todo: remove this
 public class StationDbHelper {
 
     private StationDatabase mDatabase;
@@ -30,13 +29,16 @@ public class StationDbHelper {
 
     public void initStationDb(Context context) throws IOException, XmlPullParserException {
         int count = getStationCount();
-        if(count == 0 || count < mNumOfBartStations) {
+        if(count < mNumOfBartStations) {
             List<Station> stationList;
             StationXmlParser parser = new StationXmlParser(context);
             stationList = parser.getList(BartApiUtils.getAllStations());
             for(Station x : stationList) {
+                Log.i(x.getName(), x.getAbbr());
                 mDatabase.getStationDAO().addStation(x);
             }
+        } else {
+            Log.i("STATIONS DB", "IS FILLED");
         }
     }
 
@@ -45,14 +47,5 @@ public class StationDbHelper {
         if(DebugController.DEBUG)
             Log.i("count", String.valueOf(count));
         return count;
-    }
-
-    public List<Station> getAllStations() {
-        return mDatabase.getStationDAO().getAllStations();
-    }
-
-    public String getAbbrFromDb(String stationName) {
-        Station station = mDatabase.getStationDAO().getStationByName(stationName);
-        return station.getAbbr();
     }
 }

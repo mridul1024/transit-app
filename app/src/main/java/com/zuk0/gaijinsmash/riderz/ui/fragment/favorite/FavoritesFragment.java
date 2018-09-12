@@ -3,6 +3,7 @@ package com.zuk0.gaijinsmash.riderz.ui.fragment.favorite;
 import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,8 @@ import java.util.List;
 public class FavoritesFragment extends Fragment {
     private View mInflatedView;
     private TextView mError;
+
+    private RecyclerView mRecyclerView;
     private ListView mListView;
 
     @Override
@@ -34,7 +37,7 @@ public class FavoritesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mError = mInflatedView.findViewById(R.id.bartFavorites_error_tV);
-        mListView = mInflatedView.findViewById(R.id.bartFavorites_listView);
+        //mListView = mInflatedView.findViewById(R.id.bartFavorites_listView);
     }
 
     @Override

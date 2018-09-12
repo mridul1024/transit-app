@@ -140,7 +140,7 @@ public class EstimateXmlParser implements XmlParserInterface {
         trip.setOrigin(mOrigin);          // full name, not abbr
         trip.setDestination(destination); // full name, not abbr
         trip.setEstimateList(estimateList);
-        trip.setDestinationAbbr(abbr);
+        //trip.setDestinationAbbr(abbr);
         return trip;
     }
 

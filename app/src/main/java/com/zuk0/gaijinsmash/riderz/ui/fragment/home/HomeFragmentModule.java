@@ -1,6 +1,7 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.home;
 
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.BsaRepository;
+import com.zuk0.gaijinsmash.riderz.data.remote.repository.EtdRepository;
 
 import dagger.Module;
 import dagger.Provides;
@@ -9,7 +10,7 @@ import dagger.Provides;
 public class HomeFragmentModule {
 
     @Provides
-    HomeViewModel provideHomeViewModel(BsaRepository repository) {
-        return new HomeViewModel(repository);
+    HomeViewModel provideHomeViewModel(BsaRepository bsaRepository, EtdRepository etdRepository) {
+        return new HomeViewModel(bsaRepository, etdRepository);
     }
 }

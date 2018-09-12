@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
+//todo: prepare to delete this
 public class FullTrip implements Parcelable {
 
     private Trip trip;

@@ -17,14 +17,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <AutoCompleteTextView
-                android:id="@+id/trip_autoCompleteTextView"
+                android:id="@+id/trip_departure_autoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:hint="@string/departure_station"
-                android:labelFor="@id/trip_autoCompleteTextView" />
+                android:labelFor="@id/trip_departure_autoCompleteTextView" />
         </android.support.design.widget.TextInputLayout>
         <Spinner
             android:id="@+id/station_spinner1"
@@ -45,14 +45,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <AutoCompleteTextView
-                android:id="@+id/trip_autoCompleteTextView2"
+                android:id="@+id/trip_arrival_autoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:hint="@string/arrival_station"
-                android:labelFor="@id/trip_autoCompleteTextView2" />
+                android:labelFor="@id/trip_arrival_autoCompleteTextView" />
         </android.support.design.widget.TextInputLayout>
         <Spinner
             android:id="@+id/station_spinner2"
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="3">
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/date_editText"
+                android:id="@+id/trip_date_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -80,7 +80,7 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:inputType="date"
-                android:labelFor="@id/date_editText" />
+                android:labelFor="@id/trip_date_editText" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2">
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/time_editText"
+                android:id="@+id/trip_time_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -96,7 +96,7 @@
                 android:singleLine="true"
                 android:hint="@string/time_hint"
                 android:inputType="time"
-                android:labelFor="@id/time_editText" />
+                android:labelFor="@id/trip_time_editText" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 

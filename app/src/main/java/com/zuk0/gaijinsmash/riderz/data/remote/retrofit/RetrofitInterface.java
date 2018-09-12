@@ -15,12 +15,14 @@ import retrofit2.http.Query;
 @Singleton
 public interface RetrofitInterface {
 
-    @GET("etd.aspx?cmd=depart&b=0&a=4")
+    @GET("sched.aspx?cmd=depart")
     Call<TripXmlResponse> getTrip(
             @Query("orig") String origin,
             @Query("dest") String destination,
             @Query("date") String date,
-            @Query("time") String time);
+            @Query("time") String time,
+            @Query("b") int before,
+            @Query("a") int amount);
 
     @GET("etd.aspx?cmd=etd")
     Call<EtdXmlResponse> getEtd(@Query("orig") String origin);

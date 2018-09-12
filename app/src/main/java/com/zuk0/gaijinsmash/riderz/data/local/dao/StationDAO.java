@@ -40,16 +40,19 @@ public interface StationDAO {
     @Query("SELECT * from stations where longitude = :longitude")
     public Station getStationByLongitude(String longitude);
 
+    @Query("SELECT * from stations where name = :origin or name = :destination")
+    LiveData<List<Station>> getOriginAndDestination(String origin, String destination);
+
     // Selects station with the matching id
     //todo: must eventually remove this when finished
     @Query("SELECT * from stations where abbr = :abbr")
     Station getStationByAbbr2(String abbr);
 
     @Query("SELECT * from stations where abbr = :abbr")
-    LiveData<Station> getStationByAbbr(String abbr);
+    Station getStationByAbbr(String abbr);
 
     @Query("SELECT * from stations where name = :name")
-    public Station getStationByName(String name);
+    LiveData<Station> getStationByName(String name);
 
     @Query("SELECT * from stations where address = :address")
     LiveData<Station> getStationByAddress(String address);

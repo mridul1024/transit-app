@@ -3,27 +3,54 @@ package com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.simpleframework.xml.Attribute;
+
 /**
  * Created by ryanj on 12/1/2017.
  */
 
 public class Leg implements Parcelable {
-    private String origin, destination;
 
+    @Attribute
+    private String origin;
+
+    @Attribute
+    private String destination;
+
+    @Attribute
     private int order;
+
+    @Attribute(name = "transfercode")
     private int transferCode;
+
+    @Attribute
     private String line;
+
+    @Attribute(name = "bikeflag")
     private int bikeFlag;
+
+    @Attribute
     private String trainHeadStation;
 
+    @Attribute
     private String origTimeMin;
+
+    @Attribute
     private String origTimeDate;
+
+    @Attribute
     private String destTimeMin;
+
+    @Attribute
     private String destTimeDate;
 
-    //unimportant
+    @Attribute(required = false)
     private String load;
+
+    @Attribute(required = false)
     private String trainId;
+
+    @Attribute(required = false)
     private String traindIdx;
 
     public void setOrigin(String origin) { this.origin = origin; }

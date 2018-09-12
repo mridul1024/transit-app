@@ -4,13 +4,16 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
+import com.zuk0.gaijinsmash.riderz.data.local.converter.Converters;
 import com.zuk0.gaijinsmash.riderz.data.local.dao.TripDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 
 @Database(entities = {Trip.class}, version = 1, exportSchema = false)
+@TypeConverters({Converters.class})
 public abstract class TripDatabase extends RoomDatabase {
 
     private static TripDatabase INSTANCE;
