@@ -24,7 +24,7 @@ android {
             resValue 'string', "api_key", RIDERZ_BART_API_KEY
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'String', "BartApiKey", RIDERZ_BART_API_KEY
             resValue 'string', "api_key", RIDERZ_BART_API_KEY
