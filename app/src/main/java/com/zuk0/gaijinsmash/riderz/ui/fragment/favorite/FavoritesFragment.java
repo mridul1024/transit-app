@@ -1,5 +1,8 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.favorite;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProviders;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
+import com.zuk0.gaijinsmash.riderz.ui.adapter.favorite.FavoriteRecyclerAdapter;
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.favorite.FavoriteViewAdapter;
@@ -20,78 +24,54 @@ import com.zuk0.gaijinsmash.riderz.ui.adapter.favorite.FavoriteViewAdapter;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import dagger.android.support.AndroidSupportInjection;
+
 public class FavoritesFragment extends Fragment {
-    private View mInflatedView;
-    private TextView mError;
 
-    private RecyclerView mRecyclerView;
-    private ListView mListView;
+    @BindView(R.id.bartFavorites_error_tV) TextView mError;
+    @BindView(R.id.bartFavorites_recyclerView) RecyclerView mRecyclerView;
+
+    @Inject
+    FavoritesViewModelFactory mFavoritesViewModelFactory;
+    private FavoritesViewModel mViewModel;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mInflatedView = inflater.inflate(R.layout.view_bart_favorites, container, false);
-        return mInflatedView;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        mError = mInflatedView.findViewById(R.id.bartFavorites_error_tV);
-        //mListView = mInflatedView.findViewById(R.id.bartFavorites_listView);
+        View inflatedView = inflater.inflate(R.layout.view_bart_favorites, container, false);
+        ButterKnife.bind(this, inflatedView);
+        return inflatedView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setRetainInstance(true);
-        new GetFavoritesTask(this).execute();
+        initDagger();
+        initViewModel();
+        initFavorites();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void initDagger() {
+        AndroidSupportInjection.inject(this);
     }
 
-    private static class GetFavoritesTask extends AsyncTask<Void, Void, Boolean> {
-        private WeakReference<FavoritesFragment> mWeakRef;
-        private List<Favorite> mFavoritesList;
+    private void initViewModel() {
+        mViewModel = ViewModelProviders.of(this, mFavoritesViewModelFactory).get(FavoritesViewModel.class);
+    }
 
-        private GetFavoritesTask(FavoritesFragment context) {
-            mWeakRef = new WeakReference<>(context);
-        }
-
-        @Override
-        protected Boolean doInBackground(Void...voids) {
-            FavoritesFragment frag = mWeakRef.get();
-            // connect to DB
-            FavoriteDatabase db = FavoriteDatabase.getRoomDB(frag.getActivity());
-            int numberOfFavorites = db.getFavoriteDAO().countFavorites();
-            if(DebugController.DEBUG){
-                Log.d("Favorite Count", String.valueOf(numberOfFavorites));
-            }
-            if(numberOfFavorites > 0) {
-                mFavoritesList = db.getFavoriteDAO().getAllFavorites();
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            FavoritesFragment frag = mWeakRef.get();
-            if(result) {
-                // set view
-                if(mFavoritesList != null) {
-                    FavoriteViewAdapter adapter = new FavoriteViewAdapter(mFavoritesList, frag.getActivity(), frag);
-                    frag.mListView.setAdapter(adapter);
-                } else {
-                    frag.mError.setText(frag.getResources().getString(R.string.bart_favorites_empty));
+    private void initFavorites() {
+        mViewModel.getFavorites().observe(this, data -> {
+            if(data != null) {
+                if(data.size() > 0) {
+                    mError.setVisibility(View.GONE);
+                    FavoriteRecyclerAdapter adapter = new FavoriteRecyclerAdapter(data);
+                    mRecyclerView.setAdapter(adapter);
                 }
-            } else {
-                // set a default view for empty favorites list
-                if(frag.isAdded())
-                    frag.mError.setText(frag.getResources().getString(R.string.bart_favorites_empty));
             }
-        }
+        });
     }
 }

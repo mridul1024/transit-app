@@ -1,5 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.ui.adapter.favorite;
 
+import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,8 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.favorite.FavoritesViewModel;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecyclerAdapter.ViewHolder> {
 

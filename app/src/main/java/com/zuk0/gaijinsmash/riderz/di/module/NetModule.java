@@ -28,7 +28,6 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 public class NetModule {
     private static final String BART_API_KEY = "Q7Z9-PZ53-9QXT-DWE9";
     private static final String BASE_URL = "http://api.bart.gov/api/";
-    private String baseUrl;
 
     @Provides
     @Singleton

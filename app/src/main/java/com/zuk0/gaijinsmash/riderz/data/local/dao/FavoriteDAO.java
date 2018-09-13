@@ -21,7 +21,7 @@ public interface FavoriteDAO {
     public void delete(Favorite favorite);
 
     @Query("SELECT * from favorites")
-    public List<Favorite> getAllFavorites();
+    public LiveData<List<Favorite>> getAllFavoritesLiveData();
 
     @Query("SELECT COUNT(*) from favorites")
     int countFavorites();

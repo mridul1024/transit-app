@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.ui.fragment;
+package com.zuk0.gaijinsmash.riderz.ui.fragment.google_map;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -49,7 +49,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     private View mInflatedView;
 
     //---------------------------------------------------------------------------------------------
-    // Lifecycle Events - MapView must be used for Fragments to prevent nested fragments.
+    // MapView must be used for Fragments to prevent nested fragments.
     //---------------------------------------------------------------------------------------------
 
     @Override
@@ -98,7 +98,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mMapView != null)
             mMapView.onSaveInstanceState(outState);
@@ -112,14 +112,14 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mInflatedView = inflater.inflate(R.layout.view_google_map, container, false);
         return mInflatedView;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         Button mButton = mInflatedView.findViewById(R.id.googleMap_btn);
         mButton.setOnClickListener(v -> {
             FragmentManager manager = getFragmentManager();

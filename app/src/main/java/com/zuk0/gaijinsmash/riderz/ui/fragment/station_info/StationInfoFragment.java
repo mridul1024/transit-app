@@ -1,11 +1,9 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.station_info;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -19,19 +17,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
-import com.zuk0.gaijinsmash.riderz.ui.adapter.station.StationXmlParser;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.GoogleMapFragment;
-import com.zuk0.gaijinsmash.riderz.utils.BartApiUtils;
-
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.google_map.GoogleMapFragment;
 
 import javax.inject.Inject;
 

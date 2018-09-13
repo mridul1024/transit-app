@@ -1,5 +1,7 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.favorite;
 
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
@@ -13,20 +15,22 @@ import java.util.List;
 import javax.inject.Singleton;
 
 @Singleton
-public class FavoritesViewModel extends ViewModel {
+public class FavoritesViewModel extends AndroidViewModel {
 
     private enum FavoriteAction { DeleteFavorite, SetAsPriority, DeletePriority }
 
     private LiveData<List<Favorite>> mFavoritesLiveData;
 
-    FavoritesViewModel() {
-
+    FavoritesViewModel(Application application) {
+        super(application);
+        initData();
     }
 
-    public LiveData<List<Favorite>> getFavorites(Context context) {
-        if(mFavoritesLiveData == null) {
-            FavoriteDatabase.getRoomDB(context).getFavoriteDAO().getAllFavorites();
-        }
+    private void initData() {
+        mFavoritesLiveData = FavoriteDatabase.getRoomDB(super.getApplication()).getFavoriteDAO().getAllFavoritesLiveData();
+    }
+
+    public LiveData<List<Favorite>> getFavorites() {
         return mFavoritesLiveData;
     }
 

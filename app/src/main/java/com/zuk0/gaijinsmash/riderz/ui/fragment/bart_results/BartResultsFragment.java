@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -143,8 +144,11 @@ public class BartResultsFragment extends Fragment {
         mViewModel.getTrip(originAbbr, destAbbr, date, time)
                 .observe(this, tripXmlResponse -> {
                     if(tripXmlResponse != null) {
+                        Log.wtf("initTripCall", "success");
                         List<Trip> list = tripXmlResponse.getSchedule().getRequest().getTripList();
                         initRecylerView(list);
+                    } else {
+                        Log.wtf("initTripCall", "error");
                     }
         });
     }

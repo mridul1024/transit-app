@@ -40,8 +40,7 @@
         <activity
             android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/CustomMainTheme"
-            android:screenOrientation="portrait">
+            android:theme="@style/CustomMainTheme">
 
             <intent-filter android:label="@string/filter_view_app_riderz">
                 <action android:name="android.intent.action.VIEW" />

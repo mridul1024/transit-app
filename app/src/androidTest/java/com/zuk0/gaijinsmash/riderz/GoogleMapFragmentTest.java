@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.GoogleMapFragment;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.google_map.GoogleMapFragment;
 
 import org.junit.Before;
 import org.junit.Rule;
