@@ -75,19 +75,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 //todo: add something
             } else {
                 val currentFrag = mFragmentManager.findFragmentById(R.id.fragmentContent)
-                if(currentFrag.tag.equals("HomeFragment")) {
+                if(currentFrag?.tag.equals("HomeFragment")) {
                     mBottomNavigation.currentItem = 0
                     mFragmentManager.popBackStack()
                 }
-                if(currentFrag.tag.equals("GoogleMapFragment")) {
+                if(currentFrag?.tag.equals("GoogleMapFragment")) {
                     mBottomNavigation.currentItem = 1
                     mFragmentManager.popBackStack()
                 }
-                if(currentFrag.tag.equals("TripFragment")) {
+                if(currentFrag?.tag.equals("TripFragment")) {
                     mBottomNavigation.currentItem = 2
                     mFragmentManager.popBackStack()
                 }
-                if(currentFrag.tag.equals("FavoritesFragment")) {
+                if(currentFrag?.tag.equals("FavoritesFragment")) {
                     mBottomNavigation.currentItem = 3
                     mFragmentManager.popBackStack()
                 }

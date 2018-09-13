@@ -14,7 +14,8 @@
         android:required="true" />
 
     <application
-        android:name=".RiderzApplication"
+        android:name="com.zuk0.gaijinsmash.riderz.RiderzApplication"
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

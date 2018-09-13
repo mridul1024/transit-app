@@ -6,7 +6,7 @@ import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 
 public class BartApiUtils {
     private static final String API_KEY = "&key=Q7Z9-PZ53-9QXT-DWE9";
-    private static final String BASE_URI = "http://api.bart.gov/api/";
+    private static final String BASE_URI = "https://api.bart.gov/api/";
 
     public static String getAllStations() {
         String stations = "stn.aspx?cmd=stns";

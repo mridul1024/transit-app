@@ -12,7 +12,7 @@ import retrofit2.Retrofit;
 
 public class ApiUtils {
 
-    private static final String BASE_URL = "http://api.bart.gov/api/";
+    private static final String BASE_URL = "https://api.bart.gov/api/";
 
     public static RetrofitInterface getBartApiService() {
         return RetrofitClient.getClient(BASE_URL, new ApiKeyInterceptor(BuildConfig.BartApiKey)).create(RetrofitInterface.class);
