@@ -14,7 +14,7 @@ import android.view.View
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.zuk0.gaijinsmash.riderz.R
-import com.zuk0.gaijinsmash.riderz.data.remote.network.CheckInternet
+import com.zuk0.gaijinsmash.riderz.utils.NetworkUtils
 import com.zuk0.gaijinsmash.riderz.ui.fragment.*
 import com.zuk0.gaijinsmash.riderz.ui.fragment.about.AboutFragment
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment
@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun initMapFragment() {
-        if(CheckInternet.isNetworkActive(applicationContext)) {
+        if(NetworkUtils.isNetworkActive(applicationContext)) {
             replaceFrag(GoogleMapFragment(), "GoogleMapFragment", true)
         } else {
             replaceFrag(BartMapFragment(), "BartMapFragment", true)
@@ -209,7 +209,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
             R.id.nav_map -> {
-                if(CheckInternet.isNetworkActive(applicationContext))
+                if(NetworkUtils.isNetworkActive(applicationContext))
                     fragmentFactory(GoogleMapFragment(), "GoogleMapFragment", true) else fragmentFactory(BartMapFragment(), "BartMapFragment", false)
                 mBottomNavigation.currentItem = 1
                 return true

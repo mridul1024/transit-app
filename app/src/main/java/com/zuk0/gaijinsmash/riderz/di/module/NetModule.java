@@ -5,6 +5,7 @@ import android.app.Application;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.zuk0.gaijinsmash.riderz.BuildConfig;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.ApiKeyInterceptor;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitClient;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
@@ -26,8 +27,8 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 @Module
 public class NetModule {
-    private static final String BART_API_KEY = "Q7Z9-PZ53-9QXT-DWE9";
-    private static final String BASE_URL = "http://api.bart.gov/api/";
+    private static final String BART_API_KEY = BuildConfig.BartApiKey;
+    private static final String BASE_URL = "https://api.bart.gov/api/";
 
     @Provides
     @Singleton

@@ -1,22 +1,12 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.splash;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.data.local.database.StationDbHelper;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
-
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 

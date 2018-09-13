@@ -6,8 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
-import com.zuk0.gaijinsmash.riderz.data.local.database.StationDbHelper;
+import com.zuk0.gaijinsmash.riderz.data.local.helper.StationDbHelper;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.StationRepository;
 

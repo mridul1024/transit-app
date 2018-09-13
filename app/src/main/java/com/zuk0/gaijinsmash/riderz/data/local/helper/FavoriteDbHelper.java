@@ -1,8 +1,9 @@
-package com.zuk0.gaijinsmash.riderz.data.local.database;
+package com.zuk0.gaijinsmash.riderz.data.local.helper;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 
 import java.util.List;

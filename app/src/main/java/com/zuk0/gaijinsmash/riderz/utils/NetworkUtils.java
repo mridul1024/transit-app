@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.remote.network;
+package com.zuk0.gaijinsmash.riderz.utils;
 
 import android.content.Context;
 import android.location.LocationManager;
@@ -7,7 +7,7 @@ import android.net.NetworkInfo;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-public class CheckInternet {
+public class NetworkUtils {
 
     // Check for network Connection, will return NULL if no network is currently available
     public static boolean isNetworkActive(Context context) {

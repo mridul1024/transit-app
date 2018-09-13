@@ -36,7 +36,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment;
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
-import com.zuk0.gaijinsmash.riderz.data.remote.network.CheckInternet;
+import com.zuk0.gaijinsmash.riderz.utils.NetworkUtils;
 import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
 
 import java.lang.ref.WeakReference;
@@ -220,7 +220,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
                 Log.e("Exception: %s", e.getMessage());
         }
 
-        boolean gpsCheck = CheckInternet.isGPSEnabled(context);
+        boolean gpsCheck = NetworkUtils.isGPSEnabled(context);
         if (gpsCheck && loc != null) {
             // move camera to user location
             LatLng userLocation;
