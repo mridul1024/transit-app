@@ -64,13 +64,10 @@ public class StationsFragment extends Fragment {
         mViewModel = ViewModelProviders.of(this, mStationsViewModelFactory).get(StationsViewModel.class);
     }
 
-    private void handleListItemClick(View view1) {
+    private void handleListItemClick(View view) {
         //todo: probably can delete stationAddress - not needed
-        String stationAddress = ((TextView) view1.findViewById(R.id.stationAddress_textView)).getText().toString();
-        String stationAbbr = ((TextView) view1.findViewById(R.id.stationAbbr_textView)).getText().toString();
-        Bundle bundle = new Bundle();
-        bundle.putString("StationAddress", stationAddress); //todo: convert StationAddress to enum
-        bundle.putString("StationAbbr", stationAbbr); //todo: convert StationAbbr to enum
+        Bundle bundle = initBundle(view);
+
         Fragment newFrag = new StationInfoFragment();
         newFrag.setArguments(bundle);
         FragmentManager manager = getFragmentManager();
@@ -80,6 +77,19 @@ public class StationsFragment extends Fragment {
             transaction.replace(R.id.fragmentContent, newFrag)
                     .addToBackStack(null).commit();
         }
+    }
+
+    private Bundle initBundle(View view) {
+        String stationAddress = ((TextView) view.findViewById(R.id.stationAddress_textView)).getText().toString();
+        String stationAbbr = ((TextView) view.findViewById(R.id.stationAbbr_textView)).getText().toString();
+        Bundle bundle = new Bundle();
+        bundle.putString("StationAddress", stationAddress); //todo: convert StationAddress to enum
+        bundle.putString("StationAbbr", stationAbbr); //todo: convert StationAbbr to enum
+        return bundle;
+    }
+
+    private void loadNewFragment() {
+
     }
 
     private void initStationList() {

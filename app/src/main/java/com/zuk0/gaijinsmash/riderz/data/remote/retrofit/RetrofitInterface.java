@@ -7,7 +7,6 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripXmlRespon
 
 import javax.inject.Singleton;
 
-import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -26,12 +25,6 @@ public interface RetrofitInterface {
 
     @GET("etd.aspx?cmd=etd")
     Call<EtdXmlResponse> getEtd(@Query("orig") String origin);
-
-    @GET("etd.aspx?cmd=etd")
-    Single<EtdXmlResponse> getEtdRx(@Query("orig") String origin);
-
-    @GET("bsa.aspx?cmd=bsa")
-    Single<BsaXmlResponse> getBsaRx();
 
     @GET("bsa.aspx?cmd=bsa")
     Call<BsaXmlResponse> getBsa();

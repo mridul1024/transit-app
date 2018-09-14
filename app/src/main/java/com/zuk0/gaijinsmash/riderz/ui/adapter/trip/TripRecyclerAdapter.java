@@ -162,7 +162,7 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
     }
 
     public enum LegOrder {
-        FIRST_LEG, SECOND_LEG, THIRD_LEG;
+        FIRST_LEG, SECOND_LEG, THIRD_LEG
     }
 
     private void initTextForLeg(LegOrder leg, ViewHolder holder, List<Trip> list) {
@@ -203,6 +203,4 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
                 break;
         }
     }
-
-
 }

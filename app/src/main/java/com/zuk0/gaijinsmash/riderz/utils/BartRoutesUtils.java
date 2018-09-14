@@ -16,7 +16,11 @@ import javax.inject.Inject;
 
 public class BartRoutesUtils {
 
-    public static void setLineBarByRoute(Context context, String route, TextView coloredBar) {
+    //todo: potential memory leak
+    @Inject
+    Context context;
+
+    public void setLineBarByRoute(String route, TextView coloredBar) {
         switch(route) {
             case "ROUTE 1": coloredBar.setBackgroundColor(context.getResources().getColor(R.color.bartYellowLine));
                 break;

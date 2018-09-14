@@ -46,7 +46,6 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
                 mClickListener.onClick(v);
             }
         });
-
         return holder;
     }
 

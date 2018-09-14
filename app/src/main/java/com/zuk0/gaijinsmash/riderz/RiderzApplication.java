@@ -2,6 +2,8 @@ package com.zuk0.gaijinsmash.riderz;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.zuk0.gaijinsmash.riderz.di.component.DaggerAppComponent;
@@ -12,7 +14,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 
 /*
-    This will create Dagger object
+    This will create a Dagger object
  */
 public class RiderzApplication extends Application implements HasActivityInjector{
 
@@ -34,4 +36,9 @@ public class RiderzApplication extends Application implements HasActivityInjecto
         return activityDispatchingAndroidInjector;
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this); //todo: verify multidex is working
+    }
 }
