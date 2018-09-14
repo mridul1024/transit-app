@@ -16,10 +16,7 @@ import javax.inject.Inject;
 
 public class BartRoutesUtils {
 
-    @Inject
-    Context context;
-
-    public void setLineBarByRoute(String route, TextView coloredBar) {
+    public static void setLineBarByRoute(Context context, String route, TextView coloredBar) {
         switch(route) {
             case "ROUTE 1": coloredBar.setBackgroundColor(context.getResources().getColor(R.color.bartYellowLine));
                 break;

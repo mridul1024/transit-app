@@ -10,11 +10,13 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center" />
 
-    <ListView
-        android:id="@+id/station_listView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/station_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:paddingBottom="60dp" />
+        android:paddingBottom="60dp">
+
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

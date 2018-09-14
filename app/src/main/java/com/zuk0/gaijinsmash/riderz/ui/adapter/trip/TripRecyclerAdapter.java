@@ -16,7 +16,7 @@ import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 
 import java.util.List;
 
-public class TripViewRecyclerAdapter extends RecyclerView.Adapter<TripViewRecyclerAdapter.ViewHolder> {
+public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView origin1;
@@ -94,7 +94,7 @@ public class TripViewRecyclerAdapter extends RecyclerView.Adapter<TripViewRecycl
 
     private List<Trip> mTripList;
 
-    public TripViewRecyclerAdapter(List<Trip> tripList) { mTripList = tripList; }
+    public TripRecyclerAdapter(List<Trip> tripList) { mTripList = tripList; }
 
     @NonNull
     @Override

@@ -1,28 +1,17 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.favorite;
 
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.favorite.FavoriteRecyclerAdapter;
-import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
-import com.zuk0.gaijinsmash.riderz.ui.adapter.favorite.FavoriteViewAdapter;
-
-import java.lang.ref.WeakReference;
-import java.util.List;
 
 import javax.inject.Inject;
 

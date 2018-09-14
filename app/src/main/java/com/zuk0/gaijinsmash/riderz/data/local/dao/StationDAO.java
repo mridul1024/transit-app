@@ -21,10 +21,6 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface StationDAO {
 
-    // Adds a station object to the database
-    @Insert(onConflict = REPLACE)
-    void addStation(Station station);
-
     // Removes a station from the database
     @Delete
     void delete(Station station);

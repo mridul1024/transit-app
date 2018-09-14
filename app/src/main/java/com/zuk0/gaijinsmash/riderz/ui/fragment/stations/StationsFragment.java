@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.ui.adapter.station.StationViewAdapter;
+import com.zuk0.gaijinsmash.riderz.ui.adapter.station.StationRecyclerAdapter;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.station_info.StationInfoFragment;
 
 import javax.inject.Inject;
@@ -31,7 +32,7 @@ public class StationsFragment extends Fragment {
 
     private StationsViewModel mViewModel;
 
-    @BindView(R.id.station_listView) ListView mListView;
+    @BindView(R.id.station_recyclerView) RecyclerView mRecyclerView;
     @BindView(R.id.station_progress_bar) ProgressBar mProgressBar;
 
     @Override
@@ -45,11 +46,6 @@ public class StationsFragment extends Fragment {
         View mInflatedView = inflater.inflate(R.layout.view_station, container, false);
         ButterKnife.bind(this, mInflatedView);
         return mInflatedView;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        mListView.setOnItemClickListener((parent, view1, position, id) -> handleListItemClick(view1));
     }
 
     @Override
@@ -91,15 +87,17 @@ public class StationsFragment extends Fragment {
         .observe(this, stations -> {
             //update the ui
             if(stations != null) {
-                StationViewAdapter adapter = new StationViewAdapter(stations, getActivity());
-                mListView.setAdapter(adapter);
+                StationRecyclerAdapter adapter = new StationRecyclerAdapter(stations);
+                mRecyclerView.setAdapter(adapter);
+                adapter.setClickListener(this::handleListItemClick);
             } else {
                 mViewModel.getListFromRepo()
                         .observe(this, data -> {
-                            StationViewAdapter adapter;
+                            StationRecyclerAdapter adapter;
                             if (data != null) {
-                                adapter = new StationViewAdapter(data.getStationList(), getActivity());
-                                mListView.setAdapter(adapter);
+                                adapter = new StationRecyclerAdapter(data.getStationList());
+                                mRecyclerView.setAdapter(adapter);
+                                adapter.setClickListener(this::handleListItemClick);
                             } else {
                                 Log.wtf("StationsFragment", "error with list");
                             }
