@@ -274,23 +274,20 @@ public class TripFragment extends Fragment {
     }
 
     private void launchTripResultFragment(String origin, String destination, String date, String time) {
+        Bundle bundle = initBundler(origin, destination, date, time);
+        initFragmentManager(bundle);
+    }
 
+    private Bundle initBundler(String origin, String destination, String date, String time) {
         Bundle bundle = new Bundle();
         bundle.putString(TripBundle.ORIGIN.getValue(), origin);
         bundle.putString(TripBundle.DESTINATION.getValue(), destination);
         bundle.putString(TripBundle.DATE.getValue(), date);
         bundle.putString(TripBundle.TIME.getValue(), time);
+        return bundle;
+    }
 
-        /*
-                        mTrainHeaders = new ArrayList<>();
-
-                for(FullTrip fullTrip : mFullTripList) {
-                    mTrainHeaders.add(fullTrip.getLegList().get(0).getTrainHeadStation());
-                    if(DebugController.DEBUG) Log.d("trainHeader added", fullTrip.getLegList().get(0).getTrainHeadStation());
-                }
-                bundle.putStringArrayList(TripFragment.TripBundle.TRAIN_HEADERS.getValue(), (ArrayList<String>) mTrainHeaders);
-         */
-
+    private void initFragmentManager(Bundle bundle) {
         Fragment frag = new BartResultsFragment();
         frag.setArguments(bundle);
         FragmentManager fm = getFragmentManager();
@@ -301,6 +298,18 @@ public class TripFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), getResources().getString(R.string.error_try_again), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void handleTrainHeaders() {
+                /*
+                        mTrainHeaders = new ArrayList<>();
+
+                for(FullTrip fullTrip : mFullTripList) {
+                    mTrainHeaders.add(fullTrip.getLegList().get(0).getTrainHeadStation());
+                    if(DebugController.DEBUG) Log.d("trainHeader added", fullTrip.getLegList().get(0).getTrainHeadStation());
+                }
+                bundle.putStringArrayList(TripFragment.TripBundle.TRAIN_HEADERS.getValue(), (ArrayList<String>) mTrainHeaders);
+         */
     }
 
     public enum TripBundle {

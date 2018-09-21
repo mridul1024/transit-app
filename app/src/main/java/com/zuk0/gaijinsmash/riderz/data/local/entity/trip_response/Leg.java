@@ -3,149 +3,182 @@ package com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import org.simpleframework.xml.Attribute;
 
 /**
  * Created by ryanj on 12/1/2017.
  */
 
-public class Leg implements Parcelable {
+public class Leg {
 
-    @Attribute
+    @SerializedName("@order")
+    @Expose
+    private String order;
+
+    @SerializedName("@transfercode")
+    @Expose
+    private String transfercode;
+
+    @SerializedName("@origin")
+    @Expose
     private String origin;
 
-    @Attribute
+    @SerializedName("@destination")
+    @Expose
     private String destination;
 
-    @Attribute
-    private int order;
-
-    @Attribute(name = "transfercode")
-    private int transferCode;
-
-    @Attribute
-    private String line;
-
-    @Attribute(name = "bikeflag")
-    private int bikeFlag;
-
-    @Attribute
-    private String trainHeadStation;
-
-    @Attribute
+    @SerializedName("@origTimeMin")
+    @Expose
     private String origTimeMin;
 
-    @Attribute
+    @SerializedName("@origTimeDate")
+    @Expose
     private String origTimeDate;
 
-    @Attribute
+    @SerializedName("@destTimeMin")
+    @Expose
     private String destTimeMin;
 
-    @Attribute
+    @SerializedName("@destTimeDate")
+    @Expose
     private String destTimeDate;
 
-    @Attribute(required = false)
+    @SerializedName("@line")
+    @Expose
+    private String line;
+
+    @SerializedName("@bikeflag")
+    @Expose
+    private String bikeflag;
+
+    @SerializedName("@trainHeadStation")
+    @Expose
+    private String trainHeadStation;
+
+    @SerializedName("@load")
+    @Expose
     private String load;
 
-    @Attribute(required = false)
+    @SerializedName("@trainId")
+    @Expose
     private String trainId;
 
-    @Attribute(required = false)
-    private String traindIdx;
+    @SerializedName("@trainIdx")
+    @Expose
+    private String trainIdx;
 
-    public void setOrigin(String origin) { this.origin = origin; }
-    public String getOrigin() { return origin; }
-
-    public void setDestination(String destination) { this.destination = destination; }
-    public String getDestination() { return destination; }
-
-    public int getOrder() {
+    public String getOrder() {
         return order;
     }
-    public void setOrder(int order) {
+
+    public void setOrder(String order) {
         this.order = order;
     }
 
-    public void setTransferCode(int transferCode) {
-        this.transferCode = transferCode;
+    public String getTransfercode() {
+        return transfercode;
     }
-    public int getTransferCode() { return transferCode; }
+
+    public void setTransfercode(String transfercode) {
+        this.transfercode = transfercode;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getOrigTimeMin() {
+        return origTimeMin;
+    }
+
+    public void setOrigTimeMin(String origTimeMin) {
+        this.origTimeMin = origTimeMin;
+    }
+
+    public String getOrigTimeDate() {
+        return origTimeDate;
+    }
+
+    public void setOrigTimeDate(String origTimeDate) {
+        this.origTimeDate = origTimeDate;
+    }
+
+    public String getDestTimeMin() {
+        return destTimeMin;
+    }
+
+    public void setDestTimeMin(String destTimeMin) {
+        this.destTimeMin = destTimeMin;
+    }
+
+    public String getDestTimeDate() {
+        return destTimeDate;
+    }
+
+    public void setDestTimeDate(String destTimeDate) {
+        this.destTimeDate = destTimeDate;
+    }
 
     public String getLine() {
         return line;
     }
+
     public void setLine(String line) {
         this.line = line;
     }
-    public int getBikeFlag() { return bikeFlag; }
-    public void setBikeFlag(int bikeFlag) { this.bikeFlag = bikeFlag; }
-    public String getTrainHeadStation() { return trainHeadStation; }
+
+    public String getBikeflag() {
+        return bikeflag;
+    }
+
+    public void setBikeflag(String bikeflag) {
+        this.bikeflag = bikeflag;
+    }
+
+    public String getTrainHeadStation() {
+        return trainHeadStation;
+    }
+
     public void setTrainHeadStation(String trainHeadStation) {
         this.trainHeadStation = trainHeadStation;
     }
 
-    public String getOrigTimeMin() { return origTimeMin; }
-    public String getOrigTimeDate() { return origTimeDate; }
-    public String getDestTimeMin() { return destTimeMin; }
-    public String getDestTimeDate() { return destTimeDate; }
-
-    public void setOrigTimeMin(String origTimeMin) { this.origTimeMin = origTimeMin; }
-    public void setOrigTimeDate(String origTimeDate) { this.origTimeDate = origTimeDate ;}
-    public void setDestTimeDate(String destTimeDate) { this.destTimeDate = destTimeDate; }
-    public void setDestTimeMin(String destTimeMin) { this.destTimeMin = destTimeMin; }
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getLoad() {
+        return load;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.origin);
-        dest.writeString(this.destination);
-        dest.writeInt(this.order);
-        dest.writeInt(this.transferCode);
-        dest.writeString(this.line);
-        dest.writeInt(this.bikeFlag);
-        dest.writeString(this.trainHeadStation);
-        dest.writeString(this.origTimeMin);
-        dest.writeString(this.origTimeDate);
-        dest.writeString(this.destTimeMin);
-        dest.writeString(this.destTimeDate);
-        dest.writeString(this.load);
-        dest.writeString(this.trainId);
-        dest.writeString(this.traindIdx);
+    public void setLoad(String load) {
+        this.load = load;
     }
 
-    public Leg() {
+    public String getTrainId() {
+        return trainId;
     }
 
-    private Leg(Parcel in) {
-        this.origin = in.readString();
-        this.destination = in.readString();
-        this.order = in.readInt();
-        this.transferCode = in.readInt();
-        this.line = in.readString();
-        this.bikeFlag = in.readInt();
-        this.trainHeadStation = in.readString();
-        this.origTimeMin = in.readString();
-        this.origTimeDate = in.readString();
-        this.destTimeMin = in.readString();
-        this.destTimeDate = in.readString();
-        this.load = in.readString();
-        this.trainId = in.readString();
-        this.traindIdx = in.readString();
+    public void setTrainId(String trainId) {
+        this.trainId = trainId;
     }
 
-    public static final Parcelable.Creator<Leg> CREATOR = new Parcelable.Creator<Leg>() {
-        @Override
-        public Leg createFromParcel(Parcel source) {
-            return new Leg(source);
-        }
+    public String getTrainIdx() {
+        return trainIdx;
+    }
 
-        @Override
-        public Leg[] newArray(int size) {
-            return new Leg[size];
-        }
-    };
+    public void setTrainIdx(String trainIdx) {
+        this.trainIdx = trainIdx;
+    }
 }

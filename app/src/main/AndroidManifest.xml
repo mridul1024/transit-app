@@ -43,6 +43,7 @@
             android:label="@string/title_activity_main"
             android:theme="@style/CustomMainTheme">
 
+            <!-- This is for Google Search Indexing -->
             <intent-filter android:label="@string/filter_view_app_riderz">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -53,9 +54,7 @@
                     android:pathPrefix="/riderz" />
                 <!-- note that the leading "/" is required for pathPrefix-->
             </intent-filter>
-
         </activity>
 
     </application>
-
 </manifest>

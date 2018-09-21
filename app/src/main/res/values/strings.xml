@@ -25,33 +25,27 @@
     <string name="navigation_drawer_phoneLines">Call Lines</string>
     <string name="navigation_drawer_misc">Misc</string>
     <string name="navigation_drawer_about">About</string>
-    <string name="menu_share">Share</string>
     <string name="about_textView">Made by Ryan J Suzuki. All Rights Reserved.</string>
     <string name="logo_description">Application Logo</string>
     <string name="help_view_title">FAQ</string>
 
     <!-- BART Map Fragment-->
     <string name="bart_map_button">Train Lines Map</string>
-    <string name="bart_lines_map_btn">Switch To GoogleMap</string>
     <string name="bart_lines_map_description">An image of the BART Train Lines</string>
 
     <!-- Bart Results Fragment-->
     <string name="bart_result_depart">Depart:</string>
     <string name="bart_result_arrive">Arrive:</string>
     <string name="bart_result_tripTime">Travel Time (minutes):</string>
-    <string name="bart_result_date">Date</string>
     <string name="bart_result_departTime">Departure Time:</string>
     <string name="bart_result_arriveTime">Arrival Time:</string>
     <string name="bart_result_cashFare">Cash Fare: $</string>
     <string name="bart_result_clipperFare">Clipper Fare: $</string>
-    <string name="bart_result_minutes">minutes</string>
-    <string name="bart_result_transfer">Transfer</string>
     <string name="bart_result_transfer_cd">Train Transfer Icon</string>
 
     <!-- Favorites Fragment -->
     <string name="action_favorites">Favorites</string>
     <string name="bart_favorites_empty">You currently don\'t have any favorite routes.</string>
-    <string name="fav_system_bart">BART</string>
     <string name="favorite_origin">Origin</string>
     <string name="favorite_destination">Destination</string>
     <string name="contentDesc_arrow">Arrow pointing right</string>
@@ -59,9 +53,7 @@
     <string name="contentDesc_options">Options Button</string>
     <string name="favorite_search">Search</string>
     <string name="favorite_options">Options</string>
-    <string name="favorite_color">Change Color</string>
     <string name="action_delete">Delete</string>
-    <string name="favorite_priority">Change Priority</string>
     <string name="deletion_success">Successfully Deleted</string>
     <string name="favorite_added">Added to Favorites!</string>
     <string name="favorite_deleted">Favorite successfully removed.</string>
@@ -72,7 +64,6 @@
     <string name="help_intent_text">Please input your message here.</string>
 
     <!-- Home Fragment -->
-    <string name="home_title">Welcome to the BART App!</string>
     <string name="home_alerts">Welcome, fellow Rider!</string>
     <string name="banner">Image of San Francisco</string>
 
@@ -145,7 +136,6 @@
     <!-- Station Info Fragment -->
     <string name="stationInfo_oops">Oops!</string>
     <string name="stationInfo_error">Sorry, but there was a network error. Please go back and try again.</string>
-    <string name="stationInfo_return_button">Go Back</string>
     <string name="stationInfo_attractionTitle">Attractions</string>
     <string name="stationInfo_foodTitle">Food</string>
     <string name="stationInfo_shoppingTitle">Shopping</string>
@@ -163,58 +153,29 @@
     <!-- Trip Fragment -->
     <string name="departure_station">Departing Station</string>
     <string name="arrival_station">Arriving Station</string>
-    <string name="departing_time">Time of Departure</string>
-    <string name="departing_date">Date of Departure</string>
     <string name="schedule_button">Search</string>
     <string name="date_hint">Date</string>
     <string name="time_hint">Time</string>
     <string name="time_title">Select Time</string>
-    <string name="date_unavailable">Date is unavailable</string>
-    <string name="time_unavailable">Time is unavailable</string>
-    <string name="update_unavailable">Updates are currently not available. Please check your network settings.</string>
     <string name="last_update">Last update at</string>
     <string name="currentDate">Today</string>
     <string name="currentTime">Now</string>
 
     <!-- Google Map -->
-    <string name="title_activity_google_maps">Map</string>
 
     <!-- Permissions -->
-    <string name="location_permission_denied">GPS Permission Denied</string>
-    <string name="permission_required_toast">GPS Permission Required</string>
-    <string name="permission_rationale_location">Rationale Location</string>
 
     <!-- Errors -->
     <string name="error_form_completion">Please input all fields</string>
-    <string name="network_error">Sorry, but there\'s a network problem. Try again in bit.</string>
     <string name="error_form_completion2">You\'re going nowhere! Please try again.</string>
     <string name="error_try_again">Sorry! Something went wrong. Please try again.</string>
 
     <!-- Alert Dialog -->
-    <string name="alert_dialog_yes">Yes</string>
     <string name="alert_dialog_no">No</string>
-    <string name="alert_dialog_network_title">Network Settings</string>
-    <string name="alert_dialog_network_message">Network is not available. Do you want to turn it on?</string>
-    <string name="alert_dialog_location_title">GPS Settings</string>
-    <string name="alert_dialog_location_message">GPS is not enabled. Do you want to change that now?</string>
-    <string name="alert_dialog_favorite_title">Just Checking</string>
-    <string name="alert_dialog_favorite_message">Are you sure you want to remove this from your favorites?</string>
 
     <!-- Preference Screen -->
-    <string name="preference_title">Settings</string>
     <string name="preference_checkbox_title">24 Hour Format</string>
-    <string name="preference_checkbox_value">Something goes here</string>
-    <string name="preference_edittext_title">Your Daily Commute</string>
-    <string name="preference_edittext_summary">Click here to create your most common trip</string>
-    <string name="preference_edittext_dialog">Dialog Title</string>
     <string name="preference_category_title">Time Setting</string>
-    <string name="preference_list_title">List Title</string>
-    <string name="preference_list_dialog">Dialog Title</string>
-    <string name="preference_intent_title">Intent</string>
-    <string name="preference_time_title">Time Format</string>
-    <string name="preference_checkbox_title2">24 Hour Format</string>
-    <string name="preference_button">Save</string>
-    <string name="cannot_do_this">\"Sorry, can\'t do this right now. Please try again in a bit.\"</string>
 
     <string name="help_q1">Q: Will there be features added in the future?</string>
     <string name="help_a1">A: Yes! Next up is MUNI :)</string>
@@ -234,7 +195,6 @@
     <string name="priority_set">Set as a priority</string>
     <string name="priority_deleted">Removed as a priority</string>
 
-    <string name="estimate_not_available">Currently unavailable. \n Either the network is down or you may need to add a trip to your favorites menu.</string>
     <string name="real_time_estimates">Real Time Estimates</string>
     <string name="error_station_not_found">The station you selected was not found. Please try again.</string>
     <string name="now">now</string>

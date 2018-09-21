@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.zuk0.gaijinsmash.riderz.data.local.dao.TripDao;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripXmlResponse;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
 
 import java.util.concurrent.Executor;
@@ -32,16 +32,16 @@ public class TripRepository {
         this.executor = executor;
     }
 
-    public LiveData<TripXmlResponse> getTrip(String origin, String destination, String date, String time, int b, int a) {
-        final MutableLiveData<TripXmlResponse> data = new MutableLiveData<>();
-        service.getTrip(origin, destination, date, time, b, a).enqueue(new Callback<TripXmlResponse>() {
+    public LiveData<TripJsonResponse> getTrip(String origin, String destination, String date, String time) {
+        final MutableLiveData<TripJsonResponse> data = new MutableLiveData<>();
+        service.getTripJson(origin, destination, date, time).enqueue(new Callback<TripJsonResponse>() {
             @Override
-            public void onResponse(@NonNull Call<TripXmlResponse> call, @NonNull Response<TripXmlResponse> response) {
+            public void onResponse(@NonNull Call<TripJsonResponse> call, @NonNull Response<TripJsonResponse> response) {
                 data.postValue(response.body());
             }
 
             @Override
-            public void onFailure(@NonNull Call<TripXmlResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<TripJsonResponse> call, @NonNull Throwable t) {
                 Log.wtf("Trip", t.getMessage());
             }
         });

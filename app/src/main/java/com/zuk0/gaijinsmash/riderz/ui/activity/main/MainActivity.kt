@@ -15,12 +15,13 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.utils.NetworkUtils
-import com.zuk0.gaijinsmash.riderz.ui.fragment.*
 import com.zuk0.gaijinsmash.riderz.ui.fragment.about.AboutFragment
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment
 import com.zuk0.gaijinsmash.riderz.ui.fragment.favorite.FavoritesFragment
 import com.zuk0.gaijinsmash.riderz.ui.fragment.google_map.GoogleMapFragment
+import com.zuk0.gaijinsmash.riderz.ui.fragment.help.HelpFragment
 import com.zuk0.gaijinsmash.riderz.ui.fragment.home.HomeFragment
+import com.zuk0.gaijinsmash.riderz.ui.fragment.phone_lines.PhoneLinesFragment
 import com.zuk0.gaijinsmash.riderz.ui.fragment.settings.SettingsFragment
 import com.zuk0.gaijinsmash.riderz.ui.fragment.stations.StationsFragment
 import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         AndroidInjection.inject(this)
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        setContentView(R.layout.main_activity) //todo: review error here
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 

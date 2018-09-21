@@ -2,22 +2,20 @@ package com.zuk0.gaijinsmash.riderz.ui.activity.splash;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.StationRepository;
-import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository;
+import com.zuk0.gaijinsmash.riderz.utils.xml_parser.StationXmlParser;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -33,41 +31,58 @@ public class SplashViewModel extends AndroidViewModel {
         mRepository = repository;
     }
 
-    // todo: first check database - if database is null or too low, then
-    public void loadStations() {
-        new LoadStationsTask(super.getApplication(), mRepository).execute();
+    public void initStationsData() {
+        new SaveStationsTask(super.getApplication()).execute();
     }
 
-    private static class LoadStationsTask extends AsyncTask<Void, Void, Void> {
+    private static class SaveStationsTask extends AsyncTask<Void, Void, Void> {
         private WeakReference<Application> mWeakRef;
+        private List<Station> mStationList;
 
-        StationRepository mRepository;
-
-        LoadStationsTask(Application application, StationRepository repository) {
+        SaveStationsTask(Application application) {
             mWeakRef = new WeakReference<>(application);
-            mRepository = repository;
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             Application ref = mWeakRef.get();
+
+            int count = getCount();
+            if(count < BART_STATIONS_COUNT) {
+                List<Station> stationList = getList();
+                saveList(stationList);
+            }
+            return null;
+        }
+
+        private int getCount() {
             int count = StationDatabase.getRoomDB(mWeakRef.get())
                     .getStationDAO()
                     .countStations();
+            Log.i("doInBackground", String.valueOf(count));
+            return count;
+        }
 
-            if(count < BART_STATIONS_COUNT) {
-                // make api call and all stations to RoomDb
-                List<Station> stationList = Objects.requireNonNull(mRepository
-                        .getStations()
-                        .getValue())
-                        .getStationList();
+        private List<Station> getList() {
+            InputStream is;
+            List<Station> stationList = null;
+            try {
+                is = mWeakRef.get().getAssets().open("stations.xml");
+                StationXmlParser parser = new StationXmlParser(is);
+                stationList = parser.getList();
+            } catch (IOException | XmlPullParserException e) {
+                e.printStackTrace();
+            }
+            return stationList;
+        }
 
+        private void saveList(List<Station> stationList) {
+            if(stationList != null) {
                 for(Station station : stationList) {
                     Log.i("station added", station.getName());
                     StationDatabase.getRoomDB(mWeakRef.get()).getStationDAO().save(station);
                 }
             }
-            return null;
         }
     }
 }

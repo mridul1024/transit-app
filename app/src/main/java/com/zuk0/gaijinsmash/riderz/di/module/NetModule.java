@@ -58,7 +58,7 @@ public class NetModule {
     Retrofit provideRetrofitXml(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(new Persister(new AnnotationStrategy())))
-                .addConverterFactory(GsonConverterFactory.create())
+                //addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(BASE_URL)
                 .client(okHttpClient)
                 .build();

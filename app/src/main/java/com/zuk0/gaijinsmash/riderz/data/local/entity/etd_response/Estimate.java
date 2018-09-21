@@ -6,22 +6,31 @@ public class Estimate {
 
     @Element(name = "origin", required = false)
     private String origin;
+
     @Element(name = "destination", required = false)
     private String destination;
+
     @Element(name = "minutes", required = false)
     private String minutes; // can be 'leaving'
+
     @Element(name = "platform", required = false)
     private int platform;
+
     @Element(name = "direction", required = false)
     private String direction;
+
     @Element(name = "length", required = false)
     private int length;
+
     @Element(name = "color", required = false)
     private String color;
+
     @Element(name = "hexcolor", required = false)
     private String hexcolor;
+
     @Element(name = "bikeflag", required = false)
     private int bikeflag;
+
     @Element(name = "delay", required = false)
     private int delay;
 

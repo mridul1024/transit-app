@@ -7,6 +7,7 @@ import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository;
 
 import javax.inject.Inject;
 
+//todo: think about abstracting ViewModelProvider.Factory with Factory pattern
 public class BartResultsViewModelFactory implements ViewModelProvider.Factory {
 
     private final TripRepository tripRepository;

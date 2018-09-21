@@ -16,8 +16,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 public class RetrofitClient {
 
     /*
-        Retrofit should be created with the Singleton pattern.
-
+       Retrofit should be created with the Singleton pattern.
        This client can be used for the whole android project to make requests.
     */
 
@@ -31,19 +30,17 @@ public class RetrofitClient {
             HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.networkInterceptors().add(httpLoggingInterceptor);
-
             builder.interceptors().add(interceptor);
-            //builder.interceptors().add(new JsonInterceptor());
             OkHttpClient client = builder.build();
 
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
-                    // AnnotationStrategy avoids SimpleXml crashes from empty tags
-                    .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(new Persister(new AnnotationStrategy())))
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(new RetrofitConverterFactory())
                     .client(client)
                     .build();
         }
         return retrofit;
     }
+
+
 }

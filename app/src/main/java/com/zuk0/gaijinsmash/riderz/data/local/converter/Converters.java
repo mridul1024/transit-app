@@ -1,6 +1,7 @@
 package com.zuk0.gaijinsmash.riderz.data.local.converter;
 
 import android.arch.persistence.room.TypeConverter;
+import android.arch.persistence.room.TypeConverters;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -10,6 +11,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Estimate;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Fare;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Fares;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Leg;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 
@@ -188,6 +190,26 @@ public class Converters {
     }
 
     @TypeConverter
+    public static Fares stringToFares(String value) {
+        if(value == null || value.equals("")) {
+            return new Fares();
+        } else {
+            Type listType = new TypeToken<Fares>() {}.getType();
+            return new Gson().fromJson(value, listType);
+        }
+    }
+
+    @TypeConverter
+    public static String faresToString(Fares fares) {
+        if(fares == null) {
+            return "";
+        } else {
+            Gson gson = new Gson();
+            return gson.toJson(fares);
+        }
+    }
+
+    @TypeConverter
     public static Leg stringToLeg(String value) {
         if(value == null || value.equals("")) {
             return new Leg();
@@ -266,4 +288,5 @@ public class Converters {
             return gson.toJson(fareList);
         }
     }
+
 }

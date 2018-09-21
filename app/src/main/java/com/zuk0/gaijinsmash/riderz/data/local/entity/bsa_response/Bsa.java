@@ -14,10 +14,21 @@ public class Bsa {
     @Element(name="description", data = true)
     private String description;
 
+    @Element(required = false)
+    private String sms_text;
+
     public void setStation(String station) { this.station = station; }
     public void setDescription(String description) { this.description = description; }
     public void setType(String type) { this.type = type; }
     public String getType() { return type; }
     public String getStation() { return station; }
     public String getDescription() { return description; }
+
+    public String getSms_text() {
+        return sms_text;
+    }
+
+    public void setSms_text(String sms_text) {
+        this.sms_text = sms_text;
+    }
 }

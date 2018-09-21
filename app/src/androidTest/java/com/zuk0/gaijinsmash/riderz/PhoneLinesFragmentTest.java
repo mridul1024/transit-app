@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.PhoneLinesFragment;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.phone_lines.PhoneLinesFragment;
 
 import org.junit.Before;
 import org.junit.Rule;

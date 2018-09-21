@@ -4,57 +4,47 @@ import android.arch.persistence.room.Entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 
-public class Fare implements Parcelable {
+public class Fare {
 
-    @Attribute(name = "amount")
-    private String fareAmount;
+    @SerializedName("@amount")
+    @Expose
+    private String amount;
 
-    @Attribute(name = "class")
-    private String fareClass;
+    @SerializedName("@class")
+    @Expose
+    private String _class;
 
-    @Attribute(name = "name")
-    private String fareName;
+    @SerializedName("@name")
+    @Expose
+    private String name;
 
-    public void setFareAmount(String fareAmount) { this.fareAmount = fareAmount; }
-    public void setFareClass(String fareClass) { this.fareClass = fareClass; }
-    public void setFareName(String fareName) { this.fareName = fareName; }
-    public String getFareAmount() { return fareAmount; }
-    public String getFareClass() { return fareClass; }
-    public String getFareName() { return fareName; }
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getAmount() {
+        return amount;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.fareAmount);
-        dest.writeString(this.fareClass);
-        dest.writeString(this.fareName);
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
-    public Fare() {
+    public String getClass_() {
+        return _class;
     }
 
-    private Fare(Parcel in) {
-        this.fareAmount = in.readString();
-        this.fareClass = in.readString();
-        this.fareName = in.readString();
+    public void setClass_(String _class) {
+        this._class = _class;
     }
 
-    public static final Parcelable.Creator<Fare> CREATOR = new Parcelable.Creator<Fare>() {
-        @Override
-        public Fare createFromParcel(Parcel source) {
-            return new Fare(source);
-        }
+    public String getName() {
+        return name;
+    }
 
-        @Override
-        public Fare[] newArray(int size) {
-            return new Fare[size];
-        }
-    };
+    public void setName(String name) {
+        this.name = name;
+    }
 }

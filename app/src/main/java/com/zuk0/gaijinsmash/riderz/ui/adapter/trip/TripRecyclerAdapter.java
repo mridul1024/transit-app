@@ -1,5 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.ui.adapter.trip;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -55,6 +56,8 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
         ViewHolder(View view) {
             super(view);
 
+            origTimeDate = view.findViewById(R.id.trip_date_textView);
+
             // First Leg
             origin1 = view.findViewById(R.id.trip_origin_textView);
             destination1 = view.findViewById(R.id.trip_destination_textView);
@@ -93,8 +96,12 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
     }
 
     private List<Trip> mTripList;
+    private Context mContext;
 
-    public TripRecyclerAdapter(List<Trip> tripList) { mTripList = tripList; }
+    public TripRecyclerAdapter(Context context, List<Trip> tripList) {
+        mContext = context;
+        mTripList = tripList;
+    }
 
     @NonNull
     @Override
@@ -107,10 +114,19 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Trip trip = mTripList.get(position);
 
-        holder.origTimeDate.setText(trip.getOrigTimeDate());
-        holder.tripTime.setText(trip.getTripTime());
-        //holder.clipper.setText(trip.getFare());
-        //holder.fare.setText(trip.getFareList().getFareAmount()); //todo: check this
+        if(trip.getOrigTimeDate() != null)
+            holder.origTimeDate.setText(trip.getOrigTimeDate());
+            Log.i("origTimeDate", trip.getOrigTimeDate());
+
+        if(trip.getTripTime() != null)
+            holder.tripTime.setText(trip.getTripTime());
+            Log.i("tripTime", trip.getTripTime());
+
+        if(trip.getClipper() != null)
+            holder.clipper.setText(trip.getClipper());
+
+        if(trip.getFare() != null)
+            holder.fare.setText(trip.getFare());
 
         initTripLegs(trip, holder);
     }
@@ -120,16 +136,17 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
         return mTripList.size();
     }
 
+    //todo: change default visibility of Views to Gone in R.layout.list_row_trip
     private void initTripLegs(Trip trip, ViewHolder holder) {
         int length = trip.getLegList().size();
         if(length > 0) {
             // todo: set visibility of related views and coloredbars
             initTextForLeg(LegOrder.FIRST_LEG, holder, mTripList);
-            setColoredBar(trip.getLegList().get(0).getLine(), holder, LegOrder.FIRST_LEG);
+            setColoredBar(mContext, trip.getLegList().get(0).getLine(), holder, LegOrder.FIRST_LEG);
         }
         if(length > 1) {
             initTextForLeg(LegOrder.SECOND_LEG, holder, mTripList);
-            setColoredBar(trip.getLegList().get(1).getLine(), holder, LegOrder.SECOND_LEG);
+            setColoredBar(mContext, trip.getLegList().get(1).getLine(), holder, LegOrder.SECOND_LEG);
         } else {
             if(DebugController.DEBUG) {
                 Log.i("Leg 2", "skipped");
@@ -145,7 +162,7 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
         }
         if(length > 2) {
             initTextForLeg(LegOrder.THIRD_LEG, holder, mTripList);
-            setColoredBar(trip.getLegList().get(2).getLine(), holder, LegOrder.THIRD_LEG);
+            setColoredBar(mContext, trip.getLegList().get(2).getLine(), holder, LegOrder.THIRD_LEG);
         } else {
             if(DebugController.DEBUG) {
                 Log.i("Leg 3", "skipped");
@@ -188,8 +205,8 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
         }
     }
 
-    private void setColoredBar(String route, ViewHolder holder, LegOrder leg) {
-        BartRoutesUtils utils = new BartRoutesUtils();
+    private void setColoredBar(Context context, String route, ViewHolder holder, LegOrder leg) {
+        BartRoutesUtils utils = new BartRoutesUtils(context);
 
         switch(leg) {
             case FIRST_LEG:
@@ -203,4 +220,6 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
                 break;
         }
     }
+
+
 }

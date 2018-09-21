@@ -17,10 +17,8 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 public abstract class TripDatabase extends RoomDatabase {
 
     private static TripDatabase INSTANCE;
-
     public abstract TripDao getTripDao();
 
-    //todo: add synchronized?
     public static TripDatabase getRoomDB(Context context) {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), TripDatabase.class, "trips")

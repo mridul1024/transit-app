@@ -16,7 +16,6 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
     </style>
 
     <style name="CustomMainTheme" parent="AppTheme.NoActionBar">
@@ -59,10 +58,6 @@
     </style>
 
     <!-- Text Styles -->
-    <style name="ButtonTitle">
-        <item name="android:typeface">monospace</item>
-        <item name="android:textSize">10sp</item>
-    </style>
 
     <style name="ViewTitle" parent="android:TextAppearance.Large">
         <item name="android:textSize">25sp</item>

@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripRecyclerAdapter;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -92,7 +94,7 @@ public class BartResultsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_favorite:
-                new SetFavoritesTask(this, FavoritesTask.ADD_FAVORITE).execute();
+                //new SetFavoritesTask(this, FavoritesTask.ADD_FAVORITE).execute();
                 return true;
             case R.id.action_favorited:
                 initAlertDialog();
@@ -127,7 +129,7 @@ public class BartResultsFragment extends Fragment {
         liveData.observe(this, data -> {
             String depart;
             String arrive;
-            if (data != null) {
+            if (data != null && data.size() > 0) {
                 if(data.get(0).getName().equals(origin)){
                     depart = data.get(0).getAbbr();
                     arrive = data.get(1).getAbbr();
@@ -136,16 +138,24 @@ public class BartResultsFragment extends Fragment {
                     arrive = data.get(0).getAbbr();
                 }
                 initTripCall(depart, arrive, mDate, mTime);
+            } else {
+                Log.wtf("initLiveData for Trip", "NULL");
             }
         });
     }
 
     private void initTripCall(String originAbbr, String destAbbr, String date, String time) {
         mViewModel.getTrip(originAbbr, destAbbr, date, time)
-                .observe(this, tripXmlResponse -> {
-                    if(tripXmlResponse != null) {
+                .observe(this, response -> {
+                    if(response != null) {
                         Log.wtf("initTripCall", "success");
-                        List<Trip> list = tripXmlResponse.getSchedule().getRequest().getTripList();
+                        Log.i("response", response.toString());
+                        if(response.getRoot().getDestination() != null) {
+                            Log.i("LINE", response.getRoot().getDestination());
+                        } else {
+                            Log.wtf("response", "EMPTY");
+                        }
+                        List<Trip> list = response.getRoot().getSchedule().getRequest().getTripList();
                         initRecylerView(list);
                     } else {
                         Log.wtf("initTripCall", "error");
@@ -155,8 +165,9 @@ public class BartResultsFragment extends Fragment {
 
     private void initRecylerView(List<Trip> tripList) {
         if(tripList != null) {
-            TripRecyclerAdapter adapter = new TripRecyclerAdapter(tripList);
+            TripRecyclerAdapter adapter = new TripRecyclerAdapter(getActivity(), tripList);
             mRecyclerView.setAdapter(adapter);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             mProgressBar.setVisibility(View.GONE);
         }
     }
@@ -184,81 +195,7 @@ public class BartResultsFragment extends Fragment {
         alertDialog.show();
     }
 
+    private void handleFavorites() {
 
-
-
-
-
-
-
-
-    //---------------------------------------------------------------------------------------------
-    // AsyncTask
-    //---------------------------------------------------------------------------------------------
-    private enum FavoritesTask {
-        CHECK_CURRENT_TRIP, ADD_FAVORITE, DELETE_FAVORITE
-    }
-
-    private static class SetFavoritesTask extends AsyncTask<Void, Void, Boolean> {
-        private WeakReference<BartResultsFragment> mWeakRef;
-        private FavoritesTask mTask;
-
-        private SetFavoritesTask(BartResultsFragment context, FavoritesTask task) {
-            mWeakRef = new WeakReference<>(context);
-            mTask = task;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            BartResultsFragment frag = mWeakRef.get();
-            FavoriteDbHelper db = new FavoriteDbHelper(frag.getActivity());
-            switch(mTask) {
-                case CHECK_CURRENT_TRIP:
-                    return db.doesFavoriteExistAlready(frag.mFavoriteObject);
-                case ADD_FAVORITE:
-                    if (db.getFavoritesCount() < 2) {
-                        frag.mFavoriteObject.setPriority(Favorite.Priority.ON);
-                    }
-                    db.addToFavorites(frag.mFavoriteObject);
-
-                    // This adds the inverse of the Trip object
-                    Favorite favoriteReversed = new Favorite();
-                    favoriteReversed.setOrigin(frag.mDestination);
-                    favoriteReversed.setDestination(frag.mOrigin);
-                    if (db.getFavoritesCount()< 2) {
-                        favoriteReversed.setPriority(Favorite.Priority.ON);
-                    }
-                    //List<FullTrip> tripList = getFullTripList(frag.getActivity(), frag.mDestination, frag.mOrigin);
-                    //favoriteReversed.setColors(BartRoutesUtils.getColorsSetFromFullTrip(tripList));
-                    //favoriteReversed.setTrainHeaderStations(BartRoutesUtils.getTrainHeadersListFromFullTrip(tripList));
-                    db.addToFavorites(favoriteReversed);
-                    return true;
-                case DELETE_FAVORITE:
-                    db.removeFromFavorites(frag.mFavoriteObject);
-                    return false;
-            }
-            db.closeDb();
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            BartResultsFragment frag = mWeakRef.get();
-            if(result) {
-                IS_FAVORITED_ON = true;
-                frag.mFavoritedIcon.setVisible(true);
-                frag.mFavoriteIcon.setVisible(false);
-                if(mTask == FavoritesTask.ADD_FAVORITE) {
-                    Toast.makeText(frag.getActivity(), frag.getResources().getString(R.string.favorite_added), Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                IS_FAVORITED_ON = false;
-                frag.mFavoriteIcon.setVisible(true);
-                frag.mFavoritedIcon.setVisible(false);
-                if(mTask == FavoritesTask.DELETE_FAVORITE) {
-                    Toast.makeText(frag.getActivity(), frag.getResources().getString(R.string.favorite_deleted), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
     }
 }

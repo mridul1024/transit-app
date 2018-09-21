@@ -1,19 +1,31 @@
 package com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import org.simpleframework.xml.Element;
 
 public class Schedule {
 
-    @Element
-    String date;
+    @SerializedName("date")
+    @Expose
+    private String date;
 
-    @Element
-    String time;
+    @SerializedName("time")
+    @Expose
+    private String time;
 
-    @Element
+    @SerializedName("before")
+    @Expose
+    private String before;
+
+    @SerializedName("after")
+    @Expose
+    private String after;
+
+    @SerializedName("request")
+    @Expose
     private Request request;
-
-    public Request getRequest() { return request; }
 
     public String getDate() {
         return date;
@@ -31,7 +43,28 @@ public class Schedule {
         this.time = time;
     }
 
+    public String getBefore() {
+        return before;
+    }
+
+    public void setBefore(String before) {
+        this.before = before;
+    }
+
+    public String getAfter() {
+        return after;
+    }
+
+    public void setAfter(String after) {
+        this.after = after;
+    }
+
+    public Request getRequest() {
+        return request;
+    }
+
     public void setRequest(Request request) {
         this.request = request;
     }
+
 }

@@ -1,66 +1,97 @@
 package com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.arch.persistence.room.TypeConverters;
 
-import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Estimate;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "trips")
-public class Trip implements Parcelable {
+public class Trip  {
 
-    // NOTE: origin and destination will return the Abbreviation of a Station,
-    // because of the way BART API returns results.
-    // You will need to convert them to their full names
+    /*
+     NOTE: origin and destination will return the Abbreviation of a Station Name,
+     because of the way BART API returns results.
+     You will need to convert them to their full names
+    */
 
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    @Attribute
+    @SerializedName("@origin")
+    @Expose
     private String origin;
 
-    @Attribute
+    @SerializedName("@destination")
+    @Expose
     private String destination;
 
-    @Attribute
-    private String origTimeMin;
-
-    @Attribute
-    private String origTimeDate;
-
-    @Attribute
-    private String destTimeMin;
-
-    @Attribute
-    private String destTimeDate;
-
-    @Attribute
-    private String tripTime;
-
-    @Attribute
+    @SerializedName("@fare")
+    @Expose
     private String fare;
 
-    @ElementList(name = "fares", required = false)
-    private List<Fare> fareList;
+    @SerializedName("@origTimeMin")
+    @Expose
+    private String origTimeMin;
 
-    @ElementList(inline = true)
-    private List<Leg> legList; //todo: check this
+    @SerializedName("@origTimeDate")
+    @Expose
+    private String origTimeDate;
 
-    // only used for real time estimates
-    @ElementList(required = false)
-    private List<Estimate> estimateList;
+    @SerializedName("@destTimeMin")
+    @Expose
+    private String destTimeMin;
 
-    public Trip() { }
+    @SerializedName("@destTimeDate")
+    @Expose
+    private String destTimeDate;
+
+    @SerializedName("@clipper")
+    @Expose
+    private String clipper;
+
+    @SerializedName("@tripTime")
+    @Expose
+    private String tripTime;
+
+    @SerializedName("@co2")
+    @Expose
+    private String co2;
+
+    @SerializedName("fares")
+    @Expose
+    private Fares fares;
+
+    @SerializedName("leg")
+    @Expose
+    private List<Leg> legList = null;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
 
     public String getFare() {
         return fare;
@@ -70,95 +101,75 @@ public class Trip implements Parcelable {
         this.fare = fare;
     }
 
-    public String getOrigin() { return origin; }
-    public String getDestination() { return destination; }
-    public String getOrigTimeMin() { return origTimeMin; }
-    public String getOrigTimeDate() { return origTimeDate; }
-    public String getDestTimeMin() { return destTimeMin; }
-    public String getDestTimeDate() { return destTimeDate; }
-    public String getTripTime() { return tripTime; }
-    public List<Estimate> getEstimateList() {
-        return estimateList;
+    public String getOrigTimeMin() {
+        return origTimeMin;
     }
+
+    public void setOrigTimeMin(String origTimeMin) {
+        this.origTimeMin = origTimeMin;
+    }
+
+    public String getOrigTimeDate() {
+        return origTimeDate;
+    }
+
+    public void setOrigTimeDate(String origTimeDate) {
+        this.origTimeDate = origTimeDate;
+    }
+
+    public String getDestTimeMin() {
+        return destTimeMin;
+    }
+
+    public void setDestTimeMin(String destTimeMin) {
+        this.destTimeMin = destTimeMin;
+    }
+
+    public String getDestTimeDate() {
+        return destTimeDate;
+    }
+
+    public void setDestTimeDate(String destTimeDate) {
+        this.destTimeDate = destTimeDate;
+    }
+
+    public String getClipper() {
+        return clipper;
+    }
+
+    public void setClipper(String clipper) {
+        this.clipper = clipper;
+    }
+
+    public String getTripTime() {
+        return tripTime;
+    }
+
+    public void setTripTime(String tripTime) {
+        this.tripTime = tripTime;
+    }
+
+    public String getCo2() {
+        return co2;
+    }
+
+    public void setCo2(String co2) {
+        this.co2 = co2;
+    }
+
+    public Fares getFares() {
+        return fares;
+    }
+
+    public void setFares(Fares fares) {
+        this.fares = fares;
+    }
+
     public List<Leg> getLegList() {
         return legList;
     }
-    public List<Fare> getFareList() {
-        return fareList;
-    }
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
-    public void setFareList(List<Fare> fareList) {
-        this.fareList = fareList;
-    }
+
     public void setLegList(List<Leg> legList) {
         this.legList = legList;
     }
-    public void setEstimateList(List<Estimate> estimateList) {
-        this.estimateList = estimateList;
-    }
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-    public void setOrigTimeMin(String origTimeMin) { this.origTimeMin = origTimeMin; }
-    public void setOrigTimeDate(String origTimeDate) { this.origTimeDate = origTimeDate; }
-    public void setDestTimeMin(String destTimeMin) { this.destTimeMin = destTimeMin; }
-    public void setDestTimeDate(String destTimeDate) { this.destTimeDate = destTimeDate; }
-    public void setTripTime(String tripTime) { this.tripTime = tripTime; }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
-        dest.writeString(this.origin);
-        dest.writeString(this.destination);
-        dest.writeString(this.origTimeMin);
-        dest.writeString(this.origTimeDate);
-        dest.writeString(this.destTimeMin);
-        dest.writeString(this.destTimeDate);
-        dest.writeString(this.tripTime);
-        dest.writeString(this.fare);
-        dest.writeTypedList(this.fareList);
-        dest.writeTypedList(this.legList);
-        dest.writeList(this.estimateList);
-    }
-
-    protected Trip(Parcel in) {
-        this.id = in.readInt();
-        this.origin = in.readString();
-        this.destination = in.readString();
-        this.origTimeMin = in.readString();
-        this.origTimeDate = in.readString();
-        this.destTimeMin = in.readString();
-        this.destTimeDate = in.readString();
-        this.tripTime = in.readString();
-        this.fare = in.readString();
-        this.fareList = in.createTypedArrayList(Fare.CREATOR);
-        this.legList = in.createTypedArrayList(Leg.CREATOR);
-        this.estimateList = new ArrayList<Estimate>();
-        in.readList(this.estimateList, Estimate.class.getClassLoader());
-    }
-
-    public static final Parcelable.Creator<Trip> CREATOR = new Parcelable.Creator<Trip>() {
-        @Override
-        public Trip createFromParcel(Parcel source) {
-            return new Trip(source);
-        }
-
-        @Override
-        public Trip[] newArray(int size) {
-            return new Trip[size];
-        }
-    };
 }

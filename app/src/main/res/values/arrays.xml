@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="preference_list_entries">Something</string-array>
-    <string-array name="preference_list_entry_value">List</string-array>
-</resources>

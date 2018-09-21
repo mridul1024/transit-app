@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.HelpFragment;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.help.HelpFragment;
 
 import org.junit.Before;
 import org.junit.Rule;
