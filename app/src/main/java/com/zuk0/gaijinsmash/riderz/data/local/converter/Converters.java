@@ -37,7 +37,7 @@ public class Converters {
 
     @TypeConverter
     public static String arrayListToString(ArrayList<String> list) {
-        if(list.size() == 0) {
+        if(list == null) {
             return "";
         } else {
             Gson gson = new Gson();
@@ -81,7 +81,7 @@ public class Converters {
     //todo: convert to ArraySet instead of HashSet for increased performance
     @TypeConverter
     public static String hashSetToString(HashSet<String> set) {
-        if(set.size() == 0) {
+        if(set == null) {
             return "";
         } else {
             Gson gson = new Gson();

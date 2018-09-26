@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
+import com.zuk0.gaijinsmash.riderz.data.local.StationList;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils;
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
@@ -185,20 +186,20 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
     private void initTextForLeg(LegOrder leg, ViewHolder holder, List<Trip> list) {
         switch(leg) {
             case FIRST_LEG:
-                holder.origin1.setText(list.get(0).getOrigin());
-                holder.destination1.setText(list.get(0).getDestination()); //todo: check this
+                holder.origin1.setText(getStationNameFromAbbr(list.get(0).getOrigin()));
+                holder.destination1.setText(getStationNameFromAbbr(list.get(0).getDestination())); //todo: check this
                 holder.origTimeMin1.setText(list.get(0).getLegList().get(0).getOrigTimeMin());
                 holder.destTimeMin1.setText(list.get(0).getLegList().get(0).getDestTimeMin());
                 break;
             case SECOND_LEG:
-                holder.origin2.setText(list.get(1).getOrigin());
-                holder.destination2.setText(list.get(1).getDestination()); //todo: check this
+                holder.origin2.setText(getStationNameFromAbbr(list.get(1).getOrigin()));
+                holder.destination2.setText(getStationNameFromAbbr(list.get(1).getDestination())); //todo: check this
                 holder.origTimeMin2.setText(list.get(1).getLegList().get(1).getOrigTimeMin());
                 holder.destTimeMin2.setText(list.get(1).getLegList().get(1).getDestTimeMin());
                 break;
             case THIRD_LEG:
-                holder.origin3.setText(list.get(2).getOrigin());
-                holder.destination3.setText(list.get(2).getDestination()); //todo: check this
+                holder.origin3.setText(getStationNameFromAbbr(list.get(2).getOrigin()));
+                holder.destination3.setText(getStationNameFromAbbr(list.get(2).getDestination())); //todo: check this
                 holder.origTimeMin3.setText(list.get(2).getLegList().get(2).getOrigTimeMin());
                 holder.destTimeMin3.setText(list.get(2).getLegList().get(2).getDestTimeMin());
                 break;
@@ -207,7 +208,6 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
 
     private void setColoredBar(Context context, String route, ViewHolder holder, LegOrder leg) {
         BartRoutesUtils utils = new BartRoutesUtils(context);
-
         switch(leg) {
             case FIRST_LEG:
                 utils.setLineBarByRoute(route, holder.coloredBar1);
@@ -221,5 +221,9 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
         }
     }
 
+    private String getStationNameFromAbbr(String abbr) {
+        StationList list = new StationList();
+        return list.getStationMap().get(abbr.toLowerCase()); // keys are case sensitive
+    }
 
 }

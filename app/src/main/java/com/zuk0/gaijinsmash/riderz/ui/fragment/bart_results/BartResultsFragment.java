@@ -3,7 +3,6 @@ package com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results;
 import android.app.AlertDialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -17,18 +16,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.data.local.helper.FavoriteDbHelper;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Leg;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripRecyclerAdapter;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -46,14 +42,10 @@ public class BartResultsFragment extends Fragment {
     BartResultsViewModelFactory mBartResultsViewModelFactory;
 
     private BartResultsViewModel mViewModel;
-
-    //todo: save in onSavedInstance
     private String mOrigin, mDestination, mDate, mTime;
 
     private MenuItem mFavoriteIcon, mFavoritedIcon;
     private Favorite mFavoriteObject;
-    //private ArrayList<String> mTrainHeaders;
-    private static boolean IS_FAVORITED_ON = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -75,10 +67,11 @@ public class BartResultsFragment extends Fragment {
         initDagger();
         initViewModel();
         initBundleFromTripFragment();
-        initFavoriteIcon();
-        initLiveData(mOrigin, mDestination);
-        // Checks database and displays appropriate view in toolbar
-        //new SetFavoritesTask(this, FavoritesTask.CHECK_CURRENT_TRIP).execute();
+        initStationsForTripCall(mOrigin, mDestination);
+
+        initFavoriteObject(mOrigin, mDestination);
+        initFavoriteIcon(mFavoriteObject);
+
     }
 
     @Override
@@ -94,10 +87,10 @@ public class BartResultsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_favorite:
-                //new SetFavoritesTask(this, FavoritesTask.ADD_FAVORITE).execute();
+                addFavorite(BartResultsViewModel.FavoritesAction.ADD_FAVORITE, mFavoriteObject);
                 return true;
             case R.id.action_favorited:
-                initAlertDialog();
+                removeFavorite(BartResultsViewModel.FavoritesAction.DELETE_FAVORITE, mFavoriteObject);
                 return true;
         }
         return false;
@@ -118,14 +111,11 @@ public class BartResultsFragment extends Fragment {
             mDestination = bundle.getString(TripFragment.TripBundle.DESTINATION.getValue());
             mDate = bundle.getString(TripFragment.TripBundle.DATE.getValue());
             mTime = bundle.getString(TripFragment.TripBundle.TIME.getValue());
-            //mTrainHeaders = mBundle.getStringArrayList(TripFragment.TripBundle.TRAIN_HEADERS.getValue());
         }
     }
 
-    private void initLiveData(String origin, String destination) {
-        //the get livedata list
+    private void initStationsForTripCall(String origin, String destination) {
         LiveData<List<Station>> liveData = mViewModel.getStationsFromDb(getActivity(), origin, destination);
-
         liveData.observe(this, data -> {
             String depart;
             String arrive;
@@ -146,20 +136,13 @@ public class BartResultsFragment extends Fragment {
 
     private void initTripCall(String originAbbr, String destAbbr, String date, String time) {
         mViewModel.getTrip(originAbbr, destAbbr, date, time)
-                .observe(this, response -> {
-                    if(response != null) {
-                        Log.wtf("initTripCall", "success");
-                        Log.i("response", response.toString());
-                        if(response.getRoot().getDestination() != null) {
-                            Log.i("LINE", response.getRoot().getDestination());
-                        } else {
-                            Log.wtf("response", "EMPTY");
-                        }
-                        List<Trip> list = response.getRoot().getSchedule().getRequest().getTripList();
-                        initRecylerView(list);
-                    } else {
-                        Log.wtf("initTripCall", "error");
-                    }
+            .observe(this, response -> {
+                if(response != null) {
+                    List<Trip> list = response.getRoot().getSchedule().getRequest().getTripList();
+                    initRecylerView(list);
+                } else {
+                    Log.wtf("initTripCall", "error");
+                }
         });
     }
 
@@ -172,30 +155,37 @@ public class BartResultsFragment extends Fragment {
         }
     }
 
-    private void initFavoriteIcon() {
-        if(mOrigin != null && mDestination != null) {
-            mFavoriteObject = new Favorite();
-
-            //check db if first entry
-            mFavoriteObject.setPriority(Favorite.Priority.ON);
-            mFavoriteObject.setOrigin(mOrigin);
-            mFavoriteObject.setDestination(mDestination);
-
-            //mFavoriteObject.setColors(BartRoutesUtils.getColorsSetFromFullTrip(mFullTripList));
-            //mFavoriteObject.setTrainHeaderStations(mTrainHeaders);
-        }
+    private void initFavoriteObject(String origin, String destination) {
+        mFavoriteObject = mViewModel.createFavorite(origin, destination);
     }
 
-    private void initAlertDialog() {
+    private void initFavoriteIcon(Favorite favorite) {
+        mViewModel.isTripFavorited(favorite.getOriginTrip(), favorite.getDestinationTrip()).observe(this, data -> {
+            if(data != null) {
+                // Current trip is already a Favorite
+                mFavoritedIcon.setVisible(true);
+                mFavoriteIcon.setVisible(false);
+            } else {
+                mFavoritedIcon.setVisible(false);
+                mFavoriteIcon.setVisible(true);
+            }
+        });
+    }
+
+    private void addFavorite(BartResultsViewModel.FavoritesAction action, Favorite favorite) {
+        mViewModel.handleFavoritesIcon(action, favorite);
+    }
+
+    private void removeFavorite(BartResultsViewModel.FavoritesAction action, Favorite favorite) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setTitle(getResources().getString(R.string.alert_dialog_remove_favorite_title));
-        alertDialog.setMessage(getResources().getString(R.string.alert_dialog_confirmation));
-        //alertDialog.setPositiveButton(getResources().getString(R.string.alert_dialog_yes), (dialog, which) -> new SetFavoritesTask(mBartResultsFragment, FavoritesTask.DELETE_FAVORITE).execute());
-        alertDialog.setNegativeButton(getResources().getString(R.string.alert_dialog_no), (dialog, which) -> dialog.cancel());
+        alertDialog.setMessage(getResources()
+                .getString(R.string.alert_dialog_confirmation));
+        alertDialog.setPositiveButton(getResources()
+                        .getString(R.string.alert_dialog_yes),
+                (dialog, which) -> mViewModel.handleFavoritesIcon(BartResultsViewModel.FavoritesAction.DELETE_FAVORITE, favorite));
+        alertDialog.setNegativeButton(getResources()
+                .getString(R.string.alert_dialog_no), (dialog, which) -> dialog.cancel());
         alertDialog.show();
-    }
-
-    private void handleFavorites() {
-
     }
 }

@@ -172,6 +172,7 @@
 
     <!-- Alert Dialog -->
     <string name="alert_dialog_no">No</string>
+    <string name="alert_dialog_yes">Yes</string>
 
     <!-- Preference Screen -->
     <string name="preference_checkbox_title">24 Hour Format</string>

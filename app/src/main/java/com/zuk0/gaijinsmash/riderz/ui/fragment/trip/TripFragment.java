@@ -205,11 +205,11 @@ public class TripFragment extends Fragment {
             String arrivingStation = mArrivalActv.getText().toString();
 
             // TIME
-            String preformatTime = mTimeEt.getText().toString();
+            String preformatTime = Objects.requireNonNull(mTimeEt.getText()).toString();
             String departingTime = mViewModel.getTimeForTripSearch(preformatTime, mIs24HrTimeOn);
 
             // DATE
-            String departingDate = mDateEt.getText().toString();
+            String departingDate = Objects.requireNonNull(mDateEt.getText()).toString();
 
             attemptTripSearch(departingStation, arrivingStation, departingDate, departingTime);
         });

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Leg;
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 
 import java.util.ArrayList;
@@ -89,4 +90,23 @@ public class BartRoutesUtils {
         return "BLACK";
     }
 
+    public static HashSet<String> getColorsSetFromLegList(List<Leg> legList) {
+        HashSet<String> colors = new HashSet<>();
+        for(Leg leg : legList) {
+            // get the first leg object only
+            String line = leg.getLine();
+            colors.add(BartRoutesUtils.lineToColor(line));
+        }
+        return colors;
+    }
+/*
+    public static ArrayList<String> getTrainHeadersListFromFullTrip(List<Leg> legList) {
+        ArrayList<String> headers = new ArrayList<>();
+        for(Leg leg : legList) {
+            headers.add(fullTrip.getLegList().get(0).getTrainHeadStation());
+            if(DebugController.DEBUG) Log.d("trainHeader added", fullTrip.getLegList().get(0).getTrainHeadStation());
+        }
+        return headers;
+    }
+*/
 }

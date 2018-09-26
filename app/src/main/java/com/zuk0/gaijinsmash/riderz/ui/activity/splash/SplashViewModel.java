@@ -37,7 +37,6 @@ public class SplashViewModel extends AndroidViewModel {
 
     private static class SaveStationsTask extends AsyncTask<Void, Void, Void> {
         private WeakReference<Application> mWeakRef;
-        private List<Station> mStationList;
 
         SaveStationsTask(Application application) {
             mWeakRef = new WeakReference<>(application);
@@ -45,8 +44,6 @@ public class SplashViewModel extends AndroidViewModel {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Application ref = mWeakRef.get();
-
             int count = getCount();
             if(count < BART_STATIONS_COUNT) {
                 List<Station> stationList = getList();

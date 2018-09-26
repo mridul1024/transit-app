@@ -1,17 +1,21 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results;
 
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
+import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.R;
+import com.zuk0.gaijinsmash.riderz.data.local.StationList;
+import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Leg;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse;
-import com.zuk0.gaijinsmash.riderz.data.local.helper.FavoriteDbHelper;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository;
 
 import java.lang.ref.WeakReference;
@@ -20,20 +24,24 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static android.support.constraint.Constraints.TAG;
+
 @Singleton
-public class BartResultsViewModel extends ViewModel {
+public class BartResultsViewModel extends AndroidViewModel {
 
     private LiveData<TripJsonResponse> mTrip;
     private TripRepository mTripRepository;
+    private Favorite mFavorite;
+    private List<Trip> mTripList;
 
     @Inject
-    BartResultsViewModel(TripRepository tripRepository) {
+    BartResultsViewModel(Application application, TripRepository tripRepository) {
+        super(application);
         mTripRepository = tripRepository;
     }
-
-    /*
-       origin and destination must be in abbreviated form
-    */
+    /****************************************************************
+       Trips - origin and destination must be in abbreviated form
+     ****************************************************************/
     public LiveData<TripJsonResponse> getTrip(String origin, String destination, String date, String time) {
         if(mTrip == null) {
             mTrip = mTripRepository.getTrip(origin, destination, date, time);
@@ -45,83 +53,64 @@ public class BartResultsViewModel extends ViewModel {
         return StationDatabase.getRoomDB(context).getStationDAO().getOriginAndDestination(origin, destination);
     }
 
-    public void initFavoritesIcon() {
 
+
+    /****************************************************************
+        Favorites
+     ****************************************************************/
+    public Favorite createFavorite(String origin, String destination) {
+        if(origin != null && destination != null) {
+            mFavorite = new Favorite();
+            Trip originTrip = new Trip();
+            originTrip.setOrigin(origin);
+            originTrip.setDestination(destination);
+            Trip destTrip = new Trip();
+            destTrip.setOrigin(destination);
+            destTrip.setDestination(origin);
+            mFavorite.setOriginTrip(originTrip);
+            mFavorite.setDestinationTrip(destTrip);
+            //todo: mFavoriteObject.setColors(BartRoutesUtils.getColorsSetFromLegList(legList));
+        }
+        return mFavorite;
     }
 
-    private void loadData() {
+    public Favorite getFavorite() { return mFavorite; }
+
+    public void handleFavoritesIcon(FavoritesAction action, Favorite favorite) {
+        new AddOrRemoveFavoriteTask(getApplication(), action, favorite).execute();
     }
 
-
-    //---------------------------------------------------------------------------------------------
-    // AsyncTask
-    //---------------------------------------------------------------------------------------------
-    /*
-    private enum FavoritesTask {
-        CHECK_CURRENT_TRIP, ADD_FAVORITE, DELETE_FAVORITE
+    //check if favorite exists
+    public LiveData<Favorite> isTripFavorited(Trip trip1, Trip trip2) {
+        return FavoriteDatabase.getRoomDB(getApplication()).getFavoriteDAO().findFavoriteByTrips(trip1, trip2);
     }
 
-    private static class SetFavoritesTask extends AsyncTask<Void, Void, Boolean> {
-        private WeakReference<BartResultsFragment> mWeakRef;
-        private FavoritesTask mTask;
+    public enum FavoritesAction {
+        ADD_FAVORITE, DELETE_FAVORITE
+    }
 
-        private SetFavoritesTask(BartResultsFragment context, FavoritesTask task) {
+    private static class AddOrRemoveFavoriteTask extends AsyncTask<Void,Void,Void> {
+
+        private WeakReference<Context> mWeakRef;
+        private Favorite mFavorite;
+        private FavoritesAction mAction;
+
+        private AddOrRemoveFavoriteTask(Application context, FavoritesAction action, Favorite favorite) {
             mWeakRef = new WeakReference<>(context);
-            mTask = task;
+            this.mFavorite = favorite;
+            this.mAction = action;
         }
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
-            BartResultsFragment frag = mWeakRef.get();
-            FavoriteDbHelper db = new FavoriteDbHelper(frag.getActivity());
-            switch(mTask) {
-                case CHECK_CURRENT_TRIP:
-                    return db.doesFavoriteExistAlready(frag.mFavoriteObject);
+        protected Void doInBackground(Void... voids) {
+            switch(mAction){
                 case ADD_FAVORITE:
-                    if (db.getFavoritesCount() < 2) {
-                        frag.mFavoriteObject.setPriority(Favorite.Priority.ON);
-                    }
-                    db.addToFavorites(frag.mFavoriteObject);
-
-                    // This adds the inverse of the Trip object
-                    Favorite favoriteReversed = new Favorite();
-                    favoriteReversed.setOrigin(frag.mDestination);
-                    favoriteReversed.setDestination(frag.mOrigin);
-                    if (db.getFavoritesCount()< 2) {
-                        favoriteReversed.setPriority(Favorite.Priority.ON);
-                    }
-                    //List<FullTrip> tripList = getFullTripList(frag.getActivity(), frag.mDestination, frag.mOrigin);
-                    //favoriteReversed.setColors(BartRoutesUtils.getColorsSetFromFullTrip(tripList));
-                    //favoriteReversed.setTrainHeaderStations(BartRoutesUtils.getTrainHeadersListFromFullTrip(tripList));
-                    db.addToFavorites(favoriteReversed);
-                    return true;
+                    FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().add(mFavorite);
                 case DELETE_FAVORITE:
-                    db.removeFromFavorites(frag.mFavoriteObject);
-                    return false;
+                    FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().delete(mFavorite);
             }
-            db.closeDb();
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            BartResultsFragment frag = mWeakRef.get();
-            if(result) {
-                IS_FAVORITED_ON = true;
-                frag.mFavoritedIcon.setVisible(true);
-                frag.mFavoriteIcon.setVisible(false);
-                if(mTask == FavoritesTask.ADD_FAVORITE) {
-                    Toast.makeText(frag.getActivity(), frag.getResources().getString(R.string.favorite_added), Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                IS_FAVORITED_ON = false;
-                frag.mFavoriteIcon.setVisible(true);
-                frag.mFavoritedIcon.setVisible(false);
-                if(mTask == FavoritesTask.DELETE_FAVORITE) {
-                    Toast.makeText(frag.getActivity(), frag.getResources().getString(R.string.favorite_deleted), Toast.LENGTH_SHORT).show();
-                }
-            }
+            return null;
         }
     }
-    */
+
 }

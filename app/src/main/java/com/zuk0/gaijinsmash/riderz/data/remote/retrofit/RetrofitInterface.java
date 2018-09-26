@@ -41,5 +41,4 @@ public interface RetrofitInterface {
     @Xml
     @GET("stn.aspx?cmd=stninfo")
     Call<StationXmlResponse> getStation(@Query("orig") String originAbbr);
-
 }

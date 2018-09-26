@@ -4,6 +4,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.google.gson.annotations.Expose;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -14,7 +16,7 @@ import java.util.List;
 @Root(name="root", strict=false)
 public class BsaXmlResponse {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private int id;
 
     @Element(name="date")

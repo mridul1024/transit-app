@@ -12,7 +12,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.converter.Converters;
 import com.zuk0.gaijinsmash.riderz.data.local.dao.FavoriteDAO;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 
-@Database(entities = {Favorite.class}, version = 13, exportSchema = false)
+@Database(entities = {Favorite.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class FavoriteDatabase extends RoomDatabase {
 
@@ -23,7 +23,7 @@ public abstract class FavoriteDatabase extends RoomDatabase {
     public static FavoriteDatabase getRoomDB(Context context) {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), FavoriteDatabase.class, "favorites")
-                    .addMigrations(MIGRATION)
+                    //.addMigrations(MIGRATION)
                     .fallbackToDestructiveMigration()
                     .build();
         }

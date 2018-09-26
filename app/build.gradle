@@ -32,6 +32,9 @@ android {
             buildConfigField 'String', "BartApiKey", RIDERZ_BART_API_KEY
         }
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
     dexOptions {
         preDexLibraries = false
     }
@@ -51,7 +54,7 @@ dependencies {
     //implementation 'com.android.support:multidex:1.0.3'
 
     // UI
-    def support_version = "28.0.0-rc02"
+    def support_version = "28.0.0"
     implementation "com.android.support:cardview-v7:$support_version"
     implementation "com.android.support:appcompat-v7:$support_version"
     implementation "com.android.support:design:$support_version"

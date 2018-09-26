@@ -1,5 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results;
 
+import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
@@ -10,16 +11,18 @@ import javax.inject.Inject;
 //todo: think about abstracting ViewModelProvider.Factory with Factory pattern
 public class BartResultsViewModelFactory implements ViewModelProvider.Factory {
 
+    private final Application application;
     private final TripRepository tripRepository;
 
     @Inject
-    BartResultsViewModelFactory(TripRepository tripRepository) {
+    BartResultsViewModelFactory(Application application, TripRepository tripRepository) {
+        this.application = application;
         this.tripRepository = tripRepository;
     }
 
     @NonNull
     @Override
     public BartResultsViewModel create(@NonNull Class modelClass) {
-        return new BartResultsViewModel(tripRepository);
+        return new BartResultsViewModel(application, tripRepository);
     }
 }
