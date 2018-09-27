@@ -6,7 +6,7 @@ import org.simpleframework.xml.Element;
 
 public class Bsa {
 
-    @Attribute
+    @Attribute(required = false)
     private int id;
 
     @Element(name="station", required = false)

@@ -222,8 +222,7 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
     }
 
     private String getStationNameFromAbbr(String abbr) {
-        StationList list = new StationList();
-        return list.getStationMap().get(abbr.toLowerCase()); // keys are case sensitive
+        return StationList.stationMap.get(abbr.toLowerCase()); // keys are case sensitive
     }
 
 }

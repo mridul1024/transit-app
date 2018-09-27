@@ -7,7 +7,9 @@ import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.StationList;
 import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
@@ -17,6 +19,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Leg;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository;
+import com.zuk0.gaijinsmash.riderz.utils.SnackbarUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -52,8 +55,6 @@ public class BartResultsViewModel extends AndroidViewModel {
     public LiveData<List<Station>> getStationsFromDb(Context context, String origin, String destination) {
         return StationDatabase.getRoomDB(context).getStationDAO().getOriginAndDestination(origin, destination);
     }
-
-
 
     /****************************************************************
         Favorites
@@ -112,5 +113,4 @@ public class BartResultsViewModel extends AndroidViewModel {
             return null;
         }
     }
-
 }

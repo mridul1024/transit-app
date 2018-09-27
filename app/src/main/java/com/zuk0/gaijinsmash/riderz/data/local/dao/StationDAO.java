@@ -40,11 +40,9 @@ public interface StationDAO {
     @Query("SELECT * from stations where address = :address")
     LiveData<Station> getStationByAddress(String address);
 
-    // Updates a station
     @Update(onConflict = REPLACE)
     void updateStation(Station station);
 
-    // Get count
     @Query("SELECT COUNT(*) from stations")
     int countStations();
 

@@ -3,8 +3,12 @@ package com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results;
 import android.app.AlertDialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
@@ -24,6 +29,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Leg;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripRecyclerAdapter;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
+import com.zuk0.gaijinsmash.riderz.utils.SnackbarUtils;
 
 import java.util.List;
 
@@ -68,10 +74,8 @@ public class BartResultsFragment extends Fragment {
         initViewModel();
         initBundleFromTripFragment();
         initStationsForTripCall(mOrigin, mDestination);
-
         initFavoriteObject(mOrigin, mDestination);
         initFavoriteIcon(mFavoriteObject);
-
     }
 
     @Override
@@ -87,10 +91,10 @@ public class BartResultsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_favorite:
-                addFavorite(BartResultsViewModel.FavoritesAction.ADD_FAVORITE, mFavoriteObject);
+                addFavorite(mFavoriteObject);
                 return true;
             case R.id.action_favorited:
-                removeFavorite(BartResultsViewModel.FavoritesAction.DELETE_FAVORITE, mFavoriteObject);
+                removeFavorite(mFavoriteObject);
                 return true;
         }
         return false;
@@ -172,20 +176,26 @@ public class BartResultsFragment extends Fragment {
         });
     }
 
-    private void addFavorite(BartResultsViewModel.FavoritesAction action, Favorite favorite) {
-        mViewModel.handleFavoritesIcon(action, favorite);
+    private void addFavorite(Favorite favorite) {
+        mViewModel.handleFavoritesIcon(BartResultsViewModel.FavoritesAction.ADD_FAVORITE, favorite);
+        Toast.makeText(getActivity(), getResources()
+                .getString(R.string.favorite_added), Toast.LENGTH_SHORT).show();
     }
 
-    private void removeFavorite(BartResultsViewModel.FavoritesAction action, Favorite favorite) {
+    private void removeFavorite(Favorite favorite) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setTitle(getResources().getString(R.string.alert_dialog_remove_favorite_title));
-        alertDialog.setMessage(getResources()
-                .getString(R.string.alert_dialog_confirmation));
-        alertDialog.setPositiveButton(getResources()
-                        .getString(R.string.alert_dialog_yes),
-                (dialog, which) -> mViewModel.handleFavoritesIcon(BartResultsViewModel.FavoritesAction.DELETE_FAVORITE, favorite));
-        alertDialog.setNegativeButton(getResources()
-                .getString(R.string.alert_dialog_no), (dialog, which) -> dialog.cancel());
+        alertDialog.setMessage(getResources().getString(R.string.alert_dialog_confirmation));
+        alertDialog.setPositiveButton(getResources().getString(R.string.alert_dialog_yes),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mViewModel.handleFavoritesIcon(BartResultsViewModel.FavoritesAction.DELETE_FAVORITE, favorite);
+                        mFavoritedIcon.setVisible(false);
+                        mFavoriteIcon.setVisible(true);
+                    }
+                });
+        alertDialog.setNegativeButton(getResources().getString(R.string.alert_dialog_no), (dialog, which) -> dialog.cancel());
         alertDialog.show();
     }
 }
