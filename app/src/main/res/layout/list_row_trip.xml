@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView android:layout_margin="5dp"
+<android.support.v7.widget.CardView
+    android:layout_margin="5dp"
     android:elevation="1dp"
     android:padding="2dp"
     android:layout_width="match_parent"
@@ -9,8 +10,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/list_row_trip_bg"
             android:orientation="vertical">
 
+            <!-- LEG 1 -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -33,7 +36,6 @@
                         style="@style/TextViewRiderz"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:text="@string/bart_result_depart" />
 
                     <TextView
@@ -69,7 +71,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/trip_linearLayout2">
 
-
                     <TextView
                         android:id="@+id/trip_departTime_textView"
                         style="@style/TextViewRiderz"
@@ -91,27 +92,39 @@
                         android:layout_height="wrap_content"
                         android:textColor="#000"
                         android:text="@string/bart_result_arriveTime" />
-
                 </LinearLayout>
             </RelativeLayout>
 
+            <!-- TRANSFER ICON -->
             <LinearLayout
+                android:id="@+id/trip_transferLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="5dp">
+                android:paddingBottom="5dp"
+                android:visibility="gone">
                 <ImageView
                     android:id="@+id/trip_imageView1"
-                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_transfer_within_a_station_black_24dp"
                     android:contentDescription="@string/bart_result_transfer_cd"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal" />
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/trip_transfer"/>
             </LinearLayout>
 
+            <!-- lEG 2 -->
             <RelativeLayout
+                android:id="@+id/results_leg2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/trip_linearLayout4"
@@ -186,23 +199,36 @@
                 </LinearLayout>
             </RelativeLayout>
 
+            <!-- TRANSFER ICON -->
             <LinearLayout
+                android:id="@+id/trip_transferLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="5dp">
+                android:paddingBottom="5dp"
+                android:visibility="gone">
                 <ImageView
                     android:id="@+id/trip_imageView2"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:src="@drawable/ic_transfer_within_a_station_black_24dp"
                     android:contentDescription="@string/bart_result_transfer_cd"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal" />
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/trip_transfer"/>
             </LinearLayout>
 
+            <!-- LEG 3 -->
             <RelativeLayout
+                android:id="@+id/results_leg3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/trip_linearLayout7"
@@ -230,7 +256,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_below="@+id/trip_linearLayout7">
-
                     <TextView
                         android:id="@+id/trip_arriveTitle3"
                         style="@style/TextViewRiderz"
@@ -306,8 +331,7 @@
                         android:id="@+id/textView23"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/bart_result_cashFare"
-                        />
+                        android:text="@string/bart_result_cashFare" />
 
                     <TextView
                         style="@style/TextViewRiderz"

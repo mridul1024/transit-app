@@ -22,7 +22,6 @@ public class SnackbarUtils {
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                     }
                 })
                 .setActionTextColor(Color.RED)

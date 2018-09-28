@@ -204,4 +204,5 @@
     <string name="preference_checkbox_time_summary">View time in 12 or 24 hour format</string>
     <string name="alert_dialog_confirmation">Are you sure you want to remove this favorite?</string>
     <string name="alert_dialog_remove_favorite_title">Remove Favorite</string>
+    <string name="trip_transfer">Transfer</string>
 </resources>

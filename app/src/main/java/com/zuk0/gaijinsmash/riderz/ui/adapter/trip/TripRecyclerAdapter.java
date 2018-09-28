@@ -8,91 +8,57 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.StationList;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils;
-import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView origin1;
-        TextView destination1;
-        TextView origTimeMin1;
-        TextView destTimeMin1;
+        @BindView(R.id.trip_origin_textView) TextView origin1;
+        @BindView(R.id.trip_destination_textView) TextView destination1;
+        @BindView(R.id.trip_departTime_textView) TextView origTimeMin1;
+        @BindView(R.id.trip_arrivalTime_textView) TextView destTimeMin1;
 
-        TextView origin2;
-        TextView destination2;
-        TextView origTimeMin2;
-        TextView destTimeMin2;
+        @BindView(R.id.results_leg2) RelativeLayout leg2Layout; //layout container
+        @BindView(R.id.results_leg3) RelativeLayout leg3Layout; //layout container
 
-        TextView origin3;
-        TextView destination3;
-        TextView origTimeMin3;
-        TextView destTimeMin3;
+        @BindView(R.id.trip_transferLayout1) LinearLayout transferLayout1; //icon
+        @BindView(R.id.trip_transferLayout2) LinearLayout transferLayout2; //icon
 
-        TextView tripTime;
-        TextView origTimeDate;
+        @BindView(R.id.trip_origin_textView2) TextView origin2;
+        @BindView(R.id.trip_destination_textView2) TextView destination2;
+        @BindView(R.id.trip_departTime_textView2) TextView origTimeMin2;
+        @BindView(R.id.trip_arrivalTime_textView2) TextView destTimeMin2;
 
-        TextView fare;
-        TextView clipper;
+        @BindView(R.id.trip_origin_textView3) TextView origin3;
+        @BindView(R.id.trip_destination_textView3) TextView destination3;
+        @BindView(R.id.trip_departTime_textView3) TextView origTimeMin3;
+        @BindView(R.id.trip_arrivalTime_textView3) TextView destTimeMin3;
 
-        TextView coloredBar1;
-        TextView coloredBar2;
-        TextView coloredBar3;
+        @BindView(R.id.trip_totalTime_textView) TextView tripTime;
+        @BindView(R.id.trip_date_textView) TextView origTimeDate;
 
-        TextView departTitle2;
-        TextView arriveTitle2;
-        TextView departTitle3;
-        TextView arriveTitle3;
+        @BindView(R.id.trip_fare_textView) TextView fare;
+        @BindView(R.id.trip_clipper_textView) TextView clipper;
 
-        ImageView imageView1;
-        ImageView imageView2;
+        @BindView(R.id.trip_colored_line1) TextView coloredBar1;
+        @BindView(R.id.trip_colored_line2) TextView coloredBar2;
+        @BindView(R.id.trip_colored_line3) TextView coloredBar3;
 
         ViewHolder(View view) {
             super(view);
-
-            origTimeDate = view.findViewById(R.id.trip_date_textView);
-
-            // First Leg
-            origin1 = view.findViewById(R.id.trip_origin_textView);
-            destination1 = view.findViewById(R.id.trip_destination_textView);
-            origTimeMin1 =   view.findViewById(R.id.trip_departTime_textView);
-            coloredBar1 =   view.findViewById(R.id.trip_colored_line1);
-            destTimeMin1 =   view.findViewById(R.id.trip_arrivalTime_textView);
-
-            // Transfer Icon
-            imageView1  =   view.findViewById(R.id.trip_imageView1);
-
-            // Second Leg
-            departTitle2 =  view.findViewById(R.id.trip_departTitle2);
-            arriveTitle2 =  view.findViewById(R.id.trip_arriveTitle2);
-            origin2 =       view.findViewById(R.id.trip_origin_textView2);
-            destination2 =  view.findViewById(R.id.trip_destination_textView2);
-            origTimeMin2 =  view.findViewById(R.id.trip_departTime_textView2);
-            coloredBar2 =   view.findViewById(R.id.trip_colored_line2);
-            destTimeMin2 =  view.findViewById(R.id.trip_arrivalTime_textView2);
-
-            // Transfer Icon
-            imageView2  =   view.findViewById(R.id.trip_imageView2);
-
-            // Third Leg
-            departTitle3 =  view.findViewById(R.id.trip_departTitle3);
-            arriveTitle3 =  view.findViewById(R.id.trip_arriveTitle3);
-            origin3 =       view.findViewById(R.id.trip_origin_textView3);
-            destination3 =  view.findViewById(R.id.trip_destination_textView3);
-            origTimeMin3 =  view.findViewById(R.id.trip_departTime_textView3);
-            coloredBar3 =   view.findViewById(R.id.trip_colored_line3);
-            destTimeMin3 =  view.findViewById(R.id.trip_arrivalTime_textView3);
-
-            fare =          view.findViewById(R.id.trip_fare_textView);
-            clipper =       view.findViewById(R.id.trip_clipper_textView);
-            tripTime =      view.findViewById(R.id.trip_totalTime_textView);
+            ButterKnife.bind(this, view);
         }
     }
 
@@ -124,7 +90,7 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
             Log.i("tripTime", trip.getTripTime());
 
         if(trip.getClipper() != null)
-            holder.clipper.setText(trip.getClipper());
+            holder.clipper.setText(trip.getFares().getFare().get(0).getAmount());
 
         if(trip.getFare() != null)
             holder.fare.setText(trip.getFare());
@@ -137,45 +103,36 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
         return mTripList.size();
     }
 
-    //todo: change default visibility of Views to Gone in R.layout.list_row_trip
     private void initTripLegs(Trip trip, ViewHolder holder) {
         int length = trip.getLegList().size();
         if(length > 0) {
-            // todo: set visibility of related views and coloredbars
             initTextForLeg(LegOrder.FIRST_LEG, holder, mTripList);
             setColoredBar(mContext, trip.getLegList().get(0).getLine(), holder, LegOrder.FIRST_LEG);
         }
         if(length > 1) {
+            showLegView(LegOrder.SECOND_LEG, holder);
             initTextForLeg(LegOrder.SECOND_LEG, holder, mTripList);
             setColoredBar(mContext, trip.getLegList().get(1).getLine(), holder, LegOrder.SECOND_LEG);
-        } else {
-            if(DebugController.DEBUG) {
-                Log.i("Leg 2", "skipped");
-            }
-            holder.imageView1.setVisibility(View.GONE);
-            holder.origin2.setVisibility(View.GONE);
-            holder.destination2.setVisibility(View.GONE);
-            holder.origTimeMin2.setVisibility(View.GONE);
-            holder.destTimeMin2.setVisibility(View.GONE);
-            holder.coloredBar2.setVisibility(View.GONE);
-            holder.departTitle2.setVisibility(View.GONE);
-            holder.arriveTitle2.setVisibility(View.GONE);
         }
         if(length > 2) {
+            showLegView(LegOrder.THIRD_LEG, holder);
             initTextForLeg(LegOrder.THIRD_LEG, holder, mTripList);
             setColoredBar(mContext, trip.getLegList().get(2).getLine(), holder, LegOrder.THIRD_LEG);
-        } else {
-            if(DebugController.DEBUG) {
-                Log.i("Leg 3", "skipped");
-            }
-            holder.imageView2.setVisibility(View.GONE);
-            holder.origin3.setVisibility(View.GONE);
-            holder.destination3.setVisibility(View.GONE);
-            holder.origTimeMin3.setVisibility(View.GONE);
-            holder.destTimeMin3.setVisibility(View.GONE);
-            holder.coloredBar3.setVisibility(View.GONE);
-            holder.departTitle3.setVisibility(View.GONE);
-            holder.arriveTitle3.setVisibility(View.GONE);
+        }
+    }
+
+    private void showLegView(LegOrder leg, ViewHolder holder) {
+        switch(leg) {
+            case SECOND_LEG:
+                holder.leg2Layout.setVisibility(View.VISIBLE);
+                holder.transferLayout1.setVisibility(View.VISIBLE);
+                //holder.transferIcon_iv1.setVisibility(View.VISIBLE);
+                break;
+            case THIRD_LEG:
+                holder.leg3Layout.setVisibility(View.VISIBLE);
+                holder.transferLayout2.setVisibility(View.VISIBLE);
+                //holder.transferIcon_iv2.setVisibility(View.VISIBLE);
+                break;
         }
     }
 
@@ -186,20 +143,32 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
     private void initTextForLeg(LegOrder leg, ViewHolder holder, List<Trip> list) {
         switch(leg) {
             case FIRST_LEG:
-                holder.origin1.setText(getStationNameFromAbbr(list.get(0).getOrigin()));
-                holder.destination1.setText(getStationNameFromAbbr(list.get(0).getDestination())); //todo: check this
+                String origin1 = list.get(0).getLegList().get(0).getOrigin();
+                String dest1 = list.get(0).getLegList().get(0).getDestination();
+                Log.i("origin1", origin1);
+                Log.i("dest1", dest1);
+                holder.origin1.setText(getStationNameFromAbbr(origin1));
+                holder.destination1.setText(getStationNameFromAbbr(dest1)); //todo: check this
                 holder.origTimeMin1.setText(list.get(0).getLegList().get(0).getOrigTimeMin());
                 holder.destTimeMin1.setText(list.get(0).getLegList().get(0).getDestTimeMin());
                 break;
             case SECOND_LEG:
-                holder.origin2.setText(getStationNameFromAbbr(list.get(1).getOrigin()));
-                holder.destination2.setText(getStationNameFromAbbr(list.get(1).getDestination())); //todo: check this
+                String origin2 = list.get(1).getLegList().get(1).getOrigin();
+                String dest2 = list.get(1).getLegList().get(1).getDestination();
+                Log.i("origin2", origin2);
+                Log.i("dest2", dest2);
+                holder.origin2.setText(getStationNameFromAbbr(origin2));
+                holder.destination2.setText(getStationNameFromAbbr(dest2)); //todo: check this
                 holder.origTimeMin2.setText(list.get(1).getLegList().get(1).getOrigTimeMin());
                 holder.destTimeMin2.setText(list.get(1).getLegList().get(1).getDestTimeMin());
                 break;
             case THIRD_LEG:
-                holder.origin3.setText(getStationNameFromAbbr(list.get(2).getOrigin()));
-                holder.destination3.setText(getStationNameFromAbbr(list.get(2).getDestination())); //todo: check this
+                String origin3 = list.get(2).getLegList().get(2).getOrigin();
+                String dest3 = list.get(2).getLegList().get(2).getDestination();
+                Log.i("origin3", origin3);
+                Log.i("dest3", dest3);
+                holder.origin3.setText(getStationNameFromAbbr(origin3));
+                holder.destination3.setText(getStationNameFromAbbr(dest3)); //todo: check this
                 holder.origTimeMin3.setText(list.get(2).getLegList().get(2).getOrigTimeMin());
                 holder.destTimeMin3.setText(list.get(2).getLegList().get(2).getDestTimeMin());
                 break;
@@ -224,5 +193,4 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
     private String getStationNameFromAbbr(String abbr) {
         return StationList.stationMap.get(abbr.toLowerCase()); // keys are case sensitive
     }
-
 }
