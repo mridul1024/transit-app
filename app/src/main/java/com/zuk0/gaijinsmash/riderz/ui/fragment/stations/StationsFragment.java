@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,16 +68,7 @@ public class StationsFragment extends Fragment {
     private void handleListItemClick(View view) {
         //todo: probably can delete stationAddress - not needed
         Bundle bundle = initBundle(view);
-
-        Fragment newFrag = new StationInfoFragment();
-        newFrag.setArguments(bundle);
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction;
-        if (manager != null) {
-            transaction = manager.beginTransaction();
-            transaction.replace(R.id.fragmentContent, newFrag)
-                    .addToBackStack(null).commit();
-        }
+        loadNewFragment(bundle);
     }
 
     private Bundle initBundle(View view) {
@@ -88,8 +80,16 @@ public class StationsFragment extends Fragment {
         return bundle;
     }
 
-    private void loadNewFragment() {
-
+    private void loadNewFragment(Bundle bundle) {
+        Fragment newFrag = new StationInfoFragment();
+        newFrag.setArguments(bundle);
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction;
+        if (manager != null) {
+            transaction = manager.beginTransaction();
+            transaction.replace(R.id.fragmentContent, newFrag)
+                    .addToBackStack(null).commit();
+        }
     }
 
     private void initStationList() {
@@ -99,6 +99,7 @@ public class StationsFragment extends Fragment {
             if(stations != null) {
                 StationRecyclerAdapter adapter = new StationRecyclerAdapter(stations);
                 mRecyclerView.setAdapter(adapter);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 adapter.setClickListener(this::handleListItemClick);
             } else {
                 mViewModel.getListFromRepo()
@@ -107,6 +108,7 @@ public class StationsFragment extends Fragment {
                             if (data != null) {
                                 adapter = new StationRecyclerAdapter(data.getStationList());
                                 mRecyclerView.setAdapter(adapter);
+                                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                                 adapter.setClickListener(this::handleListItemClick);
                             } else {
                                 Log.wtf("StationsFragment", "error with list");

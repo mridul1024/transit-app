@@ -87,9 +87,29 @@ public class Station {
     @ElementList(name="etd", inline=true, required = false)
     private List<Etd> etdList;
 
+    @Ignore
+    @ElementList(name = "north_routes", required = false)
+    private List<Route> northRoutes;
+
+    @Ignore
+    @ElementList(name = "south_routes", required = false)
+    private List<Route> southRoutes;
+
+    @Ignore
+    @ElementList(name = "north_platforms", required = false)
+    private List<Platform> northPlatforms;
+
+    @Ignore
+    @ElementList(name = "south_platforms", required = false)
+    private List<Platform> southPlatforms;
+
     public Station () {}
 
     // Setters
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setName(@NonNull String name) { this.name = name; }
     public void setAddress(String address) { this.address = address; }
     public void setLatitude(double latitude) { this.latitude = latitude; }
@@ -106,17 +126,22 @@ public class Station {
     public void setAttraction(String attraction) { this.attraction = attraction; }
     public void setLink(String link) { this.link = link; }
     public void setAbbr(String abbr) { this.abbr = abbr; }
-
-    public int getId() {
-        return id;
+    public void setEtdList(List<Etd> etdList) {
+        this.etdList = etdList;
+    }
+    public void setNorthRoutes(List<Route> northRoutes) {
+        this.northRoutes = northRoutes;
+    }
+    public void setSouthRoutes(List<Route> southRoutes) {
+        this.southRoutes = southRoutes;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     // Getters
     @NonNull
+    public int getId() {
+        return id;
+    }
     public String getName() {
         return name;
     }
@@ -143,6 +168,12 @@ public class Station {
     public String getPlatformInfo() { return platformInfo; }
     public List<Etd> getEtdList() {
         return etdList;
+    }
+    public List<Route> getNorthRoutes() {
+        return northRoutes;
+    }
+    public List<Route> getSouthRoutes() {
+        return southRoutes;
     }
 
 }
