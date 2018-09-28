@@ -21,20 +21,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecyclerAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView origin;
-        TextView destination;
-        ImageButton searchButton;
-        ImageButton optionsButton;
+        @BindView(R.id.favorite_origin_textView) TextView origin;
+        @BindView(R.id.favorite_destination_textView) TextView destination;
+        @BindView(R.id.favorite_search_ib) ImageButton searchButton;
+        @BindView(R.id.favorite_options_ib) ImageButton optionsButton;
 
         ViewHolder(View view) {
             super(view);
-            origin = view.findViewById(R.id.favorite_origin_textView);
-            destination = view.findViewById(R.id.favorite_destination_textView);
-            searchButton = view.findViewById(R.id.favorite_search_ib);
-            optionsButton = view.findViewById(R.id.favorite_options_ib);
+            ButterKnife.bind(this, view);
         }
     }
 
