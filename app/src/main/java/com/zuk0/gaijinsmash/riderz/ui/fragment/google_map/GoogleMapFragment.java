@@ -1,16 +1,18 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.google_map;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.support.v4.app.Fragment;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -20,33 +22,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment;
-import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
-import com.zuk0.gaijinsmash.riderz.utils.NetworkUtils;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment;
 import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
+import com.zuk0.gaijinsmash.riderz.utils.NetworkUtils;
+import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import dagger.android.support.AndroidSupportInjection;
 
 public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
-    private MapView mMapView;
-    private ProgressBar mProgressBar;
-    private View mInflatedView;
+    @BindView(R.id.googleMap_btn) Button mButton;
+    @BindView(R.id.googleMap_mapView) MapView mMapView;
+    @BindView(R.id.googleMap_progress_bar) ProgressBar mProgressBar;
+
+    @Inject
+    GoogleMapViewModelFactory mViewModelFactory;
+
+    private GoogleMapViewModel mViewModel;
+    private List<Station> mStationList;
 
     //---------------------------------------------------------------------------------------------
     // MapView must be used for Fragments to prevent nested fragments.
@@ -111,26 +122,32 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
             mMapView.onLowMemory();
     }
 
+    //---------------------------------------------------------------------------------------------
+    // Fragment Lifecycle
+    //---------------------------------------------------------------------------------------------
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        mInflatedView = inflater.inflate(R.layout.view_google_map, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View mInflatedView = inflater.inflate(R.layout.view_google_map, container, false);
+        ButterKnife.bind(this, mInflatedView);
         return mInflatedView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        Button mButton = mInflatedView.findViewById(R.id.googleMap_btn);
-        mButton.setOnClickListener(v -> {
-            FragmentManager manager = getFragmentManager();
-            FragmentTransaction tx = manager.beginTransaction();
-            Fragment newFrag = new BartMapFragment();
-            tx.replace(R.id.fragmentContent, newFrag).addToBackStack(null).commit();
-        });
-        mProgressBar = mInflatedView.findViewById(R.id.googleMap_progress_bar);
-        mProgressBar.setVisibility(View.VISIBLE);
+        initMapView(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initDagger();
+        initViewModel();
+        initBartButton();
+    }
+
+    private void initMapView(Bundle savedInstanceState) {
         try {
-            mMapView = mInflatedView.findViewById(R.id.googleMap_mapView);
             mMapView.onCreate(savedInstanceState);
             mMapView.getMapAsync(this);
         } catch (Exception e) {
@@ -138,10 +155,26 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         }
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setRetainInstance(true);
+    private void initDagger() {
+        AndroidSupportInjection.inject(this);
+    }
+
+    private void initViewModel() {
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(GoogleMapViewModel.class);
+    }
+
+    private void initBartButton() {
+        mButton.setOnClickListener(v -> initBartMapFragment());
+    }
+
+    private void initBartMapFragment() {
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction tx;
+        if (manager != null) {
+            tx = manager.beginTransaction();
+            Fragment newFrag = new BartMapFragment();
+            tx.replace(R.id.fragmentContent, newFrag).addToBackStack(null).commit();
+        }
     }
 
     //---------------------------------------------------------------------------------------------
@@ -150,70 +183,72 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
 
     @Override // This is called when google map is initialized
     public void onMapReady(GoogleMap googleMap) {
-
-        // GoogleMaps settings
         initMapSettings(googleMap);
         initUserLocation(getActivity(), googleMap);
-
-        // Populate map with all the stations (markers)
-        new GetMarkersTask(googleMap, this).execute();
-
+        initStationMarkers(googleMap); // Populate map with all the stations (markers)
         googleMap.setOnMarkerClickListener(marker -> {
-            //todo show a dialog on marker click
+            //initMarkerSnackbar(googleMap, marker.getPosition());
             return false;
         });
 
-        // Move camera to specified Station if intended
-        Bundle mBundle = getArguments();
-        if(mBundle != null) {
-            String stationTitle = mBundle.getString("StationTitle");
-            LatLng latLng = new LatLng(Double.valueOf(mBundle.getString("StationLat")), Double.valueOf(mBundle.getString("StationLong")));
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(14).build();
-            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title(stationTitle));
-            marker.showInfoWindow();
-        }
+        // Move camera to specified Station from user's selection on StationInfoFragment
+        Bundle bundle = getArguments();
+        mViewModel.initLocationFromBundle(bundle, googleMap);
         mMapView.onResume();
     }
-    //---------------------------------------------------------------------------------------------
-    // Helpers
-    //---------------------------------------------------------------------------------------------
+
+    private void initMarkerSnackbar(GoogleMap map, LatLng position) {
+        View parentView = getActivity().findViewById(R.id.main_app_bar_coordinatorLayout);
+        String message = getResources().getString(R.string.alert_dialog_gpsMarker);
+        String yesAction = getResources().getString(R.string.alert_dialog_yes);
+        Snackbar.make(parentView, message, Snackbar.LENGTH_INDEFINITE)
+                .setAction(yesAction, view -> {
+                    Station station = mViewModel.findNearestMarker(map, position, mStationList);
+                    if(station == null) {
+                        Toast.makeText(getActivity(), "You are already near you destination", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // launch bart results fragment
+                        Toast.makeText(getActivity(), "station found!" + station.getName(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setActionTextColor(Color.RED)
+                .show();
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        return false;
+    }
+
+    @Override
+    public void onMyLocationClick(@NonNull Location location) {
+    }
 
     private void initMapSettings(GoogleMap map) {
-        Log.i("initMapSettings", "googlemap");
-        // Set boundary of map area
-        LatLngBounds bayArea = new LatLngBounds(
-                new LatLng(37.2982, -121.5363), //southwest
-                new LatLng(38.0694, -121.7438)); //northeast
-        map.setLatLngBoundsForCameraTarget(bayArea);
-        map.getUiSettings().setZoomControlsEnabled(true);
-        map.getUiSettings().setMyLocationButtonEnabled(true);
-        map.getUiSettings().setZoomGesturesEnabled(true);
-        map.setMinZoomPreference(9f);
+        mViewModel.initMapSettings(map);
     }
 
     private void initUserLocation(Context context, GoogleMap map) {
+        View parentView = getActivity().findViewById(R.id.main_app_bar_coordinatorLayout);
         GpsUtils gps;
         Location loc = null;
         try {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 gps = new GpsUtils(context);
                 loc = gps.getLocation();
-
                 map.setMyLocationEnabled(true);
                 map.setOnMyLocationButtonClickListener(this);
                 map.setOnMyLocationClickListener(this);
             } else {
-                //TODO: abstract AlertDialog code
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-                alertDialog.setTitle("Location Settings");
-                alertDialog.setMessage("Location is not available. Do you want to turn it on?");
-                alertDialog.setPositiveButton("Settings", (dialog, which) -> {
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    context.startActivity(intent);
-                });
-                alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-                alertDialog.show();
+                String message = getResources().getString(R.string.gps_permission_alert);
+                String yesAction = getResources().getString(R.string.alert_dialog_yes);
+                Snackbar.make(parentView, message, Snackbar.LENGTH_INDEFINITE)
+                        .setAction(yesAction, view -> {
+                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            context.startActivity(intent);
+                        })
+                        .setActionTextColor(Color.RED)
+                        .show();
             }
         } catch(SecurityException e) {
             if(DebugController.LOG_E)
@@ -226,60 +261,27 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
             LatLng userLocation;
             userLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
             CameraUpdate update;
-            update = CameraUpdateFactory.newLatLngZoom(userLocation, 5f);
+            update = CameraUpdateFactory.newLatLngZoom(userLocation, 6f);
             map.moveCamera(update);
         } else {
-            initDefaultLocation(map);
+            mViewModel.initDefaultLocation(map);
         }
     }
 
-    private void initDefaultLocation(GoogleMap map) {
-        LatLng defaultLocation = new LatLng(37.73659478, -122.19683306);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 6f));
-    }
-
-    private static List<Station> initMarkers(Context context) {
-        StationDatabase db = StationDatabase.getRoomDB(context);
-        return db.getStationDAO().getAllStations();
-    }
-
-    @Override
-    public boolean onMyLocationButtonClick() {
-        return false;
-    }
-
-    @Override
-    public void onMyLocationClick(@NonNull Location location) {
-    }
-
-    //---------------------------------------------------------------------------------------------
-    // AsyncTask for call to database and create Markers
-    //---------------------------------------------------------------------------------------------
-    // 3 params are Params, Progress, Result
-    private static class GetMarkersTask extends AsyncTask<Void, Integer, List<Station>> {
-        WeakReference<GoogleMapFragment> mWeakRef;
-        private GoogleMap mGoogleMap;
-
-        private GetMarkersTask(GoogleMap map, GoogleMapFragment context) {
-                mWeakRef = new WeakReference<>(context);
-                this.mGoogleMap = map;
-        }
-
-        @Override
-        protected List<Station> doInBackground(Void...voids) {
-            GoogleMapFragment frag = mWeakRef.get();
-            return initMarkers(frag.getActivity());
-        }
-
-        @Override
-        protected void onPostExecute(List<Station> list) {
-            GoogleMapFragment frag = mWeakRef.get();
-            // populate map with markers
-            for(Station station : list) {
-                LatLng latLng = new LatLng(station.getLatitude(), station.getLongitude());
-                mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(station.getName()));
+    private void initStationMarkers(GoogleMap map) {
+        mViewModel.getStationsLiveData().observe(this, stationList -> {
+            mStationList = stationList;
+            if (stationList != null) {
+                for(Station station : stationList) {
+                    LatLng latLng = new LatLng(station.getLatitude(), station.getLongitude());
+                    map.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title(station.getName())
+                            .snippet(station.getAddress())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                }
             }
-            frag.mProgressBar.setVisibility(View.GONE);
-        }
+            mProgressBar.setVisibility(View.GONE);
+        });
     }
 }

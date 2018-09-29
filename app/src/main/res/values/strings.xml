@@ -205,4 +205,6 @@
     <string name="alert_dialog_confirmation">Are you sure you want to remove this favorite?</string>
     <string name="alert_dialog_remove_favorite_title">Remove Favorite</string>
     <string name="trip_transfer">Transfer</string>
+    <string name="gps_permission_alert">Location is not available. Do you want to turn it on?</string>
+    <string name="alert_dialog_gpsMarker">Do you want to find a Bart Schedule to this location?</string>
 </resources>

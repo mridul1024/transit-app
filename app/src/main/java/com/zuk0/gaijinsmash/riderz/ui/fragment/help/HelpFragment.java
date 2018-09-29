@@ -1,5 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.help;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,18 +15,15 @@ public class HelpFragment extends Fragment {
 
     private View mInflatedView;
 
-    //---------------------------------------------------------------------------------------------
-    // Lifecycle Events
-    //---------------------------------------------------------------------------------------------
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mInflatedView = inflater.inflate(R.layout.view_help, container, false);
         return mInflatedView;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         Button mButton = mInflatedView.findViewById(R.id.help_report_button);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override

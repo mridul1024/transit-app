@@ -42,7 +42,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
-
     }
 
     private void save(Context context, boolean result) {
