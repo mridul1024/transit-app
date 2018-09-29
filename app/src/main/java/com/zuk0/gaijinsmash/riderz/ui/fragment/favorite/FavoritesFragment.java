@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +27,13 @@ public class FavoritesFragment extends Fragment {
 
     @Inject
     FavoritesViewModelFactory mFavoritesViewModelFactory;
+
     private FavoritesViewModel mViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View inflatedView = inflater.inflate(R.layout.view_bart_favorites, container, false);
+        View inflatedView = inflater.inflate(R.layout.view_favorites, container, false);
         ButterKnife.bind(this, inflatedView);
         return inflatedView;
     }
@@ -59,6 +61,7 @@ public class FavoritesFragment extends Fragment {
                     mError.setVisibility(View.GONE);
                     FavoriteRecyclerAdapter adapter = new FavoriteRecyclerAdapter(data);
                     mRecyclerView.setAdapter(adapter);
+                    mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 }
             }
         });

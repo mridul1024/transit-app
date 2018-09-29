@@ -23,14 +23,12 @@ public class FavoritesViewModel extends AndroidViewModel {
 
     FavoritesViewModel(Application application) {
         super(application);
-        initData();
-    }
-
-    private void initData() {
-        mFavoritesLiveData = FavoriteDatabase.getRoomDB(super.getApplication()).getFavoriteDAO().getAllFavoritesLiveData();
     }
 
     public LiveData<List<Favorite>> getFavorites() {
+        if(mFavoritesLiveData == null) {
+            mFavoritesLiveData = FavoriteDatabase.getRoomDB(super.getApplication()).getFavoriteDAO().getAllFavoritesLiveData();
+        }
         return mFavoritesLiveData;
     }
 

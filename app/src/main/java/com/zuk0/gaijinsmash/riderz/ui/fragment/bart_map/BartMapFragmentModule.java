@@ -1,12 +1,14 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map;
 
+import android.app.Application;
+
 import dagger.Module;
 import dagger.Provides;
 
 @Module
 public class BartMapFragmentModule {
     @Provides
-    BartMapViewModel provideBartMapViewModel() {
-        return new BartMapViewModel();
+    BartMapViewModel provideBartMapViewModel(Application application) {
+        return new BartMapViewModel(application);
     }
 }

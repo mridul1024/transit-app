@@ -1,6 +1,5 @@
 package com.zuk0.gaijinsmash.riderz.ui.adapter.favorite;
 
-import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -14,12 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
+import com.zuk0.gaijinsmash.riderz.data.local.StationList;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.favorite.FavoritesViewModel;
 
 import java.util.List;
-
-import javax.inject.Inject;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +30,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         @BindView(R.id.favorite_destination_textView) TextView destination;
         @BindView(R.id.favorite_search_ib) ImageButton searchButton;
         @BindView(R.id.favorite_options_ib) ImageButton optionsButton;
+        @BindView(R.id.favorite_reverse_ib) ImageButton reverseButton;
 
         ViewHolder(View view) {
             super(view);
@@ -45,15 +45,23 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row_bart_favorites, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row_favorites, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Favorite favorite = mFavoriteList.get(position);
-        holder.origin.setText(favorite.getOrigin());
-        holder.destination.setText(favorite.getDestination());
+
+        String originAbbr = getAbbrFromStationName(favorite.getDestinationTrip().getOrigin());
+        String destAbbr = getAbbrFromStationName(favorite.getDestinationTrip().getDestination());
+        holder.origin.setText(originAbbr);
+        holder.destination.setText(destAbbr);
+        holder.reverseButton.setOnClickListener(v -> {
+            String temp = holder.origin.getText().toString();
+            holder.origin.setText(holder.destination.getText());
+            holder.destination.setText(temp);
+        });
 
         // onClick => make an API request for Trip results and change to BartResultsFragment
         holder.searchButton.setOnClickListener(v -> {
@@ -121,5 +129,15 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
                 //refreshFragment();
         }
         return false;
+    }
+
+    private String getAbbrFromStationName(String name) {
+        String abbr = "";
+        for(Map.Entry<String, String> e : StationList.stationMap.entrySet()) {
+            if(e.getValue().equalsIgnoreCase(name)) {
+                abbr = e.getKey();
+            }
+        }
+        return abbr;
     }
 }

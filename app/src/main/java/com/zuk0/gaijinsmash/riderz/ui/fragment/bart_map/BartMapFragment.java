@@ -11,13 +11,19 @@ import android.widget.ImageView;
 
 import com.zuk0.gaijinsmash.riderz.R;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 
 
 public class BartMapFragment extends Fragment {
 
     @BindView(R.id.bartMap_imageView) ImageView mImageView;
+
+    @Inject
+    BartMapViewModelFactory mViewModelFactory;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -27,7 +33,9 @@ public class BartMapFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.view_bart_map, container, false);
+        View mInflatedView = inflater.inflate(R.layout.view_bart_map, container, false);
+        ButterKnife.bind(this, mInflatedView);
+        return mInflatedView;
     }
 
     @Override
@@ -43,7 +51,7 @@ public class BartMapFragment extends Fragment {
     }
 
     private void initViewModel() {
-        BartMapViewModel mViewModel = ViewModelProviders.of(this).get(BartMapViewModel.class);
+        BartMapViewModel mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(BartMapViewModel.class);
         mViewModel.initBarMap(getActivity(), mImageView);
     }
 }

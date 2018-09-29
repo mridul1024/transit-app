@@ -36,6 +36,10 @@ import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 class GoogleMapViewModel extends AndroidViewModel {
 
     private static LatLng SOUTH_WEST_BOUNDS = new LatLng(37.2982, -121.5363);
@@ -45,6 +49,7 @@ class GoogleMapViewModel extends AndroidViewModel {
 
     private LiveData<List<Station>> mStationsLivedata;
 
+    @Inject
     GoogleMapViewModel(Application application) {
         super(application);
     }
