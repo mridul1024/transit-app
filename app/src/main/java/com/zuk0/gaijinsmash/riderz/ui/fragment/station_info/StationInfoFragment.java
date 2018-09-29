@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
@@ -46,6 +47,7 @@ public class StationInfoFragment extends Fragment {
     @BindView(R.id.stationInfo_intro_textView) TextView mIntro;
     @BindView(R.id.stationInfo_food_textView) TextView mFood;
     @BindView(R.id.stationInfo_map_btn) Button mMapButton;
+    @BindView(R.id.station_info_progressBar) ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -98,6 +100,8 @@ public class StationInfoFragment extends Fragment {
 
     private void initStationDetails(LiveData<StationXmlResponse> data) {
         data.observe(this, stationObject -> {
+            mProgressBar.setVisibility(View.GONE);
+
             //update the ui
             Station station1 = null;
             if (stationObject != null) {
