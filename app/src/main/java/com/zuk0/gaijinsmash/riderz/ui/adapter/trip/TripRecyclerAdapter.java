@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,6 +17,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -191,6 +191,6 @@ public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapte
     }
 
     private String getStationNameFromAbbr(String abbr) {
-        return StationList.stationMap.get(abbr.toLowerCase()); // keys are case sensitive
+        return StationList.stationMap.get(abbr.toLowerCase(Locale.US)); // keys are case sensitive
     }
 }

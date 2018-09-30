@@ -23,8 +23,7 @@
                 android:ems="10"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:hint="@string/departure_station"
-                android:labelFor="@id/trip_departure_autoCompleteTextView" />
+                android:hint="@string/departure_station" />
         </android.support.design.widget.TextInputLayout>
         <Spinner
             android:id="@+id/station_spinner1"
@@ -51,8 +50,7 @@
                 android:ems="10"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:hint="@string/arrival_station"
-                android:labelFor="@id/trip_arrival_autoCompleteTextView" />
+                android:hint="@string/arrival_station" />
         </android.support.design.widget.TextInputLayout>
         <Spinner
             android:id="@+id/station_spinner2"
