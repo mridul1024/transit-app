@@ -80,6 +80,7 @@ public class StationsFragment extends Fragment {
         return bundle;
     }
 
+    // todo: abstract this
     private void loadNewFragment(Bundle bundle) {
         Fragment newFrag = new StationInfoFragment();
         newFrag.setArguments(bundle);

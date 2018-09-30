@@ -10,7 +10,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -35,11 +34,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
 import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
 import com.zuk0.gaijinsmash.riderz.utils.NetworkUtils;
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -187,7 +189,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         initUserLocation(getActivity(), googleMap);
         initStationMarkers(googleMap); // Populate map with all the stations (markers)
         googleMap.setOnMarkerClickListener(marker -> {
-            //initMarkerSnackbar(googleMap, marker.getPosition());
+            initMarkerSnackbar(googleMap, marker.getPosition(), marker.getTitle());
             return false;
         });
 
@@ -197,22 +199,41 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         mMapView.onResume();
     }
 
-    private void initMarkerSnackbar(GoogleMap map, LatLng position) {
-        View parentView = getActivity().findViewById(R.id.main_app_bar_coordinatorLayout);
+    private void initMarkerSnackbar(GoogleMap map, LatLng position, String destination) {
+        View parentView = Objects.requireNonNull(getActivity()).findViewById(R.id.main_app_bar_coordinatorLayout);
         String message = getResources().getString(R.string.alert_dialog_gpsMarker);
         String yesAction = getResources().getString(R.string.alert_dialog_yes);
         Snackbar.make(parentView, message, Snackbar.LENGTH_INDEFINITE)
                 .setAction(yesAction, view -> {
-                    Station station = mViewModel.findNearestMarker(map, position, mStationList);
+                    Station station = mViewModel.findNearestMarker(map, position, destination, mStationList);
                     if(station == null) {
                         Toast.makeText(getActivity(), "You are already near you destination", Toast.LENGTH_SHORT).show();
                     } else {
-                        // launch bart results fragment
+                        //todo: confirm user wants to use nearest bart station or, show dialog picker
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString(TripFragment.TripBundle.ORIGIN.getValue(), station.getName());
+                        bundle.putString(TripFragment.TripBundle.DESTINATION.getValue(), destination);
+                        bundle.putString(TripFragment.TripBundle.DATE.getValue(), "TODAY");
+                        bundle.putString(TripFragment.TripBundle.TIME.getValue(), "NOW");
+                        loadNewFragment(bundle);
                         Toast.makeText(getActivity(), "station found!" + station.getName(), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setActionTextColor(Color.RED)
                 .show();
+    }
+
+    private void loadNewFragment(Bundle bundle) {
+        Fragment newFrag = new BartResultsFragment();
+        newFrag.setArguments(bundle);
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction;
+        if (manager != null) {
+            transaction = manager.beginTransaction();
+            transaction.replace(R.id.fragmentContent, newFrag)
+                    .addToBackStack(null).commit();
+        }
     }
 
     @Override

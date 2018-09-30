@@ -1,7 +1,11 @@
 package com.zuk0.gaijinsmash.riderz.ui.adapter.favorite;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,7 +19,10 @@ import android.widget.Toast;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.StationList;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.favorite.FavoritesViewModel;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
 
 import java.util.List;
 import java.util.Map;
@@ -67,8 +74,20 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         holder.searchButton.setOnClickListener(v -> {
             String origin = holder.origin.getText().toString();
             String destination = holder.destination.getText().toString();
-            //todo : getTrip from ViewModel
-            //new FavoriteViewAdapter.GetTripTask(mFragment, origin, destination, "Today", "Now").execute();
+            Bundle bundle = new Bundle();
+            bundle.putString(TripFragment.TripBundle.ORIGIN.getValue(), origin);
+            bundle.putString(TripFragment.TripBundle.DESTINATION.getValue(), destination);
+            bundle.putString(TripFragment.TripBundle.DATE.getValue(), "TODAY");
+            bundle.putString(TripFragment.TripBundle.TIME.getValue(), "NOW");
+            Fragment newFrag = new BartResultsFragment();
+            newFrag.setArguments(bundle);
+            FragmentManager manager = ((MainActivity) v.getContext()).getSupportFragmentManager();
+            FragmentTransaction transaction;
+            if(manager != null) {
+                transaction = manager.beginTransaction();
+                transaction.replace(R.id.fragmentContent, newFrag).addToBackStack(null).commit();
+            }
+
         });
 
         // onClick => open options menu with inflater
@@ -113,6 +132,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
                 return true;
             case R.id.action_favorite_setPriority:
                 if(FavoritesViewModel.doesPriorityExist(context)) {
+                    //todo: if current == priority
                     Toast.makeText(context, "Only one Favorite can be priority.", Toast.LENGTH_LONG).show();
                     return false;
                 } else {
@@ -140,4 +160,6 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         }
         return abbr;
     }
+
+
 }
