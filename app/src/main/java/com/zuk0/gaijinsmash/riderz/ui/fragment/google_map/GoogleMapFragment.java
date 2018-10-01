@@ -1,8 +1,10 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.google_map;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -19,8 +21,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -54,6 +59,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     @BindView(R.id.googleMap_btn) Button mButton;
     @BindView(R.id.googleMap_mapView) MapView mMapView;
     @BindView(R.id.googleMap_progress_bar) ProgressBar mProgressBar;
+
 
     @Inject
     GoogleMapViewModelFactory mViewModelFactory;
@@ -186,17 +192,24 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     @Override // This is called when google map is initialized
     public void onMapReady(GoogleMap googleMap) {
         initMapSettings(googleMap);
+
         initUserLocation(getActivity(), googleMap);
+
         initStationMarkers(googleMap); // Populate map with all the stations (markers)
-        googleMap.setOnMarkerClickListener(marker -> {
-            initMarkerSnackbar(googleMap, marker.getPosition(), marker.getTitle());
-            return false;
-        });
+
+        initMapOnClickListener(googleMap);
 
         // Move camera to specified Station from user's selection on StationInfoFragment
         Bundle bundle = getArguments();
         mViewModel.initLocationFromBundle(bundle, googleMap);
         mMapView.onResume();
+    }
+
+    private void initMapOnClickListener(GoogleMap googleMap) {
+        googleMap.setOnMarkerClickListener(marker -> {
+            initMarkerSnackbar(googleMap, marker.getPosition(), marker.getTitle());
+            return false;
+        });
     }
 
     private void initMarkerSnackbar(GoogleMap map, LatLng position, String destination) {
@@ -210,19 +223,46 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
                         Toast.makeText(getActivity(), "You are already near you destination", Toast.LENGTH_SHORT).show();
                     } else {
                         //todo: confirm user wants to use nearest bart station or, show dialog picker
+                        initAlertDialog(station, destination);
+                    }
+                })
+                .setActionTextColor(Color.RED)
+                .show();
+    }
 
+    private void initAlertDialog(Station station, String destination) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_spinner, null);
+        TextView destinationTv = view.findViewById(R.id.googleMap_dialog_destinationTv);
+        destinationTv.setText(destination);
+
+        String[] stationsList = getResources().getStringArray(R.array.stations_list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_dropdown_item, stationsList);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        Spinner spinner = view.findViewById(R.id.googleMap_dialog_spinner);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(adapter.getPosition(station.getName()));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(view);
+        builder.setTitle(getString(R.string.googleMap_dialog_title))
+                .setCancelable(true)
+                .setPositiveButton(getResources().getString(R.string.alert_dialog_continue), (dialog, which) -> {
+                    String origin = spinner.getSelectedItem().toString();
+                    if(!origin.isEmpty()){
                         Bundle bundle = new Bundle();
                         bundle.putString(TripFragment.TripBundle.ORIGIN.getValue(), station.getName());
                         bundle.putString(TripFragment.TripBundle.DESTINATION.getValue(), destination);
                         bundle.putString(TripFragment.TripBundle.DATE.getValue(), "TODAY");
                         bundle.putString(TripFragment.TripBundle.TIME.getValue(), "NOW");
                         loadNewFragment(bundle);
-                        Toast.makeText(getActivity(), "station found!" + station.getName(), Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                     }
                 })
-                .setActionTextColor(Color.RED)
-                .show();
+                .setNegativeButton(getResources().getString(R.string.alert_dialog_cancel), (dialog, which) -> dialog.cancel());
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
+
 
     private void loadNewFragment(Bundle bundle) {
         Fragment newFrag = new BartResultsFragment();
@@ -250,7 +290,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     }
 
     private void initUserLocation(Context context, GoogleMap map) {
-        View parentView = getActivity().findViewById(R.id.main_app_bar_coordinatorLayout);
+        View parentView = Objects.requireNonNull(getActivity()).findViewById(R.id.main_app_bar_coordinatorLayout);
         GpsUtils gps;
         Location loc = null;
         try {

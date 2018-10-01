@@ -11,10 +11,11 @@ public class DialogUtils extends DialogFragment {
         // Empty constructor required for DialogFragment
     }
 
-    public static DialogUtils newInstance(String title) {
+    public static DialogUtils newInstance(String title, String message) {
         DialogUtils frag = new DialogUtils();
         Bundle args = new Bundle();
         args.putString("title", title);
+        args.putString("message", message);
         frag.setArguments(args);
         return frag;
     }
