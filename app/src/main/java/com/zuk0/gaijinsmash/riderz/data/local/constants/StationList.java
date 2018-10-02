@@ -1,8 +1,9 @@
-package com.zuk0.gaijinsmash.riderz.data.local;
+package com.zuk0.gaijinsmash.riderz.data.local.constants;
 
 import android.util.ArrayMap;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class StationList {
 
@@ -59,6 +60,16 @@ public class StationList {
         stationMap.put("wcrk", "Walnut Creek");
         stationMap.put("wdub", "West Dublin");
         stationMap.put("woak", "West Oakland");
+    }
+
+    public static String getAbbrFromStationName(String name) {
+        String abbr = "";
+        for(Map.Entry<String, String> e : StationList.stationMap.entrySet()) {
+            if(e.getValue().equalsIgnoreCase(name)) {
+                abbr = e.getKey();
+            }
+        }
+        return abbr;
     }
 
 }

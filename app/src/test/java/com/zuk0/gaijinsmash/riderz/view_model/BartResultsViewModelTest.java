@@ -1,15 +1,10 @@
 package com.zuk0.gaijinsmash.riderz.view_model;
 
-import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.data.local.StationList;
-import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
-import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.constants.StationList;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
-import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsViewModel;
 
 import org.junit.Before;

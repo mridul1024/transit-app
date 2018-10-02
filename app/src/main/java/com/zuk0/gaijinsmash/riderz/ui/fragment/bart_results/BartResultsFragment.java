@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
+import com.zuk0.gaijinsmash.riderz.data.local.constants.RiderzEnums;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
@@ -172,9 +173,8 @@ public class BartResultsFragment extends Fragment {
     }
 
     private void addFavorite(Favorite favorite) {
-        mViewModel.handleFavoritesIcon(BartResultsViewModel.FavoritesAction.ADD_FAVORITE, favorite);
-        Toast.makeText(getActivity(), getResources()
-                .getString(R.string.favorite_added), Toast.LENGTH_SHORT).show();
+        mViewModel.handleFavoritesIcon(RiderzEnums.FavoritesAction.ADD_FAVORITE, favorite);
+        Toast.makeText(getActivity(), getResources().getString(R.string.favorite_added), Toast.LENGTH_SHORT).show();
     }
 
     private void removeFavorite(Favorite favorite) {
@@ -185,7 +185,7 @@ public class BartResultsFragment extends Fragment {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mViewModel.handleFavoritesIcon(BartResultsViewModel.FavoritesAction.DELETE_FAVORITE, favorite);
+                        mViewModel.handleFavoritesIcon(RiderzEnums.FavoritesAction.DELETE_FAVORITE, favorite);
                         mFavoritedIcon.setVisible(false);
                         mFavoriteIcon.setVisible(true);
                     }

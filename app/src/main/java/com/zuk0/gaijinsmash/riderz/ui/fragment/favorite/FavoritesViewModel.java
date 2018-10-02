@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,10 +13,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
+import com.zuk0.gaijinsmash.riderz.data.local.constants.RiderzEnums;
 import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsViewModel;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import javax.inject.Singleton;
@@ -31,7 +35,7 @@ public class FavoritesViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public LiveData<List<Favorite>> getFavorites() {
+    LiveData<List<Favorite>> getFavorites() {
         if(mFavoritesLiveData == null) {
             mFavoritesLiveData = FavoriteDatabase.getRoomDB(super.getApplication()).getFavoriteDAO().getAllFavoritesLiveData();
         }
@@ -39,22 +43,76 @@ public class FavoritesViewModel extends AndroidViewModel {
     }
 
     public static void deleteFavorite(Context context, Favorite favorite) {
-        FavoriteDatabase.getRoomDB(context).getFavoriteDAO().delete(favorite);
+        new FavoritesTask(context, RiderzEnums.FavoritesAction.DELETE_FAVORITE, favorite).execute();
     }
 
-    public static boolean doesPriorityExist(Context context) {
-        return FavoriteDatabase.getRoomDB(context).getFavoriteDAO().getAllPriorityFavorites() != null;
+    public static void addPriority(Context context, Favorite favorite) {
+        new FavoritesTask(context, RiderzEnums.FavoritesAction.ADD_PRIORITY, favorite).execute();
     }
 
-    public static void setPriority(Context context, int id) {
-        FavoriteDatabase.getRoomDB(context).getFavoriteDAO().setPriorityById(id);
+    public static void removePriority(Context context, Favorite favorite) {
+        new FavoritesTask(context, RiderzEnums.FavoritesAction.DELETE_PRIORITY, favorite).execute();
     }
 
-    public static void removePriority(Context context, int id) {
-        FavoriteDatabase.getRoomDB(context).getFavoriteDAO().removePriorityById(id);
-    }
+    private static class FavoritesTask extends AsyncTask<Void,Void,Boolean> {
 
-    public static int getFavoriteCount(Context context) {
-        return FavoriteDatabase.getRoomDB(context).getFavoriteDAO().countFavorites();
+        private WeakReference<Context> mWeakRef;
+        private Favorite mFavorite;
+        private RiderzEnums.FavoritesAction mAction;
+
+        private FavoritesTask(Context context, RiderzEnums.FavoritesAction action, Favorite favorite) {
+            mWeakRef = new WeakReference<>(context);
+            this.mFavorite = favorite;
+            this.mAction = action;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            switch(mAction){
+                case ADD_PRIORITY:
+                    if(FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().getPriorityCount() > 0) {
+                        return false;
+                    }
+                    if(FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().getPriorityCount() == 0) {
+                        FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().addPriorityById(mFavorite.getId());
+                        return true;
+                    }
+                    return false;
+                case DELETE_PRIORITY:
+                    FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().removePriorityById(mFavorite.getId());
+                    return true;
+                case DELETE_FAVORITE:
+                    FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().delete(mFavorite);
+                    return true;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+            if(result) {
+                switch(mAction) {
+                    case ADD_PRIORITY:
+                        Toast.makeText(mWeakRef.get(), "Set as Priority", Toast.LENGTH_SHORT).show();
+                        break;
+                    case DELETE_PRIORITY:
+                        Toast.makeText(mWeakRef.get(), "Favorite is no longer Priority", Toast.LENGTH_SHORT).show();
+                        break;
+                    case DELETE_FAVORITE:
+                        Toast.makeText(mWeakRef.get(), "Favorite Deleted", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+
+            } else {
+                switch(mAction) {
+                    case ADD_PRIORITY:
+                        Toast.makeText(mWeakRef.get(), "Only one favorite can be your priority", Toast.LENGTH_LONG).show();
+                        break;
+                }
+
+            }
+        }
     }
 }

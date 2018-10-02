@@ -21,6 +21,9 @@ public interface FavoriteDAO {
     @Delete
     public void delete(Favorite favorite);
 
+    @Query("SELECT * from favorites where destinationTrip = :originTrip OR originTrip = :originTrip")
+    Favorite getFavorite(Trip originTrip);
+
     @Query("SELECT * from favorites")
     public LiveData<List<Favorite>> getAllFavoritesLiveData();
 
@@ -35,7 +38,7 @@ public interface FavoriteDAO {
 
     //Update a priority favorite
     @Query("Update favorites set priority = 1 where id = :id")
-    public void setPriorityById(int id);
+    public void addPriorityById(int id);
 
     //Update priority to null
     @Query("Update favorites set priority = 0 where id = :id")
@@ -43,4 +46,7 @@ public interface FavoriteDAO {
 
     @Query("SELECT * from favorites where originTrip = :originTrip or originTrip = :destTrip")
     LiveData<Favorite> findFavoriteByTrips(Trip originTrip, Trip destTrip);
+
+    @Query("SELECT count(*) from favorites where priority = 1")
+    int getPriorityCount();
 }
