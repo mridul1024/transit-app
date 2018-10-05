@@ -16,6 +16,7 @@ public class BartMapViewModelFactory implements ViewModelProvider.Factory {
     @Inject
     public BartMapViewModelFactory(Application application) { this.application = application; }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public BartMapViewModel create(@NonNull Class modelClass) {

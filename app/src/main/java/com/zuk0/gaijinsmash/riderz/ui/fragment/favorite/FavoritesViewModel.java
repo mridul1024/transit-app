@@ -3,21 +3,13 @@ package com.zuk0.gaijinsmash.riderz.ui.fragment.favorite;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 
-import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.constants.RiderzEnums;
 import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsViewModel;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

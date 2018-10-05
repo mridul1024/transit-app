@@ -3,8 +3,6 @@ package com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import org.simpleframework.xml.ElementList;
-
 import java.util.List;
 
 public class Request {

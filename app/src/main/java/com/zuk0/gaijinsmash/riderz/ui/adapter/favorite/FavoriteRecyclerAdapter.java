@@ -26,7 +26,6 @@ import com.zuk0.gaijinsmash.riderz.ui.fragment.favorite.FavoritesViewModel;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
 
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,13 +43,9 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
             super(view);
             ButterKnife.bind(this, view);
 
-            reverseButton.setOnClickListener(v -> {
-                reverseRoute(origin, destination);
-            });
+            reverseButton.setOnClickListener(v -> reverseRoute(origin, destination));
 
-            searchButton.setOnClickListener(v -> {
-                initTripSearch(v.getContext(), origin, destination);
-            });
+            searchButton.setOnClickListener(v -> initTripSearch(v.getContext(), origin, destination));
         }
     }
 
@@ -100,9 +95,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         String destAbbr = StationList.getAbbrFromStationName(favorite.getDestinationTrip().getDestination());
         holder.origin.setText(originAbbr);
         holder.destination.setText(destAbbr);
-        holder.optionsButton.setOnClickListener(v -> {
-            initPopupMenu(v.getContext(), holder.optionsButton, favorite);
-        });
+        holder.optionsButton.setOnClickListener(v -> initPopupMenu(v.getContext(), holder.optionsButton, favorite));
     }
 
     @Override
@@ -136,18 +129,18 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
                 FavoritesViewModel.deleteFavorite(context, favorite);
                 menu.dismiss();
                 Toast.makeText(context, R.string.deletion_success, Toast.LENGTH_SHORT).show();
-                notifyItemRemoved(itemId);
+                notifyDataSetChanged();
                 break;
             case R.id.action_favorite_setPriority:
                 FavoritesViewModel.addPriority(context, favorite);
                 menu.dismiss();
-                notifyItemChanged(itemId);
+                notifyDataSetChanged();
                 break;
             case R.id.action_favorite_deletePriority:
                 FavoritesViewModel.removePriority(context, favorite);
                 menu.dismiss();
                 Toast.makeText(context, R.string.priority_deleted, Toast.LENGTH_SHORT).show();
-                notifyItemChanged(itemId);
+                notifyDataSetChanged();
                 break;
         }
     }

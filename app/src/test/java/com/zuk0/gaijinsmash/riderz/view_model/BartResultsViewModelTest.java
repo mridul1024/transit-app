@@ -13,15 +13,10 @@ import org.mockito.Mock;
 
 import javax.inject.Inject;
 
-import static org.junit.Assert.assertTrue;
-
 public class BartResultsViewModelTest {
 
     @Inject
     BartResultsViewModel viewModel;
-
-    private Favorite favorite;
-    private Trip trip1, trip2;
 
     @Mock
     private Context context;
@@ -31,13 +26,13 @@ public class BartResultsViewModelTest {
 
     @Before
     public void setup() {
-        favorite = new Favorite();
+        Favorite favorite = new Favorite();
 
-        trip1 = new Trip();
+        Trip trip1 = new Trip();
         trip1.setOrigin("ASHB");
         trip1.setDestination("12TH");
 
-        trip2 = new Trip();
+        Trip trip2 = new Trip();
         trip2.setOrigin("24TH");
         trip2.setDestination("COLM");
 

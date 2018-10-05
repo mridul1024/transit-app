@@ -23,12 +23,10 @@ public class SplashViewModel extends AndroidViewModel {
 
     private static final int BART_STATIONS_COUNT = 48;
 
-    private StationRepository mRepository;
-
     @Inject
     SplashViewModel(Application application, StationRepository repository) {
         super(application);
-        mRepository = repository;
+        StationRepository mRepository = repository;
     }
 
     public void initStationsData() {

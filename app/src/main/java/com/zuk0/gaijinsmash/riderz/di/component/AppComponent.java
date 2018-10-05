@@ -7,8 +7,6 @@ import com.zuk0.gaijinsmash.riderz.RiderzApplication;
 import com.zuk0.gaijinsmash.riderz.di.module.ActivityBuilder;
 import com.zuk0.gaijinsmash.riderz.di.module.AppModule;
 import com.zuk0.gaijinsmash.riderz.di.module.NetModule;
-import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.home.HomeFragment;
 
 import javax.inject.Singleton;
 

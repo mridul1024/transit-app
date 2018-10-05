@@ -35,12 +35,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         addPreferencesFromResource(R.xml.preferences);
 
         CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference(PreferenceKey.TIME_KEY.getValue());
-        checkBoxPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                save(Objects.requireNonNull(getActivity()), (Boolean) newValue);
-                return true;
-            }
+        checkBoxPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+            save(Objects.requireNonNull(getActivity()), (Boolean) newValue);
+            return true;
         });
     }
 

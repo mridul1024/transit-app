@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
 public class TimeAndDateTest {
@@ -13,7 +14,7 @@ public class TimeAndDateTest {
     public void getTodaysDateTest() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyy");
         String expectedDate = sdf.format(Calendar.getInstance().getTime());
-        assertTrue("current date is returned properly", TimeDateUtils.getTodaysDate().equals(expectedDate));
+        assertEquals("current date is returned properly", TimeDateUtils.getTodaysDate(), expectedDate);
     }
 
     @Test
@@ -25,13 +26,13 @@ public class TimeAndDateTest {
     @Test
     public void testFormatDate() {
         String dateExample1 = "12-30-2017";
-        assertTrue("format date correctly to MM/dd/yyyy", TimeDateUtils.formatDate(dateExample1).equals("12/30/2017"));
+        assertEquals("format date correctly to MM/dd/yyyy", "12/30/2017", TimeDateUtils.formatDate(dateExample1));
     }
 
     @Test
     public void testRegex() {
         String timeExample3 = "12:22 PM";
-        assertTrue("first whitespace should be eliminated", TimeDateUtils.formatTime(timeExample3).equals("12:22PM"));
+        assertEquals("first whitespace should be eliminated", "12:22PM", TimeDateUtils.formatTime(timeExample3));
     }
 
     @Test
@@ -39,12 +40,12 @@ public class TimeAndDateTest {
         String input = "21:12:00 AM PST";
         String result = TimeDateUtils.format24hrTime(input);
         String expected = "21:12 PST";
-        assertTrue("Time is converted properly", expected.equals(result));
+        assertEquals("Time is converted properly", expected, result);
 
         String input2 = "01:22:00 AM PST";
         String result2 = TimeDateUtils.format24hrTime(input2);
         String expected2 = "01:22 PST";
-        assertTrue("Time is converted properly", expected2.equals(result2));
+        assertEquals("Time is converted properly", expected2, result2);
     }
 
     /*

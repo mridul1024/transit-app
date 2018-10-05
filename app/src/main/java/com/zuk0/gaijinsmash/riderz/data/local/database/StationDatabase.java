@@ -1,11 +1,9 @@
 package com.zuk0.gaijinsmash.riderz.data.local.database;
 
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
 import com.zuk0.gaijinsmash.riderz.data.local.dao.StationDAO;

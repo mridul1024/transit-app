@@ -70,7 +70,7 @@ public class BsaRepository {
                     bsaDao.save((BsaXmlResponse) response.body());
                 } catch (IOException e) {
                     e.printStackTrace();
-                } 
+                }
             }
         });
     }

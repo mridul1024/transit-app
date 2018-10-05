@@ -6,7 +6,6 @@ import com.zuk0.gaijinsmash.riderz.ui.activity.splash.SplashActivityModule;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragmentProvider;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragmentProvider;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.favorite.FavoritesFragmentProvider;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.google_map.GoogleMapFragment;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.google_map.GoogleMapFragmentProvider;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.home.HomeFragmentProvider;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.station_info.StationInfoFragmentProvider;

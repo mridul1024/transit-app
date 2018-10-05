@@ -1,12 +1,7 @@
 package com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import org.simpleframework.xml.Attribute;
 
 /**
  * Created by ryanj on 12/1/2017.

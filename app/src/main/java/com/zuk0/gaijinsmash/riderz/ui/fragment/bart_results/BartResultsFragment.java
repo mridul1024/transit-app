@@ -182,13 +182,10 @@ public class BartResultsFragment extends Fragment {
         alertDialog.setTitle(getResources().getString(R.string.alert_dialog_remove_favorite_title));
         alertDialog.setMessage(getResources().getString(R.string.alert_dialog_confirmation));
         alertDialog.setPositiveButton(getResources().getString(R.string.alert_dialog_yes),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mViewModel.handleFavoritesIcon(RiderzEnums.FavoritesAction.DELETE_FAVORITE, favorite);
-                        mFavoritedIcon.setVisible(false);
-                        mFavoriteIcon.setVisible(true);
-                    }
+                (dialog, which) -> {
+                    mViewModel.handleFavoritesIcon(RiderzEnums.FavoritesAction.DELETE_FAVORITE, favorite);
+                    mFavoritedIcon.setVisible(false);
+                    mFavoriteIcon.setVisible(true);
                 });
         alertDialog.setNegativeButton(getResources().getString(R.string.alert_dialog_no), (dialog, which) -> dialog.cancel());
         alertDialog.show();

@@ -1,7 +1,5 @@
 package com.zuk0.gaijinsmash.riderz.data.local.constants;
 
-import android.util.ArrayMap;
-
 import java.util.HashMap;
 import java.util.Map;
 

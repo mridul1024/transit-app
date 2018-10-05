@@ -45,7 +45,6 @@ android {
     productFlavors {
     }
 }
-//NOTE : testCompile is now deprecated. must use 'implementation'
 // kapt = annotationProcessor for kotlin
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -91,8 +90,9 @@ dependencies {
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
 
     //Google Play Services
-    implementation 'com.google.android.gms:play-services-maps:15.0.1'
-    implementation 'com.google.android.gms:play-services-location:15.0.1'
+    def google_version = '16.0.0'
+    implementation "com.google.android.gms:play-services-maps:$google_version"
+    implementation "com.google.android.gms:play-services-location:$google_version"
 
     // Android Lifecycle
     def lifecycle_version = "1.1.1"

@@ -1,17 +1,9 @@
 package com.zuk0.gaijinsmash.riderz.data.remote.retrofit;
 
-import org.simpleframework.xml.convert.AnnotationStrategy;
-import org.simpleframework.xml.core.Persister;
-
-import javax.inject.Singleton;
-
-import dagger.Provides;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class RetrofitClient {
 

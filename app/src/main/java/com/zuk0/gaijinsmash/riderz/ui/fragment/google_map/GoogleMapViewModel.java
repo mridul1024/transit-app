@@ -3,12 +3,9 @@ package com.zuk0.gaijinsmash.riderz.ui.fragment.google_map;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,13 +14,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
 import com.zuk0.gaijinsmash.riderz.utils.HaversineFormulaUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -34,7 +31,6 @@ class GoogleMapViewModel extends AndroidViewModel {
     private static LatLng SOUTH_WEST_BOUNDS = new LatLng(37.2982, -121.5363);
     private static LatLng NORTH_EAST_BOUNDS = new LatLng(38.0694, -121.7438);
     private static LatLng DEFAULT_LOCATION = new LatLng(37.73659478, -122.19683306);
-    private static float DEFAULT_ZOOM = 6f;
 
     private LiveData<List<Station>> mStationsLivedata;
 
@@ -86,7 +82,7 @@ class GoogleMapViewModel extends AndroidViewModel {
                 }
             }
             // if user is already near destination station, alert user
-            if(destinationStation.equalsIgnoreCase(closestStation.getName())) {
+            if(destinationStation.equalsIgnoreCase(Objects.requireNonNull(closestStation).getName())) {
                 Log.i("closesstStation", "USER IS ALREADY THERE");
                 return null;
             }
@@ -110,6 +106,7 @@ class GoogleMapViewModel extends AndroidViewModel {
 
     void initDefaultLocation(GoogleMap map) {
         LatLng defaultLocation = DEFAULT_LOCATION;
+        float DEFAULT_ZOOM = 6f;
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
     }
 

@@ -22,13 +22,12 @@ import retrofit2.Response;
 public class TripRepository {
 
     private final RetrofitInterface service;
-    private final TripDao tripDao;
     private final Executor executor;
 
     @Inject
     TripRepository(RetrofitInterface service, TripDao tripDao, Executor executor) {
         this.service = service;
-        this.tripDao = tripDao;
+        TripDao tripDao1 = tripDao;
         this.executor = executor;
     }
 

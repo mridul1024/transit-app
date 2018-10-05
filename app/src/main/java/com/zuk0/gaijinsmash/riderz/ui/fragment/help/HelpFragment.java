@@ -25,16 +25,13 @@ public class HelpFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         Button mButton = mInflatedView.findViewById(R.id.help_report_button);
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("message/rfc822")
-                        .putExtra(Intent.EXTRA_EMAIL, new String[] {"zuk0.hack@gmail.com"})
-                        .putExtra(Intent.EXTRA_SUBJECT, "***RIDERZ BUG REPORT***")
-                        .putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.help_intent_text));
-                startActivity(Intent.createChooser(intent, getResources().getString(R.string.help_intent_title)));
-            }
+        mButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("message/rfc822")
+                    .putExtra(Intent.EXTRA_EMAIL, new String[] {"zuk0.hack@gmail.com"})
+                    .putExtra(Intent.EXTRA_SUBJECT, "***RIDERZ BUG REPORT***")
+                    .putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.help_intent_text));
+            startActivity(Intent.createChooser(intent, getResources().getString(R.string.help_intent_title)));
         });
     }
 

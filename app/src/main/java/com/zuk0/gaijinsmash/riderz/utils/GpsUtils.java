@@ -15,14 +15,13 @@ import android.util.Log;
 public class GpsUtils implements LocationListener {
 
     private final Context mContext;
-    private LocationManager mLocationManager;
     private Location mLocation;
     private double mLatitude;
     private double mLongitude;
 
     public GpsUtils(Context context) {
         this.mContext = context;
-        mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         // Define the criteria for how to select the location provider
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);

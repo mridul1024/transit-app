@@ -2,10 +2,7 @@ package com.zuk0.gaijinsmash.riderz.ui.fragment.favorite;
 
 import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
-
-import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 
 import javax.inject.Inject;
 

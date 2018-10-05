@@ -19,6 +19,7 @@ public class HomeViewModelFactory implements ViewModelProvider.Factory {
         this.etdRepository = etdRepository;
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public HomeViewModel create(@NonNull Class modelClass) {

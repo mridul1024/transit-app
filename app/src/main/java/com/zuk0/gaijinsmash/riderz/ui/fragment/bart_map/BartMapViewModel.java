@@ -2,7 +2,6 @@ package com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.widget.ImageView;
 

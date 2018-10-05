@@ -1,10 +1,12 @@
-package com.zuk0.gaijinsmash.riderz;
+package com.zuk0.gaijinsmash.riderz.ui;
 
 import android.support.test.espresso.contrib.DrawerActions;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
 
 import org.junit.Before;
@@ -32,7 +34,7 @@ public class GeneralFragmentTest {
 
     @Test
     public void TestMainActivity() {
-        onView(withId(R.id.fragmentContent)).check(matches((isDisplayed())));
+        onView(ViewMatchers.withId(R.id.fragmentContent)).check(matches((isDisplayed())));
     }
 
     @Test

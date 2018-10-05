@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
+import java.util.Objects;
+
 public class DialogUtils extends DialogFragment {
     public DialogUtils() {
         // Empty constructor required for DialogFragment
@@ -22,24 +24,17 @@ public class DialogUtils extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String title = getArguments().getString("title");
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        String title = Objects.requireNonNull(getArguments()).getString("title");
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         alertDialogBuilder.setTitle(title);
         alertDialogBuilder.setMessage("Are you sure?");
-        alertDialogBuilder.setPositiveButton("OK",  new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // on success
-            }
+        alertDialogBuilder.setPositiveButton("OK", (dialog, which) -> {
+            // on success
         });
-        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+        alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+            if (dialog != null) {
+                dialog.dismiss();
             }
-
         });
 
         return alertDialogBuilder.create();

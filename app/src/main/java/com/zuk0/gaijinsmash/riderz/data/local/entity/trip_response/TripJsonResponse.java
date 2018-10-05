@@ -1,7 +1,5 @@
 package com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.util.Xml;
 
 import com.google.gson.annotations.Expose;

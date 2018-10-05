@@ -22,14 +22,14 @@ public interface StationDAO {
 
     // Gets all stations from the database
     @Query("SELECT * from stations")
-    public List<Station> getAllStations();
+    List<Station> getAllStations();
 
     @Query("SELECT * from stations")
     LiveData<List<Station>> getStationsLiveData();
 
     // Select station by matching Longitude coordinate
     @Query("SELECT * from stations where longitude = :longitude")
-    public Station getStationByLongitude(String longitude);
+    Station getStationByLongitude(String longitude);
 
     @Query("SELECT * from stations where name = :origin or name = :destination")
     LiveData<List<Station>> getOriginAndDestination(String origin, String destination);

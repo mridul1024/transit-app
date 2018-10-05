@@ -11,23 +11,22 @@ import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-// Estimates
+@Singleton
 public class EtdRepository {
 
     private final RetrofitInterface service;
-    private final EtdDao etdDao;
-    private final Executor executor;
 
     @Inject
     EtdRepository(RetrofitInterface service, EtdDao etdDao, Executor executor) {
         this.service = service;
-        this.etdDao = etdDao;
-        this.executor = executor;
+        EtdDao etdDao1 = etdDao;
+        Executor executor1 = executor;
     }
 
     public LiveData<EtdXmlResponse> getEtd(String originAbbr) {

@@ -1,15 +1,14 @@
-package com.zuk0.gaijinsmash.riderz;
+package com.zuk0.gaijinsmash.riderz.ui;
 
-
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
+import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
+import com.zuk0.gaijinsmash.riderz.ui.fragment.google_map.GoogleMapFragment;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,28 +22,20 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class TripFragmentTest {
-
+public class GoogleMapFragmentTest {
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void init() {
-        Fragment frag = new TripFragment();
+        Fragment frag = new GoogleMapFragment();
         FragmentManager fm = mActivityRule.getActivity().getSupportFragmentManager();
         fm.beginTransaction().add(R.id.fragmentContent, frag).commit();
     }
 
     @Test
-    public void TestTripFragment() {
-        onView(withId(R.id.trip_container)).check(matches((isDisplayed())));
+    public void TestFavoritesFragment() {
+        onView(withId(R.id.googleMap_mapView)).check(matches((isDisplayed())));
+        onView(withId(R.id.googleMap_btn)).check(matches((isDisplayed())));
     }
-
-    // Use case: User selects a station and then hits spacebar, then pushes button -
-
-    // Use case: User uses keyboard and pushes characters/symbols that don't equal to a known Station.
-
-
-
-
 }

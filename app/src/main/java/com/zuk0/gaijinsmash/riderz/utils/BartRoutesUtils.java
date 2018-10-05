@@ -1,18 +1,13 @@
 package com.zuk0.gaijinsmash.riderz.utils;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Leg;
-import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-
-import javax.inject.Inject;
 
 public class BartRoutesUtils {
 

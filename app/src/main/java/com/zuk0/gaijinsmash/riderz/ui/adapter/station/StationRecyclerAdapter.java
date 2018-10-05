@@ -40,12 +40,7 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_row_station, viewGroup, false);
         ViewHolder holder = new ViewHolder(view);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mClickListener.onClick(v);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> mClickListener.onClick(v));
         return holder;
     }
 
