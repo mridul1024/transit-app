@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.local.converter
+package com.zuk0.gaijinsmash.riderz.data.local.room.converter
 
 import android.arch.persistence.room.TypeConverter
 

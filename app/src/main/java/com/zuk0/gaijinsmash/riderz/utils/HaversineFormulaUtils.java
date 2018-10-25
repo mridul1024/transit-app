@@ -1,5 +1,9 @@
 package com.zuk0.gaijinsmash.riderz.utils;
 
+/*
+    This class provides a formula to calculate distance
+    between two locations on Lat/Lng coordinates
+ */
 public class HaversineFormulaUtils {
 
     private final static double AVERAGE_RADIUS_OF_EARTH_KM = 6371;

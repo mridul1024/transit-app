@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
+import com.zuk0.gaijinsmash.riderz.databinding.ViewGoogleMapBinding;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
@@ -49,20 +51,15 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 
 public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
-    @BindView(R.id.googleMap_btn) Button mButton;
-    @BindView(R.id.googleMap_mapView) MapView mMapView;
-    @BindView(R.id.googleMap_progress_bar) ProgressBar mProgressBar;
-
-
     @Inject
     GoogleMapViewModelFactory mViewModelFactory;
 
+    private ViewGoogleMapBinding mDataBinding;
+    private MapView mMapView;
     private GoogleMapViewModel mViewModel;
     private List<Station> mStationList;
 
@@ -135,9 +132,8 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View mInflatedView = inflater.inflate(R.layout.view_google_map, container, false);
-        ButterKnife.bind(this, mInflatedView);
-        return mInflatedView;
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_google_map, container, false);
+        return mDataBinding.getRoot();
     }
 
     @Override
@@ -171,7 +167,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     }
 
     private void initBartButton() {
-        mButton.setOnClickListener(v -> initBartMapFragment());
+        mDataBinding.googleMapBtn.setOnClickListener(v -> initBartMapFragment());
     }
 
     private void initBartMapFragment() {
@@ -341,7 +337,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                 }
             }
-            mProgressBar.setVisibility(View.GONE);
+            mDataBinding.googleMapProgressBar.setVisibility(View.GONE);
         });
     }
 }

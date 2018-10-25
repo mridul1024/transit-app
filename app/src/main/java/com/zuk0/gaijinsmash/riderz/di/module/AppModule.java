@@ -4,14 +4,14 @@ import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 
-import com.zuk0.gaijinsmash.riderz.data.local.dao.BsaDao;
-import com.zuk0.gaijinsmash.riderz.data.local.dao.EtdDao;
-import com.zuk0.gaijinsmash.riderz.data.local.dao.StationDAO;
-import com.zuk0.gaijinsmash.riderz.data.local.dao.TripDao;
-import com.zuk0.gaijinsmash.riderz.data.local.database.BsaDatabase;
-import com.zuk0.gaijinsmash.riderz.data.local.database.EtdDatabase;
-import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
-import com.zuk0.gaijinsmash.riderz.data.local.database.TripDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.BsaDao;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.EtdDao;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.StationDao;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.TripDao;
+import com.zuk0.gaijinsmash.riderz.data.local.room.database.BsaDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.room.database.EtdDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.room.database.TripDatabase;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -34,6 +34,12 @@ public class AppModule {
 
     @Provides
     @Singleton
+    ViewModelProvider.Factory provideViewModelFactory() {
+        return new ViewModelProvider.NewInstanceFactory();
+    }
+
+    @Provides
+    @Singleton
     BsaDatabase provideBsaDatabase(Context context) {
         return BsaDatabase.getRoomDb(context);
     }
@@ -52,17 +58,11 @@ public class AppModule {
 
     @Provides
     @Singleton
-    ViewModelProvider.Factory provideViewModelFactory() {
-        return new ViewModelProvider.NewInstanceFactory();
-    }
-
-    @Provides
-    @Singleton
     StationDatabase provideStationDatabase(Context context) { return StationDatabase.getRoomDB(context); }
 
     @Provides
     @Singleton
-    StationDAO provideStationDao(StationDatabase db) { return db.getStationDAO(); }
+    StationDao provideStationDao(StationDatabase db) { return db.getStationDAO(); }
 
     @Provides
     @Singleton

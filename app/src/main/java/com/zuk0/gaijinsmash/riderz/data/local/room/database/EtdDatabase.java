@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.local.database;
+package com.zuk0.gaijinsmash.riderz.data.local.room.database;
 
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
@@ -8,8 +8,8 @@ import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
-import com.zuk0.gaijinsmash.riderz.data.local.converter.Converters;
-import com.zuk0.gaijinsmash.riderz.data.local.dao.EtdDao;
+import com.zuk0.gaijinsmash.riderz.data.local.room.converter.Converters;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.EtdDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
 
 @Database(entities = {EtdXmlResponse.class}, version = 1, exportSchema = false)

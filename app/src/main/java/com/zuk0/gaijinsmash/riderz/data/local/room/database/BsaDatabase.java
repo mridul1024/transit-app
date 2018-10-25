@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.local.database;
+package com.zuk0.gaijinsmash.riderz.data.local.room.database;
 
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
@@ -8,20 +8,20 @@ import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
-import com.zuk0.gaijinsmash.riderz.data.local.converter.Converters;
-import com.zuk0.gaijinsmash.riderz.data.local.dao.TripDao;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
+import com.zuk0.gaijinsmash.riderz.data.local.room.converter.Converters;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.BsaDao;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
 
-@Database(entities = {Trip.class}, version = 1, exportSchema = false)
+@Database(entities = {BsaXmlResponse.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
-public abstract class TripDatabase extends RoomDatabase {
+public abstract class BsaDatabase extends RoomDatabase {
 
-    private static TripDatabase INSTANCE;
-    public abstract TripDao getTripDao();
+    private static BsaDatabase INSTANCE;
+    public abstract BsaDao getBsaDAO();
 
-    public static TripDatabase getRoomDB(Context context) {
+    public static BsaDatabase getRoomDb(Context context) {
         if(INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), TripDatabase.class, "trips")
+            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), BsaDatabase.class, "advisories")
                     .addMigrations(MIGRATION)
                     .build();
         }
@@ -39,7 +39,8 @@ public abstract class TripDatabase extends RoomDatabase {
     private static final Migration MIGRATION = new Migration(1,2) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE trips ADD COLUMN last_update INTEGER");
+            database.execSQL("ALTER TABLE advisories ADD COLUMN last_update INTEGER");
         }
     };
+
 }

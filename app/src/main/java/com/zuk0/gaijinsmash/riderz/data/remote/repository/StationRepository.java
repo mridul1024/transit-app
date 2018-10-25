@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.data.local.dao.StationDAO;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.StationDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
@@ -24,17 +24,19 @@ import retrofit2.Response;
 public class StationRepository  {
 
     private final RetrofitInterface service;
-    private final StationDAO stationDAO;
+    private final StationDao stationDAO;
     private final Executor executor;
 
     @Inject
-    StationRepository(RetrofitInterface service, StationDAO stationDAO, Executor executor) {
+    StationRepository(RetrofitInterface service, StationDao stationDAO, Executor executor) {
         this.service = service;
         this.stationDAO = stationDAO;
         this.executor = executor;
     }
 
     public LiveData<StationXmlResponse> getStation(String abbr) {
+        //todo: if cached != null, return cached
+
         final MutableLiveData<StationXmlResponse> data = new MutableLiveData<>();
         service.getStation(abbr).enqueue(new Callback<StationXmlResponse>() {
             @Override

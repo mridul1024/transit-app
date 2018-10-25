@@ -14,8 +14,8 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class RetrofitConverterFactory extends Converter.Factory {
 
-    final Converter.Factory xmlFactory = SimpleXmlConverterFactory.create();
-    final Converter.Factory gsonFactory = GsonConverterFactory.create();
+    private final Converter.Factory xmlFactory = SimpleXmlConverterFactory.create();
+    private final Converter.Factory gsonFactory = GsonConverterFactory.create();
 
     @Override
     public Converter<ResponseBody, ?> responseBodyConverter(

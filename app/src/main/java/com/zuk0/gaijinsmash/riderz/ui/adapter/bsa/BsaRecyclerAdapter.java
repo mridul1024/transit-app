@@ -12,21 +12,21 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.Bsa;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class BsaRecyclerAdapter extends RecyclerView.Adapter<BsaRecyclerAdapter.ViewHolder>  {
 
     private List<Bsa> mAdvisoryList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.bsa_station_textView) TextView stationName;
-        @BindView(R.id.bsa_type_textView) TextView bsaType;
-        @BindView(R.id.bsa_description_textView) TextView bsaDescription;
+
+        private TextView stationName;
+        private TextView bsaType;
+        private TextView bsaDescription;
 
         ViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this, view);
+            stationName = view.findViewById(R.id.bsa_station_textView);
+            bsaType = view.findViewById(R.id.bsa_type_textView);
+            bsaDescription = view.findViewById(R.id.bsa_description_textView);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.local.database;
+package com.zuk0.gaijinsmash.riderz.data.local.room.database;
 
 
 import android.arch.persistence.room.Database;
@@ -6,7 +6,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import com.zuk0.gaijinsmash.riderz.data.local.dao.StationDAO;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.StationDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 
 @Database(entities = {Station.class}, version = 4, exportSchema = false)
@@ -14,7 +14,7 @@ public abstract class StationDatabase extends RoomDatabase {
 
     private static StationDatabase INSTANCE;
 
-    public abstract StationDAO getStationDAO();
+    public abstract StationDao getStationDAO();
 
     public static StationDatabase getRoomDB(Context context) {
         if(INSTANCE == null) {

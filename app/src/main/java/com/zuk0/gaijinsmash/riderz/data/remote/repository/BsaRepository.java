@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.data.local.dao.BsaDao;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.BsaDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
 
@@ -36,10 +36,12 @@ public class BsaRepository {
     BsaRepository(RetrofitInterface service, BsaDao bsaDao, Executor executor) {
         this.service = service;
         this.bsaDao = bsaDao; // for caching
-        this.executor = executor; // for executing on thread?
+        this.executor = executor; // for executing on new thread
     }
 
     public LiveData<BsaXmlResponse> getBsa() {
+        //todo: if cached != null, return cached
+
         final MutableLiveData<BsaXmlResponse> data = new MutableLiveData<>();
         service.getBsa().enqueue(new Callback<BsaXmlResponse>() {
             @Override

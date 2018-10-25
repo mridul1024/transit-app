@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
 import com.zuk0.gaijinsmash.riderz.utils.HaversineFormulaUtils;

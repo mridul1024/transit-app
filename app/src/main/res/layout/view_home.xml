@@ -1,106 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_home_container"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:fitsSystemWindows="true"
-    android:paddingBottom="50dp">
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/home_appbar"
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/fragment_home_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:paddingBottom="50dp">
 
-        <ImageView
-            android:id="@+id/home_banner_imageView"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/home_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/banner"
-            android:elevation="0dp"
-            app:layout_scrollFlags="scroll|snap"/>
+            android:fitsSystemWindows="true">
 
-    </android.support.design.widget.AppBarLayout>
+            <ImageView
+                android:id="@+id/home_banner_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/banner"
+                android:elevation="0dp"
+                app:layout_scrollFlags="scroll|snap"/>
 
-    <android.support.v4.widget.NestedScrollView
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:scrollbars="none">
+        </android.support.design.widget.AppBarLayout>
 
-        <LinearLayout
-            android:orientation="vertical"
+        <android.support.v4.widget.NestedScrollView
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="none">
 
-            <ProgressBar
-                android:id="@+id/home_etd_progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:layout_gravity="center_horizontal" />
-
-            <TextView
-                android:id="@+id/home_view_alertsTv"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:elevation="1dp"
-                android:padding="5dp"
-                android:background="@color/mp_primary_light"
-                android:gravity="center_horizontal"
-                android:text="@string/home_alerts"
-                android:textColor="@color/mp_primary_text" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/bsa_view_timeTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center_horizontal" />
+                <ProgressBar
+                    android:id="@+id/home_etd_progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:layout_gravity="center_horizontal" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/home_bsa_recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:background="@color/mp_primary_light"
-                android:elevation="1dp" />
+                <TextView
+                    android:id="@+id/home_view_alertsTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:elevation="1dp"
+                    android:padding="5dp"
+                    android:background="@color/mp_primary_light"
+                    android:gravity="center_horizontal"
+                    android:text="@string/home_alerts"
+                    android:textColor="@color/mp_primary_text" />
 
-            <TextView
-                android:id="@+id/home_etd_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:layout_margin="5dp"
-                android:gravity="center_horizontal"
-                android:visibility="gone"
-                android:text="@string/real_time_estimates"/>
+                <TextView
+                    android:id="@+id/bsa_view_timeTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center_horizontal" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/home_etd_recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:elevation="1dp"/>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/home_bsa_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:background="@color/mp_primary_light"
+                    android:elevation="1dp" />
 
-            <TextView
-                android:id="@+id/home_etd_error"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:padding="10dp"
-                android:layout_margin="7dp"
-                android:background="@color/mp_primary_light"
-                android:elevation="1dp"
-                android:gravity="center_horizontal" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/home_etd_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:layout_margin="5dp"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone"
+                    android:text="@string/real_time_estimates"/>
 
-    </android.support.v4.widget.NestedScrollView>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/home_etd_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:elevation="1dp"/>
 
-</android.support.design.widget.CoordinatorLayout>
+                <TextView
+                    android:id="@+id/home_etd_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:padding="10dp"
+                    android:layout_margin="7dp"
+                    android:background="@color/mp_primary_light"
+                    android:elevation="1dp"
+                    android:gravity="center_horizontal" />
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

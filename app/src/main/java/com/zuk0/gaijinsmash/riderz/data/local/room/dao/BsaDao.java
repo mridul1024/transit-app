@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.local.dao;
+package com.zuk0.gaijinsmash.riderz.data.local.room.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -19,4 +19,8 @@ public interface BsaDao {
 
     @Query("SELECT * From advisories where id = :bsaId")
     boolean bsaExists(int bsaId);
+
+    @Query("SELECT * From advisories where id = :id")
+    BsaXmlResponse getBsaById(int id);
 }
+

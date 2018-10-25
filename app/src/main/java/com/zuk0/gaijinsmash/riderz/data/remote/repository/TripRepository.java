@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.data.local.dao.TripDao;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.TripDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
 
@@ -23,15 +23,18 @@ public class TripRepository {
 
     private final RetrofitInterface service;
     private final Executor executor;
+    private final TripDao tripDao;
 
     @Inject
     TripRepository(RetrofitInterface service, TripDao tripDao, Executor executor) {
         this.service = service;
-        TripDao tripDao1 = tripDao;
+        this.tripDao = tripDao;
         this.executor = executor;
     }
 
     public LiveData<TripJsonResponse> getTrip(String origin, String destination, String date, String time) {
+        //todo: if cached != null, return cached
+
         final MutableLiveData<TripJsonResponse> data = new MutableLiveData<>();
         service.getTripJson(origin, destination, date, time).enqueue(new Callback<TripJsonResponse>() {
             @Override
@@ -48,8 +51,11 @@ public class TripRepository {
     }
 
     public void refreshTrip(final int tripId) {
+
+        // runs in a background thread
         executor.execute(() -> {
             //todo  save data logic here
+            //boolean tripExists = tripDao.hasTrip();
         });
     }
 }

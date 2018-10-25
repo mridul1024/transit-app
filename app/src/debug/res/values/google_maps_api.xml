@@ -6,7 +6,7 @@
 
     https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=76:A0:D8:BC:A2:0B:66:64:DE:A3:FD:3F:CB:DB:40:E1:DA:AB:F1:3A%3Bcom.example.gaijinsmash.transitapp.activity
 
-    You can also add your credentials to an existing key, using these values:
+    You can also save your credentials to an existing key, using these values:
 
     Package name:
     76:A0:D8:BC:A2:0B:66:64:DE:A3:FD:3F:CB:DB:40:E1:DA:AB:F1:3A

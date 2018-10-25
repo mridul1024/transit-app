@@ -27,24 +27,24 @@ import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecyclerAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.favorite_origin_textView) TextView origin;
-        @BindView(R.id.favorite_destination_textView) TextView destination;
-        @BindView(R.id.favorite_search_ib) ImageButton searchButton;
-        @BindView(R.id.favorite_options_ib) ImageButton optionsButton;
-        @BindView(R.id.favorite_reverse_ib) ImageButton reverseButton;
+        private TextView origin;
+        private TextView destination;
+        private ImageButton searchButton;
+        private ImageButton optionsButton;
+        private ImageButton reverseButton;
 
         ViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this, view);
+            origin = view.findViewById(R.id.favorite_origin_textView);
+            destination = view.findViewById(R.id.favorite_destination_textView);
+            searchButton = view.findViewById(R.id.favorite_search_ib);
+            optionsButton = view.findViewById(R.id.favorite_options_ib);
+            reverseButton = view.findViewById(R.id.favorite_reverse_ib);
 
             reverseButton.setOnClickListener(v -> reverseRoute(origin, destination));
-
             searchButton.setOnClickListener(v -> initTripSearch(v.getContext(), origin, destination));
         }
     }

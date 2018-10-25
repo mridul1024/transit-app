@@ -10,18 +10,16 @@ import javax.inject.Inject;
 
 public class SplashViewModelFactory implements ViewModelProvider.Factory {
 
-    private final StationRepository repository;
     private final Application application;
 
     @Inject
-    SplashViewModelFactory(Application application, StationRepository repository) {
+    SplashViewModelFactory(Application application) {
         this.application = application;
-        this.repository = repository;
     }
 
     @NonNull
     @Override
     public SplashViewModel create(@NonNull Class modelClass) {
-        return new SplashViewModel(application, repository);
+        return new SplashViewModel(application);
     }
 }

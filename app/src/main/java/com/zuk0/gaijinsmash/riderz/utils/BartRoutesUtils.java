@@ -11,13 +11,7 @@ import java.util.List;
 
 public class BartRoutesUtils {
 
-    private Context context;
-
-    public BartRoutesUtils(Context context) {
-        this.context = context;
-    }
-
-    public void setLineBarByRoute(String route, TextView coloredBar) {
+    public static void setLineBarByRoute(Context context, String route, TextView coloredBar) {
         switch(route) {
             case "ROUTE 1": coloredBar.setBackgroundColor(context.getResources().getColor(R.color.bartYellowLine));
                 break;
@@ -98,7 +92,7 @@ public class BartRoutesUtils {
     public static ArrayList<String> getTrainHeadersListFromFullTrip(List<Leg> legList) {
         ArrayList<String> headers = new ArrayList<>();
         for(Leg leg : legList) {
-            headers.add(fullTrip.getLegList().get(0).getTrainHeadStation());
+            headers.save(fullTrip.getLegList().get(0).getTrainHeadStation());
             if(DebugController.DEBUG) Log.d("trainHeader added", fullTrip.getLegList().get(0).getTrainHeadStation());
         }
         return headers;

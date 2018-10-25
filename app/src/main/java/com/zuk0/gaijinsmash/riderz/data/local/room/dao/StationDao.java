@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.local.dao;
+package com.zuk0.gaijinsmash.riderz.data.local.room.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -14,11 +14,14 @@ import java.util.List;
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao
-public interface StationDAO {
+public interface StationDao {
 
     // Removes a station from the database
     @Delete
     void delete(Station station);
+
+    @Query("SELECT * from stations where id = :id")
+    Station getStationByID(int id);
 
     // Gets all stations from the database
     @Query("SELECT * from stations")

@@ -5,7 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.StationRepository;
 import com.zuk0.gaijinsmash.riderz.utils.xml_parser.StationXmlParser;
@@ -24,9 +24,8 @@ public class SplashViewModel extends AndroidViewModel {
     private static final int BART_STATIONS_COUNT = 48;
 
     @Inject
-    SplashViewModel(Application application, StationRepository repository) {
+    SplashViewModel(Application application) {
         super(application);
-        StationRepository mRepository = repository;
     }
 
     public void initStationsData() {

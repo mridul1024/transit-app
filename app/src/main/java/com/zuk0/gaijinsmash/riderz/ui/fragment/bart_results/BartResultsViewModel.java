@@ -6,8 +6,8 @@ import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
-import com.zuk0.gaijinsmash.riderz.data.local.database.StationDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.room.database.FavoriteDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
@@ -97,7 +97,7 @@ public class BartResultsViewModel extends AndroidViewModel {
                     if(FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().getPriorityCount() == 0) {
                         mFavorite.setPriority(Favorite.Priority.ON);
                     }
-                    FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().add(mFavorite);
+                    FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().save(mFavorite);
                     break;
                 case DELETE_FAVORITE:
                     FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().delete(mFavorite);

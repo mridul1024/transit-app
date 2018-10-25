@@ -1,28 +1,26 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.stations;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
+import com.zuk0.gaijinsmash.riderz.databinding.ViewStationBinding;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.station.StationRecyclerAdapter;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.station_info.StationInfoFragment;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 
 public class StationsFragment extends Fragment {
@@ -30,10 +28,8 @@ public class StationsFragment extends Fragment {
     @Inject
     StationsViewModelFactory mStationsViewModelFactory;
 
+    private ViewStationBinding mDataBinding;
     private StationsViewModel mViewModel;
-
-    @BindView(R.id.station_recyclerView) RecyclerView mRecyclerView;
-    @BindView(R.id.station_progress_bar) ProgressBar mProgressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -43,9 +39,8 @@ public class StationsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View mInflatedView = inflater.inflate(R.layout.view_station, container, false);
-        ButterKnife.bind(this, mInflatedView);
-        return mInflatedView;
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_station, container, false);
+        return mDataBinding.getRoot();
     }
 
     @Override
@@ -98,8 +93,8 @@ public class StationsFragment extends Fragment {
             //update the ui
             if(stations != null) {
                 StationRecyclerAdapter adapter = new StationRecyclerAdapter(stations);
-                mRecyclerView.setAdapter(adapter);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                mDataBinding.stationRecyclerView.setAdapter(adapter);
+                mDataBinding.stationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 adapter.setClickListener(this::handleListItemClick);
             } else {
                 mViewModel.getListFromRepo()
@@ -107,15 +102,15 @@ public class StationsFragment extends Fragment {
                             StationRecyclerAdapter adapter;
                             if (data != null) {
                                 adapter = new StationRecyclerAdapter(data.getStationList());
-                                mRecyclerView.setAdapter(adapter);
-                                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                                mDataBinding.stationRecyclerView.setAdapter(adapter);
+                                mDataBinding.stationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                                 adapter.setClickListener(this::handleListItemClick);
                             } else {
                                 Log.wtf("StationsFragment", "error with list");
                             }
                         });
             }
-            mProgressBar.setVisibility(View.GONE);
+            mDataBinding.stationProgressBar.setVisibility(View.GONE);
         });
     }
 }

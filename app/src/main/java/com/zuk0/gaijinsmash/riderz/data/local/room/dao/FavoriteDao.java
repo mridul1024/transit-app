@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.local.dao;
+package com.zuk0.gaijinsmash.riderz.data.local.room.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -13,13 +13,16 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 import java.util.List;
 
 @Dao
-public interface FavoriteDAO {
+public interface FavoriteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void add(Favorite favorite);
+    void save(Favorite favorite);
 
     @Delete
     void delete(Favorite favorite);
+
+    @Query("SELECT * from favorites where id = :id")
+    Favorite getFavoriteById(int id);
 
     @Query("SELECT * from favorites where destinationTrip = :originTrip OR originTrip = :originTrip")
     Favorite getFavorite(Trip originTrip);
@@ -38,7 +41,7 @@ public interface FavoriteDAO {
 
     //Update a priority favorite
     @Query("Update favorites set priority = 1 where id = :id")
-    void addPriorityById(int id);
+    void updatePriorityById(int id);
 
     //Update priority to null
     @Query("Update favorites set priority = 0 where id = :id")

@@ -8,7 +8,7 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.data.local.constants.RiderzEnums;
-import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.room.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 
 import java.lang.ref.WeakReference;
@@ -66,7 +66,7 @@ public class FavoritesViewModel extends AndroidViewModel {
                         return false;
                     }
                     if(FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().getPriorityCount() == 0) {
-                        FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().addPriorityById(mFavorite.getId());
+                        FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().updatePriorityById(mFavorite.getId());
                         return true;
                     }
                     return false;

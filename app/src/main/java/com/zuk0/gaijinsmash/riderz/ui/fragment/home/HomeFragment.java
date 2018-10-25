@@ -2,6 +2,7 @@ package com.zuk0.gaijinsmash.riderz.ui.fragment.home;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,13 +19,12 @@ import android.widget.TextView;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
+import com.zuk0.gaijinsmash.riderz.databinding.ViewHomeBinding;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.bsa.BsaRecyclerAdapter;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.estimate.EstimateRecyclerAdapter;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 
 // must use android.support.v4.app.Fragment for ViewModelProvider compatibility
@@ -33,15 +33,8 @@ public class HomeFragment extends Fragment  {
     @Inject
     HomeViewModelFactory mHomeViewModelFactory;
 
+    private ViewHomeBinding mDataBinding;
     private HomeViewModel mViewModel;
-
-    @BindView(R.id.home_bsa_recyclerView) RecyclerView mAdvisoryRecyclerView;
-    @BindView(R.id.home_etd_recyclerView) RecyclerView mEstimateRecyclerView;
-    @BindView(R.id.home_etd_title) TextView mEtdTitle;
-    @BindView(R.id.home_etd_error) TextView mEstimateErrorTv;
-    @BindView(R.id.bsa_view_timeTv) TextView mBsaTimeTv;
-    @BindView(R.id.home_etd_progressBar) ProgressBar mEtdProgressBar; // default is VISIBLE
-    @BindView(R.id.home_banner_imageView) ImageView mImageView;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -51,9 +44,8 @@ public class HomeFragment extends Fragment  {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View mInflatedView = inflater.inflate(R.layout.view_home, container, false);
-        ButterKnife.bind(this, mInflatedView);
-        return mInflatedView;
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_home, container, false);
+        return mDataBinding.getRoot();
     }
 
     @Override
@@ -76,17 +68,17 @@ public class HomeFragment extends Fragment  {
     }
 
     private void initPicture(HomeViewModel viewModel) {
-        viewModel.initPic(getActivity(), mViewModel.getHour(), mImageView);
+        viewModel.initPic(getActivity(), mViewModel.getHour(), mDataBinding.homeBannerImageView);
     }
 
     private void updateAdvisories(LiveData<BsaXmlResponse> bsa) {
         bsa.observe(this, bsaXmlResponse -> {
             //update the ui here
             if (bsaXmlResponse != null) {
-                mBsaTimeTv.setText(mViewModel.initMessage(getActivity(),mViewModel.is24HrTimeOn(getActivity()),bsaXmlResponse.getTime()));
+                mDataBinding.bsaViewTimeTv.setText(mViewModel.initMessage(getActivity(),mViewModel.is24HrTimeOn(getActivity()),bsaXmlResponse.getTime()));
                 BsaRecyclerAdapter bsaAdapter = new BsaRecyclerAdapter(bsaXmlResponse.getBsaList());
-                mAdvisoryRecyclerView.setAdapter(bsaAdapter);
-                mAdvisoryRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                mDataBinding.homeBsaRecyclerView.setAdapter(bsaAdapter);
+                mDataBinding.homeBsaRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             }
         });
     }
@@ -96,12 +88,12 @@ public class HomeFragment extends Fragment  {
             if(etdXmlResponse != null) {
 
                 EstimateRecyclerAdapter etdAdapter = new EstimateRecyclerAdapter(etdXmlResponse.getStation().getEtdList().get(0).getEstimateList());
-                mEstimateRecyclerView.setAdapter(etdAdapter);
+                mDataBinding.homeEtdRecyclerView.setAdapter(etdAdapter);
             }
         });
     }
 
     private void updateProgressBar() {
-        mEtdProgressBar.setVisibility(View.GONE);
+        mDataBinding.homeEtdProgressBar.setVisibility(View.GONE);
     }
 }

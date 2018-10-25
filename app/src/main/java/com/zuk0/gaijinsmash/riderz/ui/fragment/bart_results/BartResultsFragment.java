@@ -3,12 +3,11 @@ package com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results;
 import android.app.AlertDialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,7 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
@@ -24,6 +22,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.constants.RiderzEnums;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
+import com.zuk0.gaijinsmash.riderz.databinding.ViewResultsBinding;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.trip.TripRecyclerAdapter;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
 
@@ -31,17 +30,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 
 public class BartResultsFragment extends Fragment {
 
-    @BindView(R.id.results_recyclerView) RecyclerView mRecyclerView;
-    @BindView(R.id.bart_results_progressBar) ProgressBar mProgressBar;
-
     @Inject
     BartResultsViewModelFactory mBartResultsViewModelFactory;
+
+    private ViewResultsBinding mDataBinding;
 
     private BartResultsViewModel mViewModel;
     private String mOrigin, mDestination, mDate, mTime;
@@ -58,9 +54,8 @@ public class BartResultsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View inflatedView = inflater.inflate(R.layout.view_results, container, false);
-        ButterKnife.bind(this, inflatedView);
-        return inflatedView;
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_results, container, false);
+        return mDataBinding.getRoot();
     }
 
     @Override
@@ -149,9 +144,9 @@ public class BartResultsFragment extends Fragment {
     private void initRecylerView(List<Trip> tripList) {
         if(tripList != null) {
             TripRecyclerAdapter adapter = new TripRecyclerAdapter(getActivity(), tripList);
-            mRecyclerView.setAdapter(adapter);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mProgressBar.setVisibility(View.GONE);
+            mDataBinding.resultsRecyclerView.setAdapter(adapter);
+            mDataBinding.resultsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mDataBinding.bartResultsProgressBar.setVisibility(View.GONE);
         }
     }
 

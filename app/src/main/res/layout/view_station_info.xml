@@ -1,155 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="60dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
-            style="@style/CardViewRiderz"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="60dp">
 
-            <RelativeLayout
+            <android.support.v7.widget.CardView
+                style="@style/CardViewRiderz"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="5dp">
+                android:layout_height="wrap_content">
 
-                <ProgressBar
-                    android:id="@+id/station_info_progressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:visibility="visible"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="5dp">
 
-                <TextView
-                    android:id="@+id/stationInfo_title_textView"
-                    style="@style/ViewTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:text="@string/stationInfo_stationName"
-                    android:textColor="@color/mp_primary_text" />
+                    <ProgressBar
+                        android:id="@+id/station_info_progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:visibility="visible"/>
 
-                <TextView
-                    android:id="@+id/stationInfo_address_textView"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/stationInfo_title_textView"
-                    android:text="@string/stationInfo_stationAddress" />
+                    <TextView
+                        android:id="@+id/stationInfo_title_textView"
+                        style="@style/ViewTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="@string/stationInfo_stationName"
+                        android:textColor="@color/mp_primary_text" />
 
-                <Button
-                    android:id="@+id/stationInfo_map_btn"
-                    style="@style/ButtonAppTheme2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignTop="@id/stationInfo_address_textView"
-                    android:drawableStart="@drawable/ic_map_black_24dp"
-                    android:text="@string/stationInfo_map_button" />
+                    <TextView
+                        android:id="@+id/stationInfo_address_textView"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/stationInfo_title_textView"
+                        android:text="@string/stationInfo_stationAddress" />
 
-                <TextView
-                    android:id="@+id/stationInfo_city_textView"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/stationInfo_address_textView"
-                    android:text="@string/stationInfo_stationCity" />
+                    <Button
+                        android:id="@+id/stationInfo_map_btn"
+                        style="@style/ButtonAppTheme2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignTop="@id/stationInfo_address_textView"
+                        android:drawableStart="@drawable/ic_map_black_24dp"
+                        android:text="@string/stationInfo_map_button" />
 
-                <TextView
-                    android:id="@+id/stationInfo_crossStreet_textView"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/stationInfo_city_textView"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/stationInfo_station_crossStreet" />
+                    <TextView
+                        android:id="@+id/stationInfo_city_textView"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/stationInfo_address_textView"
+                        android:text="@string/stationInfo_stationCity" />
 
-                <TextView
-                    android:id="@+id/stationInfo_link_textView"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/stationInfo_crossStreet_textView"
-                    android:autoLink="web"
-                    android:text="@string/stationInfo_stationLink"
-                    android:textColor="@color/mp_primary" />
+                    <TextView
+                        android:id="@+id/stationInfo_crossStreet_textView"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/stationInfo_city_textView"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/stationInfo_station_crossStreet" />
 
-                <TextView
-                    android:id="@+id/stationInfo_intro_textView"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/stationInfo_link_textView"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/stationInfo_stationIntro" />
+                    <TextView
+                        android:id="@+id/stationInfo_link_textView"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/stationInfo_crossStreet_textView"
+                        android:autoLink="web"
+                        android:text="@string/stationInfo_stationLink"
+                        android:textColor="@color/mp_primary" />
 
-                <TextView
-                    android:id="@+id/stationInfo_attractionTitle_textView"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/stationInfo_intro_textView"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/stationInfo_attractionTitle"
-                    android:textColor="@color/mp_primary_text" />
+                    <TextView
+                        android:id="@+id/stationInfo_intro_textView"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/stationInfo_link_textView"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/stationInfo_stationIntro" />
 
-                <TextView
-                    android:id="@+id/stationInfo_attraction_textView"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/stationInfo_attractionTitle_textView"
-                    tools:text="@string/stationInfo_stationAttraction" />
+                    <TextView
+                        android:id="@+id/stationInfo_attractionTitle_textView"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/stationInfo_intro_textView"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/stationInfo_attractionTitle"
+                        android:textColor="@color/mp_primary_text" />
 
-                <TextView
-                    android:id="@+id/stationInfo_shoppingTitle_textView"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/stationInfo_attraction_textView"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/stationInfo_shoppingTitle"
-                    android:textColor="@color/mp_primary_text" />
+                    <TextView
+                        android:id="@+id/stationInfo_attraction_textView"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/stationInfo_attractionTitle_textView"
+                        tools:text="@string/stationInfo_stationAttraction" />
 
-                <TextView
-                    android:id="@+id/stationInfo_shopping_textView"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/stationInfo_shoppingTitle_textView"
-                    tools:text="@string/stationInfo_stationShopping" />
+                    <TextView
+                        android:id="@+id/stationInfo_shoppingTitle_textView"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/stationInfo_attraction_textView"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/stationInfo_shoppingTitle"
+                        android:textColor="@color/mp_primary_text" />
 
-                <TextView
-                    android:id="@+id/stationInfo_foodTitle_textView"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/stationInfo_shopping_textView"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/stationInfo_foodTitle"
-                    android:textColor="@color/mp_primary_text" />
+                    <TextView
+                        android:id="@+id/stationInfo_shopping_textView"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/stationInfo_shoppingTitle_textView"
+                        tools:text="@string/stationInfo_stationShopping" />
 
-                <TextView
-                    android:id="@+id/stationInfo_food_textView"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/stationInfo_foodTitle_textView"
-                    tools:text="@string/stationInfo_stationFood" />
-            </RelativeLayout>
+                    <TextView
+                        android:id="@+id/stationInfo_foodTitle_textView"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/stationInfo_shopping_textView"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/stationInfo_foodTitle"
+                        android:textColor="@color/mp_primary_text" />
 
-        </android.support.v7.widget.CardView>
+                    <TextView
+                        android:id="@+id/stationInfo_food_textView"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/stationInfo_foodTitle_textView"
+                        tools:text="@string/stationInfo_stationFood" />
+                </RelativeLayout>
 
-    </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-</ScrollView>
+        </LinearLayout>
+
+    </ScrollView>
+</layout>

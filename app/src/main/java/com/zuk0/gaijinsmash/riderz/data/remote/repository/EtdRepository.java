@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.data.local.dao.EtdDao;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.EtdDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
 
@@ -21,15 +21,19 @@ import retrofit2.Response;
 public class EtdRepository {
 
     private final RetrofitInterface service;
+    private Executor executor;
+    private EtdDao etdDao;
 
     @Inject
     EtdRepository(RetrofitInterface service, EtdDao etdDao, Executor executor) {
         this.service = service;
-        EtdDao etdDao1 = etdDao;
-        Executor executor1 = executor;
+        this.etdDao = etdDao;
+        this.executor = executor;
     }
 
     public LiveData<EtdXmlResponse> getEtd(String originAbbr) {
+        //todo: if cached != null, return cached
+
         final MutableLiveData<EtdXmlResponse> data = new MutableLiveData<>();
         service.getEtd(originAbbr).enqueue(new Callback<EtdXmlResponse>() {
             @Override

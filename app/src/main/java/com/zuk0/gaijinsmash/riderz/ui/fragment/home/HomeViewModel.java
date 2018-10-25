@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.data.local.database.FavoriteDatabase;
+import com.zuk0.gaijinsmash.riderz.data.local.room.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
@@ -43,25 +43,17 @@ public class HomeViewModel extends ViewModel {
     @Inject
     HomeViewModel(BsaRepository bsaRepository, EtdRepository etdRepository) {
         mBsaRepository = bsaRepository;
+        }
 
-        initData();
-    }
-
-    // Only perform initialization once per app lifetime.
-    private synchronized void initData() {
+    public LiveData<BsaXmlResponse> getBsaLiveData() {
         if(mBsaLiveData == null) {
             mBsaLiveData = mBsaRepository.getBsa();
         }
-
-        //todo: init favorites and call
-    }
-
-    public LiveData<BsaXmlResponse> getBsaLiveData() {
         return mBsaLiveData;
     }
 
     // Create message for Advisory Time and Date
-    public boolean is24HrTimeOn(Context context) {
+    boolean is24HrTimeOn(Context context) {
         return SharedPreferencesUtils.getTimePreference(context);
     }
 
@@ -75,16 +67,16 @@ public class HomeViewModel extends ViewModel {
         return result;
     }
 
-    public String initMessage(Context context, boolean is24HrTimeOn, String time) {
+    String initMessage(Context context, boolean is24HrTimeOn, String time) {
         return context.getResources().getString(R.string.last_update) + " " + initTime(is24HrTimeOn, time);
     }
 
     // For the home screen banner picture
-    public int getHour() {
+    int getHour() {
         return TimeDateUtils.getCurrentHour();
     }
 
-    public void initPic(Context context, int hour, ImageView imageView) {
+    void initPic(Context context, int hour, ImageView imageView) {
         if(hour < 6 || hour >= 21) {
             // show night picture
             Glide.with(context)

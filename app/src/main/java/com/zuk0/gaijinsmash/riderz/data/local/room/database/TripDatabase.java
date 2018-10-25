@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.local.database;
+package com.zuk0.gaijinsmash.riderz.data.local.room.database;
 
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
@@ -8,20 +8,20 @@ import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
-import com.zuk0.gaijinsmash.riderz.data.local.converter.Converters;
-import com.zuk0.gaijinsmash.riderz.data.local.dao.BsaDao;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
+import com.zuk0.gaijinsmash.riderz.data.local.room.converter.Converters;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.TripDao;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 
-@Database(entities = {BsaXmlResponse.class}, version = 1, exportSchema = false)
+@Database(entities = {Trip.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
-public abstract class BsaDatabase extends RoomDatabase {
+public abstract class TripDatabase extends RoomDatabase {
 
-    private static BsaDatabase INSTANCE;
-    public abstract BsaDao getBsaDAO();
+    private static TripDatabase INSTANCE;
+    public abstract TripDao getTripDao();
 
-    public static BsaDatabase getRoomDb(Context context) {
+    public static TripDatabase getRoomDB(Context context) {
         if(INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), BsaDatabase.class, "advisories")
+            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), TripDatabase.class, "trips")
                     .addMigrations(MIGRATION)
                     .build();
         }
@@ -39,8 +39,7 @@ public abstract class BsaDatabase extends RoomDatabase {
     private static final Migration MIGRATION = new Migration(1,2) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE advisories ADD COLUMN last_update INTEGER");
+            database.execSQL("ALTER TABLE trips ADD COLUMN last_update INTEGER");
         }
     };
-
 }

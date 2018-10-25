@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/bart_map_container"
-    android:paddingBottom="50dp">
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bart_map_container"
+        android:paddingBottom="50dp">
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/bartMap_imageView"
                     android:layout_width="wrap_content"
@@ -14,5 +15,6 @@
                     android:contentDescription="@string/bart_lines_map_description"
                     android:elevation="1dp"
                     android:scaleType="matrix" />
-        </HorizontalScrollView>
-</ScrollView>
+            </HorizontalScrollView>
+    </ScrollView>
+</layout>

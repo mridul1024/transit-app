@@ -11,7 +11,7 @@ import dagger.Provides;
 public class SplashActivityModule {
 
     @Provides
-    SplashViewModel provideSplashViewModel(Application application, StationRepository repository) {
-        return new SplashViewModel(application, repository);
+    SplashViewModel provideSplashViewModel(Application application) {
+        return new SplashViewModel(application);
     }
 }

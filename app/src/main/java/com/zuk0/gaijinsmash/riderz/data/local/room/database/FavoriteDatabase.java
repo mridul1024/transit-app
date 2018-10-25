@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.local.database;
+package com.zuk0.gaijinsmash.riderz.data.local.room.database;
 
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
@@ -8,8 +8,8 @@ import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
-import com.zuk0.gaijinsmash.riderz.data.local.converter.Converters;
-import com.zuk0.gaijinsmash.riderz.data.local.dao.FavoriteDAO;
+import com.zuk0.gaijinsmash.riderz.data.local.room.converter.Converters;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.FavoriteDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 
 @Database(entities = {Favorite.class}, version = 1, exportSchema = false)
@@ -17,9 +17,9 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 public abstract class FavoriteDatabase extends RoomDatabase {
 
     private static FavoriteDatabase INSTANCE;
-    public abstract FavoriteDAO getFavoriteDAO();
+    public abstract FavoriteDao getFavoriteDAO();
 
-    //todo: add synchronized?
+    //todo: save synchronized?
     public static FavoriteDatabase getRoomDB(Context context) {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), FavoriteDatabase.class, "favorites")

@@ -13,21 +13,22 @@ import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecyclerAdapter.ViewHolder>{
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.etd_originTv) TextView origin;
-        @BindView(R.id.etd_destinationTv) TextView destination;
-        @BindView(R.id.etd_minutesTv) TextView minutes;
-        @BindView(R.id.etd_colored_line) TextView line;
-        @BindView(R.id.etd_minutes_tag_tV) TextView tag;
+        private TextView origin;
+        private TextView destination;
+        private TextView minutes;
+        private TextView line;
+        private TextView tag;
 
         ViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this, view);
+            origin = view.findViewById(R.id.etd_originTv);
+            destination = view.findViewById(R.id.etd_destinationTv);
+            minutes = view.findViewById(R.id.etd_minutesTv);
+            line = view.findViewById(R.id.etd_colored_line);
+            tag = view.findViewById(R.id.etd_minutes_tag_tV);
         }
     }
 
