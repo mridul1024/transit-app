@@ -133,6 +133,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_google_map, container, false);
+        mMapView = mDataBinding.googleMapMapView;
         return mDataBinding.getRoot();
     }
 
