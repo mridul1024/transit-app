@@ -22,8 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +40,7 @@ import com.zuk0.gaijinsmash.riderz.databinding.ViewGoogleMapBinding;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
+import com.zuk0.gaijinsmash.riderz.utils.AlertDialogUtils;
 import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
 import com.zuk0.gaijinsmash.riderz.utils.NetworkUtils;
 import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
@@ -214,19 +213,24 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         String yesAction = getResources().getString(R.string.alert_dialog_yes);
         Snackbar.make(parentView, message, Snackbar.LENGTH_INDEFINITE)
                 .setAction(yesAction, view -> {
-                    Station station = mViewModel.findNearestMarker(map, position, destination, mStationList);
-                    if(station == null) {
-                        Toast.makeText(getActivity(), "You are already near you destination", Toast.LENGTH_SHORT).show();
+                    if(GpsUtils.checkLocationPermission(getActivity())) {
+                        Station station = mViewModel.findNearestMarker(map, position, destination, mStationList);
+                        if(station == null) {
+                            Toast.makeText(getActivity(), "You are already near you destination", Toast.LENGTH_SHORT).show();
+                        } else {
+                            //todo: confirm user wants to use nearest bart station or, show dialog picker
+                            initTripAlertDialog(station, destination);
+                        }
                     } else {
-                        //todo: confirm user wants to use nearest bart station or, show dialog picker
-                        initAlertDialog(station, destination);
+                        AlertDialogUtils.launchLocationAlertDialog(getActivity(), parentView);
                     }
                 })
                 .setActionTextColor(Color.RED)
                 .show();
     }
 
-    private void initAlertDialog(Station station, String destination) {
+    //todo: refactor this - abstract to AlertDialogUtils
+    private void initTripAlertDialog(Station station, String destination) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_spinner, null);
         TextView destinationTv = view.findViewById(R.id.googleMap_dialog_destinationTv);
         destinationTv.setText(destination);
@@ -290,22 +294,14 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         GpsUtils gps;
         Location loc = null;
         try {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if(GpsUtils.checkLocationPermission(context)) {
                 gps = new GpsUtils(context);
                 loc = gps.getLocation();
                 map.setMyLocationEnabled(true);
                 map.setOnMyLocationButtonClickListener(this);
                 map.setOnMyLocationClickListener(this);
             } else {
-                String message = getResources().getString(R.string.gps_permission_alert);
-                String yesAction = getResources().getString(R.string.alert_dialog_yes);
-                Snackbar.make(parentView, message, Snackbar.LENGTH_INDEFINITE)
-                        .setAction(yesAction, view -> {
-                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                            context.startActivity(intent);
-                        })
-                        .setActionTextColor(Color.RED)
-                        .show();
+                AlertDialogUtils.launchLocationAlertDialog(context, parentView);
             }
         } catch(SecurityException e) {
             if(DebugController.LOG_E)

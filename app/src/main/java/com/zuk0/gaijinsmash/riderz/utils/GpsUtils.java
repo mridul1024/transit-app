@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-
 public class GpsUtils implements LocationListener {
 
     private String TAG = "GpsUtils";
@@ -20,13 +19,14 @@ public class GpsUtils implements LocationListener {
     private double mLongitude;
     private String mLocationProvider;
 
+
     public GpsUtils(Context context) {
         LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE); // Define the criteria for how to select the location provider
 
-        mLocationProvider = initLocationProvider(manager, criteria);
 
+        mLocationProvider = initLocationProvider(context, manager, criteria);
         mLocation = initLocation(manager, context);
 
         // Initialize the location fields
@@ -50,18 +50,24 @@ public class GpsUtils implements LocationListener {
     }
     public String getLocationProvider() { return mLocationProvider; }
 
-    private String initLocationProvider(LocationManager manager, Criteria criteria) {
+    public static boolean checkLocationPermission(Context context) {
+        return (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private String initLocationProvider(Context context, LocationManager manager, Criteria criteria) {
         String locationProvider = "";
-        if (manager != null) {
-            locationProvider = manager.getBestProvider(criteria, true);
-            Log.i(TAG, locationProvider);
+        if(checkLocationPermission(context)) {
+            if (manager != null) {
+                locationProvider = manager.getBestProvider(criteria, true);
+                Log.i(TAG, locationProvider);
+            }
         }
         return locationProvider;
     }
 
     private Location initLocation(LocationManager manager, Context context) {
         Location location = null;
-        if((ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+        if(checkLocationPermission(context)) {
             location = manager.getLastKnownLocation(mLocationProvider);
         }
         return location;
