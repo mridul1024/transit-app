@@ -15,10 +15,10 @@ import java.util.List;
 public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecyclerAdapter.ViewHolder>{
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name;
-        TextView address;
-        TextView city;
-        TextView abbr;
+        private TextView name;
+        private TextView address;
+        private TextView city;
+        private TextView abbr;
 
 
         ViewHolder(View view) {

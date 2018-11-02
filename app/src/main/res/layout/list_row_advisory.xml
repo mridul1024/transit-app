@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="bsa"
+            type="com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.Bsa" />
+
+    </data>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -9,19 +17,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAlignment="center"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:text="@{bsa.station}"/>
         <TextView
             android:id="@+id/bsa_type_textView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAlignment="center"
             android:textColor="@color/colorTextAlert"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:text="@{bsa.type}"/>
         <TextView
             android:id="@+id/bsa_description_textView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAlignment="center"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:text="@{bsa.description}"/>
     </LinearLayout>
 </layout>
