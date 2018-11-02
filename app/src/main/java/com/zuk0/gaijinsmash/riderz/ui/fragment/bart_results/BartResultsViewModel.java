@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.FavoriteDao;
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
@@ -53,15 +54,8 @@ public class BartResultsViewModel extends AndroidViewModel {
     Favorite createFavorite(String origin, String destination) {
         if(origin != null && destination != null) {
             mFavorite = new Favorite();
-
-            Trip originTrip = new Trip();
-            originTrip.setOrigin(origin);
-            originTrip.setDestination(destination);
-            Trip destTrip = new Trip();
-            destTrip.setOrigin(destination);
-            destTrip.setDestination(origin);
-            mFavorite.setOriginTrip(originTrip);
-            mFavorite.setDestinationTrip(destTrip);
+            mFavorite.setOrigin(origin);
+            mFavorite.setDestination(destination);
             //todo: mFavoriteObject.setColors(BartRoutesUtils.getColorsSetFromLegList(legList));
         }
         return mFavorite;
@@ -74,8 +68,8 @@ public class BartResultsViewModel extends AndroidViewModel {
     }
 
     //check if favorite exists
-    LiveData<Favorite> isTripFavorited(Trip trip1, Trip trip2) {
-        return FavoriteDatabase.getRoomDB(getApplication()).getFavoriteDAO().findFavoriteByTrips(trip1, trip2);
+    LiveData<Favorite> isTripFavorited(Favorite favorite) {
+        return FavoriteDatabase.getRoomDB(getApplication()).getFavoriteDAO().getLiveDataFavorite(favorite.getOrigin(), favorite.getDestination());
     }
 
     private static class AddOrRemoveFavoriteTask extends AsyncTask<Void,Void,Void> {
@@ -96,11 +90,21 @@ public class BartResultsViewModel extends AndroidViewModel {
                 case ADD_FAVORITE:
                     if(FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().getPriorityCount() == 0) {
                         mFavorite.setPriority(Favorite.Priority.ON);
+                    } else {
+                        mFavorite.setPriority(Favorite.Priority.OFF);
                     }
                     FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().save(mFavorite);
                     break;
                 case DELETE_FAVORITE:
-                    FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO().delete(mFavorite);
+                    FavoriteDao dao = FavoriteDatabase.getRoomDB(mWeakRef.get()).getFavoriteDAO();
+                    Favorite one = dao.getFavorite(mFavorite.getOrigin(), mFavorite.getDestination());
+                    Favorite two = dao.getFavorite(mFavorite.getDestination(), mFavorite.getOrigin());
+                    if(one != null) {
+                        dao.delete(one);
+                    }
+                    if(two != null) {
+                        dao.delete(two);
+                    }
                     break;
             }
             return null;

@@ -24,9 +24,6 @@ public interface FavoriteDao {
     @Query("SELECT * from favorites where id = :id")
     Favorite getFavoriteById(int id);
 
-    @Query("SELECT * from favorites where destinationTrip = :originTrip OR originTrip = :originTrip")
-    Favorite getFavorite(Trip originTrip);
-
     @Query("SELECT * from favorites")
     LiveData<List<Favorite>> getAllFavoritesLiveData();
 
@@ -35,6 +32,10 @@ public interface FavoriteDao {
 
     @Query("SELECT * from favorites where origin = :origin and destination = :destination")
     Favorite getFavorite(String origin, String destination);
+
+    @Query("SELECT * from favorites where origin = :origin and destination = :destination " +
+            "OR origin = :destination and destination = :origin")
+    boolean doesFavoriteExist(String origin, String destination);
 
     @Query("SELECT * from favorites where priority = 1")
     LiveData<List<Favorite>> getAllPriorityFavorites();
@@ -47,8 +48,8 @@ public interface FavoriteDao {
     @Query("Update favorites set priority = 0 where id = :id")
     void removePriorityById(int id);
 
-    @Query("SELECT * from favorites where originTrip = :originTrip or originTrip = :destTrip")
-    LiveData<Favorite> findFavoriteByTrips(Trip originTrip, Trip destTrip);
+    @Query("SELECT * from favorites where origin = :origin and destination = :destination OR origin = :destination and destination = :origin")
+    LiveData<Favorite> getLiveDataFavorite(String origin, String  destination);
 
     @Query("SELECT count(*) from favorites where priority = 1")
     int getPriorityCount();

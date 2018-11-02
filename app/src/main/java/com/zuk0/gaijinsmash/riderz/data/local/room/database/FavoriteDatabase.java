@@ -12,19 +12,18 @@ import com.zuk0.gaijinsmash.riderz.data.local.room.converter.Converters;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.FavoriteDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 
-@Database(entities = {Favorite.class}, version = 1, exportSchema = false)
+@Database(entities = {Favorite.class}, version = 2, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class FavoriteDatabase extends RoomDatabase {
 
     private static FavoriteDatabase INSTANCE;
     public abstract FavoriteDao getFavoriteDAO();
 
-    //todo: save synchronized?
     public static FavoriteDatabase getRoomDB(Context context) {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), FavoriteDatabase.class, "favorites")
                     //.addMigrations(MIGRATION)
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration() //todo remove this after testing
                     .build();
         }
         return INSTANCE;
@@ -35,7 +34,7 @@ public abstract class FavoriteDatabase extends RoomDatabase {
     }
 
     // Edit this to create a new migration for database
-    private static final Migration MIGRATION = new Migration(13,14) {
+    private static final Migration MIGRATION = new Migration(1,2) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE favorites ADD COLUMN last_update INTEGER");

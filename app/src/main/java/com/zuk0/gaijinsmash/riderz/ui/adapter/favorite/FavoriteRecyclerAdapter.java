@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,8 @@ import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.favorite.FavoritesViewModel;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecyclerAdapter.ViewHolder> {
@@ -35,6 +38,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         private ImageButton searchButton;
         private ImageButton optionsButton;
         private ImageButton reverseButton;
+        private LinearLayout background;
 
         ViewHolder(View view) {
             super(view);
@@ -43,6 +47,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
             searchButton = view.findViewById(R.id.favorite_search_ib);
             optionsButton = view.findViewById(R.id.favorite_options_ib);
             reverseButton = view.findViewById(R.id.favorite_reverse_ib);
+            background = view.findViewById(R.id.favorite_row_background);
 
             reverseButton.setOnClickListener(v -> reverseRoute(origin, destination));
             searchButton.setOnClickListener(v -> initTripSearch(v.getContext(), origin, destination));
@@ -74,6 +79,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         origin.setText(destination.getText());
         destination.setText(temp);
     }
+
     /**************************************************
         FavoriteRecyclerAdapter Class
      **************************************************/
@@ -91,11 +97,14 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Favorite favorite = mFavoriteList.get(position);
-        String originAbbr = StationList.getAbbrFromStationName(favorite.getDestinationTrip().getOrigin());
-        String destAbbr = StationList.getAbbrFromStationName(favorite.getDestinationTrip().getDestination());
+        String originAbbr = StationList.getAbbrFromStationName(favorite.getOrigin());
+        String destAbbr = StationList.getAbbrFromStationName(favorite.getDestination());
         holder.origin.setText(originAbbr);
         holder.destination.setText(destAbbr);
-        holder.optionsButton.setOnClickListener(v -> initPopupMenu(v.getContext(), holder.optionsButton, favorite));
+        holder.optionsButton.setOnClickListener(v -> initPopupMenu(v.getContext(), holder.optionsButton, favorite, position));
+        if(favorite.getPriority() == Favorite.Priority.ON) {
+            holder.background.setBackgroundColor(holder.origin.getContext().getResources().getColor(R.color.colorBottomNavigationAccent));
+        }
     }
 
     @Override
@@ -103,7 +112,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         return mFavoriteList.size();
     }
 
-    private void initPopupMenu(Context context, ImageButton ib, Favorite favorite) {
+    private void initPopupMenu(Context context, ImageButton ib, Favorite favorite, int rowPosition) {
         PopupMenu popupMenu = new PopupMenu(context, ib);
         popupMenu.getMenuInflater().inflate(R.menu.favorite_options, popupMenu.getMenu());
         popupMenu.show();
@@ -118,29 +127,33 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
             }
         }
         popupMenu.setOnMenuItemClickListener(item -> {
-            selectFavoriteAction(popupMenu, context, item.getItemId(), favorite);
+            selectFavoriteAction(popupMenu, context, item.getItemId(), favorite, rowPosition);
             return true;
         });
     }
 
-    private void selectFavoriteAction(PopupMenu menu, Context context, int itemId, Favorite favorite) {
+    private void selectFavoriteAction(PopupMenu menu, Context context, int itemId, Favorite favorite, int rowPosition) {
         switch(itemId) {
             case R.id.action_delete_favorite:
                 FavoritesViewModel.deleteFavorite(context, favorite);
                 menu.dismiss();
                 Toast.makeText(context, R.string.deletion_success, Toast.LENGTH_SHORT).show();
-                notifyDataSetChanged();
+                this.notifyItemRemoved(rowPosition);
+                if(getItemCount() == 1) {
+                    mFavoriteList.clear();
+                    this.notifyDataSetChanged();
+                }
                 break;
             case R.id.action_favorite_setPriority:
                 FavoritesViewModel.addPriority(context, favorite);
                 menu.dismiss();
-                notifyDataSetChanged();
+                this.notifyItemChanged(rowPosition);
                 break;
             case R.id.action_favorite_deletePriority:
                 FavoritesViewModel.removePriority(context, favorite);
                 menu.dismiss();
                 Toast.makeText(context, R.string.priority_deleted, Toast.LENGTH_SHORT).show();
-                notifyDataSetChanged();
+                this.notifyItemChanged(rowPosition);
                 break;
         }
     }

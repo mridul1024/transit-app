@@ -13,7 +13,6 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Fares
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Leg
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip
 
-import java.lang.reflect.Type
 import java.util.ArrayList
 import java.util.HashSet
 
@@ -24,12 +23,10 @@ class Converters {
 
     @TypeConverter
     fun toStringList(value: String?): ArrayList<String> {
-        if (value == null) {
+        if (value.equals("") || value == null) {
             return ArrayList()
         } else {
-            val listType = object : TypeToken<ArrayList<String>>() {
-
-            }.type
+            val listType = object : TypeToken<ArrayList<String>>() {}.type
             return Gson().fromJson(value, listType)
         }
     }
@@ -45,6 +42,26 @@ class Converters {
     }
 
     @TypeConverter
+    fun favoriteToString(favorite: Favorite) : String {
+        if(favorite == null) {
+            return ""
+        } else {
+            val gson = Gson()
+            return gson.toJson(favorite)
+        }
+    }
+
+    @TypeConverter
+    fun stringToFavorite(value: String) : Favorite {
+        if(value.equals("") ) {
+            return Favorite()
+        } else {
+            val listType = object : TypeToken<Favorite>() {}.type
+            return Gson().fromJson(value, listType)
+        }
+    }
+
+    @TypeConverter
     fun toInt(priority: Favorite.Priority): Int {
         if (priority == OFF) {
             return 0
@@ -56,9 +73,9 @@ class Converters {
 
     @TypeConverter
     fun toPriority(value: Int): Favorite.Priority {
-        return if (value == 0) {
+        return if (value.equals(0)) {
             OFF
-        } else if (value == 1) {
+        } else if (value.equals(1)) {
             ON
         } else {
             throw IllegalArgumentException("Wrong argument. Value must be either 0 or 1")
@@ -68,7 +85,7 @@ class Converters {
     //todo: convert to ArraySet instead of HashSet for increased performance
     @TypeConverter
     fun toHashType(value: String?): HashSet<String> {
-        if (value == null) {
+        if (value == "") {
             return HashSet()
         } else {
             val listType = object : TypeToken<HashSet<String>>() {
@@ -91,7 +108,7 @@ class Converters {
 
     @TypeConverter
     fun toBSAType(value: String?): Bsa {
-        if (value == null) {
+        if (value == "") {
             return Bsa()
         } else {
             val listType = object : TypeToken<Bsa>() {
@@ -113,7 +130,7 @@ class Converters {
 
     @TypeConverter
     fun toBSAListType(value: String?): List<Bsa> {
-        if (value == null) {
+        if (value == "") {
             return ArrayList()
         } else {
             val listType = object : TypeToken<List<Bsa>>() {

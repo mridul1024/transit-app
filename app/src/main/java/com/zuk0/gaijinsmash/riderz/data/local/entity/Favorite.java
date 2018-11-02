@@ -5,8 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 
-import com.zuk0.gaijinsmash.riderz.data.local.room.converter.Converters;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
+import com.zuk0.gaijinsmash.riderz.data.local.room.converter.Converters;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,12 +16,6 @@ public class Favorite {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-
-    @ColumnInfo(name = "originTrip")
-    private Trip originTrip;
-
-    @ColumnInfo(name = "destinationTrip")
-    private Trip destinationTrip;
 
     @ColumnInfo(name = "origin")
     private String origin; // abbreviated
@@ -75,22 +69,6 @@ public class Favorite {
         return colors;
     }
     public ArrayList<String> getTrainHeaderStations() { return trainHeaderStations; }
-
-    public Trip getOriginTrip() {
-        return originTrip;
-    }
-
-    public void setOriginTrip(Trip originTrip) {
-        this.originTrip = originTrip;
-    }
-
-    public Trip getDestinationTrip() {
-        return destinationTrip;
-    }
-
-    public void setDestinationTrip(Trip destinationTrip) {
-        this.destinationTrip = destinationTrip;
-    }
 
     // Setters
     public void setId(int id) { this.id = id; }

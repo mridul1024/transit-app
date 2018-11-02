@@ -21,17 +21,12 @@ public class FavoritesViewModel extends AndroidViewModel {
 
     private enum FavoriteAction { DeleteFavorite, SetAsPriority, DeletePriority }
 
-    private LiveData<List<Favorite>> mFavoritesLiveData;
-
     FavoritesViewModel(Application application) {
         super(application);
     }
 
     LiveData<List<Favorite>> getFavorites() {
-        if(mFavoritesLiveData == null) {
-            mFavoritesLiveData = FavoriteDatabase.getRoomDB(super.getApplication()).getFavoriteDAO().getAllFavoritesLiveData();
-        }
-        return mFavoritesLiveData;
+        return FavoriteDatabase.getRoomDB(getApplication()).getFavoriteDAO().getAllFavoritesLiveData();
     }
 
     public static void deleteFavorite(Context context, Favorite favorite) {

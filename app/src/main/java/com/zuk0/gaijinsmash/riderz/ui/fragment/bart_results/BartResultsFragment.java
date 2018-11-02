@@ -85,7 +85,7 @@ public class BartResultsFragment extends Fragment {
                 addFavorite(mFavoriteObject);
                 return true;
             case R.id.action_favorited:
-                removeFavorite(mFavoriteObject);
+                removeFavorite();
                 return true;
         }
         return false;
@@ -155,7 +155,7 @@ public class BartResultsFragment extends Fragment {
     }
 
     private void initFavoriteIcon(Favorite favorite) {
-        mViewModel.isTripFavorited(favorite.getOriginTrip(), favorite.getDestinationTrip()).observe(this, data -> {
+        mViewModel.isTripFavorited(favorite).observe(this, data -> {
             if(data != null) {
                 // Current trip is already a Favorite
                 mFavoritedIcon.setVisible(true);
@@ -172,13 +172,13 @@ public class BartResultsFragment extends Fragment {
         Toast.makeText(getActivity(), getResources().getString(R.string.favorite_added), Toast.LENGTH_SHORT).show();
     }
 
-    private void removeFavorite(Favorite favorite) {
+    private void removeFavorite() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setTitle(getResources().getString(R.string.alert_dialog_remove_favorite_title));
         alertDialog.setMessage(getResources().getString(R.string.alert_dialog_confirmation));
         alertDialog.setPositiveButton(getResources().getString(R.string.alert_dialog_yes),
                 (dialog, which) -> {
-                    mViewModel.handleFavoritesIcon(RiderzEnums.FavoritesAction.DELETE_FAVORITE, favorite);
+                    mViewModel.handleFavoritesIcon(RiderzEnums.FavoritesAction.DELETE_FAVORITE, mFavoriteObject);
                     mFavoritedIcon.setVisible(false);
                     mFavoriteIcon.setVisible(true);
                 });
