@@ -14,6 +14,9 @@ public class Etd {
     @Element(name="abbreviation")
     private String destinationAbbr;
 
+    @Element(name="limited")
+    private int limited;
+
     @ElementList(inline=true)
     private List<Estimate> estimateList; //
 
@@ -39,5 +42,13 @@ public class Etd {
 
     public void setEstimateList(List<Estimate> estimateList) {
         this.estimateList = estimateList;
+    }
+
+    public int getLimited() {
+        return limited;
+    }
+
+    public void setLimited(int limited) {
+        this.limited = limited;
     }
 }

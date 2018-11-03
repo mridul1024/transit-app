@@ -1,20 +1,26 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.home;
 
+import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.BsaRepository;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.EtdRepository;
+import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository;
 
 import javax.inject.Inject;
 
 public class HomeViewModelFactory implements ViewModelProvider.Factory {
 
+    private final Application application;
     private final BsaRepository bsaRepository;
     private final EtdRepository etdRepository;
+    private final TripRepository tripRepository;
 
     @Inject
-    public HomeViewModelFactory(BsaRepository bsaRepository, EtdRepository etdRepository) {
+    public HomeViewModelFactory(Application application, TripRepository tripRepository, BsaRepository bsaRepository, EtdRepository etdRepository) {
+        this.application = application;
+        this.tripRepository = tripRepository;
         this.bsaRepository = bsaRepository;
         this.etdRepository = etdRepository;
     }
@@ -23,6 +29,6 @@ public class HomeViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public HomeViewModel create(@NonNull Class modelClass) {
-        return new HomeViewModel(bsaRepository, etdRepository);
+        return new HomeViewModel(application, tripRepository, bsaRepository, etdRepository);
     }
 }

@@ -38,7 +38,7 @@ public interface FavoriteDao {
     boolean doesFavoriteExist(String origin, String destination);
 
     @Query("SELECT * from favorites where priority = 1")
-    LiveData<List<Favorite>> getAllPriorityFavorites();
+    Favorite getPriorityFavorite();
 
     //Update a priority favorite
     @Query("Update favorites set priority = 1 where id = :id")
@@ -53,4 +53,6 @@ public interface FavoriteDao {
 
     @Query("SELECT count(*) from favorites where priority = 1")
     int getPriorityCount();
+
+
 }

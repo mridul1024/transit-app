@@ -1,10 +1,12 @@
 package com.zuk0.gaijinsmash.riderz.ui.adapter.estimate;
 
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
@@ -28,7 +30,6 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
             destination = view.findViewById(R.id.etd_destinationTv);
             minutes = view.findViewById(R.id.etd_minutesTv);
             line = view.findViewById(R.id.etd_colored_line);
-            tag = view.findViewById(R.id.etd_minutes_tag_tV);
         }
     }
 
@@ -50,15 +51,35 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
         holder.destination.setText(estimate.getDestination());
 
         String minutes = estimate.getMinutes();
-        holder.minutes.setText(minutes);
-        if(minutes.equals("Leaving")) {
-            holder.tag.setText(R.string.now);
+
+        //holder.minutes.setText(minutes);
+        if(!minutes.equals("Leaving")) {
+            beginTimer(holder.minutes, Integer.valueOf(minutes));
         }
+
         BartRoutesUtils.setLineBarByColor(holder.line.getContext(), estimate.getColor(), holder.line);
     }
 
     @Override
     public int getItemCount() {
         return mEstimateList.size();
+    }
+
+    private void beginTimer(TextView textView, int minutesLeft) {
+
+        Long untilFinished = (long) (minutesLeft * 60000);
+        new CountDownTimer(untilFinished, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                String minutes = textView.getContext().getResources().getString(R.string.minutes);
+                String seconds = textView.getContext().getResources().getString(R.string.seconds);
+                textView.setText( millisUntilFinished / 60000 + " " + minutes + " : " + millisUntilFinished % 60000 / 1000 + " " + seconds);
+            }
+
+            @Override
+            public void onFinish() {
+                textView.setText("Leaving!");
+            }
+        }.start();
     }
 }

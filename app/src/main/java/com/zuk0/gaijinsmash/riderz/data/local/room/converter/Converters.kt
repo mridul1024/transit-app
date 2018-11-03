@@ -43,7 +43,7 @@ class Converters {
 
     @TypeConverter
     fun favoriteToString(favorite: Favorite) : String {
-        if(favorite == null) {
+        if(false) {
             return ""
         } else {
             val gson = Gson()

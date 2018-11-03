@@ -44,7 +44,7 @@ public class BartResultsFragment extends Fragment {
 
     private MenuItem mFavoriteIcon, mFavoritedIcon;
     private Favorite mFavoriteObject;
-
+    private List<Trip> mTripList;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -133,8 +133,8 @@ public class BartResultsFragment extends Fragment {
         mViewModel.getTrip(originAbbr, destAbbr, date, time)
             .observe(this, response -> {
                 if(response != null) {
-                    List<Trip> list = response.getRoot().getSchedule().getRequest().getTripList();
-                    initRecylerView(list);
+                    mTripList = response.getRoot().getSchedule().getRequest().getTripList();
+                    initRecylerView(mTripList);
                 } else {
                     Log.wtf("initTripCall", "error");
                 }
@@ -155,7 +155,7 @@ public class BartResultsFragment extends Fragment {
     }
 
     private void initFavoriteIcon(Favorite favorite) {
-        mViewModel.isTripFavorited(favorite).observe(this, data -> {
+        mViewModel.getFavoriteLiveData(favorite).observe(this, data -> {
             if(data != null) {
                 // Current trip is already a Favorite
                 mFavoritedIcon.setVisible(true);

@@ -17,6 +17,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.constants.RiderzEnums;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -56,8 +57,7 @@ public class BartResultsViewModel extends AndroidViewModel {
             mFavorite = new Favorite();
             mFavorite.setOrigin(origin);
             mFavorite.setDestination(destination);
-            //todo: mFavoriteObject.setColors(BartRoutesUtils.getColorsSetFromLegList(legList));
-        }
+            }
         return mFavorite;
     }
 
@@ -67,8 +67,7 @@ public class BartResultsViewModel extends AndroidViewModel {
         new AddOrRemoveFavoriteTask(getApplication(), action, favorite).execute();
     }
 
-    //check if favorite exists
-    LiveData<Favorite> isTripFavorited(Favorite favorite) {
+    LiveData<Favorite> getFavoriteLiveData(Favorite favorite) {
         return FavoriteDatabase.getRoomDB(getApplication()).getFavoriteDAO().getLiveDataFavorite(favorite.getOrigin(), favorite.getDestination());
     }
 

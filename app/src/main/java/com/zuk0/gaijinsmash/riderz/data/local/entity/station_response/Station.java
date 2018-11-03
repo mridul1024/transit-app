@@ -103,6 +103,12 @@ public class Station {
     @ElementList(name = "south_platforms", required = false)
     private List<Platform> southPlatforms;
 
+    @Element(name="message", required = false)
+    private String message;
+
+    @Element(name="error", required = false)
+    private String error;
+
     public Station () {}
 
     // Setters
@@ -136,6 +142,37 @@ public class Station {
         this.southRoutes = southRoutes;
     }
 
+    public List<Platform> getNorthPlatforms() {
+        return northPlatforms;
+    }
+
+    public void setNorthPlatforms(List<Platform> northPlatforms) {
+        this.northPlatforms = northPlatforms;
+    }
+
+    public List<Platform> getSouthPlatforms() {
+        return southPlatforms;
+    }
+
+    public void setSouthPlatforms(List<Platform> southPlatforms) {
+        this.southPlatforms = southPlatforms;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
 
     // Getters
     @NonNull

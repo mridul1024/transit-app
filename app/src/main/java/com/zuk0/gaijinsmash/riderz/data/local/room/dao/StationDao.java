@@ -38,7 +38,7 @@ public interface StationDao {
     LiveData<List<Station>> getOriginAndDestination(String origin, String destination);
 
     @Query("SELECT * from stations where name = :name")
-    LiveData<Station> getStationByName(String name);
+    Station getStationByName(String name);
 
     @Query("SELECT * from stations where address = :address")
     LiveData<Station> getStationByAddress(String address);

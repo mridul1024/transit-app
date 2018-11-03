@@ -2,6 +2,7 @@ package com.zuk0.gaijinsmash.riderz.data.remote.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.EtdDao;
@@ -37,16 +38,16 @@ public class EtdRepository {
         final MutableLiveData<EtdXmlResponse> data = new MutableLiveData<>();
         service.getEtd(originAbbr).enqueue(new Callback<EtdXmlResponse>() {
             @Override
-            public void onResponse(Call<EtdXmlResponse> call, Response<EtdXmlResponse> response) {
+            public void onResponse(@NonNull Call<EtdXmlResponse> call, @NonNull Response<EtdXmlResponse> response) {
                 data.postValue(response.body());
             }
 
             @Override
-            public void onFailure(Call<EtdXmlResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<EtdXmlResponse> call, @NonNull Throwable t) {
                 Log.wtf("EtdRepository", t.getMessage());
             }
         });
-        return null;
+        return data;
     }
 
     public void refreshEtd() {

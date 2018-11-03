@@ -2,6 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+        <data>
+                <variable
+                    name="estimate"
+                    type="com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Estimate" />
+        </data>
+
         <android.support.constraint.ConstraintLayout android:background="@color/mp_primary_light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -16,7 +23,7 @@
             android:layout_marginStart="8dp"
             android:paddingEnd="2dp"
             android:paddingStart="2dp"
-            android:text="Origin"
+            android:text="@{estimate.origin}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/etd_destinationTv"
             app:layout_constraintHorizontal_bias="0.025"
@@ -52,7 +59,7 @@
             android:layout_marginTop="8dp"
             android:paddingEnd="2dp"
             android:paddingStart="2dp"
-            android:text="Destination"
+            android:text="@{estimate.destination}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.972"
@@ -71,7 +78,7 @@
             android:layout_marginStart="16dp"
             android:paddingEnd="2dp"
             android:paddingStart="2dp"
-            android:text="Train will leave in:"
+            android:text="@string/list_row_departure"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -89,7 +96,7 @@
             android:layout_toEndOf="@+id/etd_departure_notice"
             android:paddingEnd="2dp"
             android:paddingStart="2dp"
-            android:text="5"
+            android:text="@{estimate.minutes}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.37"
@@ -97,22 +104,5 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
-        <TextView
-            android:id="@+id/etd_minutes_tag_tV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="180dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:paddingEnd="2dp"
-            android:paddingStart="14dp"
-            android:text="@string/minutes"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.727"
-            app:layout_constraintStart_toEndOf="@+id/etd_minutesTv"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
     </android.support.constraint.ConstraintLayout>
 </layout>
