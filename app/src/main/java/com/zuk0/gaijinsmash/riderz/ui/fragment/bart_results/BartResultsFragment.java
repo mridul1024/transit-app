@@ -38,9 +38,9 @@ public class BartResultsFragment extends Fragment {
     BartResultsViewModelFactory mBartResultsViewModelFactory;
 
     private ViewResultsBinding mDataBinding;
-
     private BartResultsViewModel mViewModel;
     private String mOrigin, mDestination, mDate, mTime;
+    private boolean mFromRecyclerAdapter = false;
 
     private MenuItem mFavoriteIcon, mFavoritedIcon;
     private Favorite mFavoriteObject;
@@ -64,7 +64,11 @@ public class BartResultsFragment extends Fragment {
         initDagger();
         initViewModel();
         initBundleFromTripFragment();
-        initStationsForTripCall(mOrigin, mDestination);
+        if(mFromRecyclerAdapter) {
+            initTripCall(mOrigin, mDestination, mDate, mTime);
+        } else {
+            initStationsForTripCall(mOrigin, mDestination);
+        }
         initFavoriteObject(mOrigin, mDestination);
         initFavoriteIcon(mFavoriteObject);
     }
@@ -106,6 +110,7 @@ public class BartResultsFragment extends Fragment {
             mDestination = bundle.getString(TripFragment.TripBundle.DESTINATION.getValue());
             mDate = bundle.getString(TripFragment.TripBundle.DATE.getValue());
             mTime = bundle.getString(TripFragment.TripBundle.TIME.getValue());
+            mFromRecyclerAdapter = bundle.getBoolean("FAVORITE_RECYCLER_ADAPTER");
         }
     }
 

@@ -63,6 +63,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         bundle.putString(TripFragment.TripBundle.DESTINATION.getValue(), destinationString);
         bundle.putString(TripFragment.TripBundle.DATE.getValue(), "TODAY");
         bundle.putString(TripFragment.TripBundle.TIME.getValue(), "NOW");
+        bundle.putBoolean("FAVORITE_RECYCLER_ADAPTER", true);
         Fragment newFrag = new BartResultsFragment();
         newFrag.setArguments(bundle);
 

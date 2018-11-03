@@ -74,7 +74,7 @@ public class HomeFragment extends Fragment  {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
+            //todo: need to fix state of recyclerview onResume()
         Parcelable listState = mDataBinding.homeEtdRecyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable("RECYCLER_STATE", listState);
     }
