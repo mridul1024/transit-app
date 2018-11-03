@@ -55,6 +55,7 @@ public class HomeFragment extends Fragment  {
 
         if(savedInstanceState != null) {
             //todo: add logic
+
         }
 
         return mDataBinding.getRoot();
@@ -67,14 +68,12 @@ public class HomeFragment extends Fragment  {
         this.initViewModel();
         initPicture(mViewModel);
         updateAdvisories(mViewModel.getBsaLiveData());
-        attemptEstimateCall(mViewModel.doesPriorityExist());
         updateProgressBar();
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-            //todo: need to fix state of recyclerview onResume()
         Parcelable listState = mDataBinding.homeEtdRecyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable("RECYCLER_STATE", listState);
     }
@@ -88,10 +87,19 @@ public class HomeFragment extends Fragment  {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        //Parcelable listState = mDataBinding.homeEtdRecyclerView.getLayoutManager().onSaveInstanceState();
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if(mListState != null) {
             mDataBinding.homeEtdRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+        } else {
+            attemptEstimateCall(mViewModel.doesPriorityExist());
         }
     }
 

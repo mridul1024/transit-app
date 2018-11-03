@@ -126,11 +126,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun initMapFragment() {
-        if(NetworkUtils.isNetworkActive(applicationContext)) {
-            replaceFrag(GoogleMapFragment(), "GoogleMapFragment", true)
-        } else {
-            replaceFrag(BartMapFragment(), "BartMapFragment", true)
-        }
+        replaceFrag(GoogleMapFragment(), "GoogleMapFragment", true)
         mNavigationView.setCheckedItem(R.id.nav_map)
     }
 
@@ -147,12 +143,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if(addToBackStack) {
             mFragmentManager
                     .beginTransaction()
+                    .setCustomAnimations(R.anim.enter, R.anim.exit)
                     .replace(R.id.fragmentContent, newFrag, tag)
                     .addToBackStack(tag)
                     .commit()
         } else {
             mFragmentManager
                     .beginTransaction()
+                    .setCustomAnimations(R.anim.enter, R.anim.exit)
                     .replace(R.id.fragmentContent, newFrag, tag)
                     .commit()
         }
