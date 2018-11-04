@@ -18,12 +18,14 @@ import com.zuk0.gaijinsmash.riderz.data.local.room.database.FavoriteDatabase
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.BsaRepository
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.EtdRepository
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository
 import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesUtils
+import com.zuk0.gaijinsmash.riderz.utils.StationUtils
 import com.zuk0.gaijinsmash.riderz.utils.TimeDateUtils
 import kotlinx.coroutines.experimental.CoroutineDispatcher
 import kotlinx.coroutines.experimental.android.UI
@@ -33,6 +35,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 import java.lang.ref.WeakReference
+import java.util.ArrayList
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -114,20 +117,29 @@ internal constructor(private val application: Application,
     }
 
     fun getEtdLiveData(origin: String): LiveData<EtdXmlResponse>? {
-        val originAbbr = getAbbr(origin)
+        val originAbbr = StationUtils.getAbbrFromStationName(origin)
         return mEtdRepository.getEtd(originAbbr)
     }
 
-    fun getAbbr(stationName : String) : String {
-        val db = Room.databaseBuilder(application, StationDatabase::class.java,
-                "stations").allowMainThreadQueries().build()
-        val abbr = db.stationDAO.getStationByName(stationName).abbr
-        db.close()
-        return abbr
+    fun createFavoriteInverse(trips: List<Trip>, favorite: Favorite) : Favorite {
+        val trainHeaders = ArrayList<String>()
+        for (trip in trips) {
+            val header = trip.getLegList().get(0).getTrainHeadStation()
+            if (!trainHeaders.contains(header)) {
+                trainHeaders.add(header) // add a unique train header
+                Log.i("HEADER", header)
+            }
+        }
+        val favoriteInverse = Favorite()
+        favoriteInverse.origin = favorite.getDestination()
+        favoriteInverse.destination = favorite.getOrigin()
+        favoriteInverse.trainHeaderStations = trainHeaders
+        return favoriteInverse
     }
 
     fun getTripLiveData(origin: String, destination: String) : LiveData<TripJsonResponse>? {
-        return mTripRepository.getTrip(getAbbr(origin), getAbbr(destination), "TODAY", "NOW")
+        return mTripRepository.getTrip(StationUtils.getAbbrFromStationName(origin),
+                StationUtils.getAbbrFromStationName(destination), "TODAY", "NOW")
     }
 
 } // end of class

@@ -69,8 +69,7 @@ public class BartResultsFragment extends Fragment {
         } else {
             initStationsForTripCall(mOrigin, mDestination);
         }
-        initFavoriteObject(mOrigin, mDestination);
-        initFavoriteIcon(mFavoriteObject);
+        initFavoriteIcon(mOrigin, mDestination);
     }
 
     @Override
@@ -139,6 +138,9 @@ public class BartResultsFragment extends Fragment {
             .observe(this, response -> {
                 if(response != null) {
                     mTripList = response.getRoot().getSchedule().getRequest().getTripList();
+
+                    initFavoriteObject(mOrigin, mDestination, mTripList);
+
                     initRecylerView(mTripList);
                 } else {
                     Log.wtf("initTripCall", "error");
@@ -155,12 +157,12 @@ public class BartResultsFragment extends Fragment {
         }
     }
 
-    private void initFavoriteObject(String origin, String destination) {
-        mFavoriteObject = mViewModel.createFavorite(origin, destination);
+    private void initFavoriteObject(String origin, String destination, List<Trip> tripList) {
+        mFavoriteObject = mViewModel.createFavorite(origin, destination, tripList);
     }
 
-    private void initFavoriteIcon(Favorite favorite) {
-        mViewModel.getFavoriteLiveData(favorite).observe(this, data -> {
+    private void initFavoriteIcon(String origin, String destination) {
+        mViewModel.getFavoriteLiveData(origin, destination).observe(this, data -> {
             if(data != null) {
                 // Current trip is already a Favorite
                 mFavoritedIcon.setVisible(true);

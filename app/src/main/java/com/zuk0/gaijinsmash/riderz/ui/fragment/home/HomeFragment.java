@@ -1,10 +1,11 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.home;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,10 +18,14 @@ import android.view.ViewGroup;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.MergedTrip;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.Bsa;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Estimate;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Etd;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse;
 import com.zuk0.gaijinsmash.riderz.databinding.ViewHomeBinding;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.bsa.BsaRecyclerAdapter;
 import com.zuk0.gaijinsmash.riderz.ui.adapter.estimate.EstimateRecyclerAdapter;
@@ -41,7 +46,11 @@ public class HomeFragment extends Fragment  {
 
     private ViewHomeBinding mDataBinding;
     private HomeViewModel mViewModel;
-    private static Bundle mListState;
+    private Favorite mFavorite;
+
+    private static List<Bsa> mBsaList;
+    private static Parcelable mListState;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -52,12 +61,6 @@ public class HomeFragment extends Fragment  {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_home, container, false);
-
-        if(savedInstanceState != null) {
-            //todo: add logic
-
-        }
-
         return mDataBinding.getRoot();
     }
 
@@ -67,40 +70,40 @@ public class HomeFragment extends Fragment  {
         this.initDagger();
         this.initViewModel();
         initPicture(mViewModel);
-        updateAdvisories(mViewModel.getBsaLiveData());
+        loadAdvisories(mViewModel.getBsaLiveData());
+
+        if(mViewModel.doesPriorityExist()) {
+            initFavorite(mViewModel);
+            loadEtdData(mFavorite);
+        }
+
         updateProgressBar();
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        Parcelable listState = mDataBinding.homeEtdRecyclerView.getLayoutManager().onSaveInstanceState();
-        outState.putParcelable("RECYCLER_STATE", listState);
+        mListState = mDataBinding.homeEtdRecyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable("RECYCLER_STATE", mListState);
+        // todo: save BSA State
+        // todo: save ETD state
     }
 
     @Override
     public void onViewStateRestored(Bundle state) {
         super.onViewStateRestored(state);
-        if(state != null) {
-            mListState = state.getParcelable("RECYCLER_STATE");
-        }
+        //mListState = state.getParcelable("RECYCLER_STATE");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //Parcelable listState = mDataBinding.homeEtdRecyclerView.getLayoutManager().onSaveInstanceState();
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(mListState != null) {
-            mDataBinding.homeEtdRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
-        } else {
-            attemptEstimateCall(mViewModel.doesPriorityExist());
-        }
+        //mDataBinding.homeEtdRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
     }
 
     private void initDagger() {
@@ -115,44 +118,41 @@ public class HomeFragment extends Fragment  {
         viewModel.initPic(Objects.requireNonNull(getActivity()), mViewModel.getHour(), mDataBinding.homeBannerImageView);
     }
 
-
-
-    private void updateAdvisories(LiveData<BsaXmlResponse> bsa) {
+    private void loadAdvisories(LiveData<BsaXmlResponse> bsa) {
         bsa.observe(this, bsaXmlResponse -> {
             if (bsaXmlResponse != null) {
                 mDataBinding.bsaViewTimeTv.setText(mViewModel.initMessage(Objects.requireNonNull(getActivity()),mViewModel.is24HrTimeOn(getActivity()),bsaXmlResponse.getTime()));
-                BsaRecyclerAdapter bsaAdapter = new BsaRecyclerAdapter(bsaXmlResponse.getBsaList());
+                mBsaList = bsaXmlResponse.getBsaList();
+                BsaRecyclerAdapter bsaAdapter = new BsaRecyclerAdapter(mBsaList);
                 mDataBinding.homeBsaRecyclerView.setAdapter(bsaAdapter);
                 mDataBinding.homeBsaRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             }
         });
     }
 
-    private void attemptEstimateCall(boolean doesPriorityExist) {
-        if(doesPriorityExist) {
-            Favorite favorite = mViewModel.getFavorite();
-
-            mViewModel.getTripLiveData(favorite.getOrigin(), favorite.getDestination()).observe(this, tripJsonResponse -> {
-                List<Trip> trips = tripJsonResponse.getRoot().getSchedule().getRequest().getTripList();
-                ArrayList<String> trainHeaders = new ArrayList<>();
-                for(Trip trip: trips) {
-                    String header = trip.getLegList().get(0).getTrainHeadStation();
-                    if(!trainHeaders.contains(header)) {
-                        trainHeaders.add(header); // add a unique train header
-                        Log.i("HEADER", header);
-                    }
-                }
-                favorite.setTrainHeaderStations(trainHeaders);
-
-                loadEtd(favorite); // attempt etd list
-            });
-        }
+    private void initFavorite(HomeViewModel viewModel) {
+        mFavorite = viewModel.getFavorite();
     }
 
-    private void loadEtd(Favorite favorite) {
-        mViewModel.getEtdLiveData(favorite.getOrigin()).observe(this, etdXmlResponse -> {
-            if(etdXmlResponse != null) {
-                List<Etd> list = etdXmlResponse.getStation().getEtdList();
+    private void loadEtdData(Favorite favorite) {
+        // Create a favorite object to handle the return trip
+        mViewModel.getTripLiveData(favorite.getDestination(), favorite.getOrigin()).observe(this, tripJsonResponse -> {
+            List<Trip> trips = tripJsonResponse.getRoot().getSchedule().getRequest().getTripList();
+            Favorite inverse = mViewModel.createFavoriteInverse(trips, favorite);
+
+            observeMediatorData(mergeEtdData(mFavorite, inverse));
+        });
+    }
+
+    private MediatorLiveData<List<Estimate>> mergeEtdData(Favorite favorite, Favorite inverse) {
+        LiveData<EtdXmlResponse> etd1 = mViewModel.getEtdLiveData(favorite.getOrigin());
+        LiveData<EtdXmlResponse> etd2 = mViewModel.getEtdLiveData(inverse.getOrigin());
+
+        MediatorLiveData<List<Estimate>> mediatorLiveData = new MediatorLiveData();
+
+        if(etd1 != null) {
+            mediatorLiveData.addSource(etd1, value -> {
+                List<Etd> list = value.getStation().getEtdList();
                 List<Estimate> results = new ArrayList<>();
                 if(list != null) {
                     for(Etd etd : list) {
@@ -163,12 +163,41 @@ public class HomeFragment extends Fragment  {
                             results.add(estimate); //add the soonest departure
                         }
                     }
-                    EstimateRecyclerAdapter etdAdapter = new EstimateRecyclerAdapter(results);
-                    mDataBinding.homeEtdRecyclerView.setAdapter(etdAdapter);
-                    mDataBinding.homeEtdRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 }
-            }
-        });
+                mediatorLiveData.setValue(results);
+            });
+        }
+
+        if(etd2 != null) {
+            mediatorLiveData.addSource(etd2, value -> {
+                List<Etd> list = value.getStation().getEtdList();
+                List<Estimate> results = new ArrayList<>();
+                if(list != null) {
+                    for(Etd etd : list) {
+                        if(inverse.getTrainHeaderStations().contains(etd.getDestinationAbbr())) {
+                            Estimate estimate = etd.getEstimateList().get(0);
+                            estimate.setOrigin(inverse.getOrigin());
+                            estimate.setDestination(etd.getDestination());
+                            results.add(estimate);
+                        }
+                    }
+                }
+                mediatorLiveData.setValue(results);
+            });
+        }
+
+        return mediatorLiveData;
+    }
+
+    private void observeMediatorData(MediatorLiveData<List<Estimate>> data) {
+        if(data !=  null) {
+            data.observe(this, estimateList -> {
+                Log.i("ESTIMATE LIST", estimateList.toString());
+                EstimateRecyclerAdapter etdAdapter = new EstimateRecyclerAdapter(estimateList);
+                mDataBinding.homeEtdRecyclerView.setAdapter(etdAdapter);
+                mDataBinding.homeEtdRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            });
+        }
     }
 
     private void updateProgressBar() {

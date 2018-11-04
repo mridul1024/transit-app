@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+        <variable
+            name="trip"
+            type="com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip" />
+    </data>
+
     <android.support.v7.widget.CardView
         android:layout_margin="5dp"
         android:elevation="1dp"

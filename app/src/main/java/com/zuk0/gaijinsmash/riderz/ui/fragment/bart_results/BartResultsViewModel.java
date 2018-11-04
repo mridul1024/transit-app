@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.FavoriteDao;
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.FavoriteDatabase;
@@ -52,12 +53,21 @@ public class BartResultsViewModel extends AndroidViewModel {
     /****************************************************************
         Favorites
      ****************************************************************/
-    Favorite createFavorite(String origin, String destination) {
+    Favorite createFavorite(String origin, String destination, List<Trip> tripList) {
         if(origin != null && destination != null) {
             mFavorite = new Favorite();
             mFavorite.setOrigin(origin);
             mFavorite.setDestination(destination);
+            ArrayList<String> trainHeaders = new ArrayList<>();
+            for(Trip trip: tripList) {
+                String header = trip.getLegList().get(0).getTrainHeadStation();
+                if(!trainHeaders.contains(header)) {
+                    trainHeaders.add(header); // add a unique train header
+                    Log.i("HEADER", header);
+                }
             }
+            mFavorite.setTrainHeaderStations(trainHeaders);
+        }
         return mFavorite;
     }
 
@@ -67,8 +77,8 @@ public class BartResultsViewModel extends AndroidViewModel {
         new AddOrRemoveFavoriteTask(getApplication(), action, favorite).execute();
     }
 
-    LiveData<Favorite> getFavoriteLiveData(Favorite favorite) {
-        return FavoriteDatabase.getRoomDB(getApplication()).getFavoriteDAO().getLiveDataFavorite(favorite.getOrigin(), favorite.getDestination());
+    LiveData<Favorite> getFavoriteLiveData(String origin, String destination) {
+        return FavoriteDatabase.getRoomDB(getApplication()).getFavoriteDAO().getLiveDataFavorite(origin, destination);
     }
 
     private static class AddOrRemoveFavoriteTask extends AsyncTask<Void,Void,Void> {
