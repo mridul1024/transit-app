@@ -2,7 +2,8 @@ package com.zuk0.gaijinsmash.riderz.utils;
 
 /*
     This class provides a formula to calculate distance
-    between two locations on Lat/Lng coordinates
+    between two locations on Lat/Lng coordinates.
+    Compliments of stackoverflow!
  */
 public class HaversineFormulaUtils {
 

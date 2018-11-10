@@ -14,7 +14,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 @Singleton
-public interface RetrofitInterface {
+public interface RetrofitService {
 
     @Json
     @GET("sched.aspx?cmd=depart&b=0&a=4&json=y")

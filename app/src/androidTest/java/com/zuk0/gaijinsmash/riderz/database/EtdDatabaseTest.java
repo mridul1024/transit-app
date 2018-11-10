@@ -1,11 +1,10 @@
-package com.zuk0.gaijinsmash.riderz.room;
+package com.zuk0.gaijinsmash.riderz.database;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Etd;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.EtdDao;

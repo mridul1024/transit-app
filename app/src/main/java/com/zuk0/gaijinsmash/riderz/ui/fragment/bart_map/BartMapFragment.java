@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.databinding.ViewBartMapBinding;
@@ -50,6 +49,6 @@ public class BartMapFragment extends Fragment {
 
     private void initViewModel() {
         BartMapViewModel mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(BartMapViewModel.class);
-        mViewModel.initBarMap(getActivity(), mDataBinding.bartMapImageView);
+        mViewModel.initBartMap(getActivity(), mDataBinding.bartMapImageView);
     }
 }

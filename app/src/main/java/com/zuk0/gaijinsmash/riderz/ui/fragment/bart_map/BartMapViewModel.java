@@ -15,11 +15,11 @@ import javax.inject.Singleton;
 public class BartMapViewModel extends AndroidViewModel {
 
     @Inject
-    BartMapViewModel(Application application) {
+    public BartMapViewModel(Application application) {
         super(application);
     }
 
-    public void initBarMap(Context context, ImageView imageView) {
+    public void initBartMap(Context context, ImageView imageView) {
         Glide.with(context)
                 .load(R.drawable.bart_map)
                 .into(imageView);

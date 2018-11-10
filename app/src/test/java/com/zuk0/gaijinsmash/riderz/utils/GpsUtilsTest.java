@@ -5,15 +5,18 @@ import android.content.Context;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class GpsUtilsTest {
 
     private GpsUtils utils;
+
     @Mock
     private Context context;
 
     @Before
     private void setup() {
+        MockitoAnnotations.initMocks(this);
         utils = new GpsUtils(context);
     }
 

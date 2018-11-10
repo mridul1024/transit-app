@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.room;
+package com.zuk0.gaijinsmash.riderz.database;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;

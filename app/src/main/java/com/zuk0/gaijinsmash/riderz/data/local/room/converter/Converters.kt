@@ -18,6 +18,7 @@ import java.util.HashSet
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite.Priority.OFF
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite.Priority.ON
+import java.sql.Timestamp
 
 class Converters {
 
@@ -326,4 +327,19 @@ class Converters {
         }
     }
 
+    @TypeConverter
+    fun stringToTimestamp(value: String) : Timestamp {
+        val listType = object : TypeToken<Timestamp>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun timestampToString(timestamp: Timestamp) : String {
+        if(false) {
+            return ""
+        } else {
+            val gson = Gson()
+            return gson.toJson(timestamp)
+        }
+    }
 }

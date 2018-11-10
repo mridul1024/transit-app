@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.EtdDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
 
 import java.util.concurrent.Executor;
 
@@ -21,12 +21,12 @@ import retrofit2.Response;
 @Singleton
 public class EtdRepository {
 
-    private final RetrofitInterface service;
+    private final RetrofitService service;
     private Executor executor;
     private EtdDao etdDao;
 
     @Inject
-    EtdRepository(RetrofitInterface service, EtdDao etdDao, Executor executor) {
+    EtdRepository(RetrofitService service, EtdDao etdDao, Executor executor) {
         this.service = service;
         this.etdDao = etdDao;
         this.executor = executor;

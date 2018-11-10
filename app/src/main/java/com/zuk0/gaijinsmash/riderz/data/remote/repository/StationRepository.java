@@ -8,7 +8,7 @@ import android.util.Log;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.StationDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
 
 import java.io.IOException;
 import java.util.concurrent.Executor;
@@ -23,12 +23,12 @@ import retrofit2.Response;
 @Singleton
 public class StationRepository  {
 
-    private final RetrofitInterface service;
+    private final RetrofitService service;
     private final StationDao stationDAO;
     private final Executor executor;
 
     @Inject
-    StationRepository(RetrofitInterface service, StationDao stationDAO, Executor executor) {
+    StationRepository(RetrofitService service, StationDao stationDAO, Executor executor) {
         this.service = service;
         this.stationDAO = stationDAO;
         this.executor = executor;

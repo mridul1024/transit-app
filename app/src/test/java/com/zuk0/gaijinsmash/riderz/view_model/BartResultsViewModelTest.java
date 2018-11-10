@@ -10,6 +10,7 @@ import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsViewModel
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import javax.inject.Inject;
 
@@ -26,6 +27,8 @@ public class BartResultsViewModelTest {
 
     @Before
     public void setup() {
+        MockitoAnnotations.initMocks(this);
+
         Favorite favorite = new Favorite();
 
         Trip trip1 = new Trip();

@@ -12,7 +12,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.room.converter.Converters;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.BsaDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
 
-@Database(entities = {BsaXmlResponse.class}, version = 1, exportSchema = false)
+@Database(entities = {BsaXmlResponse.class}, version = 2, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class BsaDatabase extends RoomDatabase {
 

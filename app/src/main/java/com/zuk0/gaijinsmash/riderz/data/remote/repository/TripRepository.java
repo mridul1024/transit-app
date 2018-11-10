@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.TripDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
 
 import java.util.concurrent.Executor;
 
@@ -21,12 +21,12 @@ import retrofit2.Response;
 @Singleton
 public class TripRepository {
 
-    private final RetrofitInterface service;
+    private final RetrofitService service;
     private final Executor executor;
     private final TripDao tripDao;
 
     @Inject
-    TripRepository(RetrofitInterface service, TripDao tripDao, Executor executor) {
+    TripRepository(RetrofitService service, TripDao tripDao, Executor executor) {
         this.service = service;
         this.tripDao = tripDao;
         this.executor = executor;

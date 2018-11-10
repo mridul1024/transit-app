@@ -1,22 +1,17 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.google_map;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +29,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.zuk0.gaijinsmash.riderz.BuildConfig;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.databinding.ViewGoogleMapBinding;
@@ -43,7 +39,6 @@ import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
 import com.zuk0.gaijinsmash.riderz.utils.AlertDialogUtils;
 import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
 import com.zuk0.gaijinsmash.riderz.utils.NetworkUtils;
-import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
 
 import java.util.List;
 import java.util.Objects;
@@ -304,7 +299,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
                 AlertDialogUtils.launchLocationAlertDialog(context, parentView);
             }
         } catch(SecurityException e) {
-            if(DebugController.LOG_E)
+            if(BuildConfig.DEBUG)
                 Log.e("Exception: %s", e.getMessage());
         }
 

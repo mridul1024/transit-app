@@ -3,9 +3,9 @@ package com.zuk0.gaijinsmash.riderz.utils.xml_parser;
 import android.util.Log;
 import android.util.Xml;
 
+import com.zuk0.gaijinsmash.riderz.BuildConfig;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
-import com.zuk0.gaijinsmash.riderz.utils.xml_parser.XmlParserAbstract;
-import com.zuk0.gaijinsmash.riderz.utils.debug.DebugController;
+
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -33,7 +33,7 @@ public class StationXmlParser {
     }
 
     private List<Station> parse(InputStream is) throws XmlPullParserException, IOException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.d("parse()", "***BEGINNING***");
 
         try {
@@ -48,7 +48,7 @@ public class StationXmlParser {
     }
 
     private List<Station> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.d("readFeed():", "***BEGINNING***");
 
         List<Station> stationList = new ArrayList<>();
@@ -69,7 +69,7 @@ public class StationXmlParser {
     }
 
     private List<Station> readStations(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.d("readStations()", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "stations");
         List<Station> stationList = new ArrayList<>();
@@ -115,47 +115,47 @@ public class StationXmlParser {
             switch (name) {
                 case "name":
                     mName = readName(parser);
-                    if (DebugController.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.i("mName", mName);
                     break;
                 case "abbr":
                     mAbbreviation = readAbbr(parser);
-                    if (DebugController.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.i("abbreviation", mAbbreviation);
                     break;
                 case "gtfs_latitude":
                     mLatitude = readLatitude(parser);
-                    if (DebugController.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.i("latitude", mLatitude);
                     break;
                 case "gtfs_longitude":
                     mLongitude = readLongitude(parser);
-                    if (DebugController.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.i("longitude", mLongitude);
                     break;
                 case "address":
                     mAddress = readAddress(parser);
-                    if (DebugController.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.i("address", mAddress);
                     break;
                 case "city":
                     mCity = readCity(parser);
-                    if (DebugController.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.i("city", mCity);
                     break;
                 case "county":
                     mCounty = readCounty(parser);
-                    if (DebugController.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.i("county", mCounty);
                     break;
                 case "state":
                     mState = readState(parser);
-                    if (DebugController.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.i("state", mState);
                     break;
                 case "zipcode":
                     mZipcode = readZipcode(parser);
-                    if (DebugController.DEBUG)
+                    if (BuildConfig.DEBUG)
                         Log.i("zipcode", mZipcode);
                     break;
                 case "platform_info":
@@ -207,7 +207,7 @@ public class StationXmlParser {
     //----------------------------------------------------------------------------------------------
     // Processes name tags in the StationInfo feed
     private String readName(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readName()", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "name");
@@ -221,7 +221,7 @@ public class StationXmlParser {
     }
 
     private String readAddress(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readAddress()", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "address");
         String address = XmlParserAbstract.readText(parser);
@@ -231,7 +231,7 @@ public class StationXmlParser {
     }
 
     private String readLatitude(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readLatitude()", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "gtfs_latitude");
@@ -241,7 +241,7 @@ public class StationXmlParser {
     }
 
     private String readLongitude(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readLongitude()", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "gtfs_longitude");
@@ -251,7 +251,7 @@ public class StationXmlParser {
     }
 
     private String readAbbr(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readAbbr()", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "abbr");
@@ -261,7 +261,7 @@ public class StationXmlParser {
     }
 
     private String readCity(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readCity()", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "city");
@@ -271,7 +271,7 @@ public class StationXmlParser {
     }
 
     private String readCounty(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readCounty()", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "county");
@@ -281,7 +281,7 @@ public class StationXmlParser {
     }
 
     private String readState(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readState()", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "state");
@@ -291,7 +291,7 @@ public class StationXmlParser {
     }
 
     private String readZipcode(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readZipcode()", "***BEGINNING***");
 
         parser.require(XmlPullParser.START_TAG, ns, "zipcode");
@@ -301,7 +301,7 @@ public class StationXmlParser {
     }
 
     private String readPlatformInfo(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readPlatformInfo()", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "platform_info");
         String platformInfo = XmlParserAbstract.readText(parser);
@@ -310,7 +310,7 @@ public class StationXmlParser {
     }
 
     private String readIntro(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readIntro()", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "intro");
         String intro = XmlParserAbstract.readText(parser);
@@ -319,7 +319,7 @@ public class StationXmlParser {
     }
 
     private String readCrossStreet(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readCrossStreet()", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "cross_street");
         String crossStreet = XmlParserAbstract.readText(parser);
@@ -328,7 +328,7 @@ public class StationXmlParser {
     }
 
     private String readFood(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readFood()", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "food");
         String food = XmlParserAbstract.readText(parser);
@@ -337,7 +337,7 @@ public class StationXmlParser {
     }
 
     private String readShopping(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readShopping()", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "shopping");
         String shopping = XmlParserAbstract.readText(parser);
@@ -346,7 +346,7 @@ public class StationXmlParser {
     }
 
     private String readAttraction(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readAttraction()", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "attraction");
         String attraction = XmlParserAbstract.readText(parser);
@@ -355,7 +355,7 @@ public class StationXmlParser {
     }
 
     private String readLink(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if(DebugController.DEBUG)
+        if(BuildConfig.DEBUG)
             Log.i("readLink()", "***BEGINNING***");
         parser.require(XmlPullParser.START_TAG, ns, "link");
         String link = XmlParserAbstract.readText(parser);

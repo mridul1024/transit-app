@@ -8,7 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.zuk0.gaijinsmash.riderz.BuildConfig;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.ApiKeyInterceptor;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitClient;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitInterface;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
 
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
@@ -65,7 +65,7 @@ public class NetModule {
 
     @Provides
     @Singleton
-    RetrofitInterface providesRetrofitInterface(Retrofit retrofit) {
-        return RetrofitClient.getClient(BASE_URL, new ApiKeyInterceptor(BART_API_KEY)).create(RetrofitInterface.class);
+    RetrofitService providesRetrofitInterface(Retrofit retrofit) {
+        return RetrofitClient.getClient(BASE_URL, new ApiKeyInterceptor(BART_API_KEY)).create(RetrofitService.class);
     }
 }
