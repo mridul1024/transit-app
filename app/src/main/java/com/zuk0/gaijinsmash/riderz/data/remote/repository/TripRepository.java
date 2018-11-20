@@ -50,7 +50,7 @@ public class TripRepository {
         return data;
     }
 
-    public void refreshTrip(final int tripId) {
+    public void refreshTrip() {
 
         // runs in a background thread
         executor.execute(() -> {
