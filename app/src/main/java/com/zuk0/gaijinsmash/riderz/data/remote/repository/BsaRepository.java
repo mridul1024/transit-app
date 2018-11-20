@@ -1,12 +1,10 @@
 package com.zuk0.gaijinsmash.riderz.data.remote.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.zuk0.gaijinsmash.riderz.data.local.room.dao.BsaDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
+import com.zuk0.gaijinsmash.riderz.data.local.room.dao.BsaDao;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
 
 import java.io.IOException;
@@ -16,8 +14,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /*

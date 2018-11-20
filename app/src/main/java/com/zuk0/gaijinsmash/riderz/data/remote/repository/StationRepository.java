@@ -72,7 +72,10 @@ public class StationRepository  {
 
     public void refreshStation(final String name) {
         executor.execute(() -> {
+            //todo: check if station exists, then check if station data exists
           boolean stationExists = stationDAO.getStationByName(name) != null;
+          String stationData = stationDAO.getStationByName(name).getIntro();
+          boolean stationDataExists = !stationData.equals("");
           if(!stationExists) {
               // refresh data
               try {

@@ -50,7 +50,7 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
 
         String minutes = estimate.getMinutes();
         if(!minutes.equals("Leaving")) {
-            HomeViewModel.Companion.beginTimer(holder.minutes, Integer.valueOf(minutes));
+            HomeViewModel.beginTimer(holder.minutes, Integer.valueOf(minutes));
         }
         BartRoutesUtils.setLineBarByColor(holder.line.getContext(), estimate.getColor(), holder.line);
     }

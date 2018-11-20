@@ -146,6 +146,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
                 }
                 break;
             case R.id.action_favorite_setPriority:
+                //todo: prompt user if he/she wants to remove current priority, and make this the priority
                 FavoritesViewModel.addPriority(context, favorite);
                 menu.dismiss();
                 this.notifyItemChanged(rowPosition);

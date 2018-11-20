@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -110,8 +109,8 @@ public class HomeFragment extends Fragment  {
         bsa.observe(this, bsaXmlResponse -> {
             if (bsaXmlResponse != null) {
                 mDataBinding.bsaViewTimeTv.setText(mViewModel.initMessage(Objects.requireNonNull(getActivity()),mViewModel.is24HrTimeOn(getActivity()),bsaXmlResponse.getTime()));
-                mViewModel.setMBsaList(bsaXmlResponse.getBsaList());
-                BsaRecyclerAdapter bsaAdapter = new BsaRecyclerAdapter(mViewModel.getMBsaList());
+                mViewModel.setBsaList(bsaXmlResponse.getBsaList());
+                BsaRecyclerAdapter bsaAdapter = new BsaRecyclerAdapter(mViewModel.getBsaList());
                 mDataBinding.homeBsaRecyclerView.setAdapter(bsaAdapter);
                 mDataBinding.homeBsaRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             }
@@ -136,7 +135,7 @@ public class HomeFragment extends Fragment  {
 
     private void loadFavoriteEtd(Favorite favorite) {
         mViewModel.getEtdLiveData(favorite.getOrigin()).observe(this, data -> {
-            if(data != null) {
+            if(data != null && data.getStation().getEtdList() != null) {
                 mFavoriteEstimateList = mViewModel.getEstimatesFromEtd(favorite, data.getStation().getEtdList());
                 EstimateRecyclerAdapter etdAdapter = new EstimateRecyclerAdapter(mFavoriteEstimateList);
                 mDataBinding.homeEtdRecyclerView.setAdapter(etdAdapter);
@@ -147,7 +146,7 @@ public class HomeFragment extends Fragment  {
 
     private void loadInverseEtd(Favorite inverse) {
         mViewModel.getEtdLiveData(inverse.getOrigin()).observe(this, data -> {
-            if(data != null) {
+            if(data != null && data.getStation().getEtdList() != null) {
                 mInverseEstimateList = mViewModel.getEstimatesFromEtd(inverse, data.getStation().getEtdList());
                 EstimateRecyclerAdapter etdAdapter = new EstimateRecyclerAdapter(mInverseEstimateList);
                 mDataBinding.homeEtdRecyclerView2.setAdapter(etdAdapter);

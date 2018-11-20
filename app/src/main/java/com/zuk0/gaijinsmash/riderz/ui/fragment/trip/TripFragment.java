@@ -288,18 +288,6 @@ public class TripFragment extends Fragment {
         }
     }
 
-    private void handleTrainHeaders() {
-                /*
-                        mTrainHeaders = new ArrayList<>();
-
-                for(FullTrip fullTrip : mFullTripList) {
-                    mTrainHeaders.save(fullTrip.getLegList().get(0).getTrainHeadStation());
-                    if(DebugController.DEBUG) Log.d("trainHeader added", fullTrip.getLegList().get(0).getTrainHeadStation());
-                }
-                bundle.putStringArrayList(TripFragment.TripBundle.TRAIN_HEADERS.getValue(), (ArrayList<String>) mTrainHeaders);
-         */
-    }
-
     public enum TripBundle {
         ORIGIN("Origin"), DESTINATION("Destination"), DATE("DATE"), TIME("TIME"), TRAIN_HEADERS("TrainHeaders");
         private String value;
