@@ -50,7 +50,7 @@ public class EtdRepository {
         return data;
     }
 
-    public void refreshEtd() {
+    public void refreshEtd(String origin) {
         //todo: insert logic
     }
 }

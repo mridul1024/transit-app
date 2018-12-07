@@ -66,8 +66,7 @@ public class HomeFragment extends Fragment {
         if(mViewModel.doesPriorityExist()) {
             initFavorite(mViewModel);
             loadTripData(mFavorite);
-            if(mBundle.getParcelable("ETD_RECYCLER_STATE") == null)
-                loadFavoriteEtd(mFavorite);
+            loadFavoriteEtd(mFavorite);
         }
         updateProgressBar();
     }
@@ -75,26 +74,11 @@ public class HomeFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        saveState(outState);
     }
 
     @Override
     public void onViewStateRestored(Bundle state) {
         super.onViewStateRestored(state);
-        restoreState();
-    }
-
-    private void saveState(Bundle outState) {
-        Parcelable state  = Objects.requireNonNull(mDataBinding.homeEtdRecyclerView.getLayoutManager()).onSaveInstanceState();
-        if(state != null)
-            outState.putParcelable("ETD_RECYCLER_STATE", state);
-            mViewModel.setEtdState(state);
-    }
-
-    private void restoreState() {
-        Parcelable listState = mBundle.getParcelable("ETD_RECYCLER_STATE");
-        if(listState != null)
-            Objects.requireNonNull(mDataBinding.homeEtdRecyclerView.getLayoutManager()).onRestoreInstanceState(listState);
     }
 
     @Override
