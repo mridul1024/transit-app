@@ -1,7 +1,7 @@
 package com.zuk0.gaijinsmash.riderz.di.module;
 
 import android.app.Application;
-import android.arch.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProvider;
 import android.content.Context;
 
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.BsaDao;

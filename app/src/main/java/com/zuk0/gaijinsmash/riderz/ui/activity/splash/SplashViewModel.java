@@ -1,13 +1,12 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.splash;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
+import androidx.lifecycle.AndroidViewModel;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
-import com.zuk0.gaijinsmash.riderz.data.remote.repository.StationRepository;
 import com.zuk0.gaijinsmash.riderz.utils.xml_parser.StationXmlParser;
 
 import org.xmlpull.v1.XmlPullParserException;

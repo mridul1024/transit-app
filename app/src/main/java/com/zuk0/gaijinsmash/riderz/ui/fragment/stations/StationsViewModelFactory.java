@@ -1,7 +1,7 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.stations;
 
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.StationRepository;
 

@@ -1,7 +1,7 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.stations;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 import android.content.Context;
 
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase;

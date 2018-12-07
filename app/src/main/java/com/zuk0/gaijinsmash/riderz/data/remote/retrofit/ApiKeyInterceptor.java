@@ -1,9 +1,8 @@
 package com.zuk0.gaijinsmash.riderz.data.remote.retrofit;
 
-import android.support.annotation.NonNull;
-
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;

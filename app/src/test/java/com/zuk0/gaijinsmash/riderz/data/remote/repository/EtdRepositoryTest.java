@@ -1,6 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.data.remote.repository;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.EtdDao;

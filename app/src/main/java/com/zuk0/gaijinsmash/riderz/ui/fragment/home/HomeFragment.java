@@ -1,13 +1,13 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.home;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +26,11 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.AndroidSupportInjection;
 
-/*
-    must use android.support.v4.app.Fragment for ViewModelProvider compatibility
-*/
-public class HomeFragment extends Fragment  {
+public class HomeFragment extends Fragment {
 
     @Inject
     HomeViewModelFactory mHomeViewModelFactory;
@@ -42,6 +41,7 @@ public class HomeFragment extends Fragment  {
 
     private List<Estimate> mInverseEstimateList;
     private List<Estimate> mFavoriteEstimateList;
+    private Bundle mBundle = new Bundle();
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -66,7 +66,8 @@ public class HomeFragment extends Fragment  {
         if(mViewModel.doesPriorityExist()) {
             initFavorite(mViewModel);
             loadTripData(mFavorite);
-            loadFavoriteEtd(mFavorite);
+            if(mBundle.getParcelable("ETD_RECYCLER_STATE") == null)
+                loadFavoriteEtd(mFavorite);
         }
         updateProgressBar();
     }
@@ -74,23 +75,36 @@ public class HomeFragment extends Fragment  {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        saveState(outState);
     }
 
     @Override
     public void onViewStateRestored(Bundle state) {
         super.onViewStateRestored(state);
+        restoreState();
+    }
+
+    private void saveState(Bundle outState) {
+        Parcelable state  = Objects.requireNonNull(mDataBinding.homeEtdRecyclerView.getLayoutManager()).onSaveInstanceState();
+        if(state != null)
+            outState.putParcelable("ETD_RECYCLER_STATE", state);
+            mViewModel.setEtdState(state);
+    }
+
+    private void restoreState() {
+        Parcelable listState = mBundle.getParcelable("ETD_RECYCLER_STATE");
+        if(listState != null)
+            Objects.requireNonNull(mDataBinding.homeEtdRecyclerView.getLayoutManager()).onRestoreInstanceState(listState);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //todo: grab state of CountDownTimer
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //todo: return state of countdowntimer
     }
 
     private void initDagger() {
@@ -105,6 +119,9 @@ public class HomeFragment extends Fragment  {
         viewModel.initPic(Objects.requireNonNull(getActivity()), mViewModel.getHour(), mDataBinding.homeBannerImageView);
     }
 
+    /*
+        Fetches data for BART advisories - i.e. delay reports
+     */
     private void loadAdvisories(LiveData<BsaXmlResponse> bsa) {
         bsa.observe(this, bsaXmlResponse -> {
             if (bsaXmlResponse != null) {
@@ -133,6 +150,9 @@ public class HomeFragment extends Fragment  {
         });
     }
 
+    /*
+        Fetches an ETD list for the user's favorite.priority route
+     */
     private void loadFavoriteEtd(Favorite favorite) {
         mViewModel.getEtdLiveData(favorite.getOrigin()).observe(this, data -> {
             if(data != null && data.getStation().getEtdList() != null) {
@@ -144,6 +164,9 @@ public class HomeFragment extends Fragment  {
         });
     }
 
+    /*
+        Fetches an ETD for the opposite direction of the favorite
+     */
     private void loadInverseEtd(Favorite inverse) {
         mViewModel.getEtdLiveData(inverse.getOrigin()).observe(this, data -> {
             if(data != null && data.getStation().getEtdList() != null) {

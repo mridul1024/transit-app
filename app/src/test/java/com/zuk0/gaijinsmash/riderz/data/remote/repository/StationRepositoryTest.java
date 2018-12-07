@@ -1,11 +1,10 @@
 package com.zuk0.gaijinsmash.riderz.data.remote.repository;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.StationDao;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
-import com.zuk0.gaijinsmash.riderz.utils.xml_parser.StationXmlParser;
 
 import org.junit.Before;
 import org.junit.Rule;

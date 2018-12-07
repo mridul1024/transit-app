@@ -1,8 +1,8 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.google_map;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;

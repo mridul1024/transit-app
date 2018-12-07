@@ -1,8 +1,8 @@
 package com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;

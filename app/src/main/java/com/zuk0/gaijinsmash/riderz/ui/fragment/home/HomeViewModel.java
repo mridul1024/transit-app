@@ -1,11 +1,12 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.home;
 
 import android.app.Application;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
-import android.arch.persistence.room.Room;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.room.Room;
 import android.content.Context;
 import android.os.CountDownTimer;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ public class HomeViewModel extends ViewModel {
     private BsaRepository mBsaRepository;
     private EtdRepository mEtdRepository;
     private List<Bsa> mBsaList;
+    private Parcelable mEtdState;
 
     @Inject
     public HomeViewModel(Application application,
@@ -52,6 +54,14 @@ public class HomeViewModel extends ViewModel {
         mTripRepository = tripRepository;
         mBsaRepository = bsaRepository;
         mEtdRepository = etdRepository;
+    }
+
+    public void setEtdState(Parcelable state) {
+        mEtdState = state;
+    }
+
+    public Parcelable getState() {
+        return mEtdState;
     }
 
     public void setBsaList(List<Bsa> bsaList) {
@@ -165,11 +175,11 @@ public class HomeViewModel extends ViewModel {
         long untilFinished = (long) (minutesLeft * 60000);
         new CountDownTimer(untilFinished, 1000) {
             String minutes = textView.getContext().getResources().getString(R.string.minutes);
-            String seconds = textView.getContext().getResources().getString(R.string.seconds);
+            //String seconds = textView.getContext().getResources().getString(R.string.seconds);
 
             @Override
             public void onTick(long millisUntilFinished) {
-                String remainingTime = String.valueOf(millisUntilFinished / 60000)+ " " + minutes + " : " + String.valueOf(millisUntilFinished % 60000 / 1000) + " " + seconds;
+                String remainingTime = String.valueOf(millisUntilFinished / 60000)+ " " + minutes;
                 textView.setText(remainingTime);
             }
 

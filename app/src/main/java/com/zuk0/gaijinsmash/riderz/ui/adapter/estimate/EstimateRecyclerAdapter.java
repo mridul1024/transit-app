@@ -1,7 +1,5 @@
 package com.zuk0.gaijinsmash.riderz.ui.adapter.estimate;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +11,9 @@ import com.zuk0.gaijinsmash.riderz.ui.fragment.home.HomeViewModel;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecyclerAdapter.ViewHolder>{
 
@@ -49,8 +50,10 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
         holder.destination.setText(estimate.getDestination());
 
         String minutes = estimate.getMinutes();
-        if(!minutes.equals("Leaving")) {
+        if(!minutes.equalsIgnoreCase("Leaving")) {
             HomeViewModel.beginTimer(holder.minutes, Integer.valueOf(minutes));
+        } else {
+            holder.minutes.setText(R.string.leaving);
         }
         BartRoutesUtils.setLineBarByColor(holder.line.getContext(), estimate.getColor(), holder.line);
     }

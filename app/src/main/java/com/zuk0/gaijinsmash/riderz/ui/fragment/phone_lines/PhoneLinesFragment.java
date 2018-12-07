@@ -1,13 +1,14 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.phone_lines;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.zuk0.gaijinsmash.riderz.R;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 public class PhoneLinesFragment extends Fragment {
 

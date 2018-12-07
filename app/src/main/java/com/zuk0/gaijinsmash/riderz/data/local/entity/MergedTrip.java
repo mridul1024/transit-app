@@ -1,11 +1,8 @@
 package com.zuk0.gaijinsmash.riderz.data.local.entity;
 
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 
-import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse;
-
-import java.util.List;
 
 public class MergedTrip {
 

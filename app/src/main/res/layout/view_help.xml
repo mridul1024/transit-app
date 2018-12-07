@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         android:paddingBottom="50dp">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/help_cardView"
             style="@style/CardViewRiderz"
             android:layout_width="match_parent"
@@ -102,6 +102,6 @@
                     android:text="@string/help_report_button" />
 
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </layout>

@@ -1,47 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <RelativeLayout
-        android:orientation="vertical"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="2dp"
-        android:paddingEnd="2dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+        android:elevation="2dp"
+        android:layout_margin="3dp"
+        app:cardCornerRadius="2dp">
 
-        <!-- Left Side of Row -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <!-- Station Name -->
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
+            <!-- Left Side of Row -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <!-- Station Name -->
+                <TextView
+                    android:id="@+id/stationName_textView"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <!-- Station Abbr -->
             <TextView
-                android:id="@+id/stationName_textView"
+                android:id="@+id/stationAbbr_textView"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+            <!-- Station Address -->
+            <TextView
+                android:id="@+id/stationAddress_textView"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <!-- Station City -->
+            <TextView
+                android:id="@+id/stationCity_textView"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/stationAddress_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <!-- Station Abbr -->
-        <TextView
-            android:id="@+id/stationAbbr_textView"
-            android:layout_alignParentEnd="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
-        <!-- Station Address -->
-        <TextView
-            android:id="@+id/stationAddress_textView"
-            android:layout_alignParentEnd="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <!-- Station City -->
-        <TextView
-            android:id="@+id/stationCity_textView"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/stationAddress_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    </androidx.cardview.widget.CardView>
 
-    </RelativeLayout>
 </layout>

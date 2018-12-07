@@ -1,6 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.ui.fragment.trip;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 import com.zuk0.gaijinsmash.riderz.utils.TimeDateUtils;
 

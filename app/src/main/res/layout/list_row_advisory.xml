@@ -8,18 +8,18 @@
 
     </data>
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/bsa_station_textView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAlignment="center"
             android:layout_gravity="center_vertical"
             android:text="@{bsa.station}"/>
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/bsa_type_textView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -27,12 +27,12 @@
             android:textColor="@color/colorTextAlert"
             android:layout_gravity="center_vertical"
             android:text="@{bsa.type}"/>
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/bsa_description_textView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAlignment="center"
             android:layout_gravity="center_vertical"
             android:text="@{bsa.description}"/>
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

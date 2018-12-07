@@ -1,13 +1,12 @@
 package com.zuk0.gaijinsmash.riderz.data.remote.repository;
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.Bsa;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.BsaDao;
-import com.zuk0.gaijinsmash.riderz.data.remote.repository.BsaRepository;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
 
 import org.junit.Before;
