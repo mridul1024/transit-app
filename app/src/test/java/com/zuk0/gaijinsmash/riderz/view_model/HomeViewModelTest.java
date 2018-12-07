@@ -41,21 +41,5 @@ public class HomeViewModelTest {
         assert(viewModel != null);
     }
 
-    @Test
-    public void createFavoriteInverse_shouldReturn() {
-        assert(viewModel.createFavoriteInverse(getTrips(), getFavorite())
-                .getOrigin().equals("12th"));
-        assert(viewModel.createFavoriteInverse(getTrips(), getFavorite())
-                .getDestination().equals("16th"));
-    }
-
-    private List<Trip> getTrips() {
-
-        return new ArrayList<Trip>();
-    }
-
-    private Favorite getFavorite() {
-        return new Favorite();
-    }
 
 }

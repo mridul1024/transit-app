@@ -36,7 +36,7 @@ public class EtdRepositoryTest {
     public void repoShould_properlyCallApi() {
         MutableLiveData<EtdXmlResponse> call = new MutableLiveData<>();
         EtdRepository repository = mock(EtdRepository.class);
-        when(repository.getEtd("12")).thenReturn(call);
+        when(repository.getEtd("12th")).thenReturn(call);
         assert(repository.getEtd("12th") != null);
     }
 }
