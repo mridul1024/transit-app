@@ -21,7 +21,7 @@ public class BartMapViewModel extends AndroidViewModel {
 
     public void initBartMap(Context context, ImageView imageView) {
         Glide.with(context)
-                .load(R.drawable.bart_map)
+                .load(R.drawable.bart_cc_map2)
                 .into(imageView);
     }
 }
