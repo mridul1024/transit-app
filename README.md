@@ -1,7 +1,7 @@
 # Transit App
 ### An open-source project in Java and Kotlin
 
-## Deployment Status : v1.1-beta on Google Play
+## Deployment Status : v1.0 Official Release on Google Play 
 ## CircleCI Status: [![CircleCI](https://circleci.com/gh/rjsuzuki/transit-app.svg?style=svg)](https://circleci.com/gh/rjsuzuki/transit-app)
 --------------------------------------------------------------------------------
 
