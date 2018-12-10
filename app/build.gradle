@@ -13,8 +13,8 @@ android {
         applicationId 'com.zuk0.gaijinsmash.riderz'
         minSdkVersion 21
         targetSdkVersion 28 // this should match compileSdkVersion
-        versionCode 7
-        versionName "1.2"
+        versionCode 8
+        versionName "1.3"
         multiDexEnabled false
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
