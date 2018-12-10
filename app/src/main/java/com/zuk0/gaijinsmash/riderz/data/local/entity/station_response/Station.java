@@ -43,13 +43,13 @@ public class Station {
     @Element(required = false)
     private String city;
 
-    @ColumnInfo(name = "county")
-    @Element(required = false)
-    private String county;
-
     @ColumnInfo(name = "state")
     @Element(required = false)
     private String state;
+
+    @ColumnInfo(name = "county")
+    @Element(required = false)
+    private String county;
 
     @ColumnInfo(name = "zipcode")
     @Element(required = false)
@@ -103,9 +103,11 @@ public class Station {
     @ElementList(name = "south_platforms", required = false)
     private List<Platform> southPlatforms;
 
+    @ColumnInfo
     @Element(name="message", required = false)
     private String message;
 
+    @ColumnInfo
     @Element(name="error", required = false)
     private String error;
 

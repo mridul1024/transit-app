@@ -23,7 +23,7 @@ public abstract class FavoriteDatabase extends RoomDatabase {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), FavoriteDatabase.class, "favorites")
                     //.addMigrations(MIGRATION)
-                    .fallbackToDestructiveMigration() //todo remove this after testing
+                    .fallbackToDestructiveMigration()
                     .build();
         }
         return INSTANCE;
@@ -33,11 +33,28 @@ public abstract class FavoriteDatabase extends RoomDatabase {
         INSTANCE = null;
     }
 
-    // Edit this to create a new migration for database
-    private static final Migration MIGRATION = new Migration(1,2) {
+    /*
+        Edit this to create a new migration for database
+     */
+    private static final Migration MIGRATION = new Migration(2,3) {
+
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE favorites ADD COLUMN last_update INTEGER");
+
+            // create a new table
+            database.execSQL("CREATE TABLE favorites_temp (id INTEGER, origin TEXT, destination TEXT," +
+                    " trainHeaderStations TEXT, system TEXT, description TEXT, priority TEXT, colors TEXT, PRIMARY KEY(id))");
+
+            // copy the data
+            database.execSQL("INSERT INTO favorites_temp (id, origin, destination, trainHeaderStations, system, description, priority, colors) "
+                    + "SELECT id, origin, destination, trainHeaderStations, system, description, priority, colors "
+                    + "FROM favorites");
+
+            // remove the old table
+            database.execSQL("DROP TABLE favorites");
+
+            // change the table name to the correct one
+            database.execSQL("ALTER TABLE favorites_temp RENAME TO favorites");
         }
     };
 }

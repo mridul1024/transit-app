@@ -41,7 +41,6 @@ public class BsaRepository {
         return bsaDao.load();
     }
 
-    //todo: add test
     private void refreshBsa(final Timestamp current) {
         // running in background thread
         executor.execute(() -> {
@@ -52,8 +51,9 @@ public class BsaRepository {
                 try {
                     Response response = service.getBsa().execute();
                     BsaXmlResponse bsa = (BsaXmlResponse) response.body();
-                    bsa.setTimestamp(new Timestamp(System.currentTimeMillis()));
-                    Log.d("refreshBsa()", bsa.getDate() + " | " + bsa.getBsaList().get(0).getDescription());
+                    if (bsa != null) {
+                        bsa.setTimestamp(new Timestamp(System.currentTimeMillis()));
+                    }
                     bsaDao.save(bsa);
                 } catch (IOException e) {
                     Log.wtf("refreshBsa()", e.getMessage());

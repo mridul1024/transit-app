@@ -16,6 +16,24 @@
 #   public *;
 #}
 -keepclassmembers class clipper
+# SimpleXMLParsing
+-keep public class org.simpleframework.** { *; }
+-keep class org.simpleframework.xml.** { *; }
+-keep class org.simpleframework.xml.core.** { *; }
+-keep class org.simpleframework.xml.util.** { *; }
+
+-keepattributes ElementList, Root
+
+-keepclassmembers class * {
+    @org.simpleframework.xml.* *;
+}
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+-keepclasseswithmembers interface * {
+    @retrofit2.* <methods>;
+}
+-keep class com.zuk0.gaijinsmash.riderz.data.local.** {*;}
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
@@ -28,3 +46,4 @@
 -dontwarn okhttp3.**
 -dontwarn okio.**
 -dontwarn retrofit2.**
+-dontwarn javax.annotation.**

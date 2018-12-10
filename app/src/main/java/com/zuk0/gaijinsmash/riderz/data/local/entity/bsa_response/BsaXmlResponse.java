@@ -11,7 +11,7 @@ import org.simpleframework.xml.Root;
 import java.sql.Timestamp;
 import java.util.List;
 
-@Entity(tableName = "advisories") //todo: finish adding @ColumnInfo to fields
+@Entity(tableName = "advisories")
 @Root(name="root", strict=false)
 public class BsaXmlResponse {
 
@@ -30,7 +30,7 @@ public class BsaXmlResponse {
     private String time;
 
     @ColumnInfo
-    @ElementList(inline = true)
+    @ElementList(inline = true, required = false)
     private List<Bsa> bsaList;
 
     public int getId() {

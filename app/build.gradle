@@ -13,8 +13,8 @@ android {
         applicationId 'com.zuk0.gaijinsmash.riderz'
         minSdkVersion 21
         targetSdkVersion 28 // this should match compileSdkVersion
-        versionCode 5
-        versionName "1.0"
+        versionCode 7
+        versionName "1.2"
         multiDexEnabled false
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -101,10 +101,9 @@ dependencies {
     testImplementation 'androidx.arch.core:core-testing:2.0.0'
 
     // Room Database
-    def room_version = "1.1.1"
-    implementation 'androidx.room:room-runtime:2.1.0-alpha02'
-    kapt 'androidx.room:room-compiler:2.1.0-alpha02'
-    testImplementation 'androidx.room:room-testing:2.1.0-alpha02'
+    implementation 'androidx.room:room-runtime:2.1.0-alpha03'
+    kapt 'androidx.room:room-compiler:2.1.0-alpha03'
+    testImplementation 'androidx.room:room-testing:2.1.0-alpha03'
 
     // Test framework
     testImplementation 'junit:junit:4.12'

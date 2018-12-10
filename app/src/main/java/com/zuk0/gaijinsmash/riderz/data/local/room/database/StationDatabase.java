@@ -21,8 +21,8 @@ public abstract class StationDatabase extends RoomDatabase {
     public static StationDatabase getRoomDB(Context context) {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), StationDatabase.class, "stations")
-                    //.addMigrations(MIGRATION) //todo: change
-                    .fallbackToDestructiveMigrationFrom(5)
+                    .addMigrations(MIGRATION)
+                    .fallbackToDestructiveMigration()
                     .build();
         }
         return INSTANCE;
@@ -36,12 +36,11 @@ public abstract class StationDatabase extends RoomDatabase {
     }
 
     // Edit this to create a new migration for database - and use ".addMigrations(example)
-
-    private static final Migration MIGRATION = new Migration(4,5) {
+    private static final Migration MIGRATION = new Migration(4,6) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE stations ADD COLUMN last_update INTEGER ");
+            database.execSQL("ALTER TABLE stations ADD COLUMN message TEXT");
+            database.execSQL("ALTER TABLE stations ADD COLUMN error TEXT");
         }
     };
-
 }

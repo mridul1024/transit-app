@@ -215,7 +215,6 @@ public class StationXmlParser {
 
         // ADD REGEX to modify "international"
         //name.replace("International", "Int'l");
-        //todo name.replaceAll("International", "Int'l");
         parser.require(XmlPullParser.END_TAG, ns, "name");
         return name;
     }

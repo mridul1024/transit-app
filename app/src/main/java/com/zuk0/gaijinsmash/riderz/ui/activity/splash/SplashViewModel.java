@@ -20,6 +20,9 @@ import javax.inject.Inject;
 
 public class SplashViewModel extends AndroidViewModel {
 
+    /*
+        TODO: update this count whenever a new station is built
+     */
     private static final int BART_STATIONS_COUNT = 48;
 
     @Inject

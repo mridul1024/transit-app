@@ -45,10 +45,13 @@
                 android:id="@+id/etd_colored_line"
                 android:layout_width="30dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="288dp"
+                android:layout_marginStart="272dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:background="@color/bartDefault"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
@@ -56,7 +59,7 @@
             <TextView
                 android:id="@+id/etd_destinationTv"
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="44dp"
                 android:layout_marginTop="8dp"
@@ -77,12 +80,12 @@
 
             <TextView
                 android:id="@+id/etd_minutesTv"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:paddingStart="3dp"
                 android:paddingEnd="3dp"
@@ -103,18 +106,15 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
                 android:contentDescription="train"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/etd_colored_line"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.181"
                 app:srcCompat="@drawable/ic_menu_station" />
 
             <ImageView
                 android:id="@+id/imageView4"
-                android:layout_width="25dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
@@ -126,7 +126,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etd_originTv"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/ic_subdirectory_arrow_right_black_24dp" />
+                app:srcCompat="@drawable/ic_subdirectory_arrow_right_black_24dp"
+                android:contentDescription="TODO" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
