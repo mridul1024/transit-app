@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.constants.RiderzEnums;
+import com.zuk0.gaijinsmash.riderz.data.local.constants.StationList;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
@@ -142,14 +143,14 @@ public class BartResultsFragment extends Fragment {
 
                     initFavoriteObject(mOrigin, mDestination, mTripList);
 
-                    initRecylerView(mTripList);
+                    initRecyclerView(mTripList);
                 } else {
                     Log.wtf("initTripCall", "error");
                 }
         });
     }
 
-    private void initRecylerView(List<Trip> tripList) {
+    private void initRecyclerView(List<Trip> tripList) {
         if(tripList != null) {
             TripRecyclerAdapter adapter = new TripRecyclerAdapter(getActivity(), tripList);
             mDataBinding.resultsRecyclerView.setAdapter(adapter);
@@ -163,7 +164,20 @@ public class BartResultsFragment extends Fragment {
     }
 
     private void initFavoriteIcon(String origin, String destination) {
-        mViewModel.getFavoriteLiveData(origin, destination).observe(this, data -> {
+        String org = "";
+        String dest = "";
+
+        if(mFromRecyclerAdapter) {
+            //convert to full name
+            org = StationList.stationMap.get(origin);
+            dest = StationList.stationMap.get(destination);
+        } else {
+            org = origin;
+            dest = destination;
+        }
+
+        mViewModel.getFavoriteLiveData(org, dest).observe(this, data -> {
+
             if(data != null) {
                 // Current trip is already a Favorite
                 mFavoritedIcon.setVisible(true);

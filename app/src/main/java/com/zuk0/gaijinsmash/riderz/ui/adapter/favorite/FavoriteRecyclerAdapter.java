@@ -53,6 +53,10 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         }
     }
 
+    /*
+        Note: pulls text directly from textviews, which are in Abbreviated format
+        Must get full stations names for sql query in favorites database.
+     */
     private void initTripSearch(Context context, TextView origin, TextView destination) {
         String originString = origin.getText().toString();
         String destinationString = destination.getText().toString();
