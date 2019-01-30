@@ -41,6 +41,7 @@ public class FavoritesViewModel extends AndroidViewModel {
         new FavoritesTask(context, RiderzEnums.FavoritesAction.DELETE_PRIORITY, favorite).execute();
     }
 
+    //todo: replace with rxjava
     private static class FavoritesTask extends AsyncTask<Void,Void,Boolean> {
 
         private WeakReference<Context> mWeakRef;
