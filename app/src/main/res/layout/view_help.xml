@@ -1,109 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingBottom="50dp">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/help_cardView"
-            style="@style/CardViewRiderz"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="50dp">
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/help_cardView"
+                style="@style/CardViewRiderz"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/mp_primary_light"
-                android:orientation="vertical"
-                android:padding="2dp">
+                android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/help_title_textView"
-                    style="@style/TextViewRiderz"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/help_view_title"
-                    android:textAlignment="center"
-                    android:textColor="@color/mp_primary_text" />
+                    android:layout_height="match_parent"
+                    android:background="@color/mp_primary_light"
+                    android:orientation="vertical"
+                    android:padding="2dp">
 
-                <TextView
-                    android:id="@+id/textView5"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/help_q1" />
+                    <TextView
+                        android:id="@+id/help_title_textView"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/help_view_title"
+                        android:textAlignment="center"
+                        android:textColor="@color/mp_primary_text" />
 
-                <TextView
-                    android:id="@+id/textView7"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/help_a1" />
+                    <TextView
+                        android:id="@+id/textView5"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/help_q1" />
 
-                <TextView
-                    android:id="@+id/textView6"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/help_q2" />
+                    <TextView
+                        android:id="@+id/textView7"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/help_a1" />
 
-                <TextView
-                    android:id="@+id/textView9"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/help_a2" />
+                    <TextView
+                        android:id="@+id/textView6"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/help_q2" />
 
-                <TextView
-                    android:id="@+id/textView2"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/help_q3" />
+                    <TextView
+                        android:id="@+id/textView9"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/help_a2" />
 
-                <TextView
-                    android:id="@+id/textView3"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/help_a3" />
+                    <TextView
+                        android:id="@+id/textView2"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/help_q3" />
 
-                <TextView
-                    android:id="@+id/textView11"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autoLink="web"
-                    android:text="@string/help_url" />
+                    <TextView
+                        android:id="@+id/textView3"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/help_a3" />
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoLink="web"
+                        android:text="@string/help_url" />
 
 
-                <TextView
-                    android:id="@+id/textView4"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/help_q4" />
+                    <TextView
+                        android:id="@+id/textView4"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/help_q4" />
 
-                <TextView
-                    android:id="@+id/textView10"
-                    style="@style/TextViewRiderz"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/help_a4" />
+                    <TextView
+                        android:id="@+id/textView10"
+                        style="@style/TextViewRiderz"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/help_a4" />
 
-                <Button
-                    android:id="@+id/help_report_button"
-                    style="@style/ButtonAppTheme"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:elevation="1dp"
-                    android:text="@string/help_report_button" />
+                    <Button
+                        android:id="@+id/help_report_button"
+                        style="@style/ButtonAppTheme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:elevation="1dp"
+                        android:text="@string/help_report_button" />
 
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
 </layout>

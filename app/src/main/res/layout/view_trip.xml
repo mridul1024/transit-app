@@ -1,119 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <RelativeLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="5dp"
-        android:id="@+id/trip_container">
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/trip_linearLayout1"
+        android:layout_height="match_parent">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:orientation="horizontal"
-            android:layout_marginTop="15dp">
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:id="@+id/trip_container">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/trip_linearLayout1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
-                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                    android:id="@+id/trip_departure_autoCompleteTextView"
-                    android:layout_width="match_parent"
+                android:layout_alignParentTop="true"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:hint="@string/departure_station" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/station_spinner1"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/trip_linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/trip_linearLayout1"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                    android:id="@+id/trip_arrival_autoCompleteTextView"
-                    android:layout_width="match_parent"
+                    android:layout_weight="1">
+                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                        android:id="@+id/trip_departure_autoCompleteTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:hint="@string/departure_station" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/station_spinner1"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:hint="@string/arrival_station" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <Spinner
-                android:id="@+id/station_spinner2"
-                android:layout_width="50dp"
-                android:layout_height="49dp" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                    android:layout_marginTop="16dp" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <LinearLayout
-            android:id="@+id/trip_linearLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/trip_linearLayout2"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal" android:baselineAligned="false">
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/trip_linearLayout2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/trip_date_editText"
-                    android:layout_width="match_parent"
+                android:layout_below="@+id/trip_linearLayout1"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="@string/date_hint"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:inputType="date"
-                    android:labelFor="@id/trip_date_editText" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_weight="1">
+                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                        android:id="@+id/trip_arrival_autoCompleteTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:hint="@string/arrival_station" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <Spinner
+                    android:id="@+id/station_spinner2"
+                    android:layout_width="50dp"
+                    android:layout_height="49dp" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/trip_linearLayout3"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/trip_time_editText"
-                    android:layout_width="match_parent"
+                android:layout_below="@+id/trip_linearLayout2"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal" android:baselineAligned="false">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:hint="@string/time_hint"
-                    android:inputType="time"
-                    android:labelFor="@id/trip_time_editText" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+                    android:paddingEnd="2dp"
+                    android:layout_weight="2">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/trip_date_editText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/date_hint"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:inputType="date"
+                        android:labelFor="@id/trip_date_editText" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            style="@style/ButtonAppTheme"
-            android:id="@+id/trip_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/schedule_button"
-            android:layout_marginTop="20dp"
-            android:layout_below="@+id/trip_linearLayout3" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="2dp"
+                    android:layout_weight="2">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/trip_time_editText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:hint="@string/time_hint"
+                        android:inputType="time"
+                        android:labelFor="@id/trip_time_editText" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
-        <TextView
-            android:layout_below="@+id/trip_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:text="@string/trip_warning"/>
-    </RelativeLayout>
+            <Button
+                style="@style/ButtonAppTheme"
+                android:id="@+id/trip_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/schedule_button"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/trip_linearLayout3" />
+
+            <TextView
+                android:layout_below="@+id/trip_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:text="@string/trip_warning"/>
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
 </layout>

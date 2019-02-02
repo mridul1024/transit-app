@@ -51,16 +51,16 @@ public class FavoritesFragment extends Fragment {
     }
 
     private void initFavorites() {
-        //todo: change bg color of priority to something else
         mViewModel.getFavorites().observe(this, data -> {
             if(data != null) {
                 if(data.size() > 0) {
                     mDataBinding.bartFavoritesErrorTV.setVisibility(View.GONE);
-                    FavoriteRecyclerAdapter adapter = new FavoriteRecyclerAdapter(data);
+                    FavoriteRecyclerAdapter adapter = new FavoriteRecyclerAdapter(data, this);
                     mDataBinding.bartFavoritesRecyclerView.setAdapter(adapter);
                     mDataBinding.bartFavoritesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 }
             }
         });
     }
+
 }

@@ -15,6 +15,7 @@ public class AlertDialogUtils {
         String message = context.getResources().getString(R.string.gps_permission_alert);
         String yesAction = context.getResources().getString(R.string.alert_dialog_yes);
         Snackbar.make(parentView, message, Snackbar.LENGTH_INDEFINITE)
+                .setAnchorView(R.id.bottom_navigation)
                 .setAction(yesAction, view -> {
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     context.startActivity(intent);

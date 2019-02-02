@@ -31,6 +31,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
+import androidx.navigation.fragment.NavHostFragment;
 import dagger.android.support.AndroidSupportInjection;
 
 public class TripFragment extends Fragment {
@@ -264,7 +265,7 @@ public class TripFragment extends Fragment {
 
     private void launchTripResultFragment(String origin, String destination, String date, String time) {
         Bundle bundle = initBundler(origin, destination, date, time);
-        initFragmentManager(bundle);
+        NavHostFragment.findNavController(this).navigate(R.id.action_tripFragment_to_resultsFragment, bundle, null, null);
     }
 
     private Bundle initBundler(String origin, String destination, String date, String time) {
@@ -274,19 +275,6 @@ public class TripFragment extends Fragment {
         bundle.putString(TripBundle.DATE.getValue(), date);
         bundle.putString(TripBundle.TIME.getValue(), time);
         return bundle;
-    }
-
-    private void initFragmentManager(Bundle bundle) {
-        Fragment frag = new BartResultsFragment();
-        frag.setArguments(bundle);
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft;
-        if (fm != null) {
-            ft = fm.beginTransaction();
-            ft.replace(R.id.fragmentContent, frag).addToBackStack(null).commit();
-        } else {
-            Toast.makeText(getActivity(), getResources().getString(R.string.error_try_again), Toast.LENGTH_SHORT).show();
-        }
     }
 
     public enum TripBundle {

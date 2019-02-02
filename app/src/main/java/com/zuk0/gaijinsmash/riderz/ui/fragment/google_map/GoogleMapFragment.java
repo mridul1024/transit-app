@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import androidx.databinding.DataBindingUtil;
@@ -29,13 +27,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.zuk0.gaijinsmash.riderz.BuildConfig;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.databinding.ViewGoogleMapBinding;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment;
 import com.zuk0.gaijinsmash.riderz.utils.AlertDialogUtils;
 import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
@@ -46,6 +43,7 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import androidx.navigation.fragment.NavHostFragment;
 import dagger.android.support.AndroidSupportInjection;
 
 public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
@@ -134,7 +132,10 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+
+
         initMapView(savedInstanceState);
+
     }
 
     @Override
@@ -142,6 +143,8 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         super.onActivityCreated(savedInstanceState);
         initDagger();
         initViewModel();
+        AppBarLayout appBarLayout = Objects.requireNonNull(getActivity()).findViewById(R.id.main_app_bar_layout);
+        appBarLayout.setExpanded(false);
         initBartButton();
     }
 
@@ -167,13 +170,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     }
 
     private void initBartMapFragment() {
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction tx;
-        if (manager != null) {
-            tx = manager.beginTransaction();
-            Fragment newFrag = new BartMapFragment();
-            tx.replace(R.id.fragmentContent, newFrag).addToBackStack(null).commit();
-        }
+        NavHostFragment.findNavController(this).navigate(R.id.action_googleMapFragment_to_bartMapFragment);
     }
 
     //---------------------------------------------------------------------------------------------
@@ -204,10 +201,11 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     }
 
     private void initMarkerSnackbar(GoogleMap map, LatLng position, String destination) {
-        View parentView = Objects.requireNonNull(getActivity()).findViewById(R.id.main_app_bar_coordinatorLayout);
+        View parentView = Objects.requireNonNull(getActivity()).findViewById(R.id.main_coordinatorLayout);
         String message = getResources().getString(R.string.alert_dialog_gpsMarker);
         String yesAction = getResources().getString(R.string.alert_dialog_yes);
         Snackbar.make(parentView, message, Snackbar.LENGTH_INDEFINITE)
+                .setAnchorView(R.id.bottom_navigation)
                 .setAction(yesAction, view -> {
                     if(GpsUtils.checkLocationPermission(getActivity())) {
                         Station station = mViewModel.findNearestMarker(map, position, destination, mStationList);
@@ -250,7 +248,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
                         bundle.putString(TripFragment.TripBundle.DESTINATION.getValue(), destination);
                         bundle.putString(TripFragment.TripBundle.DATE.getValue(), "TODAY");
                         bundle.putString(TripFragment.TripBundle.TIME.getValue(), "NOW");
-                        loadNewFragment(bundle);
+                        launchNewFragment(bundle);
                         dialog.dismiss();
                     }
                 })
@@ -260,16 +258,8 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     }
 
 
-    private void loadNewFragment(Bundle bundle) {
-        Fragment newFrag = new BartResultsFragment();
-        newFrag.setArguments(bundle);
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction;
-        if (manager != null) {
-            transaction = manager.beginTransaction();
-            transaction.replace(R.id.fragmentContent, newFrag)
-                    .addToBackStack(null).commit();
-        }
+    private void launchNewFragment(Bundle bundle) {
+        NavHostFragment.findNavController(this).navigate(R.id.action_googleMapFragment_to_resultsFragment, bundle, null, null);
     }
 
     @Override
@@ -286,7 +276,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
     }
 
     private void initUserLocation(Context context, GoogleMap map) {
-        View parentView = Objects.requireNonNull(getActivity()).findViewById(R.id.main_app_bar_coordinatorLayout);
+        View parentView = Objects.requireNonNull(getActivity()).findViewById(R.id.main_coordinatorLayout);
         GpsUtils gps;
         Location loc = null;
         try {

@@ -23,6 +23,7 @@ import com.zuk0.gaijinsmash.riderz.ui.fragment.google_map.GoogleMapFragment;
 
 import javax.inject.Inject;
 
+import androidx.navigation.fragment.NavHostFragment;
 import dagger.android.support.AndroidSupportInjection;
 
 public class StationInfoFragment extends Fragment {
@@ -66,13 +67,8 @@ public class StationInfoFragment extends Fragment {
     }
 
     private void handleMapButtonClick() {
-        FragmentManager manager = getFragmentManager();
-        if (manager != null && mStationObject != null) {
-            FragmentTransaction tx = manager.beginTransaction();
-            Fragment newFrag = new GoogleMapFragment();
-            newFrag.setArguments(mViewModel.getBundle(mStationObject));
-            tx.replace(R.id.fragmentContent, newFrag).addToBackStack(null).commit();
-        }
+        Bundle bundle = mViewModel.getBundle(mStationObject);
+        NavHostFragment.findNavController(this).navigate(R.id.action_stationInfoFragment_to_googleMapFragment, bundle, null,null);
     }
 
     private void getBundleArgs() {

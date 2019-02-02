@@ -11,7 +11,9 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
@@ -30,6 +32,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.android.support.AndroidSupportInjection;
 
+//todo: implement caching and time management of ETDs
 public class HomeFragment extends Fragment {
 
     @Inject
@@ -41,7 +44,6 @@ public class HomeFragment extends Fragment {
 
     private List<Estimate> mInverseEstimateList;
     private List<Estimate> mFavoriteEstimateList;
-    private Bundle mBundle = new Bundle();
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -51,6 +53,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_home, container, false);
         return mDataBinding.getRoot();
     }
@@ -60,15 +63,21 @@ public class HomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         this.initDagger();
         this.initViewModel();
+
         initPicture(mViewModel);
         loadAdvisories(mViewModel.getBsaLiveData());
+
+        AppBarLayout appBarLayout = Objects.requireNonNull(getActivity()).findViewById(R.id.main_app_bar_layout);
+        appBarLayout.setExpanded(true);
 
         if(mViewModel.doesPriorityExist()) {
             initFavorite(mViewModel);
             loadTripData(mFavorite);
             loadFavoriteEtd(mFavorite);
+        } else {
+            updateProgressBar();
         }
-        updateProgressBar();
+
     }
 
     @Override
@@ -100,7 +109,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void initPicture(HomeViewModel viewModel) {
-        viewModel.initPic(Objects.requireNonNull(getActivity()), mViewModel.getHour(), mDataBinding.homeBannerImageView);
+        ImageView imageView = Objects.requireNonNull(getActivity()).findViewById(R.id.home_banner_imageView);
+        viewModel.initPic(Objects.requireNonNull(getActivity()), mViewModel.getHour(), imageView);
     }
 
     /*
@@ -159,6 +169,7 @@ public class HomeFragment extends Fragment {
                 mDataBinding.homeEtdRecyclerView2.setAdapter(etdAdapter);
                 mDataBinding.homeEtdRecyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
             }
+            updateProgressBar();
         });
     }
 

@@ -83,7 +83,7 @@ public class StationsFragment extends Fragment {
         FragmentTransaction transaction;
         if (manager != null) {
             transaction = manager.beginTransaction();
-            transaction.replace(R.id.fragmentContent, newFrag)
+            transaction.replace(R.id.nav_host_fragment, newFrag)
                     .addToBackStack(null).commit();
         }
     }

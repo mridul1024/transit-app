@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.settings.SettingsFragment"
+        android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/resultsFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment"
+        android:label="Results"
+        tools:layout="@layout/view_results" />
+    <fragment
+        android:id="@+id/tripFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment"
+        android:label="Find your trip"
+        tools:layout="@layout/view_trip" >
+        <action
+            android:id="@+id/action_tripFragment_to_resultsFragment"
+            app:destination="@id/resultsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stationInfoFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.station_info.StationInfoFragment"
+        android:label="Station Info"
+        tools:layout="@layout/view_station_info" >
+        <action
+            android:id="@+id/action_stationInfoFragment_to_googleMapFragment"
+            app:destination="@id/googleMapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.about.AboutFragment"
+        android:label="About"
+        tools:layout="@layout/view_about" />
+    <fragment
+        android:id="@+id/bartMapFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment"
+        android:label="Bart Map"
+        tools:layout="@layout/view_bart_map" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.favorite.FavoritesFragment"
+        android:label="Favorites"
+        tools:layout="@layout/view_favorites" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_resultsFragment"
+            app:destination="@id/resultsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/googleMapFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.google_map.GoogleMapFragment"
+        android:label="Map"
+        tools:layout="@layout/view_google_map" >
+        <action
+            android:id="@+id/action_googleMapFragment_to_bartMapFragment"
+            app:destination="@id/bartMapFragment" />
+        <action
+            android:id="@+id/action_googleMapFragment_to_resultsFragment"
+            app:destination="@id/resultsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stationsFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.stations.StationsFragment"
+        android:label="BART Stations"
+        tools:layout="@layout/view_station" >
+        <action
+            android:id="@+id/action_stationsFragment_to_stationInfoFragment"
+            app:destination="@id/stationInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.help.HelpFragment"
+        android:label="Help"
+        tools:layout="@layout/view_help" />
+    <fragment
+        android:id="@+id/phoneLinesFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.phone_lines.PhoneLinesFragment"
+        android:label="Bart Lines"
+        tools:layout="@layout/view_phone_lines" />
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.home.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/view_home" >
+        <action
+            android:id="@+id/action_homeFragment_self"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_tripFragment"
+            app:destination="@id/tripFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_googleMapFragment"
+            app:destination="@id/googleMapFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_bartMapFragment"
+            app:destination="@id/bartMapFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_helpFragment"
+            app:destination="@id/helpFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_phoneLinesFragment"
+            app:destination="@id/phoneLinesFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_stationsFragment"
+            app:destination="@id/stationsFragment" />
+
+    </fragment>
+</navigation>

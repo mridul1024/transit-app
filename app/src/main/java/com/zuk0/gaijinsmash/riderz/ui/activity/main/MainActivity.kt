@@ -10,8 +10,15 @@ import android.view.MenuItem
 import android.view.View
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.NavigationUI.*
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.utils.NetworkUtils
@@ -28,6 +35,7 @@ import com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import kotlinx.android.synthetic.main.main_activity.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, HasSupportFragmentInjector{
@@ -38,134 +46,40 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return fragmentInjector
     }
 
-    private var mCurrentFragment = "HomeFragment"
-    private val mFragmentManager = supportFragmentManager
-    private lateinit var mDrawer: DrawerLayout
-    private lateinit var mNavigationView: NavigationView
-    private lateinit var mBottomNavigation: AHBottomNavigation
+    private lateinit var mAppBarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
+
     // ---------------------------------------------------------------------------------------------
     // Lifecycle Events
     // ---------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        AndroidInjection.inject(this)
-
         super.onCreate(savedInstanceState)
+        AndroidInjection.inject(this)
         setContentView(R.layout.main_activity)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        initBottomNavBar()
-        initNavigationDrawer(toolbar)
+        navController = findNavController(this, R.id.nav_host_fragment)
+        setupWithNavController(bottom_navigation, navController)
+        setupWithNavController(nav_view, navController)
+        mAppBarConfiguration = AppBarConfiguration.Builder(setOf(R.id.homeFragment, R.id.googleMapFragment, R.id.tripFragment, R.id.favoritesFragment))
+                .setDrawerLayout(drawer_layout)
+                .build()
+        setupWithNavController(toolbar, navController, mAppBarConfiguration)
 
         if(savedInstanceState == null) {
-            initHomeFragment()
+            //todo: add logic
         }
     }
+
+    override fun onSupportNavigateUp() = navController.popBackStack()
 
     override fun onBackPressed() {
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+            drawer_layout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
-            val count = mFragmentManager.backStackEntryCount
-            if(count == 0) {
-                super.onBackPressed()
-            } else {
-                val currentFrag = mFragmentManager.findFragmentById(R.id.fragmentContent)
-                if(currentFrag?.tag.equals("HomeFragment")) {
-                    mBottomNavigation.currentItem = 0
-                    mFragmentManager.popBackStack()
-                }
-                if(currentFrag?.tag.equals("GoogleMapFragment")) {
-                    mBottomNavigation.currentItem = 1
-                    mFragmentManager.popBackStack()
-                }
-                if(currentFrag?.tag.equals("TripFragment")) {
-                    mBottomNavigation.currentItem = 2
-                    mFragmentManager.popBackStack()
-                }
-                if(currentFrag?.tag.equals("FavoritesFragment")) {
-                    mBottomNavigation.currentItem = 3
-                    mFragmentManager.popBackStack()
-                }
-            }
         }
-    }
-    // ---------------------------------------------------------------------------------------------
-    // Navigation
-    // ---------------------------------------------------------------------------------------------
-    private fun initBottomNavBar() {
-        mBottomNavigation = findViewById<View>(R.id.bottom_navigation) as AHBottomNavigation
-        val item1 = AHBottomNavigationItem(R.string.bottomnav_title_0, R.drawable.ic_menu_home, R.color.colorPrimaryDark)
-        val item2 = AHBottomNavigationItem(R.string.bottomnav_title_1, R.drawable.ic_menu_map, R.color.colorPrimaryDark)
-        val item3 = AHBottomNavigationItem(R.string.bottomnav_title_2, R.drawable.ic_menu_schedule, R.color.colorPrimaryDark)
-        val item4 = AHBottomNavigationItem(R.string.bottomnav_title_3, R.drawable.ic_menu_favorite, R.color.colorPrimaryDark)
-
-        mBottomNavigation.addItem(item1)
-        mBottomNavigation.addItem(item2)
-        mBottomNavigation.addItem(item3)
-        mBottomNavigation.addItem(item4)
-        mBottomNavigation.currentItem = 0
-        mBottomNavigation.setOnTabSelectedListener { position, _ ->
-            when(position) {
-                0 -> initHomeFragment()
-                1 -> initMapFragment()
-                2 -> initScheduleFragment()
-                3 -> initFavoritesFragment()
-            }
-            true
-        }
-        mBottomNavigation.titleState = AHBottomNavigation.TitleState.ALWAYS_SHOW
-    }
-
-    private fun initHomeFragment() {
-        replaceFrag(HomeFragment(), "HomeFragment", true)
-        mNavigationView.setCheckedItem(R.id.nav_home)
-    }
-
-    private fun initMapFragment() {
-        replaceFrag(GoogleMapFragment(), "GoogleMapFragment", true)
-        mNavigationView.setCheckedItem(R.id.nav_map)
-    }
-
-    private fun initScheduleFragment() {
-        replaceFrag(TripFragment(), "TripFragment", true)
-        mNavigationView.setCheckedItem(R.id.nav_schedule)
-    }
-
-    private fun initFavoritesFragment() {
-        replaceFrag(FavoritesFragment(), "FavoritesFragment", true)
-    }
-
-    private fun replaceFrag(newFrag: Fragment, tag: String, addToBackStack: Boolean) {
-        if(addToBackStack) {
-            mFragmentManager
-                    .beginTransaction()
-                    //.setCustomAnimations(R.anim.enter, R.anim.exit)
-                    .replace(R.id.fragmentContent, newFrag, tag)
-                    .addToBackStack(tag)
-                    .commit()
-        } else {
-            mFragmentManager
-                    .beginTransaction()
-                    //.setCustomAnimations(R.anim.enter, R.anim.exit)
-                    .replace(R.id.fragmentContent, newFrag, tag)
-                    .commit()
-        }
-
-        mCurrentFragment = tag
-    }
-
-    private fun initNavigationDrawer(toolbar:Toolbar) {
-        mDrawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        val toggle = ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        mDrawer.addDrawerListener(toggle)
-        toggle.syncState()
-        mNavigationView = findViewById<View>(R.id.nav_view) as NavigationView
-        mNavigationView.setNavigationItemSelectedListener(this)
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -182,68 +96,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-        if (id == R.id.action_settings) {
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContent, SettingsFragment())
-                    .addToBackStack(null)
-                    .commit()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
+        return onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_home -> {
-                return if(mCurrentFragment.equals("HomeFragment")) {
-                    closeDrawer()
-                    false
-                } else {
-                    fragmentFactory(HomeFragment(), "HomeFragment", true)
-                    mBottomNavigation.currentItem = 0
-                    true
-                }
-            }
-            R.id.nav_map -> {
-                if(NetworkUtils.isNetworkActive(applicationContext))
-                    fragmentFactory(GoogleMapFragment(), "GoogleMapFragment", true) else fragmentFactory(BartMapFragment(), "BartMapFragment", false)
-                mBottomNavigation.currentItem = 1
-                return true
-            }
-            R.id.nav_schedule -> {
-                fragmentFactory(TripFragment(), "TripFragment", true)
-                mBottomNavigation.currentItem = 2
-                return true
-            }
-            R.id.nav_station -> {
-                fragmentFactory(StationsFragment(), "StationsFragment", true)
-                return true
-            }
-            R.id.nav_help -> {
-                fragmentFactory(HelpFragment(), "HelpFragment", true)
-                return true
-            }
-            R.id.nav_about -> {
-                fragmentFactory(AboutFragment(), "AboutFragment", true)
-                return true
-            }
-            R.id.nav_phoneLines -> {
-                fragmentFactory(PhoneLinesFragment(), "PhoneLinesFragment", true)
-                return true
-            }
-        }
         return true
-    }
-
-    private fun fragmentFactory(fragment: Fragment, tag: String, addToBackStack: Boolean) {
-        replaceFrag(fragment, tag, addToBackStack)
-        closeDrawer()
-    }
-
-    private fun closeDrawer() {
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        drawer.closeDrawer(GravityCompat.START)
     }
 }
 

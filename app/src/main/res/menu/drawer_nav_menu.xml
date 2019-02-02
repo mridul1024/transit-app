@@ -5,19 +5,19 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/homeFragment"
             android:icon="@drawable/ic_menu_home"
             android:title="@string/navigation_drawer_home" />
         <item
-            android:id="@+id/nav_map"
+            android:id="@+id/googleMapFragment"
             android:icon="@drawable/ic_menu_map"
             android:title="@string/navigation_drawer_bart_map" />
         <item
-            android:id="@+id/nav_schedule"
+            android:id="@+id/tripFragment"
             android:icon="@drawable/ic_menu_schedule"
             android:title="@string/navigation_drawer_schedule" />
         <item
-            android:id="@+id/nav_station"
+            android:id="@+id/stationsFragment"
             android:icon="@drawable/ic_menu_station"
             android:title="@string/navigation_drawer_stations" />
     </group>
@@ -25,16 +25,16 @@
     <item android:title="@string/navigation_drawer_misc">
         <menu>
             <item
-                android:id="@+id/nav_phoneLines"
+                android:id="@+id/phoneLinesFragment"
                 android:icon="@drawable/ic_menu_phone"
                 android:title="@string/navigation_drawer_phoneLines"
                 />
             <item
-                android:id="@+id/nav_help"
+                android:id="@+id/helpFragment"
                 android:icon="@drawable/ic_menu_help"
                 android:title="@string/navigation_drawer_help" />
             <item
-                android:id="@+id/nav_about"
+                android:id="@+id/aboutFragment"
                 android:icon="@drawable/ic_menu_about"
                 android:title="@string/navigation_drawer_about" />
         </menu>

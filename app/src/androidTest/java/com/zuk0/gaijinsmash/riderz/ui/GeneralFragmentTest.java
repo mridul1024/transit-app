@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import androidx.test.espresso.contrib.DrawerActions;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
@@ -35,7 +34,7 @@ public class GeneralFragmentTest {
 
     @Test
     public void TestMainActivity() {
-        onView(withId(R.id.fragmentContent)).check(matches((isDisplayed())));
+        onView(withId(R.id.nav_host_fragment)).check(matches((isDisplayed())));
     }
 
     @Test

@@ -31,7 +31,7 @@ public class SettingsFragmentTest {
     public void init() {
         Fragment frag = new SettingsFragment();
         FragmentManager fm = mActivityRule.getActivity().getSupportFragmentManager();
-        fm.beginTransaction().add(R.id.fragmentContent, frag).commit();
+        fm.beginTransaction().add(R.id.nav_host_fragment, frag).commit();
     }
 
     @Test
