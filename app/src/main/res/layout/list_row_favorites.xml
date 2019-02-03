@@ -51,15 +51,16 @@
                             android:layout_weight="1"/>
 
                         <ImageButton
-                            style="@style/ButtonAppTheme"
                             android:id="@+id/favorite_search_ib"
+                            style="@style/ButtonAppTheme"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_search_white_24dp"
+                            android:layout_weight="1"
+                            android:background="@color/mp_primary_dark"
                             android:contentDescription="@string/contentDesc_search"
                             android:elevation="1dp"
-                            android:layout_weight="1"/>
+                            android:src="@drawable/ic_search_white_24dp" />
 
                         <ImageButton
                             style="@style/ButtonAppTheme2"
