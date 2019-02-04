@@ -201,7 +201,7 @@ public class TripFragment extends Fragment {
             // DATE
             String departingDate = Objects.requireNonNull(mDataBinding.tripDateEditText.getText()).toString();
 
-            attemptTripSearch(departingStation, arrivingStation, departingDate, departingTime);
+            attemptTripSearch(departingStation.trim(), arrivingStation.trim(), departingDate, departingTime);
         });
     }
 
@@ -218,8 +218,6 @@ public class TripFragment extends Fragment {
     }
 
     private boolean validateUserInput(String departingStation, String arrivingStation, String departingDate, String departingTime) {
-        //todo: check if whitespace is at end of string before continuing
-
         // check if all fields are filled
         if(departingStation.isEmpty()) {
             mDataBinding.tripDepartureAutoCompleteTextView.setError(getString(R.string.error_form_completion));

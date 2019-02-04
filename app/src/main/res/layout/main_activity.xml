@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:openDrawer="start">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/main_coordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            tools:context=".ui.activity.main.MainActivity"
-            android:id="@+id/main_coordinatorLayout">
+            tools:context=".ui.activity.main.MainActivity">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/main_app_bar_layout"
@@ -25,6 +25,7 @@
                 android:theme="@style/AppTheme.AppBarOverlay">
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/main_collapsing_toolbar"
                     app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
                     app:contentScrim="?attr/colorPrimary"
                     android:layout_gravity="top"
@@ -51,8 +52,8 @@
             </com.google.android.material.appbar.AppBarLayout>
 
             <fragment
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:id="@+id/nav_host_fragment"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -60,8 +61,8 @@
                 app:navGraph="@navigation/nav_graph" />
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
-                style="@style/Widget.MaterialComponents.BottomNavigationView"
                 android:id="@+id/bottom_navigation"
+                style="@style/Widget.MaterialComponents.BottomNavigationView"
                 app:labelVisibilityMode="labeled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

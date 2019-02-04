@@ -132,6 +132,20 @@ public class HomeFragment extends Fragment {
         mFavorite = viewModel.getFavorite();
     }
 
+    /*
+       Fetches an ETD list for the user's favorite.priority route
+   */
+    private void loadFavoriteEtd(Favorite favorite) {
+        mViewModel.getEtdLiveData(favorite.getOrigin()).observe(this, data -> {
+            if(data != null && data.getStation().getEtdList() != null) {
+                mFavoriteEstimateList = mViewModel.getEstimatesFromEtd(favorite, data.getStation().getEtdList());
+                EstimateRecyclerAdapter etdAdapter = new EstimateRecyclerAdapter(mFavoriteEstimateList);
+                mDataBinding.homeEtdRecyclerView.setAdapter(etdAdapter);
+                mDataBinding.homeEtdRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            }
+        });
+    }
+
     private void loadTripData(Favorite favorite) {
         // Create a favorite object to handle the return trip
         mViewModel.getTripLiveData(favorite.getDestination(), favorite.getOrigin()).observe(this, tripJsonResponse -> {
@@ -140,20 +154,6 @@ public class HomeFragment extends Fragment {
                 trips = tripJsonResponse.getRoot().getSchedule().getRequest().getTripList();
                 Favorite inverse = mViewModel.createFavoriteInverse(trips, favorite);
                 loadInverseEtd(inverse);
-            }
-        });
-    }
-
-    /*
-        Fetches an ETD list for the user's favorite.priority route
-     */
-    private void loadFavoriteEtd(Favorite favorite) {
-        mViewModel.getEtdLiveData(favorite.getOrigin()).observe(this, data -> {
-            if(data != null && data.getStation().getEtdList() != null) {
-                mFavoriteEstimateList = mViewModel.getEstimatesFromEtd(favorite, data.getStation().getEtdList());
-                EstimateRecyclerAdapter etdAdapter = new EstimateRecyclerAdapter(mFavoriteEstimateList);
-                mDataBinding.homeEtdRecyclerView.setAdapter(etdAdapter);
-                mDataBinding.homeEtdRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             }
         });
     }
