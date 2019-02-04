@@ -132,10 +132,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-
-
         initMapView(savedInstanceState);
-
     }
 
     @Override

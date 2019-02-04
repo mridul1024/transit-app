@@ -57,8 +57,8 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         Favorite favorite = mFavoriteList.get(position);
         String originAbbr = StationList.getAbbrFromStationName(favorite.getOrigin());
         String destAbbr = StationList.getAbbrFromStationName(favorite.getDestination());
-        holder.origin.setText(originAbbr);
-        holder.destination.setText(destAbbr);
+        holder.origin.setText(originAbbr.toUpperCase());
+        holder.destination.setText(destAbbr.toUpperCase());
         holder.optionsButton.setOnClickListener(v -> initPopupMenu(v.getContext(), holder.optionsButton, favorite, position));
         if(favorite.getPriority() == Favorite.Priority.ON) {
             holder.background.setBackgroundColor(holder.origin.getContext().getResources().getColor(R.color.mp_accent));
