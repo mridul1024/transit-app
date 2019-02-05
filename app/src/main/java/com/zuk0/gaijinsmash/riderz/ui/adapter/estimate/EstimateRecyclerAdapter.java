@@ -1,5 +1,7 @@
 package com.zuk0.gaijinsmash.riderz.ui.adapter.estimate;
 
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Estimate;
 import com.zuk0.gaijinsmash.riderz.ui.fragment.home.HomeViewModel;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -36,6 +39,9 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
 
     public EstimateRecyclerAdapter(List<Estimate> estimateList) { mEstimateList = estimateList; }
 
+    public List<CountDownTimer> timers = new ArrayList<>();
+
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,11 +57,24 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
 
         String minutes = estimate.getMinutes();
         if(!minutes.equalsIgnoreCase("Leaving")) {
-            HomeViewModel.beginTimer(holder.minutes, Integer.valueOf(minutes));
+            timers.add(HomeViewModel.beginTimer(holder.minutes, Integer.valueOf(minutes)));
         } else {
             holder.minutes.setText(R.string.leaving);
         }
         BartRoutesUtils.setLineBarByColor(holder.line.getContext(), estimate.getColor(), holder.line);
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        Log.i("recycler", "onDetachedFromRecyclerView");
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        timers.clear();
+        Log.d("onDetachedFromView", "timers cleared");
     }
 
     @Override

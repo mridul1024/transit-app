@@ -171,9 +171,9 @@ public class HomeViewModel extends ViewModel {
         return results;
     }
 
-    public static void beginTimer(TextView textView, int minutesLeft) {
+    public static CountDownTimer beginTimer(TextView textView, int minutesLeft) {
         long untilFinished = (long) (minutesLeft * 60000);
-        new CountDownTimer(untilFinished, 1000) {
+        return new CountDownTimer(untilFinished, 1000) {
             String minutes = textView.getContext().getResources().getString(R.string.minutes);
             //String seconds = textView.getContext().getResources().getString(R.string.seconds);
 

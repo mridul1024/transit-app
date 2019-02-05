@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <ScrollView
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bart_map_container">
-            <HorizontalScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/bartMap_imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/bart_lines_map_description"
-                    android:elevation="1dp"
-                    android:scaleType="matrix" />
-            </HorizontalScrollView>
+        android:id="@+id/bart_map_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ImageView
+            android:id="@+id/bartMap_imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/bart_lines_map_description"
+            android:elevation="1dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/bart_map_weekday_sat" />
     </ScrollView>
 </layout>

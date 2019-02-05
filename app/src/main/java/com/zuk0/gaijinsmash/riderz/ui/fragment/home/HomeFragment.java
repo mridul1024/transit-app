@@ -93,6 +93,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+
+        //todo: destroy timers
+
     }
 
     @Override
@@ -121,7 +124,8 @@ public class HomeFragment extends Fragment {
             if (bsaXmlResponse != null) {
                 mDataBinding.bsaViewTimeTv.setText(mViewModel.initMessage(Objects.requireNonNull(getActivity()),mViewModel.is24HrTimeOn(getActivity()),bsaXmlResponse.getTime()));
                 mViewModel.setBsaList(bsaXmlResponse.getBsaList());
-                BsaRecyclerAdapter bsaAdapter = new BsaRecyclerAdapter(mViewModel.getBsaList());
+
+                BsaRecyclerAdapter bsaAdapter = new BsaRecyclerAdapter(bsaXmlResponse.getBsaList());
                 mDataBinding.homeBsaRecyclerView.setAdapter(bsaAdapter);
                 mDataBinding.homeBsaRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             }
