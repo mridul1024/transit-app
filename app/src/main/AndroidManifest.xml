@@ -47,6 +47,7 @@
         <activity
             android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity"
             android:label="@string/title_activity_main"
+            android:configChanges="orientation"
             android:theme="@style/CustomMainTheme">
 
             <!-- This is for Google Search Indexing -->

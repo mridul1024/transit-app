@@ -7,6 +7,8 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.BsaDao;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.concurrent.Executor;
@@ -14,6 +16,9 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import androidx.lifecycle.MutableLiveData;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 /*
@@ -37,8 +42,21 @@ public class BsaRepository {
     }
 
     public LiveData<BsaXmlResponse> getBsa() {
-        refreshBsa(new Timestamp(System.currentTimeMillis()));
-        return bsaDao.load();
+        //refreshBsa(new Timestamp(System.currentTimeMillis()));
+
+        MutableLiveData<BsaXmlResponse> data = new MutableLiveData<>();
+        service.getBsa().enqueue(new Callback<BsaXmlResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<BsaXmlResponse> call, @NotNull Response<BsaXmlResponse> response) {
+                data.postValue(response.body());
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<BsaXmlResponse> call, @NotNull Throwable t) {
+                Log.e("onFailure", "bsa: " + t.getMessage());
+            }
+        });
+        return data;
     }
 
     private void refreshBsa(final Timestamp current) {

@@ -2,7 +2,7 @@ package com.zuk0.gaijinsmash.riderz.ui;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.home.HomeFragment;
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.HomeFragment;
 
 import org.junit.Before;
 import org.junit.Rule;

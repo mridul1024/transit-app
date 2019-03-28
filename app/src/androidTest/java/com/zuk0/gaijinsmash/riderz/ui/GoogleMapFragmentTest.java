@@ -3,7 +3,7 @@ package com.zuk0.gaijinsmash.riderz.ui;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.google_map.GoogleMapFragment;
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.google_map.GoogleMapFragment;
 
 import org.junit.Before;
 import org.junit.Rule;

@@ -47,7 +47,7 @@ public class StationRepository  {
 
             @Override
             public void onFailure(@NonNull Call<StationXmlResponse> call, @NonNull Throwable t) {
-                Log.wtf("StationRepository", t.getMessage());
+                Log.wtf("onFailure", "station: " + t.getMessage());
             }
         });
         return data;

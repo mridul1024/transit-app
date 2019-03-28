@@ -219,4 +219,11 @@
     <string name="menu_trip">Schedule</string>
     <string name="menu_map">Map</string>
     <string name="menu_home">Home</string>
+    <string name="alert_dialog_go">Go</string>
+    <string name="etd_timeImage_description">Time</string>
+    <string name="gone">Gone!</string>
+    <string name="current_news">News - Beginning on February 11, 2019, BART\'s start of service will shift from 4 am to 5 am systemwide for a massive project that will seismically retrofit the Transbay Tube.</string>
+    <string name="alert_dialog_ok">OK</string>
+    <string name="developer_update">Developer Update</string>
+    <string name="app_crash">BART\'s system update  on February 11th, caused a few bugs. We have since fixed them and apologize for any inconveniences.</string>
 </resources>

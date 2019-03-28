@@ -6,15 +6,14 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
-
 android {
     compileSdkVersion 28 // this should always be the most recent version
     defaultConfig {
         applicationId 'com.zuk0.gaijinsmash.riderz'
         minSdkVersion 21
         targetSdkVersion 28 // this should match compileSdkVersion
-        versionCode 10
-        versionName "1.5"
+        versionCode 14
+        versionName "1.9"
         multiDexEnabled false
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -54,16 +53,15 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation 'com.google.android.material:material:1.1.0-alpha03'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
-    implementation 'androidx.core:core:1.1.0-alpha03'
-    implementation 'androidx.preference:preference:1.1.0-alpha02'
+    implementation 'androidx.core:core:1.1.0-alpha04'
+    implementation 'androidx.preference:preference:1.1.0-alpha03'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.0.0'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     kapt 'com.github.bumptech.glide:compiler:4.8.0'
-    //implementation 'com.github.MikeOrtiz:TouchImageView:2.1.1' // Android X
 
     // Dagger 2
     def dagger_version = "2.16"
@@ -79,13 +77,16 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-simplexml:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
+    //RxAndroid
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+
     //Google Play Services
     def google_version = '16.0.0'
-    implementation "com.google.android.gms:play-services-maps:$google_version"
+    implementation "com.google.android.gms:play-services-maps:16.1.0"
     implementation "com.google.android.gms:play-services-location:$google_version"
 
     // Android Lifecycle
-    def lifecycle_version = "1.1.1"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.0.0'
@@ -95,6 +96,7 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.1.0-alpha04'
     kapt 'androidx.room:room-compiler:2.1.0-alpha04'
     testImplementation 'androidx.room:room-testing:2.1.0-alpha04'
+    implementation 'android.arch.persistence.room:rxjava2:1.1.1'
 
     // Test framework
     testImplementation 'junit:junit:4.12'
@@ -107,9 +109,15 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.1'
     androidTestImplementation "androidx.arch.core:core-testing:2.0.0"
 
+    //LeakCanary - memory leak detection
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+    // Optional, if you use support library fragments:
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
+
     //Navigation
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha11'
-    implementation "android.arch.navigation:navigation-ui:1.0.0-alpha11"
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-beta01'
+    implementation "android.arch.navigation:navigation-ui:1.0.0-beta01"
 }
 
 configurations {

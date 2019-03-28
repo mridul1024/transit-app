@@ -1,5 +1,7 @@
 package com.zuk0.gaijinsmash.riderz.data.remote.retrofit;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -23,6 +25,8 @@ public class RetrofitClient {
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.networkInterceptors().add(httpLoggingInterceptor);
             builder.interceptors().add(interceptor);
+            builder.connectTimeout(30, TimeUnit.SECONDS);
+            builder.readTimeout(30, TimeUnit.SECONDS);
             OkHttpClient client = builder.build();
 
             retrofit = new Retrofit.Builder()

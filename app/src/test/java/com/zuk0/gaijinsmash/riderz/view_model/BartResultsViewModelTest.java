@@ -5,7 +5,7 @@ import android.content.Context;
 import com.zuk0.gaijinsmash.riderz.data.local.constants.StationList;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsViewModel;
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_results.BartResultsViewModel;
 
 import org.junit.Before;
 import org.junit.Test;

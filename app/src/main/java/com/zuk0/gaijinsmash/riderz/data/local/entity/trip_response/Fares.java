@@ -13,7 +13,7 @@ public class Fares {
 
     @SerializedName("fare")
     @Expose
-    private List<Fare> fare = null;
+    private Fare fare;
 
     public String getLevel() {
         return level;
@@ -23,11 +23,11 @@ public class Fares {
         this.level = level;
     }
 
-    public List<Fare> getFare() {
+    public Fare getFare() {
         return fare;
     }
 
-    public void setFare(List<Fare> fare) {
+    public void setFare(Fare fare) {
         this.fare = fare;
     }
 }

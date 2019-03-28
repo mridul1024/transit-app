@@ -8,7 +8,7 @@ import java.util.Map;
 public class StationUtils {
 
     public static String getStationNameFromAbbr(String abbr) {
-        return StationList.stationMap.get(abbr.toLowerCase(Locale.US)); // keys are case sensitive
+        return StationList.stationMap.get(abbr.toUpperCase(Locale.US)); // keys are case sensitive
     }
 
     public static String getAbbrFromStationName(String name) {

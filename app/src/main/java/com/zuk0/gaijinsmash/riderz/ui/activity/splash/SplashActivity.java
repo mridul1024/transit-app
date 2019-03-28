@@ -37,7 +37,7 @@ public class SplashActivity extends AppCompatActivity {
         mViewModel = ViewModelProviders.of(this, splashViewModelFactory).get(SplashViewModel.class);
     }
 
-    //todo: need to optimize this
+    //todo: need to move this to application
     private void initStations() {
         mViewModel.initStationsData();
     }

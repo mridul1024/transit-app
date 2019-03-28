@@ -8,7 +8,11 @@ import android.util.Log;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.TripDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
+import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -32,19 +36,29 @@ public class TripRepository {
         this.executor = executor;
     }
 
-    public LiveData<TripJsonResponse> getTrip(String origin, String destination, String date, String time) {
+    public LiveData<LiveDataWrapper<TripJsonResponse>> getTrip(String origin, String destination, String date, String time) {
         //todo: if cached != null, return cached
+        final MutableLiveData<LiveDataWrapper<TripJsonResponse>> data = new MutableLiveData<>();
 
-        final MutableLiveData<TripJsonResponse> data = new MutableLiveData<>();
         service.getTripJson(origin, destination, date, time).enqueue(new Callback<TripJsonResponse>() {
+
             @Override
             public void onResponse(@NonNull Call<TripJsonResponse> call, @NonNull Response<TripJsonResponse> response) {
-                data.postValue(response.body());
+                Log.i("onResponse", response.body().toString());
+                LiveDataWrapper<TripJsonResponse> res = LiveDataWrapper.success(response.body());
+                data.postValue(res);
+
+                if(response.code() == 502) {
+                    //try again
+                    // todo; bad gateway request handle, possibly interceptor?
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<TripJsonResponse> call, @NonNull Throwable t) {
-                Log.wtf("Trip", t.getMessage());
+                Log.wtf("onFailure", "trip: " + t.getMessage());
+                LiveDataWrapper<TripJsonResponse> res = LiveDataWrapper.error(null, t.getMessage());
+                data.setValue(res);
             }
         });
         return data;

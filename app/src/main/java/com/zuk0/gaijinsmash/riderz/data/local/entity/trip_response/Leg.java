@@ -13,10 +13,6 @@ public class Leg {
     @Expose
     private String order;
 
-    @SerializedName("@transfercode")
-    @Expose
-    private String transfercode;
-
     @SerializedName("@origin")
     @Expose
     private String origin;
@@ -57,28 +53,12 @@ public class Leg {
     @Expose
     private String load;
 
-    @SerializedName("@trainId")
-    @Expose
-    private String trainId;
-
-    @SerializedName("@trainIdx")
-    @Expose
-    private String trainIdx;
-
     public String getOrder() {
         return order;
     }
 
     public void setOrder(String order) {
         this.order = order;
-    }
-
-    public String getTransfercode() {
-        return transfercode;
-    }
-
-    public void setTransfercode(String transfercode) {
-        this.transfercode = transfercode;
     }
 
     public String getOrigin() {
@@ -161,19 +141,4 @@ public class Leg {
         this.load = load;
     }
 
-    public String getTrainId() {
-        return trainId;
-    }
-
-    public void setTrainId(String trainId) {
-        this.trainId = trainId;
-    }
-
-    public String getTrainIdx() {
-        return trainIdx;
-    }
-
-    public void setTrainIdx(String trainIdx) {
-        this.trainIdx = trainIdx;
-    }
 }

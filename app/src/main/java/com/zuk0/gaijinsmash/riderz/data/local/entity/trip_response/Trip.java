@@ -48,6 +48,7 @@ public class Trip  {
     @Expose
     private String destTimeDate;
 
+    //todo: deprecated
     @SerializedName("@clipper")
     @Expose
     private String clipper;
@@ -56,10 +57,12 @@ public class Trip  {
     @Expose
     private String tripTime;
 
+    //todo: deprecated
     @SerializedName("@co2")
     @Expose
     private String co2;
 
+    //todo: deprecated to only cash fares.
     @SerializedName("fares")
     @Expose
     private Fares fares;

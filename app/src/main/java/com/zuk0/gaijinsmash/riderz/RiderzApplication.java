@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.util.Log;
 
+import com.squareup.leakcanary.LeakCanary;
 import com.zuk0.gaijinsmash.riderz.di.component.DaggerAppComponent;
 
 import javax.inject.Inject;
@@ -22,15 +23,24 @@ public class RiderzApplication extends Application implements HasActivityInjecto
     @Override
     public void onCreate() {
         super.onCreate();
+
         DaggerAppComponent.builder()
                 .application(this)
                 .build()
                 .inject(this);
         Log.i("onCreate", "app component initialized");
+        if(LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(this);
     }
 
     @Override
     public DispatchingAndroidInjector<Activity> activityInjector() {
         return activityDispatchingAndroidInjector;
+    }
+
+    private void initData() {
+
     }
 }

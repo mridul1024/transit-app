@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.Maybe;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 
@@ -37,7 +38,7 @@ public interface FavoriteDao {
     boolean doesFavoriteExist(String origin, String destination);
 
     @Query("SELECT * from favorites where priority = 1")
-    Favorite getPriorityFavorite();
+    Maybe<Favorite> getPriorityFavorite();
 
     //Update a priority favorite
     @Query("Update favorites set priority = 1 where id = :id")

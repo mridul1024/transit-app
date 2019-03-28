@@ -15,7 +15,6 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/bart_lines_map_description"
             android:elevation="1dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/bart_map_weekday_sat" />
+            android:scaleType="fitXY" />
     </ScrollView>
 </layout>

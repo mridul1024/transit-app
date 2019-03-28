@@ -2,7 +2,7 @@ package com.zuk0.gaijinsmash.riderz.view_model;
 
 import android.app.Application;
 
-import com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapViewModel;
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_map.BartMapViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;

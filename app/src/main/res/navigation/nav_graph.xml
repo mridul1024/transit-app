@@ -7,16 +7,16 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.settings.SettingsFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.settings.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/resultsFragment"
-        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.bart_results.BartResultsFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_results.BartResultsFragment"
         android:label="Results"
         tools:layout="@layout/view_results" />
     <fragment
         android:id="@+id/tripFragment"
-        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.trip.TripFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.trip.TripFragment"
         android:label="Find your trip"
         tools:layout="@layout/view_trip" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/stationInfoFragment"
-        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.station_info.StationInfoFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.station_info.StationInfoFragment"
         android:label="Station Info"
         tools:layout="@layout/view_station_info" >
         <action
@@ -34,17 +34,17 @@
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.about.AboutFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.about.AboutFragment"
         android:label="About"
         tools:layout="@layout/view_about" />
     <fragment
         android:id="@+id/bartMapFragment"
-        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.bart_map.BartMapFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_map.BartMapFragment"
         android:label="Bart Map"
         tools:layout="@layout/view_bart_map" />
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.favorite.FavoritesFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.favorite.FavoritesFragment"
         android:label="Favorites"
         tools:layout="@layout/view_favorites" >
         <action
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/googleMapFragment"
-        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.google_map.GoogleMapFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.google_map.GoogleMapFragment"
         android:label="Map"
         tools:layout="@layout/view_google_map" >
         <action
@@ -65,7 +65,7 @@
     </fragment>
     <fragment
         android:id="@+id/stationsFragment"
-        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.stations.StationsFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.stations.StationsFragment"
         android:label="BART Stations"
         tools:layout="@layout/view_station" >
         <action
@@ -74,18 +74,18 @@
     </fragment>
     <fragment
         android:id="@+id/helpFragment"
-        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.help.HelpFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.help.HelpFragment"
         android:label="Help"
         tools:layout="@layout/view_help" />
     <fragment
         android:id="@+id/phoneLinesFragment"
-        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.phone_lines.PhoneLinesFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.phone_lines.PhoneLinesFragment"
         android:label="Bart Lines"
         tools:layout="@layout/view_phone_lines" />
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.zuk0.gaijinsmash.riderz.ui.fragment.home.HomeFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/view_home" >
         <action
@@ -118,6 +118,13 @@
         <action
             android:id="@+id/action_homeFragment_to_stationsFragment"
             app:destination="@id/stationsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_newsFragment"
+            app:destination="@id/newsFragment" />
 
     </fragment>
+    <fragment
+        android:id="@+id/newsFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.news.NewsFragment"
+        android:label="NewsFragment" />
 </navigation>

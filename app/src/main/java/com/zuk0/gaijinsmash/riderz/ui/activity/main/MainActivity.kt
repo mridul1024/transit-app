@@ -8,11 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.zuk0.gaijinsmash.riderz.R
 import dagger.android.AndroidInjection
@@ -22,6 +25,7 @@ import kotlinx.android.synthetic.main.main_activity.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, HasSupportFragmentInjector{
+
     @Inject
     lateinit var fragmentInjector : DispatchingAndroidInjector<Fragment>
 
@@ -31,6 +35,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var mAppBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
+    private val mViewModel by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java)}
 
     // ---------------------------------------------------------------------------------------------
     // Lifecycle Events
@@ -41,6 +46,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.main_activity)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         navController = findNavController(this, R.id.nav_host_fragment)
         setupWithNavController(bottom_navigation, navController)
@@ -53,18 +59,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if(savedInstanceState == null) {
             //todo: add logic
         }
+        initPic()
     }
 
-    override fun onSupportNavigateUp() = navController.popBackStack()
+    private fun initPic() {
+        mViewModel.initPic(this, mViewModel.getHour(), home_banner_imageView)
+    }
+
+    override fun onSupportNavigateUp() : Boolean {
+        onBackPressed()
+        return true
+    }
 
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            handleBottomNavViewBehaviour()
+            navController.popBackStack()
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    private fun handleBottomNavViewBehaviour() {
+        HideBottomViewOnScrollBehavior<BottomNavigationView>(this, null).slideUp(bottom_navigation)
+    }
     // ---------------------------------------------------------------------------------------------
     // Navigation Settings
     // ---------------------------------------------------------------------------------------------
@@ -83,6 +109,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        handleBottomNavViewBehaviour()
         return true
     }
 }

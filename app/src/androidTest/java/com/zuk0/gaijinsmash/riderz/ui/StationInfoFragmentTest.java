@@ -4,7 +4,7 @@ package com.zuk0.gaijinsmash.riderz.ui;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity;
-import com.zuk0.gaijinsmash.riderz.ui.fragment.station_info.StationInfoFragment;
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.station_info.StationInfoFragment;
 
 import org.junit.Before;
 import org.junit.Rule;
