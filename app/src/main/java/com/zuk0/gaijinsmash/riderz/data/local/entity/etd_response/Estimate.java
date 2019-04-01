@@ -34,6 +34,8 @@ public class Estimate {
     @Element(name = "delay", required = false)
     private int delay;
 
+    private String trainHeaderStation;
+
     public String getOrigin() {
         return origin;
     }
@@ -114,6 +116,13 @@ public class Estimate {
         this.delay = delay;
     }
 
+    public String getTrainHeaderStation() {
+        return trainHeaderStation;
+    }
+
+    public void setTrainHeaderStation(String trainHeaderStation) {
+        this.trainHeaderStation = trainHeaderStation;
+    }
 }
 
 

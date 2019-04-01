@@ -123,7 +123,6 @@ public class HomeViewModel extends ViewModel {
             }
         }
         favorite.setTrainHeaderStations(trainHeaders); //todo: use hashset
-
     }
 
     public Favorite createFavoriteInverse(List<Trip> trips, Favorite favorite) {
@@ -149,6 +148,7 @@ public class HomeViewModel extends ViewModel {
                 Estimate estimate = etd.getEstimateList().get(0);
                 estimate.setOrigin(favorite.getOrigin());
                 estimate.setDestination(favorite.getDestination());
+                estimate.setTrainHeaderStation(etd.getDestination());
                 results.add(estimate);
             }
         }

@@ -226,4 +226,7 @@
     <string name="alert_dialog_ok">OK</string>
     <string name="developer_update">Developer Update</string>
     <string name="app_crash">BART\'s system update  on February 11th, caused a few bugs. We have since fixed them and apologize for any inconveniences.</string>
+    <string name="departing_from">Departing From:</string>
+    <string name="direction">Direction:</string>
+    <string name="arriving_at">Arriving at:</string>
 </resources>

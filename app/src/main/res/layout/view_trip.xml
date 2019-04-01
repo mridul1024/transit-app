@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -9,39 +10,43 @@
             android:layout_margin="5dp"
             android:id="@+id/trip_container">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 android:id="@+id/trip_linearLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:orientation="horizontal"
                 android:layout_marginTop="15dp">
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    app:hintEnabled="true"
                     android:layout_weight="1">
+
                     <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                         android:id="@+id/trip_departure_autoCompleteTextView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="?actionBarSize"
                         android:ems="10"
+                        android:hint="@string/departure_station"
+                        android:paddingTop="20dp"
                         android:maxLines="1"
-                        android:singleLine="true"
-                        android:hint="@string/departure_station" />
+                        android:inputType="text"
+                        android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/station_spinner1"
+                    android:layout_gravity="center_vertical"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 android:id="@+id/trip_linearLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/trip_linearLayout1"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
@@ -50,17 +55,20 @@
                     <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                         android:id="@+id/trip_arrival_autoCompleteTextView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="?actionBarSize"
                         android:ems="10"
+                        android:paddingTop="20dp"
                         android:maxLines="1"
                         android:singleLine="true"
+                        android:inputType="text"
                         android:hint="@string/arrival_station" />
                 </com.google.android.material.textfield.TextInputLayout>
                 <Spinner
                     android:id="@+id/station_spinner2"
+                    android:layout_gravity="center_vertical"
                     android:layout_width="50dp"
-                    android:layout_height="49dp" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/trip_linearLayout3"
