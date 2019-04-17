@@ -4,40 +4,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-        <data>
-                <variable
-                    name="estimate"
-                    type="com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Estimate" />
-        </data>
+    <data>
+            <variable
+                name="estimate"
+                type="com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Estimate" />
+    </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="3dp"
         android:elevation="2dp"
-        app:cardCornerRadius="0dp">
+        app:cardBackgroundColor="@color/mp_primary_light"
+        app:cardCornerRadius="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/mp_primary_light">
+            android:layout_margin="3dp"
+            android:background="@color/white">
 
             <TextView
                 android:id="@+id/etd_originTv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:paddingStart="2dp"
                 android:paddingEnd="2dp"
+                android:scrollHorizontally="false"
+                android:singleLine="false"
                 android:text="@{estimate.origin}"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/etd_colored_line"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView14"
+                app:layout_constraintStart_toStartOf="@+id/etd_trainHeader"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Ashby" />
 
@@ -45,32 +50,37 @@
                 android:id="@+id/etd_colored_line"
                 android:layout_width="85dp"
                 android:layout_height="0dp"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:background="@color/bartBlueLine"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/etd_destinationTv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="44dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="10dp"
                 android:paddingStart="2dp"
                 android:paddingEnd="2dp"
+                android:scrollHorizontally="false"
+                android:singleLine="false"
                 android:text="@{estimate.destination}"
-                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/etd_colored_line"
-                app:layout_constraintHorizontal_bias="0.121"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.926"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/textView16"
+                app:layout_constraintTop_toBottomOf="@+id/etd_trainHeader"
+                app:layout_constraintVertical_bias="0.0"
                 tools:text="12th Street Oakland" />
 
             <TextView
@@ -106,23 +116,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_menu_station" />
 
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:contentDescription="@string/etd_timeImage_description"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/etd_destinationTv"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etd_originTv"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/ic_subdirectory_arrow_right_black_24dp" />
-
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier"
                 android:layout_width="wrap_content"
@@ -134,7 +127,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="300dp" />
+                app:layout_constraintGuide_end="95dp" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier2"
@@ -164,11 +157,72 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
+                android:contentDescription="@string/etd_timeImage_description"
                 app:layout_constraintBottom_toBottomOf="@+id/etd_minutesTv"
                 app:layout_constraintStart_toStartOf="@+id/etd_colored_line"
                 app:layout_constraintTop_toTopOf="@+id/etd_minutesTv"
                 app:layout_constraintVertical_bias="0.66999996"
                 app:srcCompat="@drawable/ic_menu_schedule" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/departing_from"
+                app:layout_constraintEnd_toEndOf="@+id/textView15"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/direction"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/etd_trainHeader"
+                app:layout_constraintEnd_toEndOf="@+id/textView16"
+                app:layout_constraintTop_toTopOf="@+id/etd_trainHeader" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/arriving_at"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etd_trainHeader" />
+
+            <TextView
+                android:id="@+id/etd_trainHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:paddingStart="4dp"
+                android:text="Lake Merrit"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/etd_destinationTv"
+                app:layout_constraintTop_toBottomOf="@+id/etd_originTv" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="ETA"
+                app:layout_constraintBottom_toTopOf="@+id/etd_minutesTv"
+                app:layout_constraintEnd_toEndOf="@+id/barrier2"
+                app:layout_constraintStart_toStartOf="@+id/etd_colored_line"
+                app:layout_constraintTop_toBottomOf="@+id/etd_car_tv" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

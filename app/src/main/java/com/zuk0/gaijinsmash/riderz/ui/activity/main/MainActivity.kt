@@ -17,6 +17,8 @@ import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
@@ -43,6 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidInjection.inject(this)
+        Logger.addLogAdapter(AndroidLogAdapter())
         setContentView(R.layout.main_activity)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)

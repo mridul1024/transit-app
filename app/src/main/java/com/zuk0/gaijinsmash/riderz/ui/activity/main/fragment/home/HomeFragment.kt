@@ -115,7 +115,6 @@ class HomeFragment : Fragment() {
     private fun loadAdvisories(bsa: LiveData<BsaXmlResponse>) {
         bsa.observe(this, Observer { bsaXmlResponse ->
             if (bsaXmlResponse != null) {
-                mDataBinding.bsaViewTimeTv.text = mViewModel.initMessage(Objects.requireNonNull<FragmentActivity>(activity), mViewModel.is24HrTimeOn(activity), bsaXmlResponse.time)
                 val bsaAdapter = BsaRecyclerAdapter(bsaXmlResponse.bsaList)
                 mDataBinding.homeBsaRecyclerView.adapter = bsaAdapter
                 mDataBinding.homeBsaRecyclerView.layoutManager = LinearLayoutManager(activity)

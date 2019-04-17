@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.ViewCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import androidx.databinding.DataBindingUtil;
@@ -38,13 +37,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.zuk0.gaijinsmash.riderz.BuildConfig;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.databinding.ViewGoogleMapBinding;
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment;
 import com.zuk0.gaijinsmash.riderz.utils.AlertDialogUtils;
 import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
 import com.zuk0.gaijinsmash.riderz.utils.NetworkUtils;
@@ -60,11 +59,10 @@ import dagger.android.support.AndroidSupportInjection;
 
 
 //todo: implement search widget in toolbar?
-public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
+public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
     @Inject
     GoogleMapViewModelFactory mViewModelFactory;
-
 
     private ViewGoogleMapBinding mDataBinding;
     private MapView mMapView;
@@ -105,34 +103,25 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         initGestureListener();
     }
 
-    private void initGestureListener() {
-        GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
-
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                // Pixel offset is the offset in screen pixels, while viewport offset is the
-                // offset within the current viewport.
-                float viewportOffsetX = distanceX * mCurrentViewport.width()
-                        / mContentRect.width();
-                float viewportOffsetY = -distanceY * mCurrentViewport.height()
-                        / mContentRect.height();
-
-                setViewportBottomLeft(mCurrentViewport.left + viewportOffsetX, mCurrentViewport.right + viewportOffsetY);
-                return true;
-            }
-        };
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_google_map, container, false);
+        mMapView = mDataBinding.googleMapMapView;
+        return mDataBinding.getRoot();
     }
 
-    private void setViewportBottomLeft(float x, float y) {
-        float curWidth = mCurrentViewport.width();
-        float curHeight = mCurrentViewport.height();
-        x = Math.max(AXIS_X_MIN, Math.min(x, AXIS_X_MAX - curWidth));
-        y = Math.max(AXIS_Y_MIN + curHeight, Math.min(y, AXIS_Y_MAX));
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        initMapView(savedInstanceState);
+        initFab(view);
+    }
 
-        mCurrentViewport.set(x, y - curHeight, x + curWidth, y);
-
-        // Invalidates the View to update the display.
-        ViewCompat.postInvalidateOnAnimation(Objects.requireNonNull(this.getView()));
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initViewModel();
+        super.collapseAppBar(getActivity());
+        getLifecycle().addObserver(new GoogleMapObserver());
     }
 
     @Override
@@ -152,9 +141,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         super.onPause();
         if (mMapView != null)
             mMapView.onPause();
-
         //todo: close snackbars
-
     }
 
     @Override
@@ -185,36 +172,36 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
             mMapView.onLowMemory();
     }
 
-    //---------------------------------------------------------------------------------------------
-    // Fragment Lifecycle
-    //---------------------------------------------------------------------------------------------
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_google_map, container, false);
-        mMapView = mDataBinding.googleMapMapView;
-        return mDataBinding.getRoot();
+    private void initGestureListener() {
+        GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                // Pixel offset is the offset in screen pixels, while viewport offset is the
+                // offset within the current viewport.
+                float viewportOffsetX = distanceX * mCurrentViewport.width()
+                        / mContentRect.width();
+                float viewportOffsetY = -distanceY * mCurrentViewport.height()
+                        / mContentRect.height();
+
+                setViewportBottomLeft(mCurrentViewport.left + viewportOffsetX, mCurrentViewport.right + viewportOffsetY);
+                return true;
+            }
+        };
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        initMapView(savedInstanceState);
-        initFab(view);
+    private void setViewportBottomLeft(float x, float y) {
+        float curWidth = mCurrentViewport.width();
+        float curHeight = mCurrentViewport.height();
+        x = Math.max(AXIS_X_MIN, Math.min(x, AXIS_X_MAX - curWidth));
+        y = Math.max(AXIS_Y_MIN + curHeight, Math.min(y, AXIS_Y_MAX));
+
+        mCurrentViewport.set(x, y - curHeight, x + curWidth, y);
+
+        // Invalidates the View to update the display.
+        ViewCompat.postInvalidateOnAnimation(Objects.requireNonNull(this.getView()));
     }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        initDagger();
-        initViewModel();
-        AppBarLayout appBarLayout = Objects.requireNonNull(getActivity()).findViewById(R.id.main_app_bar_layout);
-        appBarLayout.setExpanded(false);
-
-        getLifecycle().addObserver(new GoogleMapObserver());
-    }
-
-
-
 
     private void initFab(View view) {
         FloatingActionButton fab = view.findViewById(R.id.fab);
@@ -245,10 +232,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         }
     }
 
-    private void initDagger() {
-        AndroidSupportInjection.inject(this);
-    }
-
     private void initViewModel() {
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(GoogleMapViewModel.class);
     }
@@ -262,11 +245,8 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback, G
         mGoogleMap = googleMap;
 
         initMapSettings(googleMap);
-
         initUserLocation(getActivity(), googleMap);
-
         initStationMarkers(googleMap); // Populate map with all the stations (markers)
-
         initMapOnClickListener(googleMap);
 
         // Move camera to specified Station from user's selection on StationInfoFragment

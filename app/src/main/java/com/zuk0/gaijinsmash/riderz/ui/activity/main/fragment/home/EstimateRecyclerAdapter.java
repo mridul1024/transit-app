@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Estimate;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Etd;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
         private TextView minutes;
         private TextView line;
         private TextView length;
+        private TextView trainHeader;
 
         ViewHolder(View view) {
             super(view);
@@ -33,12 +35,16 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
             minutes = view.findViewById(R.id.etd_minutesTv);
             line = view.findViewById(R.id.etd_colored_line);
             length = view.findViewById(R.id.etd_car_tv);
+            trainHeader = view.findViewById(R.id.etd_trainHeader);
         }
     }
 
     private List<Estimate> mEstimateList;
+    private Etd mEtd;
 
-    public EstimateRecyclerAdapter(List<Estimate> estimateList) { mEstimateList = estimateList; }
+    public EstimateRecyclerAdapter(List<Estimate> estimateList) {
+        mEstimateList = estimateList;
+    }
 
     private List<CountDownTimer> timers = new ArrayList<>();
 
@@ -53,6 +59,7 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Estimate estimate = mEstimateList.get(position);
         holder.origin.setText(estimate.getOrigin());
+        holder.trainHeader.setText(estimate.getTrainHeaderStation());
         holder.destination.setText(estimate.getDestination());
 
         String minutes = estimate.getMinutes();

@@ -12,8 +12,8 @@ android {
         applicationId 'com.zuk0.gaijinsmash.riderz'
         minSdkVersion 21
         targetSdkVersion 28 // this should match compileSdkVersion
-        versionCode 14
-        versionName "1.9"
+        versionCode 15
+        versionName "2.0"
         multiDexEnabled false
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -92,24 +92,27 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.0.0'
-    testImplementation 'androidx.arch.core:core-testing:2.0.0'
+    testImplementation 'androidx.arch.core:core-testing:2.0.1'
 
     // Room Database
-    implementation 'androidx.room:room-runtime:2.1.0-alpha04'
-    kapt 'androidx.room:room-compiler:2.1.0-alpha04'
-    testImplementation 'androidx.room:room-testing:2.1.0-alpha04'
+    implementation 'androidx.room:room-runtime:2.1.0-alpha06'
+    kapt 'androidx.room:room-compiler:2.1.0-alpha06'
+    testImplementation 'androidx.room:room-testing:2.1.0-alpha06'
     implementation 'android.arch.persistence.room:rxjava2:1.1.1'
 
     // Test framework
     testImplementation 'junit:junit:4.12'
     // Optional -- Mockito framework
     testImplementation 'org.mockito:mockito-core:2.23.0'
-    androidTestImplementation 'org.mockito:mockito-android:2.7.6'
+    androidTestImplementation 'org.mockito:mockito-android:2.8.9'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     androidTestImplementation 'androidx.test:rules:1.1.1'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.1'
-    androidTestImplementation "androidx.arch.core:core-testing:2.0.0"
+    androidTestImplementation "androidx.arch.core:core-testing:2.0.1"
+
+    // Logger
+    implementation 'com.orhanobut:logger:2.2.0'
 
     //LeakCanary - memory leak detection
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
@@ -118,9 +121,10 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
 
     //Navigation
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-beta01'
-    implementation "android.arch.navigation:navigation-ui:1.0.0-beta01"
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0'
+    implementation "android.arch.navigation:navigation-ui:1.0.0"
 }
+
 
 configurations {
     all {

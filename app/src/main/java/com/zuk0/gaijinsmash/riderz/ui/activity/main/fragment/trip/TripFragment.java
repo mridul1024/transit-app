@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import androidx.databinding.DataBindingUtil;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.databinding.ViewTripBinding;
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment;
 import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesUtils;
 import com.zuk0.gaijinsmash.riderz.utils.TimeDateUtils;
 
@@ -28,9 +28,8 @@ import java.util.Locale;
 import java.util.Objects;
 
 import androidx.navigation.fragment.NavHostFragment;
-import dagger.android.support.AndroidSupportInjection;
 
-public class TripFragment extends Fragment {
+public class TripFragment extends BaseFragment {
 
     private ViewTripBinding mDataBinding;
     private TripViewModel mViewModel;
@@ -56,7 +55,7 @@ public class TripFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initDagger();
+        super.collapseAppBar(getActivity());
         initViewModel();
         initTimePreference(getActivity());
         initStationsList();
@@ -67,10 +66,6 @@ public class TripFragment extends Fragment {
         initTimePicker();
         initTextInputEditors();
         initSearchButton();
-    }
-
-    private void initDagger() {
-        AndroidSupportInjection.inject(this);
     }
 
     private void initViewModel() {
@@ -174,6 +169,7 @@ public class TripFragment extends Fragment {
 
         mDataBinding.tripDepartureAutoCompleteTextView.setThreshold(1); // will start working from first character
         mDataBinding.tripDepartureAutoCompleteTextView.setAdapter(textViewAdapter);
+        mDataBinding.tripDepartureAutoCompleteTextView.requestFocus();
 
         mDataBinding.tripArrivalAutoCompleteTextView.setThreshold(1);
         mDataBinding.tripArrivalAutoCompleteTextView.setAdapter(textViewAdapter);
