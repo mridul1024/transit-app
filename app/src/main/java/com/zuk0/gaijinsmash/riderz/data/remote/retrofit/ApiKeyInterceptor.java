@@ -11,8 +11,10 @@ import okhttp3.Response;
 public class ApiKeyInterceptor implements Interceptor {
 
     private String mApiKey;
+    private String mName;
 
-    public ApiKeyInterceptor(String apiKey) {
+    public ApiKeyInterceptor(String name, String apiKey) {
+        mName = name;
         mApiKey = apiKey;
     }
 
@@ -20,7 +22,7 @@ public class ApiKeyInterceptor implements Interceptor {
     public Response intercept(@NonNull Interceptor.Chain chain) throws IOException {
         HttpUrl url = chain.request().url()
                 .newBuilder()
-                .addQueryParameter("key", mApiKey)
+                .addQueryParameter(mName, mApiKey)
                 .build();
         Request request = chain.request().newBuilder().url(url).build();
         return chain.proceed(request);

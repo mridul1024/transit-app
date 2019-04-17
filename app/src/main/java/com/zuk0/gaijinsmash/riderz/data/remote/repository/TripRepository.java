@@ -7,12 +7,9 @@ import android.util.Log;
 
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.TripDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.BartService;
 import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -25,12 +22,12 @@ import retrofit2.Response;
 @Singleton
 public class TripRepository {
 
-    private final RetrofitService service;
+    private final BartService service;
     private final Executor executor;
     private final TripDao tripDao;
 
     @Inject
-    TripRepository(RetrofitService service, TripDao tripDao, Executor executor) {
+    TripRepository(BartService service, TripDao tripDao, Executor executor) {
         this.service = service;
         this.tripDao = tripDao;
         this.executor = executor;

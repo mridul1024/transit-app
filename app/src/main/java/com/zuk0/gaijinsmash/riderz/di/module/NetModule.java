@@ -7,8 +7,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.zuk0.gaijinsmash.riderz.BuildConfig;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.ApiKeyInterceptor;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.BartService;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitClient;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.WeatherService;
 
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
@@ -26,8 +27,10 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 @Module
 public class NetModule {
+    private static final String WEATHER_API_KEY = BuildConfig.OpenWeatherApiKey;
     private static final String BART_API_KEY = BuildConfig.BartApiKey;
-    private static final String BASE_URL = "https://api.bart.gov/api/";
+    private static final String BART_BASE_URL = "https://api.bart.gov/api/";
+    private static final String WEATHER_BASE_URL = "https://api.openweathermap.org/";
 
     @Provides
     @Singleton
@@ -52,20 +55,26 @@ public class NetModule {
         return client.build();
     }
 
+    //todo verify if needed
     @Provides
     @Singleton
     Retrofit provideRetrofitXml(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(new Persister(new AnnotationStrategy())))
-                //addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(BASE_URL)
+                .baseUrl(BART_BASE_URL)
                 .client(okHttpClient)
                 .build();
     }
 
     @Provides
     @Singleton
-    RetrofitService providesRetrofitInterface(Retrofit retrofit) {
-        return RetrofitClient.getClient(BASE_URL, new ApiKeyInterceptor(BART_API_KEY)).create(RetrofitService.class);
+    BartService providesBartInterface(Retrofit retrofit) {
+        return RetrofitClient.getClient(BART_BASE_URL, new ApiKeyInterceptor("key", BART_API_KEY)).create(BartService.class);
+    }
+
+    @Provides
+    @Singleton
+    WeatherService providesWeather(Retrofit retrofit) {
+        return RetrofitClient.getClient(WEATHER_BASE_URL, new ApiKeyInterceptor("appid", WEATHER_API_KEY)).create(WeatherService.class);
     }
 }

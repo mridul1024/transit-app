@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -60,6 +61,7 @@ class HomeFragment : Fragment() {
         this.initViewModel()
         loadAdvisories(mViewModel.bsaLiveData)
         initFavoriteObserver()
+        loadWeather()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -210,7 +212,31 @@ class HomeFragment : Fragment() {
         })
     }
 
+    private fun loadWeather() {
+        Log.i("LOADING", " WEAtHER ")
+        mViewModel.weather.observe(this, Observer {
+            data ->
+            if(data != null) {
+                val status = data.status
+                when(status) {
+                    LiveDataWrapper.Status.SUCCESS -> {
+                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+                    }
+                    LiveDataWrapper.Status.ERROR -> {
+                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {
+                        Log.e("ERROR", "WEATHER ERROR")
+                    }
+                }
+            }
+        })
+    }
+
     private fun updateProgressBar() {
         mDataBinding.homeEtdProgressBar.visibility = View.GONE
     }
+
+    //todo: add option for geolocation and to set "COMMUTE ROUTE" - morning/evening geolocation
+    //https://openweathermap.org/current
 }

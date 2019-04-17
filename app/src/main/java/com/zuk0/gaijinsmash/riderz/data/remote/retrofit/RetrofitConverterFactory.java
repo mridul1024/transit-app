@@ -1,7 +1,5 @@
 package com.zuk0.gaijinsmash.riderz.data.remote.retrofit;
 
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.JsonAndXmlConverters.Json;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.JsonAndXmlConverters.Xml;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -21,10 +19,10 @@ public class RetrofitConverterFactory extends Converter.Factory {
     public Converter<ResponseBody, ?> responseBodyConverter(
             Type type, Annotation[] annotations, Retrofit retrofit) {
         for (Annotation annotation : annotations) {
-            if(annotation instanceof Xml) {
+            if(annotation instanceof JsonAndXmlConverters.Xml) {
                 return xmlFactory.responseBodyConverter(type, annotations, retrofit);
             }
-            if(annotation instanceof Json) {
+            if(annotation instanceof JsonAndXmlConverters.Json) {
                 return gsonFactory.responseBodyConverter(type, annotations, retrofit);
             }
         }

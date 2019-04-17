@@ -37,10 +37,12 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Etd;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.weather_response.WeatherResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.FavoriteDatabase;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.BsaRepository;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.EtdRepository;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository;
+import com.zuk0.gaijinsmash.riderz.data.remote.repository.WeatherRepository;
 import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper;
 import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesUtils;
 import com.zuk0.gaijinsmash.riderz.utils.StationUtils;
@@ -60,6 +62,7 @@ public class HomeViewModel extends ViewModel {
     private TripRepository mTripRepository;
     private BsaRepository mBsaRepository;
     private EtdRepository mEtdRepository;
+    private WeatherRepository mWeatherRepository;
 
     private FavoriteDatabase db;
     private static final String TAG = "HomeViewModel";
@@ -68,11 +71,13 @@ public class HomeViewModel extends ViewModel {
     public HomeViewModel(Application application,
                          TripRepository tripRepository,
                          BsaRepository bsaRepository,
-                         EtdRepository etdRepository) {
+                         EtdRepository etdRepository,
+                         WeatherRepository weatherRepository) {
         mApplication = application;
         mTripRepository = tripRepository;
         mBsaRepository = bsaRepository;
         mEtdRepository = etdRepository;
+        mWeatherRepository = weatherRepository;
 
         initDb();
     }
@@ -157,6 +162,10 @@ public class HomeViewModel extends ViewModel {
 
     void checkHolidaySchedule() {
         //TODO: push news to home fragment if it's a holiday
+    }
+
+    LiveData<LiveDataWrapper<WeatherResponse>> getWeather() {
+        return mWeatherRepository.getWeather();
     }
 
     @Override

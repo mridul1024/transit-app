@@ -22,12 +22,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'String', "BartApiKey", RIDERZ_BART_API_KEY
+            buildConfigField 'String', "OpenWeatherApiKey", RIDERZ_WEATHER_API_KEY
         }
         release {
             minifyEnabled true
             //multiDexKeepFile file('multidex-config.txt')
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'String', "BartApiKey", RIDERZ_BART_API_KEY
+            buildConfigField 'String', "OpenWeatherApiKey", RIDERZ_WEATHER_API_KEY
         }
     }
     lintOptions {
@@ -53,10 +55,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.google.android.material:material:1.1.0-alpha03'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
-    implementation 'androidx.core:core:1.1.0-alpha04'
-    implementation 'androidx.preference:preference:1.1.0-alpha03'
+    implementation 'com.google.android.material:material:1.1.0-alpha05'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
+    implementation 'androidx.core:core:1.1.0-alpha05'
+    implementation 'androidx.preference:preference:1.1.0-alpha04'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.0.0'
@@ -64,7 +66,7 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.8.0'
 
     // Dagger 2
-    def dagger_version = "2.16"
+    def dagger_version = "2.22.1"
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation "com.google.dagger:dagger-android:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"

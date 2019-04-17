@@ -4,24 +4,17 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.StationDao;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.BartService;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.stubbing.Answer;
 
 import java.util.concurrent.Executor;
 
-import javax.inject.Inject;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,7 +22,7 @@ import static org.mockito.Mockito.when;
 public class StationRepositoryTest {
 
     @Mock
-    private RetrofitService service;
+    private BartService service;
 
     @Mock
     private StationDao dao;

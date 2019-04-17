@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.TripDao;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.BartService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 public class TripRepositoryTest {
 
     @Mock
-    private RetrofitService service;
+    private BartService service;
 
     @Mock
     private TripDao dao;

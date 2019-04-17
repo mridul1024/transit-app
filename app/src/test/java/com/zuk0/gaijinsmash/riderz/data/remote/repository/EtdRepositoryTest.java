@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.EtdDao;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.BartService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 public class EtdRepositoryTest {
 
     @Mock
-    private RetrofitService service;
+    private BartService service;
 
     @Mock
     private EtdDao dao;

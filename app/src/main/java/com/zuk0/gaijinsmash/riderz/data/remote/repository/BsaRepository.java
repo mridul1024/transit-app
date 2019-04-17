@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.BsaDao;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.BartService;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,19 +23,19 @@ import retrofit2.Response;
 
 /*
     This repo abstracts the data sources from the rest of the app. ViewModel doesn't know
-    that the data is fetched by the RetrofitService. Repository makes API calls and fetches data.
+    that the data is fetched by the BartService. Repository makes API calls and fetches data.
     https://proandroiddev.com/the-missing-google-sample-of-android-architecture-components-guide-c7d6e7306b8f
 */
 
 @Singleton
 public class BsaRepository {
 
-    private final RetrofitService service;
+    private final BartService service;
     private final BsaDao bsaDao;
     private final Executor executor;
 
     @Inject
-    public BsaRepository(RetrofitService service, BsaDao bsaDao, Executor executor) {
+    public BsaRepository(BartService service, BsaDao bsaDao, Executor executor) {
         this.service = service;
         this.bsaDao = bsaDao; // for caching
         this.executor = executor; // for executing on new thread

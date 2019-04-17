@@ -1,16 +1,13 @@
 package com.zuk0.gaijinsmash.riderz.data.remote.repository;
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.Bsa;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.BsaDao;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitService;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.BartService;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -18,8 +15,6 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
-
-import kotlin.jvm.JvmField;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -29,7 +24,7 @@ import static org.mockito.Mockito.when;
 public class BsaRepositoryTest {
 
     @Mock
-    private RetrofitService service;
+    private BartService service;
 
     @Mock
     private BsaDao dao;
