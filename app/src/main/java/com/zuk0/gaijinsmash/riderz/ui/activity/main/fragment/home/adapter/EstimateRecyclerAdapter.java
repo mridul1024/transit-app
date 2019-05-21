@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home;
+package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter;
 
 import android.os.CountDownTimer;
 import android.util.Log;

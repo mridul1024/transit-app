@@ -58,6 +58,17 @@
     </style>
 
     <!-- Text Styles -->
+    <style name="LightText">
+        <item name="android:textColor">@color/mp_primary_light</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
+    <style name="DarkText">
+        <item name="android:textColor">@color/mp_primary_dark</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
 
     <style name="ViewTitle" parent="android:TextAppearance.Large">
         <item name="android:textSize">25sp</item>
@@ -74,5 +85,4 @@
         <item name="android:layout_margin">10dp</item>
         <item name="android:elevation">1dp</item>
     </style>
-
 </resources>

@@ -12,4 +12,28 @@
             android:defaultValue="false"/>
 
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Measurement System">
+        <CheckBoxPreference
+            android:key="METRIC_KEY"
+            android:title="Enable Metric System?"
+            android:summary="Default is Imperial"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+
+        android:title="Weather Settings">
+        <CheckBoxPreference
+            android:key="USER_LOC_KEY"
+            android:title="Use your location?"
+            android:summary="Default is yes. If you set a commute route, the "
+            android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="USER"
+            android:title="Use BART station?"
+            android:summary="Default is No"
+            android:defaultValue="false" />
+    </PreferenceCategory>
 </PreferenceScreen>

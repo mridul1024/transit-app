@@ -229,4 +229,7 @@
     <string name="departing_from">Departing From:</string>
     <string name="direction">Direction:</string>
     <string name="arriving_at">Arriving at:</string>
+    <string name="callToAction">You currently don\'t have any favorite routes. Plan a trip and then add to your favorites now!</string>
+    <string name="callToAction_summary">Hey! You currently don\'t have any favorite routes. You can start by creating one now below.</string>
+    <string name="create_favorite">Create Favorite</string>
 </resources>

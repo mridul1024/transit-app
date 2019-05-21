@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WeatherView">
+        <!--2-->
+        <attr name="sunColor" format="color" />
+        <attr name="moonColor" format="color" />
+        <attr name="cloudsColor" format="color" />
+        <attr name="skyColor" format="color" />
+        <attr name="windColor" format="dimension" />
+        <attr name="lightningColor" format="dimension" />
+        <attr name="thunderColor" format="dimension" />
+        <attr name="snowColor" format="dimension" />
+        <attr name="rainColor" format="dimension" />
+        <attr name="state" format="enum">
+            <enum name="sunny" value="0" />
+            <enum name="windy" value="1" />
+            <enum name="cloudy" value="2" />
+            <enum name="rainy" value="3" />
+            <enum name="stormy" value="4" />
+            <enum name="snowy" value="5" />
+        </attr>
+    </declare-styleable>
+</resources>

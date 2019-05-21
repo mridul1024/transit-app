@@ -4,9 +4,8 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse;
-import com.zuk0.gaijinsmash.riderz.data.local.entity.weather_response.WeatherResponse;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.JsonAndXmlConverters.Json;
-import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.JsonAndXmlConverters.Xml;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.ResponseTypeConverter.Json;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.ResponseTypeConverter.Xml;
 
 import javax.inject.Singleton;
 

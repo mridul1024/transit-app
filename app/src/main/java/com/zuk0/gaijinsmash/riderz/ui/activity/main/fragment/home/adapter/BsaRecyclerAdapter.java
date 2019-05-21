@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home;
+package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;

@@ -11,6 +11,9 @@ import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import android.util.Log;
 
+/*
+    TODO: add lifecycle handling
+ */
 public class GpsUtils implements LocationListener {
 
     private String TAG = "GpsUtils";
@@ -20,6 +23,9 @@ public class GpsUtils implements LocationListener {
     private String mLocationProvider;
 
 
+    /*
+        Handle user location permissions here?
+     */
     public GpsUtils(Context context) {
         LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
@@ -35,14 +41,6 @@ public class GpsUtils implements LocationListener {
         } else {
             Log.i("GPS:", "Location is not available");
         }
-    }
-
-    public Double getLatitude() {
-        return mLatitude;
-    }
-
-    public Double getLongitude() {
-        return mLongitude;
     }
 
     public Location getLocation() {

@@ -55,8 +55,6 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import dagger.android.support.AndroidSupportInjection;
-
 
 //todo: implement search widget in toolbar?
 public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
@@ -295,7 +293,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
         String[] stationsList = getResources().getStringArray(R.array.stations_list);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), android.R.layout.simple_spinner_dropdown_item, stationsList);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        Spinner spinner = view.findViewById(R.id.googleMap_dialog_spinner);
+        Spinner spinner = view.findViewById(R.id.dialog_origin_spinner);
         spinner.setAdapter(adapter);
         spinner.setSelection(adapter.getPosition(station.getName()));
 

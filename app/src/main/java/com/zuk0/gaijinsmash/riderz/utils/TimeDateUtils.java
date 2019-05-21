@@ -12,6 +12,13 @@ import java.util.TimeZone;
 
 public class TimeDateUtils {
 
+    public static boolean isDaytime() {
+        long millis = System.currentTimeMillis();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millis);
+        return calendar.get(Calendar.HOUR_OF_DAY) >= 5 && calendar.get(Calendar.HOUR_OF_DAY) < 18;
+    }
+
     public static String getTodaysDate() {
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);

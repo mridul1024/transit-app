@@ -6,17 +6,12 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClient {
-
-    /*
-       Retrofit should be created with the Singleton pattern.
-       This client can be used for the whole android project to make requests.
-    */
-
+public class WeatherRetrofitClient {
     private static Retrofit retrofit = null;
 
-    public static Retrofit getClient(String baseUrl, Interceptor interceptor) {
+    public static Retrofit getClient(String baseUrl, Interceptor interceptor, GsonConverterFactory gsonFactory) {
         if(retrofit == null) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
@@ -25,18 +20,16 @@ public class RetrofitClient {
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.networkInterceptors().add(httpLoggingInterceptor);
             builder.interceptors().add(interceptor);
-            builder.connectTimeout(30, TimeUnit.SECONDS);
-            builder.readTimeout(30, TimeUnit.SECONDS);
+            builder.connectTimeout(10, TimeUnit.SECONDS);
+            builder.readTimeout(10, TimeUnit.SECONDS);
             OkHttpClient client = builder.build();
 
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
-                    .addConverterFactory(new RetrofitConverterFactory())
+                    .addConverterFactory(gsonFactory)
                     .client(client)
                     .build();
         }
         return retrofit;
     }
-
-
 }

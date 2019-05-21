@@ -6,9 +6,9 @@ import com.google.gson.annotations.SerializedName
 data class Coordinates(
         @Expose
         @SerializedName("lon")
-        var longitude: Long,
+        var longitude: Double,
 
         @Expose
         @SerializedName("lat")
-        var latitude: Long
+        var latitude: Double
 )

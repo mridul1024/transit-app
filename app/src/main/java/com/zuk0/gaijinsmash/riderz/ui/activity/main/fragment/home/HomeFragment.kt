@@ -1,15 +1,15 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
@@ -17,11 +17,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Estimate
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip
+import com.zuk0.gaijinsmash.riderz.data.local.entity.weather_response.WeatherResponse
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.BsaRecyclerAdapter
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.EstimateRecyclerAdapter
 import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper
 import com.zuk0.gaijinsmash.riderz.utils.AlertDialogUtils
 import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesUtils
@@ -29,8 +33,13 @@ import dagger.android.support.AndroidSupportInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableMaybeObserver
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 import javax.inject.Inject
+import kotlin.math.roundToLong
+
+//todo add option to get estimates based on user location - create a commute route. preferred origin and destination.
+//get user location - if user location is at a bart station other than the preferred, get etd from that location instead.
+// allow user to create a HOME(s) station.
+//show info based on user location to either location. or button to switch
 
 class HomeFragment : Fragment() {
 
@@ -40,10 +49,10 @@ class HomeFragment : Fragment() {
     private lateinit var mDataBinding: com.zuk0.gaijinsmash.riderz.databinding.ViewHomeBinding
     private lateinit var mViewModel: HomeViewModel
 
-    private var mInverseEstimateList: List<Estimate>? = null
-    private var mFavoriteEstimateList: List<Estimate>? = null
-    private var mEtdAdapter: EstimateRecyclerAdapter? = null
-    private var mEtdInverseAdapter: EstimateRecyclerAdapter? = null
+    private var mInverseEstimateList: List<Estimate>? = null //todo refactor - put in viewmodel
+    private var mFavoriteEstimateList: List<Estimate>? = null //todo refactor - put in viewmodel
+    private var mEtdAdapter: EstimateRecyclerAdapter? = null //todo refactor - put in viewmodel
+    private var mEtdInverseAdapter: EstimateRecyclerAdapter? = null //todo refactor - put in viewmodel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +78,7 @@ class HomeFragment : Fragment() {
         val mainAppBarLayout = activity?.findViewById<AppBarLayout>(R.id.main_app_bar_layout)
         mainAppBarLayout?.setExpanded(true)
         expandBottomNavView()
-        initNews()
+        displayNews(false) // use this switch to turn on/off the news manually
     }
 
     override fun onPause() {
@@ -95,18 +104,22 @@ class HomeFragment : Fragment() {
     }
 
     /*
-       A way to provide news that cannot be fetched by the api via webview
+       A way to provide news that cannot be fetched by the api via webview.
+       CardView's visibility is GONE by default
      */
-    private fun initNews() {
-        val newsButton = activity?.findViewById<Button>(R.id.home_news_button)
-        newsButton?.setOnClickListener {
-            NavHostFragment.findNavController(this).navigate(R.id.action_homeFragment_to_newsFragment)
+    private fun displayNews(isActive: Boolean) {
+        if(isActive) {
+            mDataBinding.homeNewsCardView.visibility = View.VISIBLE
+            val newsButton = activity?.findViewById<Button>(R.id.home_news_button)
+            newsButton?.setOnClickListener { //todo refactor, create a custom view to inject data easily
+                NavHostFragment.findNavController(this).navigate(R.id.action_homeFragment_to_newsFragment)
+            }
+
+            val title = resources.getString(R.string.developer_update)
+            val msg = resources.getString(R.string.app_crash)
+
+            if(SharedPreferencesUtils.getDevUpdatePreference(activity)) AlertDialogUtils.launchNotificationDialog(activity, title, msg)
         }
-
-        val title = resources.getString(R.string.developer_update)
-        val msg = resources.getString(R.string.app_crash)
-
-        if(SharedPreferencesUtils.getDevUpdatePreference(activity)) AlertDialogUtils.launchNotificationDialog(activity, title, msg)
     }
 
     /*
@@ -133,13 +146,14 @@ class HomeFragment : Fragment() {
                     }
 
                     override fun onComplete() {
-                        Log.i("onComplete","completed")
                         updateProgressBar()
                     }
 
                     override fun onError(e: Throwable) {
-                        Log.e("onError", e.message)
+                        Logger.e(e.localizedMessage)
+                        loadCallToActionOrFavorite()
                         updateProgressBar()
+
                     }
                 })
     }
@@ -157,7 +171,7 @@ class HomeFragment : Fragment() {
                 if(response.data.root.schedule.request.tripList != null) {
                     trips = response.data.root.schedule.request.tripList
                     mViewModel.setTrainHeaders(trips, favorite)
-                    loadFavoriteEtd(favorite)
+                    displayFavoriteEtd(favorite)
                 }
             }
 
@@ -175,7 +189,7 @@ class HomeFragment : Fragment() {
                 if(response.data.root.schedule.request.tripList != null) {
                     val trips: List<Trip> = response.data.root.schedule.request.tripList
                     val inverse = mViewModel.createFavoriteInverse(trips, favorite)
-                    loadInverseEtd(inverse)
+                    displayInverseEtd(inverse)
                 }
             }
 
@@ -185,7 +199,11 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun loadFavoriteEtd(favorite: Favorite) {
+    private fun loadCallToActionOrFavorite() { //todo: verify
+        mDataBinding.callToActionContainer.visibility = View.VISIBLE
+    }
+
+    private fun displayFavoriteEtd(favorite: Favorite) {
         mViewModel.getEtdLiveData(favorite.origin).observe(this, Observer { data ->
             if (data != null) {
                 mFavoriteEstimateList = mViewModel.getEstimatesFromEtd(favorite, data.station.etdList)
@@ -199,7 +217,7 @@ class HomeFragment : Fragment() {
     /*
         Fetches an ETD for the opposite direction of the favorite
      */
-    private fun loadInverseEtd(inverse: Favorite) {
+    private fun displayInverseEtd(inverse: Favorite) {
         mViewModel.getEtdLiveData(inverse.origin).observe(this, Observer { data ->
             if (data != null) {
                 mInverseEstimateList = mViewModel.getEstimatesFromEtd(inverse, data.station.etdList)
@@ -212,24 +230,56 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadWeather() {
-        Log.i("LOADING", " WEAtHER ")
-        mViewModel.weather.observe(this, Observer {
-            data ->
-            if(data != null) {
-                val status = data.status
-                when(status) {
-                    LiveDataWrapper.Status.SUCCESS -> {
-                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-                    }
-                    LiveDataWrapper.Status.ERROR -> {
-                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-                    }
-                    else -> {
-                        Log.e("ERROR", "WEATHER ERROR")
-                    }
+        Logger.i("loading weather")
+        //todo get user location if available
+
+        mViewModel.getWeather(94526).observe(this, Observer { response ->
+            when(response.status) {
+                LiveDataWrapper.Status.SUCCESS -> {
+                    Logger.i("success")
+                    displayWeather(response.data)
+                }
+                LiveDataWrapper.Status.ERROR -> {
+                    Logger.e(response.msg)
+                }
+                else -> {
+                    Logger.e( "WEATHER ERROR")
                 }
             }
         })
+    }
+
+    private fun displayWeather(weather: WeatherResponse) {
+        var textColor = 0
+        if(mViewModel.isDaytime) textColor = resources.getColor(R.color.bartYellowLine) else Color.WHITE
+
+        if(weather.name != null) { //city
+            val nameTv = activity?.findViewById<TextView>(R.id.weather_name_tv)
+            nameTv?.text = weather.name
+            nameTv?.setTextColor(textColor)
+        }
+
+        if(weather.main != null) { //
+            if(weather.main?.temp != null) {
+                val tempTv = activity?.findViewById<TextView>(R.id.weather_temp_tv)
+                //° F = 9/5 (K - 273) + 32
+                val imperialTemp = mViewModel.kelvinToFahrenheit(weather.main?.temp!!).roundToLong()
+                tempTv?.text = "${imperialTemp}F"  //todo use String resources
+                tempTv?.setTextColor(textColor) //abstract
+            }
+        }
+
+        if(weather.main?.humidity != null) {
+            val humidtyTv = activity?.findViewById<TextView>(R.id.weather_humidity_tv)
+            humidtyTv?.text = "${weather.main?.humidity}%"
+            humidtyTv?.setTextColor(textColor)
+        }
+
+        if(weather.wind != null) {
+            val windTv = activity?.findViewById<TextView>(R.id.weather_wind_tv)
+            windTv?.text = "${weather.wind?.speed?.toString()}mph"
+            windTv?.setTextColor(textColor)
+        }
     }
 
     private fun updateProgressBar() {

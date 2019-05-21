@@ -42,6 +42,22 @@
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/banner" />
 
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.weather.WeatherView
+                            android:id="@+id/home_weatherView"
+                            android:background="?android:selectableItemBackground"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="top|center_horizontal"
+                            app:state="sunny" />
+
+                        <include layout="@layout/widget_weather" />
+
+                    </FrameLayout>
+
                     <androidx.appcompat.widget.Toolbar
                         android:id="@+id/toolbar"
                         android:layout_width="match_parent"

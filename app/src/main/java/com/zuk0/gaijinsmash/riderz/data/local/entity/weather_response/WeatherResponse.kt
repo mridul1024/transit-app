@@ -24,7 +24,7 @@ data class WeatherResponse(
 
         @Expose
         @SerializedName("weather")
-        var weather: Weather? = null,
+        var weather: List<Weather>? = null,
 
         @Expose
         @SerializedName("base")

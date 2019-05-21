@@ -2,6 +2,7 @@ package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -20,6 +21,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.util.Log;
@@ -44,6 +46,7 @@ import com.zuk0.gaijinsmash.riderz.data.remote.repository.EtdRepository;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.WeatherRepository;
 import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper;
+import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
 import com.zuk0.gaijinsmash.riderz.utils.SharedPreferencesUtils;
 import com.zuk0.gaijinsmash.riderz.utils.StationUtils;
 import com.zuk0.gaijinsmash.riderz.utils.TimeDateUtils;
@@ -109,7 +112,7 @@ public class HomeViewModel extends ViewModel {
         return context.getResources().getString(R.string.last_update) + " " + initTime(is24HrTimeOn, time);
     }
 
-    public Maybe<Favorite> getMaybeFavorite() {
+    public Maybe<Favorite> getMaybeFavorite() { //todo db calls should be abstracted to a repository class
         return db.getFavoriteDAO().getPriorityFavorite();
     }
 
@@ -160,12 +163,42 @@ public class HomeViewModel extends ViewModel {
         return results;
     }
 
+    /*
+        TODO grab user input from the CREATE view and automatically refresh the homepage.
+     */
+
+    LiveData<Location> getUserLocationLiveData() {
+        //todo - abstract to repository
+        MutableLiveData<Location> userLocationLiveData = new MutableLiveData<>();
+        //if you have a commute route, get geoloc of destination
+        //else use user's current location
+        Location userLocation;
+        GpsUtils gps = new GpsUtils(mApplication);
+        userLocation = gps.getLocation();
+        userLocationLiveData.postValue(userLocation);
+        return userLocationLiveData;
+    }
+
+    //F = 9/5 (K - 273) + 32
+    double kelvinToFahrenheit(double temp) {
+        return (9f / 5f) * (temp - 273) + 32;
+    }
+
+    //C = K - 273
+    double kelvinToCelcius(double temp) {
+        return temp - 273;
+    }
+
     void checkHolidaySchedule() {
         //TODO: push news to home fragment if it's a holiday
     }
 
-    LiveData<LiveDataWrapper<WeatherResponse>> getWeather() {
-        return mWeatherRepository.getWeather();
+    LiveData<LiveDataWrapper<WeatherResponse>> getWeather(int zipcode) {
+        return mWeatherRepository.getWeather(zipcode);
+    }
+
+    boolean isDaytime() {
+        return TimeDateUtils.isDaytime();
     }
 
     @Override

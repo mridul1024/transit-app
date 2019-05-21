@@ -6,9 +6,9 @@ import com.google.gson.annotations.SerializedName
 data class Wind (
         @Expose
         @SerializedName("speed")
-        var speed: Long? = null,
+        var speed: Double? = null,
 
         @Expose
         @SerializedName("deg")
-        var deg: Int? = null
+        var deg: Double? = null
 )

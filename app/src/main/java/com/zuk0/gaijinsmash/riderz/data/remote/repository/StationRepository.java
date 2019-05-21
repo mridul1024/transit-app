@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import retrofit2.Call;

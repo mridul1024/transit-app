@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import androidx.lifecycle.MutableLiveData;
@@ -43,7 +44,6 @@ public class BsaRepository {
 
     public LiveData<BsaXmlResponse> getBsa() {
         //refreshBsa(new Timestamp(System.currentTimeMillis()));
-
         MutableLiveData<BsaXmlResponse> data = new MutableLiveData<>();
         service.getBsa().enqueue(new Callback<BsaXmlResponse>() {
             @Override
