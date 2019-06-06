@@ -1,6 +1,7 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +12,20 @@ import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
 import dagger.android.support.AndroidSupportInjection
 
-abstract class BaseFragment(inflater: LayoutInflater, view_trip: Int, container: ViewGroup, attachToParent: Boolean) : Fragment() {
+abstract class BaseFragment : Fragment() {
 
     // ---------------------------------------------------------------------------------------------
     // Lifecycle Events
     // ---------------------------------------------------------------------------------------------
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        initDagger()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.d("onCreate()")
-        initDagger()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

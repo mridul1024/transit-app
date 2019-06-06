@@ -19,7 +19,7 @@ public class HelpFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mInflatedView = inflater.inflate(R.layout.view_help, container, false);
+        mInflatedView = inflater.inflate(R.layout.fragment_help, container, false);
         return mInflatedView;
     }
 

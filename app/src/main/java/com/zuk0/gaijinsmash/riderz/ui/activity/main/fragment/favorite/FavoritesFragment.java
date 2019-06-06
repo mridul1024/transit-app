@@ -29,7 +29,7 @@ public class FavoritesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_favorites, container, false);
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorites, container, false);
         return mDataBinding.getRoot();
     }
 

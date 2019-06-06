@@ -37,7 +37,7 @@ public class StationsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_station, container, false);
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_station, container, false);
         return mDataBinding.getRoot();
     }
 

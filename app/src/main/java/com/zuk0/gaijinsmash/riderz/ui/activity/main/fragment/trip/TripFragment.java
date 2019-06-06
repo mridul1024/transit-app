@@ -48,7 +48,7 @@ public class TripFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_trip, container, false);
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_trip, container, false);
         return mDataBinding.getRoot();
     }
 

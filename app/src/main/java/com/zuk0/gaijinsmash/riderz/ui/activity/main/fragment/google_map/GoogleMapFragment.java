@@ -40,7 +40,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.orhanobut.logger.Logger;
-import com.zuk0.gaijinsmash.riderz.BuildConfig;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.databinding.ViewGoogleMapBinding;
@@ -104,7 +103,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_google_map, container, false);
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_google_map, container, false);
         mMapView = mDataBinding.googleMapMapView;
         return mDataBinding.getRoot();
     }

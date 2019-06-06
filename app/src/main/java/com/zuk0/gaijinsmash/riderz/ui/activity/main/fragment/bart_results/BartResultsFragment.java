@@ -59,7 +59,7 @@ public class BartResultsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_results, container, false);
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_results, container, false);
         return mDataBinding.getRoot();
     }
 

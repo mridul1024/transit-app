@@ -32,7 +32,7 @@ public class BartMapFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_bart_map, container, false);
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bart_map, container, false);
         return mDataBinding.getRoot();
     }
 

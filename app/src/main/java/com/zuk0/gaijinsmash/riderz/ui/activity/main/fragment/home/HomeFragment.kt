@@ -33,7 +33,6 @@ import dagger.android.support.AndroidSupportInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableMaybeObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.view_home.view.*
 import javax.inject.Inject
 import kotlin.math.roundToLong
 
@@ -68,7 +67,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.view_home, container, false)
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         return mDataBinding.root
     }
 

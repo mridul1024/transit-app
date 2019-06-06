@@ -13,12 +13,12 @@
         android:id="@+id/resultsFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_results.BartResultsFragment"
         android:label="Results"
-        tools:layout="@layout/view_results" />
+        tools:layout="@layout/fragment_results" />
     <fragment
         android:id="@+id/tripFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.trip.TripFragment"
         android:label="Find your trip"
-        tools:layout="@layout/view_trip" >
+        tools:layout="@layout/fragment_trip" >
         <action
             android:id="@+id/action_tripFragment_to_resultsFragment"
             app:destination="@id/resultsFragment" />
@@ -27,7 +27,7 @@
         android:id="@+id/stationInfoFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.station_info.StationInfoFragment"
         android:label="Station Info"
-        tools:layout="@layout/view_station_info" >
+        tools:layout="@layout/fragment_station_info" >
         <action
             android:id="@+id/action_stationInfoFragment_to_googleMapFragment"
             app:destination="@id/googleMapFragment" />
@@ -36,17 +36,17 @@
         android:id="@+id/aboutFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.about.AboutFragment"
         android:label="About"
-        tools:layout="@layout/view_about" />
+        tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/bartMapFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_map.BartMapFragment"
         android:label="Bart Map"
-        tools:layout="@layout/view_bart_map" />
+        tools:layout="@layout/fragment_bart_map" />
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.favorite.FavoritesFragment"
         android:label="Favorites"
-        tools:layout="@layout/view_favorites" >
+        tools:layout="@layout/fragment_favorites" >
         <action
             android:id="@+id/action_favoritesFragment_to_resultsFragment"
             app:destination="@id/resultsFragment" />
@@ -55,7 +55,7 @@
         android:id="@+id/googleMapFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.google_map.GoogleMapFragment"
         android:label="Map"
-        tools:layout="@layout/view_google_map" >
+        tools:layout="@layout/fragment_google_map" >
         <action
             android:id="@+id/action_googleMapFragment_to_bartMapFragment"
             app:destination="@id/bartMapFragment" />
@@ -67,7 +67,7 @@
         android:id="@+id/stationsFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.stations.StationsFragment"
         android:label="BART Stations"
-        tools:layout="@layout/view_station" >
+        tools:layout="@layout/fragment_station" >
         <action
             android:id="@+id/action_stationsFragment_to_stationInfoFragment"
             app:destination="@id/stationInfoFragment" />
@@ -76,18 +76,18 @@
         android:id="@+id/helpFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.help.HelpFragment"
         android:label="Help"
-        tools:layout="@layout/view_help" />
+        tools:layout="@layout/fragment_help" />
     <fragment
         android:id="@+id/phoneLinesFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.phone_lines.PhoneLinesFragment"
         android:label="Bart Lines"
-        tools:layout="@layout/view_phone_lines" />
+        tools:layout="@layout/fragment_phone_lines" />
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/view_home" >
+        tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_self"
             app:destination="@id/homeFragment" />

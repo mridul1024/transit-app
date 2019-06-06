@@ -20,7 +20,7 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.view_about, container, false);
+        return inflater.inflate(R.layout.fragment_about, container, false);
     }
 
     @Override
