@@ -18,7 +18,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="2dp"
-                    android:background="@color/mp_primary_light">
+                    android:background="@color/primaryLightColor">
 
                     <TextView
                         style="@style/ViewTitle"

@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.orhanobut.logger.Logger;
 import com.zuk0.gaijinsmash.riderz.BuildConfig;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
@@ -65,7 +66,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
     private ViewGoogleMapBinding mDataBinding;
     private MapView mMapView;
     private GoogleMapViewModel mViewModel;
-    private List<Station> mStationList;
+    private List<Station> mStationList; //todo put in viewmodel
 
     private GoogleMap mGoogleMap;
 
@@ -334,17 +335,15 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
                         LOCATION_PERMISSON_REQUEST_CODE);
             }
         } catch(SecurityException e) {
-            if(BuildConfig.DEBUG)
-                Log.e("Exception: %s", e.getMessage());
+            Logger.e(e.getMessage());
         }
-
 
         boolean gpsCheck = NetworkUtils.isGPSEnabled(context);
         if (gpsCheck && loc != null) {
             // move camera to user location
             LatLng userLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
             CameraUpdate update;
-            update = CameraUpdateFactory.newLatLngZoom(userLocation, 6f);
+            update = CameraUpdateFactory.newLatLngZoom(userLocation, 11f);
             map.moveCamera(update);
         } else {
             mViewModel.initDefaultLocation(map);

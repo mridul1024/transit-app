@@ -75,6 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:defaultNavHost="true"
+                android:background="@color/primaryDarkColor"
                 tools:context=".ui.activity.main.MainActivity"
                 app:navGraph="@navigation/nav_graph" />
 
@@ -99,6 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:background="@color/primaryColor"
             android:fitsSystemWindows="true"
             app:headerLayout="@layout/main_nav_header"
             app:menu="@menu/drawer_nav_menu" />

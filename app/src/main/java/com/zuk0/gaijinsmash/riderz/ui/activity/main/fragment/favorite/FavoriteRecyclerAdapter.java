@@ -60,7 +60,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         holder.destination.setText(destAbbr.toUpperCase());
         holder.optionsButton.setOnClickListener(v -> initPopupMenu(v.getContext(), holder.optionsButton, favorite, position));
         if(favorite.getPriority() == Favorite.Priority.ON) {
-            holder.background.setBackgroundColor(holder.origin.getContext().getResources().getColor(R.color.mp_accent));
+            holder.background.setBackgroundColor(holder.origin.getContext().getResources().getColor(R.color.primaryLightColor));
         }
     }
 
@@ -160,5 +160,4 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
             searchButton.setOnClickListener(v -> initTripSearch(mParent, origin, destination));
         }
     }
-
 }

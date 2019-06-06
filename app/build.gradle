@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'io.fabric'
+
 android {
     compileSdkVersion 28 // this should always be the most recent version
     defaultConfig {
@@ -55,10 +57,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.google.android.material:material:1.1.0-alpha05'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
-    implementation 'androidx.core:core:1.1.0-alpha05'
-    implementation 'androidx.preference:preference:1.1.0-alpha04'
+    implementation 'com.google.android.material:material:1.1.0-alpha07'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
+    implementation 'androidx.core:core:1.2.0-alpha01'
+    implementation 'androidx.preference:preference:1.1.0-beta01'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.0.0'
@@ -95,20 +97,20 @@ dependencies {
     testImplementation 'androidx.arch.core:core-testing:2.0.1'
 
     // Room Database
-    implementation 'androidx.room:room-runtime:2.1.0-alpha06'
-    kapt 'androidx.room:room-compiler:2.1.0-alpha06'
-    testImplementation 'androidx.room:room-testing:2.1.0-alpha06'
+    implementation 'androidx.room:room-runtime:2.1.0-rc01'
+    kapt 'androidx.room:room-compiler:2.1.0-rc01'
+    testImplementation 'androidx.room:room-testing:2.1.0-rc01'
     implementation 'android.arch.persistence.room:rxjava2:1.1.1'
 
     // Test framework
     testImplementation 'junit:junit:4.12'
     // Optional -- Mockito framework
-    testImplementation 'org.mockito:mockito-core:2.23.0'
+    testImplementation 'org.mockito:mockito-core:2.23.4'
     androidTestImplementation 'org.mockito:mockito-android:2.8.9'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    androidTestImplementation 'androidx.test:rules:1.1.1'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
     androidTestImplementation "androidx.arch.core:core-testing:2.0.1"
 
     // Logger
@@ -123,11 +125,16 @@ dependencies {
     //Navigation
     implementation 'android.arch.navigation:navigation-fragment:1.0.0'
     implementation "android.arch.navigation:navigation-ui:1.0.0"
-}
 
+    //Crashlytics
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+}
 
 configurations {
     all {
          exclude group: 'xpp3', module: 'xpp3'
     }
 }
+
+apply plugin: 'com.google.gms.google-services'

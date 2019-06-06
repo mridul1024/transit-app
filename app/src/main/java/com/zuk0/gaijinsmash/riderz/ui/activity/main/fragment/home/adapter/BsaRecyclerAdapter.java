@@ -47,6 +47,7 @@ public class BsaRecyclerAdapter extends RecyclerView.Adapter<BsaRecyclerAdapter.
         if(bsa.getType() == null) {
             holder.mAdvisoryBinding.bsaStationTextView.setVisibility(View.GONE);
         }
+
     }
 
     @Override

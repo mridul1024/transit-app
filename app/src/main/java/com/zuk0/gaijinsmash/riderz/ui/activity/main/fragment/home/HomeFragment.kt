@@ -1,6 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home
 
-import android.graphics.Color
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -33,6 +33,7 @@ import dagger.android.support.AndroidSupportInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableMaybeObserver
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.view_home.view.*
 import javax.inject.Inject
 import kotlin.math.roundToLong
 
@@ -54,6 +55,13 @@ class HomeFragment : Fragment() {
     private var mEtdAdapter: EstimateRecyclerAdapter? = null //todo refactor - put in viewmodel
     private var mEtdInverseAdapter: EstimateRecyclerAdapter? = null //todo refactor - put in viewmodel
 
+    private lateinit var mCallToAction: CallToActionView
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        this.initDagger()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -66,7 +74,6 @@ class HomeFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        this.initDagger()
         this.initViewModel()
         loadAdvisories(mViewModel.bsaLiveData)
         initFavoriteObserver()
@@ -135,25 +142,26 @@ class HomeFragment : Fragment() {
         })
     }
 
+
     private fun initFavoriteObserver() {
         mViewModel.maybeFavorite
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object: DisposableMaybeObserver<Favorite>() {
                     override fun onSuccess(fav: Favorite) {
+                        mViewModel.isFavoriteAvailable = true
                         loadTripData(fav)
                         loadInverseTripData(fav)
                     }
 
                     override fun onComplete() {
                         updateProgressBar()
+                        loadCallToAction(mViewModel.isFavoriteAvailable)
                     }
 
                     override fun onError(e: Throwable) {
                         Logger.e(e.localizedMessage)
-                        loadCallToActionOrFavorite()
                         updateProgressBar()
-
                     }
                 })
     }
@@ -199,8 +207,11 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun loadCallToActionOrFavorite() { //todo: verify
-        mDataBinding.callToActionContainer.visibility = View.VISIBLE
+    private fun loadCallToAction(isFavoriteAvailable: Boolean) { //todo: verify
+        if(!isFavoriteAvailable) {
+            if(!mDataBinding.homeStubCallToAction.isInflated)
+                mDataBinding.homeStubCallToAction.viewStub?.inflate()
+        }
     }
 
     private fun displayFavoriteEtd(favorite: Favorite) {
@@ -208,6 +219,7 @@ class HomeFragment : Fragment() {
             if (data != null) {
                 mFavoriteEstimateList = mViewModel.getEstimatesFromEtd(favorite, data.station.etdList)
                 mEtdAdapter = EstimateRecyclerAdapter(mFavoriteEstimateList)
+                mDataBinding.homeEtdRecyclerView.visibility = View.VISIBLE
                 mDataBinding.homeEtdRecyclerView.adapter = mEtdAdapter
                 mDataBinding.homeEtdRecyclerView.layoutManager = LinearLayoutManager(activity)
             }
@@ -222,6 +234,7 @@ class HomeFragment : Fragment() {
             if (data != null) {
                 mInverseEstimateList = mViewModel.getEstimatesFromEtd(inverse, data.station.etdList)
                 mEtdInverseAdapter = EstimateRecyclerAdapter(mInverseEstimateList)
+                mDataBinding.homeEtdRecyclerView2.visibility = View.VISIBLE
                 mDataBinding.homeEtdRecyclerView2.adapter = mEtdInverseAdapter
                 mDataBinding.homeEtdRecyclerView2.layoutManager = LinearLayoutManager(activity)
             }
@@ -231,7 +244,7 @@ class HomeFragment : Fragment() {
 
     private fun loadWeather() {
         Logger.i("loading weather")
-        //todo get user location if available
+        //todo get user location if available, else use a default location
 
         mViewModel.getWeather(94526).observe(this, Observer { response ->
             when(response.status) {
@@ -250,34 +263,36 @@ class HomeFragment : Fragment() {
     }
 
     private fun displayWeather(weather: WeatherResponse) {
-        var textColor = 0
-        if(mViewModel.isDaytime) textColor = resources.getColor(R.color.bartYellowLine) else Color.WHITE
-
+        var textColor = resources.getColor(R.color.bartYellowLine) //default for daytime
+        if(!mViewModel.isDaytime) textColor = resources.getColor(R.color.white)
         if(weather.name != null) { //city
             val nameTv = activity?.findViewById<TextView>(R.id.weather_name_tv)
             nameTv?.text = weather.name
             nameTv?.setTextColor(textColor)
         }
 
-        if(weather.main != null) { //
+        if(weather.main != null) {
             if(weather.main?.temp != null) {
                 val tempTv = activity?.findViewById<TextView>(R.id.weather_temp_tv)
                 //° F = 9/5 (K - 273) + 32
-                val imperialTemp = mViewModel.kelvinToFahrenheit(weather.main?.temp!!).roundToLong()
-                tempTv?.text = "${imperialTemp}F"  //todo use String resources
+                val imperialTemp = mViewModel.kelvinToFahrenheit(weather.main?.temp!!).roundToLong().toString()
+                val temp = imperialTemp + resources.getString(R.string.weather_temp_imperial)
+                tempTv?.text = temp
                 tempTv?.setTextColor(textColor) //abstract
             }
         }
 
         if(weather.main?.humidity != null) {
             val humidtyTv = activity?.findViewById<TextView>(R.id.weather_humidity_tv)
-            humidtyTv?.text = "${weather.main?.humidity}%"
+            val humidity = "${weather.main?.humidity}%"
+            humidtyTv?.text = humidity //todo use string resource
             humidtyTv?.setTextColor(textColor)
         }
 
         if(weather.wind != null) {
             val windTv = activity?.findViewById<TextView>(R.id.weather_wind_tv)
-            windTv?.text = "${weather.wind?.speed?.toString()}mph"
+            val wind = "${weather.wind?.speed?.toString()}mph"
+            windTv?.text = wind
             windTv?.setTextColor(textColor)
         }
     }

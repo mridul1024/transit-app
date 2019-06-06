@@ -2,8 +2,10 @@ package com.zuk0.gaijinsmash.riderz;
 
 import android.app.Activity;
 import android.app.Application;
+import android.os.Parcelable;
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
 import com.squareup.leakcanary.LeakCanary;
 import com.zuk0.gaijinsmash.riderz.di.component.DaggerAppComponent;
 
@@ -17,6 +19,8 @@ import dagger.android.HasActivityInjector;
  */
 public class RiderzApplication extends Application implements HasActivityInjector{
 
+    private static final boolean ENABLE_LEAKCANARY = false;
+
     @Inject
     DispatchingAndroidInjector<Activity> activityDispatchingAndroidInjector;
 
@@ -29,10 +33,15 @@ public class RiderzApplication extends Application implements HasActivityInjecto
                 .build()
                 .inject(this);
         Log.i("onCreate", "app component initialized");
-        if(LeakCanary.isInAnalyzerProcess(this)) {
-            return;
+
+        if(ENABLE_LEAKCANARY) {
+            if(LeakCanary.isInAnalyzerProcess(this)) {
+                return;
+            }
+            LeakCanary.install(this);
+        } else {
+            Logger.d("LeakCanary is disabled");
         }
-        LeakCanary.install(this);
     }
 
     @Override

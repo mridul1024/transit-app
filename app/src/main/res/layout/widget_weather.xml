@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_margin="10dp"
     android:padding="5dp"
@@ -14,8 +15,10 @@
         android:fontFamily="@font/montserrat"
         android:gravity="center"
         android:textSize="18sp"
+        android:textAlignment="viewEnd"
         android:text="@string/stationInfo_stationCity"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:ignore="RtlCompat" />
 
     <TextView
         android:id="@+id/weather_temp_tv"
@@ -24,6 +27,7 @@
         android:fontFamily="@font/montserrat"
         android:gravity="center"
         android:textSize="18sp"
+        android:textAlignment="viewEnd"
         android:text="temp"
         android:textStyle="bold" />
 
@@ -34,6 +38,7 @@
         android:fontFamily="@font/montserrat"
         android:gravity="center"
         android:textSize="18sp"
+        android:textAlignment="viewEnd"
         android:text="humidity"
         android:textStyle="bold" />
 
@@ -44,6 +49,7 @@
         android:fontFamily="@font/montserrat"
         android:gravity="center"
         android:textSize="18sp"
+        android:textAlignment="viewEnd"
         android:text="wind"
         android:textStyle="bold" />
 </LinearLayout>

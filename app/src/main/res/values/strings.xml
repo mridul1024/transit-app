@@ -165,14 +165,14 @@
 
     <!-- Permissions -->
 
+    <!-- Estimates (ETD) -->
+    <string name="etd_timeImage_description">Time</string>
+
     <!-- Errors -->
     <string name="error_form_completion">Please input all fields</string>
     <string name="error_form_completion2">You\'re going nowhere! Please try again.</string>
     <string name="error_try_again">Sorry! Something went wrong. Please try again.</string>
-
-    <!-- Alert Dialog -->
-    <string name="alert_dialog_no">No</string>
-    <string name="alert_dialog_yes">Yes</string>
+    <string name="error_station_not_found">The station you selected was not found. Please try again.</string>
 
     <!-- Preference Screen -->
     <string name="preference_checkbox_title">24 Hour Format</string>
@@ -197,39 +197,56 @@
     <string name="priority_deleted">Removed as a priority</string>
 
     <string name="real_time_estimates">Real Time Estimates</string>
-    <string name="error_station_not_found">The station you selected was not found. Please try again.</string>
     <string name="now">now</string>
     <string name="minutes">min</string>
     <string name="root_title">Settings</string>
     <string name="preference_checkbox_time_summary">View time in 12 or 24 hour format</string>
-    <string name="alert_dialog_confirmation">Are you sure you want to remove this favorite?</string>
-    <string name="alert_dialog_remove_favorite_title">Remove Favorite</string>
-    <string name="trip_transfer">Transfer</string>
+
     <string name="gps_permission_alert">Location services is not enabled. Do you want to turn it on?</string>
-    <string name="alert_dialog_gpsMarker">Do you want to find a Bart Schedule to this location?</string>
-    <string name="favorite_reverse">Reverse</string>
-    <string name="alert_dialog_cancel">Cancel</string>
-    <string name="alert_dialog_continue">Continue</string>
+
     <string name="googlemap_dialog_prompt">If the station shown below is not convenient, please choose a new station from the dropdown menu and then press continue.</string>
     <string name="googleMap_dialog_title">Please confirm the trip schedule.</string>
-    <string name="list_row_departure">Departure Estimate:</string>
-    <string name="seconds">seconds</string>
-    <string name="leaving">Leaving!</string>
+
+    <string name="favorite_reverse">Reverse</string>
+    <string name="create_favorite">Create Favorite</string>
     <string name="menu_favorites">Favorites</string>
     <string name="menu_trip">Schedule</string>
     <string name="menu_map">Map</string>
     <string name="menu_home">Home</string>
+
+    <!-- Alert Dialog -->
+    <string name="alert_dialog_no">No</string>
+    <string name="alert_dialog_yes">Yes</string>
     <string name="alert_dialog_go">Go</string>
-    <string name="etd_timeImage_description">Time</string>
-    <string name="gone">Gone!</string>
-    <string name="current_news">News - Beginning on February 11, 2019, BART\'s start of service will shift from 4 am to 5 am systemwide for a massive project that will seismically retrofit the Transbay Tube.</string>
+    <string name="alert_dialog_confirmation">Are you sure you want to remove this favorite?</string>
+    <string name="alert_dialog_remove_favorite_title">Remove Favorite</string>
+    <string name="alert_dialog_gpsMarker">Do you want to find a Bart Schedule to this location?</string>
+    <string name="alert_dialog_cancel">Cancel</string>
+    <string name="alert_dialog_continue">Continue</string>
     <string name="alert_dialog_ok">OK</string>
-    <string name="developer_update">Developer Update</string>
-    <string name="app_crash">BART\'s system update  on February 11th, caused a few bugs. We have since fixed them and apologize for any inconveniences.</string>
+
+    <!-- Train Messages -->
+    <string name="trip_transfer">Transfer</string>
+    <string name="gone">Gone!</string>
+    <string name="list_row_departure">Departure Estimate:</string>
+    <string name="seconds">seconds</string>
+    <string name="leaving">Leaving!</string>
     <string name="departing_from">Departing From:</string>
     <string name="direction">Direction:</string>
     <string name="arriving_at">Arriving at:</string>
+
+    <!-- news and updates -->
+    <string name="current_news">News - Beginning on February 11, 2019, BART\'s start of service will shift from 4 am to 5 am system wide for a massive project that will seismically retrofit the Transbay Tube.</string>
+    <string name="developer_update">Developer Update</string>
+    <string name="app_crash">BART\'s system update  on February 11th, caused a few bugs. We have since fixed them and apologize for any inconveniences.</string>
+
+    <!-- Call to action -->
     <string name="callToAction">You currently don\'t have any favorite routes. Plan a trip and then add to your favorites now!</string>
     <string name="callToAction_summary">Hey! You currently don\'t have any favorite routes. You can start by creating one now below.</string>
-    <string name="create_favorite">Create Favorite</string>
+
+
+    <!-- Weather -->
+    <string name="weather_temp_metric">C</string>
+    <string name="weather_temp_imperial">F</string>
+    <string name="advisory_icon_description">Advisory Icon</string>
 </resources>

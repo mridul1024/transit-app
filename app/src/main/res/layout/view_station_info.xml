@@ -38,7 +38,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:text="@string/stationInfo_stationName"
-                        android:textColor="@color/mp_primary_text" />
+                        android:textColor="@color/primaryTextColor" />
 
                     <TextView
                         android:id="@+id/stationInfo_address_textView"
@@ -84,7 +84,7 @@
                         android:layout_below="@+id/stationInfo_crossStreet_textView"
                         android:autoLink="web"
                         android:text="@string/stationInfo_stationLink"
-                        android:textColor="@color/mp_primary" />
+                        android:textColor="@color/primaryLightColor" />
 
                     <TextView
                         android:id="@+id/stationInfo_intro_textView"
@@ -103,7 +103,7 @@
                         android:layout_below="@id/stationInfo_intro_textView"
                         android:layout_marginTop="10dp"
                         android:text="@string/stationInfo_attractionTitle"
-                        android:textColor="@color/mp_primary_text" />
+                        android:textColor="@color/primaryTextColor" />
 
                     <TextView
                         android:id="@+id/stationInfo_attraction_textView"
@@ -121,7 +121,7 @@
                         android:layout_below="@id/stationInfo_attraction_textView"
                         android:layout_marginTop="10dp"
                         android:text="@string/stationInfo_shoppingTitle"
-                        android:textColor="@color/mp_primary_text" />
+                        android:textColor="@color/primaryTextColor" />
 
                     <TextView
                         android:id="@+id/stationInfo_shopping_textView"
@@ -139,7 +139,7 @@
                         android:layout_below="@id/stationInfo_shopping_textView"
                         android:layout_marginTop="10dp"
                         android:text="@string/stationInfo_foodTitle"
-                        android:textColor="@color/mp_primary_text" />
+                        android:textColor="@color/primaryTextColor" />
 
                     <TextView
                         android:id="@+id/stationInfo_food_textView"

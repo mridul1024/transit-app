@@ -71,9 +71,9 @@ public class AlertDialogUtils {
                 .setNegativeButton(context.getResources().getString(R.string.alert_dialog_cancel), (dialog, which) -> dialog.cancel());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.mp_primary_dark));
+        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.primaryDarkColor));
         alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundColor(android.R.attr.selectableItemBackground);
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.mp_primary_dark));
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.primaryDarkColor));
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(android.R.attr.selectableItemBackground);
     }
 }

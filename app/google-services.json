@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "998850526996",
+    "firebase_url": "https://quixotic-hash-185904.firebaseio.com",
+    "project_id": "quixotic-hash-185904",
+    "storage_bucket": "quixotic-hash-185904.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998850526996:android:2e5784d379c81163",
+        "android_client_info": {
+          "package_name": "com.zuk0.gaijinsmash.riderz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998850526996-qiotf1h4bfdjv05etqo2145hf1ebju6a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFpHFdepqM1xqziwqe5sj40lMvIvIJqh8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998850526996-qiotf1h4bfdjv05etqo2145hf1ebju6a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -57,7 +57,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:background="@color/mp_primary_dark"
+                            android:background="@color/primaryDarkColor"
                             android:contentDescription="@string/contentDesc_search"
                             android:elevation="1dp"
                             android:src="@drawable/ic_search_white_24dp" />

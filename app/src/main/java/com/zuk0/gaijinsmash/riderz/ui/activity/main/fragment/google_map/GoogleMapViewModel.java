@@ -67,7 +67,7 @@ class GoogleMapViewModel extends AndroidViewModel {
         map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.getUiSettings().setZoomGesturesEnabled(true);
-        map.setMinZoomPreference(9f);
+        map.setMinZoomPreference(11f);
     }
 
     void initBartMap(Context context, ImageView imageView) {
@@ -85,6 +85,7 @@ class GoogleMapViewModel extends AndroidViewModel {
                 .into(imageView);
     }
 
+    //todo: refactor as this is inside  another class now.
     Station findNearestMarker(GoogleMap map, LatLng destinationCoordinates, String destinationStation, List<Station> list) {
         // get user location
         GpsUtils gps = new GpsUtils(getApplication());
@@ -100,7 +101,7 @@ class GoogleMapViewModel extends AndroidViewModel {
                 double stationLatitude = station.getLatitude();
                 double stationLongitude = station.getLongitude();
 
-                int distanceBetween = HaversineFormulaUtils.calculateDistanceInKilometer(userLocation.getLatitude(), userLocation.getLongitude(),
+                int distanceBetween = HaversineFormulaUtils.INSTANCE.calculateDistanceInKilometer(userLocation.getLatitude(), userLocation.getLongitude(),
                                                                     stationLatitude, stationLongitude);
                 if(closestDistance == 0) {
                     closestDistance = distanceBetween;

@@ -11,7 +11,7 @@ import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
 import dagger.android.support.AndroidSupportInjection
 
-abstract class BaseFragment: Fragment() {
+abstract class BaseFragment(inflater: LayoutInflater, view_trip: Int, container: ViewGroup, attachToParent: Boolean) : Fragment() {
 
     // ---------------------------------------------------------------------------------------------
     // Lifecycle Events
