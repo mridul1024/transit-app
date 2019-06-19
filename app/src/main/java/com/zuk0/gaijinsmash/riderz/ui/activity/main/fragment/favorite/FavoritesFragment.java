@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.databinding.ViewFavoritesBinding;
+import com.zuk0.gaijinsmash.riderz.databinding.FragmentFavoritesBinding;
 
 import javax.inject.Inject;
 
@@ -23,7 +23,7 @@ public class FavoritesFragment extends Fragment {
     @Inject
     FavoritesViewModelFactory mFavoritesViewModelFactory;
 
-    private ViewFavoritesBinding mDataBinding;
+    private FragmentFavoritesBinding mDataBinding;
     private FavoritesViewModel mViewModel;
 
     @Override

@@ -43,8 +43,8 @@ public class HomeFragmentTest {
 
     @Test
     public void TestHomeView() {
-        onView(withId(R.id.fragment_home_container)).check(matches((isDisplayed())));
-        onView(withId(R.id.home_banner_imageView)).check(matches((isDisplayed())));
+        onView(withId(R.id.main_nested_scrollView)).check(matches((isDisplayed())));
+        onView(withId(R.id.main_banner_imageView)).check(matches((isDisplayed())));
         //onView(withId(R.id.home_bsa_listView)).check(matches((isDisplayed())));
     }
 }

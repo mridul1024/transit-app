@@ -21,7 +21,7 @@ import javax.inject.Singleton
 class WeatherRepository
 @Inject constructor(val service: WeatherService) {
 
-    //todo get user location - check permissions
+    // todo get user location - check permissions
     // get user settings - use user location or use the users preferred location.
     // get user location based on lat/long,
 
@@ -46,7 +46,7 @@ class WeatherRepository
         return data
     }
 
-    fun getWeather(zipcode: Int) : LiveData<LiveDataWrapper<WeatherResponse>> {
+    fun getWeatherByZipcode(zipcode: Int) : LiveData<LiveDataWrapper<WeatherResponse>> {
         val data = MutableLiveData<LiveDataWrapper<WeatherResponse>>()
         service.getWeatherByZipCode(zipcode).enqueue(object: Callback<WeatherResponse> {
 

@@ -41,7 +41,7 @@ public class MainActivityTest {
 
     @Test
     public void bottomNavTest() {
-        onView(withId(R.id.bottom_navigation)).check(matches(isDisplayed()));
+        onView(withId(R.id.main_bottom_navigation)).check(matches(isDisplayed()));
     }
 
     @Test

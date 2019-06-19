@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.Bsa;
 import com.zuk0.gaijinsmash.riderz.databinding.ListRowAdvisoryBinding;
@@ -46,6 +47,9 @@ public class BsaRecyclerAdapter extends RecyclerView.Adapter<BsaRecyclerAdapter.
         }
         if(bsa.getType() == null) {
             holder.mAdvisoryBinding.bsaStationTextView.setVisibility(View.GONE);
+        } else if(bsa.getType().equalsIgnoreCase("DELAY")) {
+            holder.mAdvisoryBinding.bsaStatusImageView.setImageDrawable(holder.mAdvisoryBinding.getRoot().getContext().getDrawable(R.drawable.ic_error_outline_black_24dp));
+            holder.mAdvisoryBinding.bsaStatusImageView.setColorFilter(R.color.colorTextAlert);
         }
 
     }

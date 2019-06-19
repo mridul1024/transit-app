@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         navController = findNavController(this, R.id.nav_host_fragment)
-        setupWithNavController(bottom_navigation, navController)
+        setupWithNavController(main_bottom_navigation, navController)
         setupWithNavController(nav_view, navController)
         mAppBarConfiguration = AppBarConfiguration.Builder(setOf(R.id.homeFragment, R.id.googleMapFragment, R.id.tripFragment, R.id.favoritesFragment))
                 .setDrawerLayout(drawer_layout)
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun initPic() {
-        mViewModel.initPic(this, mViewModel.getHour(), home_banner_imageView)
+        mViewModel.initPic(this, mViewModel.getHour(), main_banner_imageView)
     }
 
     override fun onSupportNavigateUp() : Boolean {
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun handleBottomNavViewBehaviour() {
-        HideBottomViewOnScrollBehavior<BottomNavigationView>(this, null).slideUp(bottom_navigation)
+        HideBottomViewOnScrollBehavior<BottomNavigationView>(this, null).slideUp(main_bottom_navigation)
     }
     // ---------------------------------------------------------------------------------------------
     // Navigation Settings

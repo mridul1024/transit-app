@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.databinding.ViewBartMapBinding;
+import com.zuk0.gaijinsmash.riderz.databinding.FragmentBartMapBinding;
 
 import javax.inject.Inject;
 
@@ -19,7 +19,7 @@ import dagger.android.support.AndroidSupportInjection;
 
 public class BartMapFragment extends Fragment {
 
-    private ViewBartMapBinding mDataBinding;
+    private FragmentBartMapBinding mDataBinding;
 
     @Inject
     BartMapViewModelFactory mViewModelFactory;

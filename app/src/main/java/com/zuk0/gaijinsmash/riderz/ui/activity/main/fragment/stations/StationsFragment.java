@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.databinding.ViewStationBinding;
+import com.zuk0.gaijinsmash.riderz.databinding.FragmentStationBinding;
 
 import javax.inject.Inject;
 
@@ -26,7 +26,7 @@ public class StationsFragment extends Fragment {
     @Inject
     StationsViewModelFactory mStationsViewModelFactory;
 
-    private ViewStationBinding mDataBinding;
+    private FragmentStationBinding mDataBinding;
     private StationsViewModel mViewModel;
 
     @Override

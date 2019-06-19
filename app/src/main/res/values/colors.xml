@@ -12,14 +12,14 @@
     <color name="colorTextAlert">#ff0000</color>
 
     <!-- MaterialPallete.com -->
-    <color name="primaryColor">#1565c0</color>
-    <color name="primaryLightColor">#5e92f3</color>
-    <color name="primaryDarkColor">#003c8f</color>
-    <color name="secondaryColor">#d50000</color>
-    <color name="secondaryLightColor">#ff5131</color>
-    <color name="secondaryDarkColor">#9b0000</color>
+    <color name="primaryColor">#1a237e</color>
+    <color name="primaryLightColor">#534bae</color>
+    <color name="primaryDarkColor">#000051</color>
+    <color name="secondaryColor">#f4511e</color>
+    <color name="secondaryLightColor">#ff844c</color>
+    <color name="secondaryDarkColor">#b91400</color>
     <color name="primaryTextColor">#ffffff</color>
-    <color name="secondaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#000000</color>
 
     <!-- BART Line Colors -->
     <color name="bartRedLine">#ff0000</color>

@@ -42,7 +42,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.orhanobut.logger.Logger;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
-import com.zuk0.gaijinsmash.riderz.databinding.ViewGoogleMapBinding;
+import com.zuk0.gaijinsmash.riderz.databinding.FragmentGoogleMapBinding;
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment;
 import com.zuk0.gaijinsmash.riderz.utils.AlertDialogUtils;
 import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
@@ -62,7 +62,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
     @Inject
     GoogleMapViewModelFactory mViewModelFactory;
 
-    private ViewGoogleMapBinding mDataBinding;
+    private FragmentGoogleMapBinding mDataBinding;
     private MapView mMapView;
     private GoogleMapViewModel mViewModel;
     private List<Station> mStationList; //todo put in viewmodel
@@ -95,6 +95,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        initViewModel();
         if (mMapView != null)
             mMapView.onCreate(bundle);
         mScaleGestureDetector = new ScaleGestureDetector(getActivity(), new GoogleMapFragment.ScaleListener());
@@ -117,9 +118,9 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initViewModel();
         super.collapseAppBar(getActivity());
-        getLifecycle().addObserver(new GoogleMapObserver());
+        super.enableNestedScrolling(false);
+        getLifecycle().addObserver(new GoogleMapObserver()); //TODO
     }
 
     @Override
@@ -154,6 +155,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
         super.onDestroy();
         if (mMapView != null)
             mMapView.onDestroy();
+        super.enableNestedScrolling(true);
     }
 
     @Override
@@ -265,7 +267,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
         String message = getResources().getString(R.string.alert_dialog_gpsMarker);
         String yesAction = getResources().getString(R.string.alert_dialog_yes);
         Snackbar.make(parentView, message, Snackbar.LENGTH_LONG)
-                .setAnchorView(R.id.bottom_navigation)
+                .setAnchorView(R.id.main_bottom_navigation)
                 .setAction(yesAction, view -> {
                     if(GpsUtils.checkLocationPermission(getActivity())) {
                         Station station = mViewModel.findNearestMarker(map, position, destination, mStationList);
@@ -359,7 +361,8 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
                             .position(latLng)
                             .title(station.getName())
                             .snippet(station.getAddress())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_train)));
+                            //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                 }
             }
             mDataBinding.googleMapProgressBar.setVisibility(View.GONE);

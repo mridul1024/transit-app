@@ -5,9 +5,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.EtdDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.BartService;
+import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper;
 
 import java.util.concurrent.Executor;
 
@@ -33,19 +35,27 @@ public class EtdRepository {
         this.executor = executor;
     }
 
-    public LiveData<EtdXmlResponse> getEtd(String originAbbr) {
+    public LiveData<LiveDataWrapper<EtdXmlResponse>> getEtd(String originAbbr) {
         //todo: if cached != null, return cached
 
-        final MutableLiveData<EtdXmlResponse> data = new MutableLiveData<>();
+        final MutableLiveData<LiveDataWrapper<EtdXmlResponse>> data = new MutableLiveData<>();
         service.getEtd(originAbbr).enqueue(new Callback<EtdXmlResponse>() {
             @Override
             public void onResponse(@NonNull Call<EtdXmlResponse> call, @NonNull Response<EtdXmlResponse> response) {
-                data.postValue(response.body());
+                Logger.i(response.message());
+                LiveDataWrapper<EtdXmlResponse> res = LiveDataWrapper.success(response.body());
+                data.postValue(res);
+
+                if(response.code() == 502) {
+                    //todo handle bat gateway request
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<EtdXmlResponse> call, @NonNull Throwable t) {
                 Log.wtf("EtdRepository", t.getMessage());
+                LiveDataWrapper<EtdXmlResponse> res = LiveDataWrapper.error(null, t.getLocalizedMessage());
+                data.postValue(res);
             }
         });
         return data;

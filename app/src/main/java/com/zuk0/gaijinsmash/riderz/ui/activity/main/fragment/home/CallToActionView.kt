@@ -13,7 +13,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite
-import com.zuk0.gaijinsmash.riderz.databinding.CallToActionBinding
+import com.zuk0.gaijinsmash.riderz.databinding.StubCallToActionBinding
 import java.util.*
 
 class CallToActionView: View, LifecycleObserver {
@@ -22,7 +22,7 @@ class CallToActionView: View, LifecycleObserver {
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private val binding: CallToActionBinding
+    private val binding: StubCallToActionBinding
     private var spinnerAdapter: ArrayAdapter<String>
     private val stationsList: List<String>
 
@@ -33,7 +33,7 @@ class CallToActionView: View, LifecycleObserver {
 
     init {
         val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        binding = CallToActionBinding.inflate(inflater)
+        binding = StubCallToActionBinding.inflate(inflater) //todo verify
         stationsList = context.resources.getStringArray(R.array.stations_list).toList()
         spinnerAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, stationsList)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)

@@ -1,15 +1,17 @@
 <PreferenceScreen
+
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/root_title">
 
     <PreferenceCategory
+        android:backgroundTint="#00CF0808"
         android:title="@string/preference_category_title">
 
         <CheckBoxPreference
+            android:defaultValue="false"
             android:key="TIME_KEY"
-            android:title="@string/preference_checkbox_title"
             android:summary="@string/preference_checkbox_time_summary"
-            android:defaultValue="false"/>
+            android:title="@string/preference_checkbox_title" />
 
     </PreferenceCategory>
 
@@ -30,10 +32,14 @@
             android:title="Use your location?"
             android:summary="Default is yes. If you set a commute route, the "
             android:defaultValue="false" />
-        <CheckBoxPreference
-            android:key="USER"
-            android:title="Use BART station?"
-            android:summary="Default is No"
-            android:defaultValue="false" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="User Settings">
+        <SwitchPreference
+            android:key="USER_HAND_KEY"
+            android:title="Left or Right Handed?"
+            android:summary="Certain UI elements will be adjusted according to your preferred hand.">
+
+        </SwitchPreference>
     </PreferenceCategory>
 </PreferenceScreen>

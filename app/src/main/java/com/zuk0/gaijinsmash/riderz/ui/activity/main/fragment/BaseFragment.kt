@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.AppBarLayout
 import com.orhanobut.logger.Logger
@@ -82,9 +83,21 @@ abstract class BaseFragment : Fragment() {
     }
 
     fun collapseAppBar(activity: Activity?) {
-        if(activity != null) {
+        activity?.let {
             val appBarLayout: AppBarLayout = activity.findViewById(R.id.main_app_bar_layout)
             appBarLayout.setExpanded(false)
         }
+    }
+
+    fun expandAppBar(activity: Activity?) {
+        activity?.let {
+            val appBarLayout: AppBarLayout = activity.findViewById(R.id.main_app_bar_layout)
+            appBarLayout.setExpanded(true)
+        }
+    }
+
+    fun enableNestedScrolling(enable: Boolean) {
+        val nestedScrollView = activity?.findViewById<NestedScrollView>(R.id.main_nested_scrollView)
+        nestedScrollView?.isNestedScrollingEnabled = enable
     }
 }

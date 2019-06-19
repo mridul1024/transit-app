@@ -1,19 +1,13 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home
 
-import android.Manifest
-import android.app.Activity
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.room.Room
-import io.reactivex.Maybe
-
 import android.content.Context
 import android.location.Location
-import android.os.Build
 import android.util.Log
-
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.room.Room
 import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite
@@ -33,10 +27,10 @@ import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.WeatherRepository
 import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper
 import com.zuk0.gaijinsmash.riderz.utils.*
-
-import java.util.ArrayList
-import java.util.Objects
-
+import io.reactivex.Maybe
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -53,8 +47,15 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
     // STATE
     var isFavoriteAvailable = false
     var closestStation: Station? = null
-    var userLocation: Location? = null
-    lateinit var gpsUtils: GpsUtils //todo use dagger
+    val userLocation: Location? by lazy {
+        val gps = GpsUtils(mApplication)
+        gps.location
+    }
+
+    // List
+    var mInverseEstimateList: List<Estimate>? = null //todo refactor - put in viewmodel
+    var mFavoriteEstimateList: List<Estimate>? = null //todo refactor - put in viewmodel
+    var upcomingNearbyEstimateList: List<Estimate>? = null
 
     val bsaLiveData: LiveData<BsaXmlResponse>
         get() = mBsaRepository.bsa
@@ -66,25 +67,10 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
     /*
         TODO grab user input from the CREATE view and automatically refresh the homepage.
      */
-
-    internal//todo - abstract to repository
-    //if you have a commute route, get geoloc of destination
-    //else use user's current location
-    val userLocationLiveData: LiveData<Location>
-        get() {
-            val userLocationLiveData = MutableLiveData<Location>()
-            val userLocation: Location
-            val gps = GpsUtils(mApplication)
-            userLocation = gps.location
-            userLocationLiveData.postValue(userLocation)
-            return userLocationLiveData
-        }
-
     internal val isDaytime: Boolean
         get() = TimeDateUtils.isDaytime()
 
     init {
-
         initDb() // todo
     }
 
@@ -111,7 +97,7 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
         return context.resources.getString(R.string.last_update) + " " + initTime(is24HrTimeOn, time)
     }
 
-    internal fun getEtdLiveData(origin: String): LiveData<EtdXmlResponse> {
+    internal fun getEtdLiveData(origin: String): LiveData<LiveDataWrapper<EtdXmlResponse>> {
         val originAbbr = StationUtils.getAbbrFromStationName(origin)
         return mEtdRepository.getEtd(originAbbr)
     }
@@ -141,6 +127,11 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
                 StationUtils.getAbbrFromStationName(destination), "TODAY", "NOW")
     }
 
+    fun getLocalEtd() : LiveData<LiveDataWrapper<EtdXmlResponse>> {
+        //get local station
+        val localStation = getNearestStation(userLocation)
+        return mEtdRepository.getEtd(localStation?.abbr)
+    }
     /*
         For comparisons - make sure all train headers are abbreviated and capitalized
      */
@@ -158,6 +149,15 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
         return results
     }
 
+    fun getEstimatesFromEtd(etds: List<Etd>)  : List<Estimate>  {
+        val results = ArrayList<Estimate>()
+        for (etd in etds) {
+            val estimate = etd.estimateList[0]
+            results.add(estimate)
+        }
+        return results
+    }
+
     //F = 9/5 (K - 273) + 32
     internal fun kelvinToFahrenheit(temp: Double): Double {
         return 9f / 5f * (temp - 273) + 32
@@ -170,50 +170,31 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
 
     internal fun checkHolidaySchedule() {
         //TODO: push news to home fragment if it's a holiday
-    }
-
-    internal fun getUserLocation(context: Activity) {
-        try {
-            if (GpsUtils.checkLocationPermission(context)) {
-                gpsUtils = GpsUtils(context)
-                userLocation = gpsUtils.location
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    context.requestPermissions(
-                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                            LOCATION_PERMISSON_REQUEST_CODE)
-                } else {
-                    // TODO handle request for api < 23
-                }
-            }
-        } catch (e: SecurityException) {
-            Logger.e(e.localizedMessage)
-        }
-
+        //https://www.bart.gov/guide/holidays
+        //xmas, nye,
     }
 
     //get user location, use haversine formula to get nearest station.
-    internal fun getNearestStation(userLat: Double, userLong: Double,
-                                   stationLat: Double, stationLong: Double) : Station? {
+    internal fun getNearestStation(userLocation: Location?) : Station? {
 
         if(closestStation != null)
             return closestStation
 
-        gpsUtils = GpsUtils(mApplication)
-        userLocation = gpsUtils.location
-
-        var closestDistance = 0
+        if(userLocation == null)
+            return null
 
         //need station list.
-        val list = getStations()
-        if(userLocation != null) {
+        runBlocking {
+            var closestDistance = 0
+            val list = getStations()
+
             for (station in list) {
                 val stationLat = station.latitude
                 val stationLong = station.longitude
 
                 val distanceBetween = HaversineFormulaUtils.calculateDistanceInKilometer(
-                        userLocation!!.latitude,
-                        userLocation!!.longitude,
+                        userLocation.latitude,
+                        userLocation.longitude,
                         stationLat,
                         stationLong)
 
@@ -227,19 +208,25 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
                     }
                 }
             }
-            //TODO use closest station to fetch  general directions for upcoming trains
-            Logger.i("closest station: ${closestStation?.name}")
-            //TODO if user has a commute/favorite route
         }
+        Logger.i("closest station: ${closestStation?.name}")
         return closestStation
     }
 
-    private fun getStations() : List<Station> { //todo
-        return StationDatabase.getRoomDB(mApplication).stationDAO.allStations
+    private suspend fun getStations() : List<Station> {
+        var list = emptyList<Station>()
+        withContext(viewModelScope.coroutineContext) {
+            list = StationDatabase.getRoomDB(mApplication).stationDAO.allStations
+        }
+        return list
     }
 
-    internal fun getWeather(zipcode: Int): LiveData<LiveDataWrapper<WeatherResponse>> {
-        return mWeatherRepository.getWeather(zipcode)
+
+    internal fun getWeather(): LiveData<LiveDataWrapper<WeatherResponse>> {
+        userLocation?.let {
+            return mWeatherRepository.getWeatherByGeoloc(it.latitude, it.longitude)
+        }
+        return mWeatherRepository.getWeatherByZipcode(94108) //default if userLocation is unavailable
     }
 
     override fun onCleared() {

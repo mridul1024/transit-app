@@ -41,8 +41,8 @@ android {
         unitTests.returnDefaultValues = true
     }
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility var1
+        sourceCompatibility var
     }
     dataBinding {
         enabled true
@@ -53,19 +53,28 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    //ktx
+    def ktx_version = "2.2.0-alpha01"
+    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$ktx_version"
+    api 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-alpha01'
+
     // UI
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.material:material:1.1.0-alpha07'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
-    implementation 'androidx.core:core:1.2.0-alpha01'
+    implementation 'androidx.core:core:1.2.0-alpha02'
     implementation 'androidx.preference:preference:1.1.0-beta01'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.0.0'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     kapt 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'com.mikhaellopez:circularimageview:4.0.0'
+
 
     // Dagger 2
     def dagger_version = "2.22.1"
@@ -97,9 +106,9 @@ dependencies {
     testImplementation 'androidx.arch.core:core-testing:2.0.1'
 
     // Room Database
-    implementation 'androidx.room:room-runtime:2.1.0-rc01'
-    kapt 'androidx.room:room-compiler:2.1.0-rc01'
-    testImplementation 'androidx.room:room-testing:2.1.0-rc01'
+    implementation 'androidx.room:room-runtime:2.1.0'
+    kapt 'androidx.room:room-compiler:2.1.0'
+    testImplementation 'androidx.room:room-testing:2.1.0'
     implementation 'android.arch.persistence.room:rxjava2:1.1.1'
 
     // Test framework

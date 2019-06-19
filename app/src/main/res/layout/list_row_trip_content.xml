@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/trip_leg_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:elevation="1dp"
+        android:padding="2dp"
+        app:cardCornerRadius="@dimen/riderz_cardView_cornerRadius">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ViewStub
+                android:id="@+id/list_row_transfer_stub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout="@layout/stub_transfer_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/trip_depart_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/bartYellowLine"
+                android:contentDescription="@string/description_train_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/trip_leg_departTime"
+                app:layout_constraintStart_toEndOf="@+id/trip_leg_departTime"
+                app:layout_constraintTop_toTopOf="@+id/trip_leg_departTime"
+                app:srcCompat="@drawable/ic_menu_station" />
+
+            <ImageView
+                android:id="@+id/trip_arrival_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/description_train_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/trip_leg_arrivalTime"
+                app:layout_constraintEnd_toEndOf="@+id/trip_leg_line"
+                app:layout_constraintStart_toStartOf="@+id/trip_leg_line"
+                app:layout_constraintTop_toTopOf="@+id/trip_leg_arrivalTime"
+                app:srcCompat="@drawable/ic_menu_station" />
+
+            <TextView
+                android:id="@+id/trip_leg_line"
+                android:layout_width="6dp"
+                android:layout_height="50dp"
+                android:background="@color/bartDefault"
+                app:layout_constraintBottom_toTopOf="@+id/trip_arrival_icon"
+                app:layout_constraintEnd_toEndOf="@+id/trip_depart_icon"
+                app:layout_constraintStart_toStartOf="@+id/trip_depart_icon"
+                app:layout_constraintTop_toBottomOf="@+id/trip_depart_icon" />
+
+            <TextView
+                android:id="@+id/trip_leg_departStation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/departing_from"
+                app:layout_constraintBottom_toBottomOf="@+id/trip_depart_icon"
+                app:layout_constraintStart_toEndOf="@+id/trip_depart_icon"
+                app:layout_constraintTop_toTopOf="@+id/trip_depart_icon" />
+
+            <TextView
+                android:id="@+id/trip_leg_arrivalStation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/arrival_station"
+                app:layout_constraintBottom_toBottomOf="@+id/trip_arrival_icon"
+                app:layout_constraintStart_toEndOf="@+id/trip_arrival_icon"
+                app:layout_constraintTop_toTopOf="@+id/trip_arrival_icon" />
+
+            <TextView
+                android:id="@+id/trip_leg_departTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="8:30pm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/trip_leg_arrivalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="8:40pm"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/trip_arrival_icon"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

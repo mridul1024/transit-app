@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
-import com.zuk0.gaijinsmash.riderz.databinding.ViewStationInfoBinding;
+import com.zuk0.gaijinsmash.riderz.databinding.FragmentStationInfoBinding;
 
 import javax.inject.Inject;
 
@@ -29,7 +29,7 @@ public class StationInfoFragment extends Fragment {
     @Inject
     StationInfoViewModelFactory mStationInfoViewModelFactory;
 
-    private ViewStationInfoBinding mDataBinding;
+    private FragmentStationInfoBinding mDataBinding;
     private StationInfoViewModel mViewModel;
     private String mStationAbbr;
     private Station mStationObject;

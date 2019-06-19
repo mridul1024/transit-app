@@ -39,7 +39,7 @@ public class GeneralFragmentTest {
 
     @Test
     public void TestBottomNavigation() {
-        onView(withId(R.id.bottom_navigation))
+        onView(withId(R.id.main_bottom_navigation))
                 .check(matches((isDisplayed())));
     }
 

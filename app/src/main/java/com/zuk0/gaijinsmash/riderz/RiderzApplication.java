@@ -50,6 +50,6 @@ public class RiderzApplication extends Application implements HasActivityInjecto
     }
 
     private void initData() {
-
+        //todo
     }
 }

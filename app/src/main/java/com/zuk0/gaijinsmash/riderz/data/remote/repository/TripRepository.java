@@ -56,7 +56,7 @@ public class TripRepository {
             public void onFailure(@NonNull Call<TripJsonResponse> call, @NonNull Throwable t) {
                 Log.wtf("onFailure", "trip: " + t.getMessage());
                 LiveDataWrapper<TripJsonResponse> res = LiveDataWrapper.error(null, t.getMessage());
-                data.setValue(res);
+                data.postValue(res);
             }
         });
         return data;

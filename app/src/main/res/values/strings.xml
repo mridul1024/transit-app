@@ -249,4 +249,8 @@
     <string name="weather_temp_metric">C</string>
     <string name="weather_temp_imperial">F</string>
     <string name="advisory_icon_description">Advisory Icon</string>
+    <string name="description_train_icon">Picture of a train</string>
+    <string name="fab_label">WTF</string>
+    <string name="button_next">Next</string>
+    <string name="button_search">Search</string>
 </resources>
