@@ -26,17 +26,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
                     android:ems="10"
+                    android:textColor="@color/secondaryDarkColor"
+                    android:textColorLink="@color/bartYellowLine"
+                    android:textColorHighlight="@color/bartBlueLine"
                     android:hint="@string/departure_station"
                     android:paddingTop="20dp"
+                    android:paddingStart="5dp"
                     android:maxLines="1"
                     android:inputType="text"
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/station_spinner1"
-                android:layout_gravity="center_vertical"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:spinnerMode="dropdown" />
         </LinearLayout>
 
         <LinearLayout
@@ -54,18 +60,21 @@
                     android:id="@+id/trip_arrival_autoCompleteTextView"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
+                    android:textColor="@color/secondaryDarkColor"
                     android:ems="10"
+                    android:paddingStart="5dp"
                     android:paddingTop="20dp"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:inputType="text"
                     android:hint="@string/arrival_station" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <Spinner
                 android:id="@+id/station_spinner2"
-                android:layout_gravity="center_vertical"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
         </LinearLayout>
 
         <LinearLayout
@@ -86,6 +95,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="@string/date_hint"
+                    android:textColor="@color/secondaryDarkColor"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:inputType="date"
@@ -102,6 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:textColor="@color/secondaryDarkColor"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:hint="@string/time_hint"

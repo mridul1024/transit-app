@@ -9,7 +9,7 @@ public abstract class AbstractLifecycleOwner<T> implements LifecycleOwner {
 
     private LifecycleRegistry lifecycleRegistry;
 
-    public AbstractLifecycleOwner(AbstractLifecycleObserver observer) {
+    public AbstractLifecycleOwner(LifeCycleObserverContract observer) {
         lifecycleRegistry = new LifecycleRegistry(this);
         getLifecycle().addObserver(observer);
     }

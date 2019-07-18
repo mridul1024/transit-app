@@ -67,7 +67,7 @@
         android:id="@+id/stationsFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.stations.StationsFragment"
         android:label="BART Stations"
-        tools:layout="@layout/fragment_station" >
+        tools:layout="@layout/fragment_stations" >
         <action
             android:id="@+id/action_stationsFragment_to_stationInfoFragment"
             app:destination="@id/stationInfoFragment" />

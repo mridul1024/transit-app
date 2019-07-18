@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -57,7 +57,6 @@
                         <include layout="@layout/widget_weather" />
 
                     </FrameLayout>
-
                     <androidx.appcompat.widget.Toolbar
                         android:id="@+id/toolbar"
                         android:layout_width="match_parent"
@@ -92,13 +91,13 @@
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 style="@style/Widget.MaterialComponents.FloatingActionButton"
                 android:id="@+id/main_fab"
-                android:layout_margin="8dp"
-                android:layout_marginBottom="50dp"
-                app:layout_anchor="@id/main_nested_scrollView"
-                app:layout_anchorGravity="bottom"
+                android:src="@drawable/ic_train_24dp"
+                app:rippleColor="@color/secondaryColor"
+                android:layout_gravity="center|bottom"
+                android:layout_marginBottom="80dp"
+                android:layout_marginEnd="0dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/main_bottom_navigation"
@@ -111,10 +110,7 @@
                 android:background="@color/white"
                 app:itemIconTint="@drawable/nav_item_color_state"
                 app:itemTextColor="@drawable/nav_item_color_state"
-                app:menu="@menu/bottom_nav_menu">
-
-            </com.google.android.material.bottomnavigation.BottomNavigationView>
-
+                app:menu="@menu/bottom_nav_menu" />
 
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

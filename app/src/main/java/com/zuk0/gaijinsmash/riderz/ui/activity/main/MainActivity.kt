@@ -1,12 +1,14 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.main
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
@@ -20,6 +22,7 @@ import com.google.android.material.navigation.NavigationView
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
+import com.zuk0.gaijinsmash.riderz.databinding.MainActivityBinding
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -35,6 +38,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return fragmentInjector
     }
 
+
+    private lateinit var binding: MainActivityBinding
     private lateinit var mAppBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
     private val mViewModel by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java)}
@@ -45,8 +50,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidInjection.inject(this)
+        binding = DataBindingUtil.setContentView(this, R.layout.main_activity)
         Logger.addLogAdapter(AndroidLogAdapter())
-        setContentView(R.layout.main_activity)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -94,6 +99,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun handleBottomNavViewBehaviour() {
         HideBottomViewOnScrollBehavior<BottomNavigationView>(this, null).slideUp(main_bottom_navigation)
     }
+
+    private fun initFab() {
+        binding.mainFab.setOnClickListener {
+            //todo
+
+        }
+    }
+
     // ---------------------------------------------------------------------------------------------
     // Navigation Settings
     // ---------------------------------------------------------------------------------------------
@@ -115,6 +128,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         handleBottomNavViewBehaviour()
         return true
     }
+
+    //TODO check if bottom nav is hidden, and show on new transitions
 }
 
 

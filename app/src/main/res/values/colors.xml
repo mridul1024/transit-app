@@ -31,5 +31,8 @@
     <color name="bartDefault">#08000000</color>
     <color name="bartPurpleLine">#c463c5</color>
     <color name="bartWhiteLine">#ffffff</color>
+    <color name="daytime_bg">#95E2FF</color>
+    <color name="dusktime_bg">#DB9B11</color>
+    <color name="nighttime_bg">#080A50</color>
 
 </resources>

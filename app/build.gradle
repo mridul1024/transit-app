@@ -25,6 +25,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'String', "BartApiKey", RIDERZ_BART_API_KEY
             buildConfigField 'String', "OpenWeatherApiKey", RIDERZ_WEATHER_API_KEY
+            //ext.enableCrashlytics = false
         }
         release {
             minifyEnabled true

@@ -1,57 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="2dp"
         android:layout_margin="3dp"
-        app:cardCornerRadius="2dp">
+        app:cardCornerRadius="@dimen/riderz_cardView_cornerRadius">
 
-        <RelativeLayout
-            android:orientation="vertical"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/primaryColor"
+            android:orientation="vertical"
             android:paddingStart="2dp"
-            android:paddingEnd="2dp"
             android:paddingTop="5dp"
+            android:paddingEnd="2dp"
             android:paddingBottom="5dp">
 
             <!-- Left Side of Row -->
-            <LinearLayout
+            <!-- Station Name -->
+            <TextView
+                android:id="@+id/stationName_textView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <!-- Station Name -->
-                <TextView
-                    android:id="@+id/stationName_textView"
-                    android:textColor="@color/black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
 
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="300dp"
+                android:text="station name"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!-- Station Abbr -->
+            <!-- This is a hidden attritubte to easily fetch the abbr -->
+
             <TextView
                 android:id="@+id/stationAbbr_textView"
-                android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <!-- Station Address -->
             <TextView
                 android:id="@+id/stationAddress_textView"
-                android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="address"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/stationName_textView" />
+
             <!-- Station City -->
             <TextView
                 android:id="@+id/stationCity_textView"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/stationAddress_textView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/stationAddress_textView"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="city"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/stationAddress_textView"
+                app:layout_constraintTop_toBottomOf="@+id/stationAddress_textView"
+                app:layout_constraintVertical_bias="0.0" />
 
-        </RelativeLayout>
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/routeChipGroup"
+                android:layout_width="266dp"
+                android:layout_height="29dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.534"
+                app:layout_constraintStart_toEndOf="@+id/stationAddress_textView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 

@@ -2,6 +2,7 @@ package com.zuk0.gaijinsmash.riderz.ui.activity.main
 
 import android.content.Context
 import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
 import com.zuk0.gaijinsmash.riderz.R
@@ -16,20 +17,17 @@ class MainViewModel: ViewModel() {
     }
 
     internal fun initPic(context: Context, hour: Int, imageView: ImageView) {
+        Glide.with(context)
+                .load(R.drawable.sf_skyline)
+                .into(imageView)
         if (hour < 6 || hour >= 21) {
             // show night picture
-            Glide.with(context)
-                    .load(R.drawable.sf_night)
-                    .into(imageView)
+            imageView.setBackgroundColor(ResourcesCompat.getColor(context.resources, R.color.nighttime_bg, context.theme))
         } else if (hour >= 17) {
             // show dusk picture
-            Glide.with(context)
-                    .load(R.drawable.sf_dusk)
-                    .into(imageView)
+            imageView.setBackgroundColor(ResourcesCompat.getColor(context.resources, R.color.dusktime_bg, context.theme))
         } else {
-            Glide.with(context)
-                    .load(R.drawable.sf_day)
-                    .into(imageView)
+            imageView.setBackgroundColor(ResourcesCompat.getColor(context.resources, R.color.daytime_bg, context.theme))
         }
     }
 }

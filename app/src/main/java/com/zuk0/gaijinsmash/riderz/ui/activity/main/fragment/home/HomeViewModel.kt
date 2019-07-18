@@ -4,9 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.location.Location
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.room.Room
 import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
@@ -28,11 +26,12 @@ import com.zuk0.gaijinsmash.riderz.data.remote.repository.WeatherRepository
 import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper
 import com.zuk0.gaijinsmash.riderz.utils.*
 import io.reactivex.Maybe
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import org.simpleframework.xml.transform.Transform
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.CoroutineContext
 
 @Singleton
 class HomeViewModel @Inject
@@ -127,10 +126,14 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
                 StationUtils.getAbbrFromStationName(destination), "TODAY", "NOW")
     }
 
-    fun getLocalEtd() : LiveData<LiveDataWrapper<EtdXmlResponse>> {
-        //get local station
-        val localStation = getNearestStation(userLocation)
-        return mEtdRepository.getEtd(localStation?.abbr)
+    private val mediatorLiveData = MediatorLiveData<Station>()
+
+    fun getLocalEtdMediator(): MediatorLiveData<Station> {
+        return mediatorLiveData
+    }
+
+    fun getLocalEtd(station: Station) : LiveData<LiveDataWrapper<EtdXmlResponse>> {
+        return mEtdRepository.getEtd(station.abbr)
     }
     /*
         For comparisons - make sure all train headers are abbreviated and capitalized
@@ -174,20 +177,21 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
         //xmas, nye,
     }
 
-    //get user location, use haversine formula to get nearest station.
-    internal fun getNearestStation(userLocation: Location?) : Station? {
+    val closestStationLiveData = MutableLiveData<Station>()
 
-        if(closestStation != null)
-            return closestStation
+    //get user location, use haversine formula to get nearest station.
+    fun getNearestStation(userLocation: Location?) : LiveData<Station> {
 
         if(userLocation == null)
-            return null
+            return closestStationLiveData
 
         //need station list.
-        runBlocking {
-            var closestDistance = 0
-            val list = getStations()
+        var closestDistance = 0
+        var list: List<Station>
 
+        Transformations.map(getStationsLiveData()) { stations ->
+            list = stations
+            //todo  optimize. save values in hashtable/graph for future reference?
             for (station in list) {
                 val stationLat = station.latitude
                 val stationLong = station.longitude
@@ -201,26 +205,20 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
                 if(closestDistance == 0) {
                     closestDistance = distanceBetween
                     closestStation = station
-                } else {
-                    if(closestDistance > distanceBetween) {
-                        closestDistance = distanceBetween
-                        closestStation = station
-                    }
+                } else if(closestDistance > distanceBetween) {
+                    closestDistance = distanceBetween
+                    closestStation = station
                 }
             }
+            Logger.i("closest station: ${closestStation?.name}")
+            closestStationLiveData.postValue(closestStation)
         }
-        Logger.i("closest station: ${closestStation?.name}")
-        return closestStation
+        return closestStationLiveData
     }
 
-    private suspend fun getStations() : List<Station> {
-        var list = emptyList<Station>()
-        withContext(viewModelScope.coroutineContext) {
-            list = StationDatabase.getRoomDB(mApplication).stationDAO.allStations
-        }
-        return list
+    private fun getStationsLiveData() : LiveData<List<Station>> {
+       return StationDatabase.getRoomDB(mApplication).stationDAO.allStations
     }
-
 
     internal fun getWeather(): LiveData<LiveDataWrapper<WeatherResponse>> {
         userLocation?.let {

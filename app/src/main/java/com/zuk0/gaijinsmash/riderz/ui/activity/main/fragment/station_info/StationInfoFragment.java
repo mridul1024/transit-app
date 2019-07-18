@@ -18,13 +18,14 @@ import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse;
 import com.zuk0.gaijinsmash.riderz.databinding.FragmentStationInfoBinding;
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment;
 
 import javax.inject.Inject;
 
 import androidx.navigation.fragment.NavHostFragment;
 import dagger.android.support.AndroidSupportInjection;
 
-public class StationInfoFragment extends Fragment {
+public class StationInfoFragment extends BaseFragment {
 
     @Inject
     StationInfoViewModelFactory mStationInfoViewModelFactory;
@@ -51,7 +52,6 @@ public class StationInfoFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.initDagger();
         this.initViewModel();
 
 
@@ -61,10 +61,6 @@ public class StationInfoFragment extends Fragment {
             mViewModel.initStation(getActivity(), mStationAbbr);
             initStationDetails(mViewModel.getStationLiveData());
         }
-    }
-
-    private void initDagger() {
-        AndroidSupportInjection.inject(this);
     }
 
     private void initViewModel() {

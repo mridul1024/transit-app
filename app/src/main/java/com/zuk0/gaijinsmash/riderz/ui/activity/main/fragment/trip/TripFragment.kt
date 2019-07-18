@@ -80,8 +80,8 @@ class TripFragment : BaseFragment() {
     }
 
     private fun initSpinnerAdapter() {
-        mSpinnerAdapter = ArrayAdapter(Objects.requireNonNull<FragmentActivity>(activity), android.R.layout.simple_spinner_dropdown_item, mViewModel.stationsList)
-        mSpinnerAdapter?.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
+        mSpinnerAdapter = ArrayAdapter(Objects.requireNonNull<FragmentActivity>(activity), R.layout.custom_dropdown_item, mViewModel.stationsList)
+        mSpinnerAdapter?.setDropDownViewResource(R.layout.custom_dropdown_item)
     }
 
     private fun initKeyboardSettings () {
@@ -129,6 +129,7 @@ class TripFragment : BaseFragment() {
     }
 
     private fun initDepartingSpinner(adapter: ArrayAdapter<String>?) {
+        mDataBinding.tripDepartureAutoCompleteTextView.setDropDownBackgroundResource(R.color.primaryDarkColor)
         mDataBinding.stationSpinner1.adapter = adapter
         mDataBinding.stationSpinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -143,6 +144,7 @@ class TripFragment : BaseFragment() {
     }
 
     private fun initArrivingSpinner(adapter: ArrayAdapter<String>?) {
+        mDataBinding.tripArrivalAutoCompleteTextView.setDropDownBackgroundResource(R.color.primaryDarkColor)
         mDataBinding.stationSpinner2.adapter = adapter
         mDataBinding.stationSpinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {

@@ -1,7 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_results
 
 import android.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.databinding.DataBindingUtil
 import android.os.Bundle
@@ -21,54 +20,48 @@ import com.zuk0.gaijinsmash.riderz.data.local.constants.StationList
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip
 import com.zuk0.gaijinsmash.riderz.databinding.FragmentResultsBinding
-import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.trip.TripFragment
 import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper
 
 import javax.inject.Inject
 
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment
-import dagger.android.support.AndroidSupportInjection
 
 class BartResultsFragment : BaseFragment() {
 
     @Inject
-    internal var mBartResultsViewModelFactory: BartResultsViewModelFactory? = null
-
-    private lateinit var mDataBinding: FragmentResultsBinding
+    lateinit var viewModelFactory: BartResultsViewModelFactory
+    private lateinit var binding: FragmentResultsBinding
     private lateinit var viewModel: BartResultsViewModel
-    private var mOrigin: String? = null
-    private var mDestination: String? = null
-    private var mDate: String? = null
-    private var mTime: String? = null
-    private var mFromRecyclerAdapter = false
 
     private var mFavoriteIcon: MenuItem? = null
     private var mFavoritedIcon: MenuItem? = null
-    private var mFavoriteObject: Favorite? = null
-    private var mTripList: List<Trip>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        initViewModel()
+        viewModel.handleIntentExtras(arguments)
+        viewModel.restoreState(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_results, container, false)
-        return mDataBinding!!.root
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_results, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initViewModel()
-        initBundleFromTripFragment()
-        if (mFromRecyclerAdapter) {
-            initTripCall(mOrigin, mDestination, mDate, mTime)
+
+        //todo consolidate
+        if (viewModel.isFromRecyclerAdapter) {
+            initStationsForTripCall(viewModel.origin, viewModel.destination, viewModel.date, viewModel.time)
         } else {
-            initStationsForTripCall(mOrigin, mDestination)
+            initStationsForTripCall(viewModel.origin, viewModel.destination, viewModel.date, viewModel.time)
         }
-        initFavoriteIcon(mOrigin, mDestination)
+        initFavoriteIcon(viewModel.origin, viewModel.destination)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -82,7 +75,7 @@ class BartResultsFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_favorite -> {
-                addFavorite(mFavoriteObject)
+                addFavorite(viewModel.mFavoriteObject)
                 return true
             }
             R.id.action_favorited -> {
@@ -94,75 +87,66 @@ class BartResultsFragment : BaseFragment() {
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(this, mBartResultsViewModelFactory).get(BartResultsViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(BartResultsViewModel::class.java)
     }
 
-    private fun initBundleFromTripFragment() { //TODO refactor
-        val bundle = arguments
-        if (bundle != null) {
-            mOrigin = bundle.getString(TripFragment.TripBundle.ORIGIN.value)
-            mDestination = bundle.getString(TripFragment.TripBundle.DESTINATION.value)
-            mDate = bundle.getString(TripFragment.TripBundle.DATE.value)
-            mTime = bundle.getString(TripFragment.TripBundle.TIME.value)
-            mFromRecyclerAdapter = bundle.getBoolean("FAVORITE_RECYCLER_ADAPTER")
-        }
-    }
+    private fun initStationsForTripCall(origin: String, destination: String, date: String, time: String) {
+        Logger.i("origin: $origin, destination: $destination, date: $date, time: $time")
 
-    //TODO
-    private fun initStationsForTripCall(origin: String?, destination: String?) {
-        val liveData = viewModel.getStationsFromDb(activity, origin, destination)
+        viewModel.loadTrip2(origin, destination, date, time).observe(this, Observer { result ->
+            result?.let {
+                when(it.status) {
+                    LiveDataWrapper.Status.SUCCESS -> {
+                        viewModel.mTripList = it.data.root.schedule.request.tripList
+                        initFavoriteObject(viewModel.origin, viewModel.destination, viewModel.mTripList)
+                        initRecyclerView(viewModel.mTripList)
+                    }
+                    LiveDataWrapper.Status.ERROR -> {
+                        Logger.wtf(it.msg)
+
+                    }
+                }
+            }
+        })
+
+/*
+        val liveData = viewModel.getStationsFromDb(origin, destination)
         liveData.observe(this, Observer { data ->
             val depart: String
             val arrive: String
-            if (data != null && data!!.size > 0) {
-                if (data!!.get(0).getName() == origin) {
-                    depart = data!!.get(0).getAbbr()
-                    arrive = data!!.get(1).getAbbr()
+            if (data != null && data.isNotEmpty()) {
+                if (data.get(0).name == origin) {
+                    depart = data.get(0).abbr
+                    arrive = data.get(1).abbr
                 } else {
-                    depart = data!!.get(1).getAbbr()
-                    arrive = data!!.get(0).getAbbr()
+                    depart = data.get(1).abbr
+                    arrive = data.get(0).abbr
                 }
                 initTripCall(depart, arrive, mDate, mTime)
             } else {
                 Log.wtf("initLiveData for Trip", "NULL")
             }
-        })
-    }
-
-    private fun initTripCall(originAbbr: String?, destAbbr: String?, date: String?, time: String?) {
-        viewModel!!.getTrip(originAbbr, destAbbr, date, time)
-                .observe(this, Observer { response ->
-                    val status = response.getStatus()
-                    if (status == LiveDataWrapper.Status.SUCCESS) {
-                        mTripList = response.getData().getRoot().getSchedule().getRequest().getTripList()
-                        initFavoriteObject(mOrigin, mDestination, mTripList)
-                        initRecyclerView(mTripList)
-                    }
-
-                    if (status == LiveDataWrapper.Status.ERROR) {
-                        Log.wtf("initTripCall", response.getMsg())
-                    }
-                })
+        }) */
     }
 
     private fun initRecyclerView(tripList: List<Trip>?) {
         if (tripList != null) {
             val adapter = TripRecyclerAdapter2(tripList)
-            mDataBinding!!.resultsRecyclerView.adapter = adapter
-            mDataBinding!!.resultsRecyclerView.layoutManager = LinearLayoutManager(activity)
-            mDataBinding!!.bartResultsProgressBar.visibility = View.GONE
+            binding.resultsRecyclerView.adapter = adapter
+            binding.resultsRecyclerView.layoutManager = LinearLayoutManager(activity)
+            binding.bartResultsProgressBar.visibility = View.GONE
         }
     }
 
     private fun initFavoriteObject(origin: String?, destination: String?, tripList: List<Trip>?) {
-        mFavoriteObject = viewModel!!.createFavorite(origin, destination, tripList)
+        viewModel.mFavoriteObject = viewModel.createFavorite(origin, destination, tripList)
     }
 
     private fun initFavoriteIcon(origin: String?, destination: String?) {
         val org: String?
         val dest: String?
 
-        if (mFromRecyclerAdapter) {
+        if (viewModel.isFromRecyclerAdapter) {
             //convert to full name
             org = StationList.stationMap[origin!!.toUpperCase()]
             dest = StationList.stationMap[destination!!.toUpperCase()]
@@ -170,22 +154,24 @@ class BartResultsFragment : BaseFragment() {
             org = origin
             dest = destination
         }
-
-        viewModel.getFavoriteLiveData(org, dest).observe(this, Observer { data ->
+        //todo tes
+        viewModel.getFavoriteLiveData(org!!, dest!!).observe(this, Observer { data ->
             if (data != null) {
                 // Current trip is already a Favorite
                 mFavoritedIcon!!.isVisible = true
-                mFavoriteIcon!!.setVisible(false)
+                mFavoriteIcon!!.isVisible = false
             } else {
                 mFavoritedIcon!!.isVisible = false
-                mFavoriteIcon!!.setVisible(true)
+                mFavoriteIcon!!.isVisible = true
             }
         })
     }
 
     private fun addFavorite(favorite: Favorite?) {
-        viewModel!!.handleFavoritesIcon(RiderzEnums.FavoritesAction.ADD_FAVORITE, favorite)
-        Toast.makeText(activity, resources.getString(R.string.favorite_added), Toast.LENGTH_SHORT).show()
+        favorite?.let {
+            viewModel.handleFavoritesIcon(RiderzEnums.FavoritesAction.ADD_FAVORITE, favorite)
+            Toast.makeText(activity, resources.getString(R.string.favorite_added), Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun removeFavorite() {
@@ -194,7 +180,7 @@ class BartResultsFragment : BaseFragment() {
         alertDialog.setMessage(resources.getString(R.string.alert_dialog_confirmation))
         alertDialog.setPositiveButton(resources.getString(R.string.alert_dialog_yes)
         ) { dialog, which ->
-            viewModel!!.handleFavoritesIcon(RiderzEnums.FavoritesAction.DELETE_FAVORITE, mFavoriteObject)
+            viewModel.handleFavoritesIcon(RiderzEnums.FavoritesAction.DELETE_FAVORITE, viewModel.mFavoriteObject!!)
             mFavoritedIcon!!.isVisible = false
             mFavoriteIcon!!.isVisible = true
         }

@@ -120,7 +120,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
         super.onActivityCreated(savedInstanceState);
         super.collapseAppBar(getActivity());
         super.enableNestedScrolling(false);
-        getLifecycle().addObserver(new GoogleMapObserver()); //TODO
+        //TODO getLifecycle().addObserver(new GoogleMapObserver());
     }
 
     @Override

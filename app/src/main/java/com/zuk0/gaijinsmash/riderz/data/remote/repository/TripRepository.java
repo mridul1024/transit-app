@@ -47,7 +47,7 @@ public class TripRepository {
                 data.postValue(res);
 
                 if(response.code() == 502) {
-                    //try again
+                    // try again
                     // todo; bad gateway request handle, possibly interceptor?
                 }
             }

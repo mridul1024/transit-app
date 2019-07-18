@@ -1,24 +1,24 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.stations;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.zuk0.gaijinsmash.riderz.R;
-import com.zuk0.gaijinsmash.riderz.databinding.FragmentStationBinding;
+import com.zuk0.gaijinsmash.riderz.databinding.FragmentStationsBinding;
 
 import javax.inject.Inject;
 
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import dagger.android.support.AndroidSupportInjection;
 
 public class StationsFragment extends Fragment {
@@ -26,7 +26,7 @@ public class StationsFragment extends Fragment {
     @Inject
     StationsViewModelFactory mStationsViewModelFactory;
 
-    private FragmentStationBinding mDataBinding;
+    private FragmentStationsBinding mDataBinding;
     private StationsViewModel mViewModel;
 
     @Override
@@ -37,7 +37,7 @@ public class StationsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_station, container, false);
+        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_stations, container, false);
         return mDataBinding.getRoot();
     }
 

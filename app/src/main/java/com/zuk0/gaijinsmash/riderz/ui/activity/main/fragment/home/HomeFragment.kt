@@ -183,22 +183,30 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun loadUpcomingNearbyTrains() {
-        //whether or not user has favorited routes, display upcoming routes of nearest station
-        //tap to expand list...lazy load?
-        mViewModel.getLocalEtd().observe(this, Observer { data ->
-            if(data.status == LiveDataWrapper.Status.SUCCESS) {
-                data?.let {
-                    mViewModel.upcomingNearbyEstimateList = mViewModel.getEstimatesFromEtd(data.data.station.etdList)
-                    localEtdAdapter = EstimateRecyclerAdapter(mViewModel.upcomingNearbyEstimateList)
-                    mDataBinding.homeEtdRecyclerView3.visibility = View.VISIBLE
-                    mDataBinding.homeEtdRecyclerView3.adapter = localEtdAdapter
-                    mDataBinding.homeEtdRecyclerView3.layoutManager = LinearLayoutManager(activity)
-                }
+        mViewModel.getLocalEtdMediator().addSource(mViewModel.getNearestStation(mViewModel.userLocation)) { station ->
+            station?.let {
+                mViewModel.getLocalEtd(station).observe(this, Observer {data ->
+                    when(data.status) {
+                        LiveDataWrapper.Status.SUCCESS -> {
+                            mViewModel.upcomingNearbyEstimateList = mViewModel.getEstimatesFromEtd(data.data.station.etdList)
+                            localEtdAdapter = EstimateRecyclerAdapter(mViewModel.upcomingNearbyEstimateList)
+                            mDataBinding.homeEtdRecyclerView3.visibility = View.VISIBLE
+                            mDataBinding.homeEtdRecyclerView3.adapter = localEtdAdapter
+                            mDataBinding.homeEtdRecyclerView3.layoutManager = LinearLayoutManager(activity)
+                        }
+                        LiveDataWrapper.Status.ERROR -> {
+                            Logger.e(data.msg)
+                        }
+                        LiveDataWrapper.Status.LOADING -> {
+                            Logger.i("loading")
+                        }
+                        else -> {
+
+                        }
+                    }
+                })
             }
-            if(data.status == LiveDataWrapper.Status.ERROR) {
-                Logger.e(data.msg)
-            }
-        })
+        }
     }
 
     private fun loadCallToAction(isFavoriteAvailable: Boolean) {

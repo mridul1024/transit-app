@@ -25,7 +25,7 @@ public interface StationDao {
 
     // Gets all stations from the database
     @Query("SELECT * from stations")
-    List<Station> getAllStations();
+    LiveData<List<Station>> getAllStations();
 
     @Query("SELECT * from stations")
     LiveData<List<Station>> getStationsLiveData();
@@ -42,6 +42,9 @@ public interface StationDao {
 
     @Query("SELECT * from stations where address = :address")
     LiveData<Station> getStationByAddress(String address);
+
+    @Query("SELECT * from stations where name = :name")
+    LiveData<Station> getStationLiveDataByName(String name);
 
     @Update(onConflict = REPLACE)
     void updateStation(Station station);
