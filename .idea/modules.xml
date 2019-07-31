@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/searchviews/searchviews.iml" filepath="$PROJECT_DIR$/searchviews/searchviews.iml" />
       <module fileurl="file://$PROJECT_DIR$/searchviewz/searchviewz.iml" filepath="$PROJECT_DIR$/searchviewz/searchviewz.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/transit-app.iml" filepath="$PROJECT_DIR$/.idea/transit-app.iml" />
     </modules>

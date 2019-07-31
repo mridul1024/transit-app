@@ -128,7 +128,6 @@ internal constructor(application: Application, private val mTripRepository: Trip
     }
 
     private fun handleFavoriteTask(context: Context, action: RiderzEnums.FavoritesAction, favorite: Favorite) {
-
         viewModelScope.launch(Dispatchers.IO) {
             val db = FavoriteDatabase.getRoomDB(context)
             when (action) {
@@ -144,6 +143,9 @@ internal constructor(application: Application, private val mTripRepository: Trip
                     val dao = db.favoriteDAO
                     val one = dao.getFavorite(favorite.origin, favorite.destination)
                     val two = dao.getFavorite(favorite.destination, favorite.origin)
+                    if(one == null && two == null) {
+                        Logger.e("unable to locate favorite object in db: $favorite")
+                    }
                     if (one != null) {
                         dao.delete(one)
                     }
