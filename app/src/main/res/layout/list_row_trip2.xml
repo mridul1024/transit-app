@@ -97,8 +97,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="8:40pm"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="171dp" />
+                app:layout_constraintBottom_toBottomOf="@+id/trip_arrival_icon"
+                app:layout_constraintStart_toStartOf="@+id/trip_leg_departTime"
+                app:layout_constraintTop_toBottomOf="@+id/trip_leg_line" />
 
             <ImageView
                 android:id="@+id/imageView7"

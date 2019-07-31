@@ -25,7 +25,7 @@ public interface StationDao {
 
     // Gets all stations from the database
     @Query("SELECT * from stations")
-    LiveData<List<Station>> getAllStations();
+    List<Station> getAllStations();
 
     @Query("SELECT * from stations")
     LiveData<List<Station>> getStationsLiveData();

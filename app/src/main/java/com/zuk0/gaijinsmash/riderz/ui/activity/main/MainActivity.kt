@@ -1,7 +1,6 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.main
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -38,7 +37,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return fragmentInjector
     }
 
-
     private lateinit var binding: MainActivityBinding
     private lateinit var mAppBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
@@ -71,7 +69,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun initPic() {
-        mViewModel.initPic(this, mViewModel.getHour(), main_banner_imageView)
+        mViewModel.initPic(this, mViewModel.getHour(), binding)
     }
 
     override fun onSupportNavigateUp() : Boolean {
@@ -84,7 +82,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
             handleBottomNavViewBehaviour()
-            navController.popBackStack()
+            navController.navigateUp()
         }
     }
 
@@ -102,8 +100,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun initFab() {
         binding.mainFab.setOnClickListener {
-            //todo
-
+            //todo - wtf / camera / map
         }
     }
 

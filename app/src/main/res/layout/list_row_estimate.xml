@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <data>
             <variable
                 name="estimate"
@@ -14,15 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="3dp"
-        android:elevation="2dp"
-        app:cardBackgroundColor="@color/primaryLightColor"
-        app:cardCornerRadius="5dp">
+        android:elevation="0dp"
+        android:background="@color/white"
+        app:cardCornerRadius="@dimen/riderz_cardView_cornerRadius">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:background="@color/white">
+            android:layout_margin="3dp">
 
             <TextView
                 android:id="@+id/etd_originTv"
@@ -35,7 +33,7 @@
                 android:paddingEnd="2dp"
                 android:scrollHorizontally="false"
                 android:singleLine="false"
-                android:text="@{estimate.origin}"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"

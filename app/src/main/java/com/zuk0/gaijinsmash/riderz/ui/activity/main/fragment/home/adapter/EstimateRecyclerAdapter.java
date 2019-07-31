@@ -40,7 +40,6 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
     }
 
     private List<Estimate> mEstimateList;
-    private Etd mEtd;
 
     public EstimateRecyclerAdapter(List<Estimate> estimateList) {
         mEstimateList = estimateList;

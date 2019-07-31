@@ -269,7 +269,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
         Snackbar.make(parentView, message, Snackbar.LENGTH_LONG)
                 .setAnchorView(R.id.main_bottom_navigation)
                 .setAction(yesAction, view -> {
-                    if(GpsUtils.checkLocationPermission(getActivity())) {
+                    if(GpsUtils.Companion.checkLocationPermission(getActivity())) {
                         Station station = mViewModel.findNearestMarker(map, position, destination, mStationList);
                         if(station == null) {
                             Toast.makeText(getActivity(), "You are already near you destination", Toast.LENGTH_SHORT).show();
@@ -324,7 +324,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
         GpsUtils gps;
         Location loc = null;
         try {
-            if(GpsUtils.checkLocationPermission(context)) {
+            if(GpsUtils.Companion.checkLocationPermission(context)) {
                 gps = new GpsUtils(context);
                 loc = gps.getLocation();
                 map.setMyLocationEnabled(true);

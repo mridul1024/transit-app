@@ -28,6 +28,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment
 
+/*
+    Note: always pass
+ */
 class BartResultsFragment : BaseFragment() {
 
     @Inject
@@ -55,12 +58,8 @@ class BartResultsFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        //todo consolidate
-        if (viewModel.isFromRecyclerAdapter) {
-            initStationsForTripCall(viewModel.origin, viewModel.destination, viewModel.date, viewModel.time)
-        } else {
-            initStationsForTripCall(viewModel.origin, viewModel.destination, viewModel.date, viewModel.time)
-        }
+        initStationsForTripCall(viewModel.origin, viewModel.destination, viewModel.date, viewModel.time)
+
         initFavoriteIcon(viewModel.origin, viewModel.destination)
     }
 
@@ -86,47 +85,38 @@ class BartResultsFragment : BaseFragment() {
         return false
     }
 
+    override fun onStop() {
+        super.onStop()
+        //todo - add caching
+    }
+
     private fun initViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(BartResultsViewModel::class.java)
     }
 
+    /**
+     * Stations must be in abbreviated format for the API call
+     */
     private fun initStationsForTripCall(origin: String, destination: String, date: String, time: String) {
         Logger.i("origin: $origin, destination: $destination, date: $date, time: $time")
 
-        viewModel.loadTrip2(origin, destination, date, time).observe(this, Observer { result ->
-            result?.let {
-                when(it.status) {
-                    LiveDataWrapper.Status.SUCCESS -> {
-                        viewModel.mTripList = it.data.root.schedule.request.tripList
-                        initFavoriteObject(viewModel.origin, viewModel.destination, viewModel.mTripList)
-                        initRecyclerView(viewModel.mTripList)
-                    }
-                    LiveDataWrapper.Status.ERROR -> {
-                        Logger.wtf(it.msg)
-
-                    }
+        //todo
+        viewModel.loadTrip(origin, destination, date, time).observe(this, Observer { result ->
+            when(result.status) {
+                LiveDataWrapper.Status.SUCCESS -> {
+                    viewModel.mTripList = result.data.root.schedule.request.tripList
+                    initFavoriteObject(viewModel.origin, viewModel.destination, viewModel.mTripList)
+                    initRecyclerView(viewModel.mTripList)
                 }
+                LiveDataWrapper.Status.LOADING -> {
+
+                }
+                LiveDataWrapper.Status.ERROR -> {
+                    Logger.e(result.msg)
+                }
+                else -> { Logger.wtf("unknown error") }
             }
         })
-
-/*
-        val liveData = viewModel.getStationsFromDb(origin, destination)
-        liveData.observe(this, Observer { data ->
-            val depart: String
-            val arrive: String
-            if (data != null && data.isNotEmpty()) {
-                if (data.get(0).name == origin) {
-                    depart = data.get(0).abbr
-                    arrive = data.get(1).abbr
-                } else {
-                    depart = data.get(1).abbr
-                    arrive = data.get(0).abbr
-                }
-                initTripCall(depart, arrive, mDate, mTime)
-            } else {
-                Log.wtf("initLiveData for Trip", "NULL")
-            }
-        }) */
     }
 
     private fun initRecyclerView(tripList: List<Trip>?) {
@@ -154,17 +144,19 @@ class BartResultsFragment : BaseFragment() {
             org = origin
             dest = destination
         }
-        //todo tes
-        viewModel.getFavoriteLiveData(org!!, dest!!).observe(this, Observer { data ->
-            if (data != null) {
-                // Current trip is already a Favorite
-                mFavoritedIcon!!.isVisible = true
-                mFavoriteIcon!!.isVisible = false
-            } else {
-                mFavoritedIcon!!.isVisible = false
-                mFavoriteIcon!!.isVisible = true
-            }
-        })
+
+        if(!org.isNullOrBlank() && !dest.isNullOrBlank()) {
+            viewModel.getFavoriteLiveData(org, dest).observe(this, Observer { data ->
+                if (data != null) {
+                    // Current trip is already a Favorite
+                    mFavoritedIcon?.isVisible = true
+                    mFavoriteIcon?.isVisible = false
+                } else {
+                    mFavoritedIcon?.isVisible = false
+                    mFavoriteIcon?.isVisible = true
+                }
+            })
+        }
     }
 
     private fun addFavorite(favorite: Favorite?) {

@@ -3,6 +3,7 @@ package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_results
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.constraintlayout.solver.widgets.ConstraintWidget.VISIBLE
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.orhanobut.logger.Logger
@@ -30,7 +31,7 @@ class TripRecyclerAdapter2(val tripList: List<Trip>) : RecyclerView.Adapter<Trip
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        containerBinding  = DataBindingUtil.inflate<ListRowTripContainerBinding>(LayoutInflater.from(parent.context), R.layout.list_row_trip_container, parent,false)
+        containerBinding  = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.list_row_trip_container, parent,false)
         return ViewHolder(containerBinding)
     }
 
@@ -43,8 +44,9 @@ class TripRecyclerAdapter2(val tripList: List<Trip>) : RecyclerView.Adapter<Trip
         Logger.d("Position: $position, Trip: $trip")
 
         //inject values into container
-        if(trip.origTimeDate.isNullOrBlank()) {
+        if(!trip.origTimeDate.isNullOrBlank()) {
             Logger.i("Date: ${trip.origTimeDate}")
+            containerBinding.tripDate.text = trip.origTimeDate
         }
         if(!trip.tripTime.isNullOrBlank()) {
             containerBinding.tripTotalTime.text = trip.tripTime
@@ -59,12 +61,6 @@ class TripRecyclerAdapter2(val tripList: List<Trip>) : RecyclerView.Adapter<Trip
             Logger.i("Cash Fare: ${trip.fare}")
         }
 
-        //create linear layout and add below parent view (container)
-        val layout = LinearLayout(containerBinding.root.context)
-        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        layout.layoutParams = params
-        containerBinding.tripMainContainer.addView(layout)
-
         //load legs of  trip
         val numOfLegs = trip.legList.size
         for(i in 0 until numOfLegs) {
@@ -76,8 +72,7 @@ class TripRecyclerAdapter2(val tripList: List<Trip>) : RecyclerView.Adapter<Trip
 
             //inflate transfer view if need be
             if(i > 0) {
-                val stub = legBinding.listRowTransferStub.viewStub
-                stub?.inflate()
+                legBinding.listRowTransferStub.visibility = VISIBLE
             }
 
             //depart time and station
@@ -89,9 +84,10 @@ class TripRecyclerAdapter2(val tripList: List<Trip>) : RecyclerView.Adapter<Trip
             legBinding.tripLegArrivalTime.text = trip.legList[i].destTimeMin
 
             //add binding to linearlayout
-            layout.addView(legBinding.root)
+            containerBinding.tripLegContainer.addView(legBinding.root)
         }
     }
+
     /**************************************************************************************
      *
      **************************************************************************************/

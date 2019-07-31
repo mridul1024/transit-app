@@ -39,7 +39,6 @@ public class BsaRecyclerAdapter extends RecyclerView.Adapter<BsaRecyclerAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Bsa bsa = mAdvisoryList.get(position);
-
         holder.mAdvisoryBinding.setBsa(bsa);
 
         if(bsa.getStation() == null) {
@@ -52,6 +51,18 @@ public class BsaRecyclerAdapter extends RecyclerView.Adapter<BsaRecyclerAdapter.
             holder.mAdvisoryBinding.bsaStatusImageView.setColorFilter(R.color.colorTextAlert);
         }
 
+        holder.mAdvisoryBinding.bsaDismissBtn.setOnClickListener(view -> {
+            //position is known so clear this from list
+            mAdvisoryList.remove(position);
+            notifyItemRemoved(position);
+            if(mAdvisoryList.size() == 0) {
+                //hide recyclerview
+                View recyclerView = holder.mAdvisoryBinding.getRoot().findViewById(R.id.home_bsa_recyclerView);
+                if(recyclerView != null) {
+                    recyclerView.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override

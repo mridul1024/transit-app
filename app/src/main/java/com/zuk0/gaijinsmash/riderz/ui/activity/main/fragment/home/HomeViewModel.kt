@@ -5,6 +5,7 @@ import android.content.Context
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.*
+import androidx.lifecycle.Observer
 import androidx.room.Room
 import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
@@ -27,11 +28,9 @@ import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper
 import com.zuk0.gaijinsmash.riderz.utils.*
 import io.reactivex.Maybe
 import kotlinx.coroutines.*
-import org.simpleframework.xml.transform.Transform
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.CoroutineContext
 
 @Singleton
 class HomeViewModel @Inject
@@ -126,9 +125,14 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
                 StationUtils.getAbbrFromStationName(destination), "TODAY", "NOW")
     }
 
-    private val mediatorLiveData = MediatorLiveData<Station>()
+    private val mediatorLiveData = MediatorLiveData<LiveDataWrapper<EtdXmlResponse>>()
 
-    fun getLocalEtdMediator(): MediatorLiveData<Station> {
+    fun getLocalEtdMediator(): MediatorLiveData<LiveDataWrapper<EtdXmlResponse>> {
+        val source = getNearestStation(userLocation)
+        mediatorLiveData.removeSource(source)
+        mediatorLiveData.addSource(source) { station ->
+            Transformations.map(mEtdRepository.getEtd(station.abbr)) { mediatorLiveData.postValue(it) }
+        }
         return mediatorLiveData
     }
 
@@ -152,10 +156,14 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
         return results
     }
 
-    fun getEstimatesFromEtd(etds: List<Etd>)  : List<Estimate>  {
+    fun getEstimatesFromEtd(station: Station)  : List<Estimate>  {
+        val origin = station.name
+        val etds = station.etdList
         val results = ArrayList<Estimate>()
         for (etd in etds) {
             val estimate = etd.estimateList[0]
+            estimate.origin = origin
+            estimate.destination = etd.destination
             results.add(estimate)
         }
         return results
@@ -177,7 +185,7 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
         //xmas, nye,
     }
 
-    val closestStationLiveData = MutableLiveData<Station>()
+    private val closestStationLiveData = MutableLiveData<Station>()
 
     //get user location, use haversine formula to get nearest station.
     fun getNearestStation(userLocation: Location?) : LiveData<Station> {
@@ -185,13 +193,9 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
         if(userLocation == null)
             return closestStationLiveData
 
-        //need station list.
-        var closestDistance = 0
-        var list: List<Station>
-
-        Transformations.map(getStationsLiveData()) { stations ->
-            list = stations
-            //todo  optimize. save values in hashtable/graph for future reference?
+        viewModelScope.launch(Dispatchers.IO) {
+            var closestDistance = 0
+            val list  =  getStationsFromDb()
             for (station in list) {
                 val stationLat = station.latitude
                 val stationLong = station.longitude
@@ -213,10 +217,11 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
             Logger.i("closest station: ${closestStation?.name}")
             closestStationLiveData.postValue(closestStation)
         }
+
         return closestStationLiveData
     }
 
-    private fun getStationsLiveData() : LiveData<List<Station>> {
+    private fun getStationsFromDb() : List<Station> {
        return StationDatabase.getRoomDB(mApplication).stationDAO.allStations
     }
 

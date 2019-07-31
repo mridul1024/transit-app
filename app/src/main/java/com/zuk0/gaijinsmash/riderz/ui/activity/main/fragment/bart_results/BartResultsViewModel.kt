@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import androidx.lifecycle.*
+import com.orhanobut.logger.Logger
 
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.FavoriteDatabase
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase
@@ -20,10 +21,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.results.TripDataResult
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.trip.TripFragment
 import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.simpleframework.xml.transform.Transform
 
 import java.lang.ref.WeakReference
@@ -35,22 +33,16 @@ import kotlin.coroutines.CoroutineContext
 
 @Singleton
 class BartResultsViewModel @Inject
-internal constructor(application: Application, private val mTripRepository: TripRepository) : AndroidViewModel(application) , CoroutineScope{
+internal constructor(application: Application, private val mTripRepository: TripRepository) : AndroidViewModel(application){
 
-    override val coroutineContext: CoroutineContext = Dispatchers.Main + Job()
     var origin: String = ""
     var destination: String = ""
-    var date: String = "today"
-    var time: String = "now"
+    var date: String = "today" // default
+    var time: String = "now" // default
     var isFromRecyclerAdapter = false
 
     var mFavoriteObject: Favorite? = null
     var mTripList: List<Trip>? = null
-
-    private var stationsMediator = MediatorLiveData<LiveDataWrapper<TripJsonResponse>>()
-    private var tripMediator = MediatorLiveData<LiveDataWrapper<TripJsonResponse>>()
-    private lateinit var tripLiveData: LiveData<LiveDataWrapper<TripJsonResponse>>
-
     var favorite: Favorite? = null
         private set
 
@@ -73,64 +65,39 @@ internal constructor(application: Application, private val mTripRepository: Trip
         //todo
 
     }
+
     /****************************************************************
      * Trips - origin and destination must be in abbreviated form
      */
-    internal fun getTrip(origin: String, destination: String, date: String, time: String): LiveData<LiveDataWrapper<TripJsonResponse>>? {
-        tripLiveData = mTripRepository.getTrip(origin, destination, date, time)
-        return tripLiveData
-    }
-
-    internal fun getStationsFromDb(origin: String?, destination: String?): LiveData<List<Station>> {
-        return StationDatabase.getRoomDB(getApplication()).stationDAO.getOriginAndDestination(origin, destination)
-    }
-
     /*
         Note: parameters must be formatted properly before submission
         Check bart api docs for reference.
      */
+    private val mediator = MediatorLiveData<LiveDataWrapper<TripJsonResponse>>()
 
-    fun loadTrip2(origin: String, destination: String, date: String, time: String) : MediatorLiveData<LiveDataWrapper<TripJsonResponse>> {
-        var originResult: Station = Station()
-        var destinationResult: Station = Station()
+    fun loadTrip(origin: String, destination: String, date: String, time: String): LiveData<LiveDataWrapper<TripJsonResponse>>  {
+        viewModelScope.launch {
+            val originTask = async(Dispatchers.IO) { getStationFromDb(origin) }
+            val destinationTask = async(Dispatchers.IO)  { getStationFromDb(destination) }
+            val result1 = originTask.await()
+            val result2 = destinationTask.await()
 
-        stationsMediator.addSource(getStationByName(origin)) { value ->
-            originResult = value
-            getTrip(originResult.abbr, destinationResult.abbr, date, time)
-        }
-
-        stationsMediator.addSource(getStationByName(destination)) { value ->
-            destinationResult = value
-            getTrip(originResult.abbr, destinationResult.abbr, date, time)
-        }
-
-        stationsMediator.addSource(tripLiveData) {
-            stationsMediator.postValue(it)
-        }
-
-        return stationsMediator
-    }
-
-    fun loadTrip(origin: String?, destination: String?, date: String, time: String): LiveData<LiveDataWrapper<TripJsonResponse>> {
-        val result = TripDataResult()
-
-        if(origin.isNullOrBlank() || destination.isNullOrBlank()) {
-            result.status = BaseResult.Status.ERROR
-        } else {
-            stationsMediator.addSource(getStationByName(origin)) {
-                value -> result.origin = value.abbr
-            }
-            stationsMediator.addSource(getStationByName(destination)) {
-                value -> result.destination = value.abbr
+            if(result1.abbr.isNotBlank() && result2.abbr.isNotBlank()) {
+                Logger.d("Origin:  ${result1.name}, Destination: ${result2.name}")
+                mediator.addSource(mTripRepository.getTrip(originTask.await().abbr, destinationTask.await().abbr, date, time)) { result ->
+                    mediator.postValue(result)
+                }
             }
         }
-        return tripMediator
+        return mediator
     }
 
-    private fun getStationByName(name: String) : LiveData<Station> {
-        return StationDatabase.getRoomDB(getApplication()).stationDAO.getStationLiveDataByName(name)
+    /**
+     * Fetches a station by name from the db
+     */
+    internal fun getStationFromDb(name:  String): Station {
+        return StationDatabase.getRoomDB(getApplication()).stationDAO.getStationByName(name);
     }
-
     /****************************************************************
      * Favorites
      */
@@ -160,9 +127,33 @@ internal constructor(application: Application, private val mTripRepository: Trip
         return FavoriteDatabase.getRoomDB(getApplication()).favoriteDAO.getLiveDataFavorite(origin, destination)
     }
 
+    private fun handleFavoriteTask(context: Context, action: RiderzEnums.FavoritesAction, favorite: Favorite) {
 
-    private suspend fun handleFavoriteTask() = withContext(Dispatchers.IO) {
-
+        viewModelScope.launch(Dispatchers.IO) {
+            val db = FavoriteDatabase.getRoomDB(context)
+            when (action) {
+                RiderzEnums.FavoritesAction.ADD_FAVORITE -> {
+                    if (db.favoriteDAO.priorityCount == 0) {
+                        favorite.priority = Favorite.Priority.ON
+                    } else {
+                        favorite.priority = Favorite.Priority.OFF
+                    }
+                    db.favoriteDAO.save(favorite)
+                }
+                RiderzEnums.FavoritesAction.DELETE_FAVORITE -> {
+                    val dao = db.favoriteDAO
+                    val one = dao.getFavorite(favorite.origin, favorite.destination)
+                    val two = dao.getFavorite(favorite.destination, favorite.origin)
+                    if (one != null) {
+                        dao.delete(one)
+                    }
+                    if (two != null) {
+                        dao.delete(two)
+                    }
+                }
+                else ->  Logger.wtf("unhandled action: $action")
+            }
+        }
     }
 
     //todo use coroutines here
@@ -198,7 +189,7 @@ internal constructor(application: Application, private val mTripRepository: Trip
 
     override fun onCleared() {
         super.onCleared()
-        //todo clear jobs
+        Logger.d("onCleared")
     }
 
     companion object {

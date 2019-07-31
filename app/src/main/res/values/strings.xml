@@ -39,8 +39,8 @@
     <string name="bart_result_tripTime">Travel Time (minutes):</string>
     <string name="bart_result_departTime">Departure Time:</string>
     <string name="bart_result_arriveTime">Arrival Time:</string>
-    <string name="bart_result_cashFare">Cash Fare: $</string>
-    <string name="bart_result_clipperFare">Clipper Fare: $</string>
+    <string name="bart_result_cashFare">Cash Fare: </string>
+    <string name="bart_result_clipperFare">Clipper Fare:</string>
     <string name="bart_result_transfer_cd">Train Transfer Icon</string>
 
     <!-- Favorites Fragment -->
@@ -65,7 +65,7 @@
 
     <!-- Home Fragment -->
     <string name="home_alerts">Welcome, fellow Rider!</string>
-    <string name="banner">Image of San Francisco</string>
+    <string name="banner">Artwork of San Francisco. By Rachelle Miller. All rights reserved.</string>
 
     <!-- Phone Lines Fragment -->
     <string name="phonesLines_lostFound">Lost and Found:</string>
@@ -253,4 +253,5 @@
     <string name="fab_label">WTF</string>
     <string name="button_next">Next</string>
     <string name="button_search">Search</string>
+    <string name="dismiss">Dismiss</string>
 </resources>

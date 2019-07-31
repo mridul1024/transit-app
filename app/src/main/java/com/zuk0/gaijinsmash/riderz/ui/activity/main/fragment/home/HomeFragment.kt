@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.orhanobut.logger.Logger
@@ -41,7 +42,7 @@ class HomeFragment : BaseFragment() {
     @Inject
     lateinit var mHomeViewModelFactory: HomeViewModelFactory
 
-    private lateinit var mDataBinding: FragmentHomeBinding
+    private lateinit var binding: FragmentHomeBinding
     private lateinit var mViewModel: HomeViewModel
 
     private var mEtdAdapter: EstimateRecyclerAdapter? = null
@@ -57,8 +58,8 @@ class HomeFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-        return mDataBinding.root
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -67,10 +68,7 @@ class HomeFragment : BaseFragment() {
         loadAdvisories(mViewModel.bsaLiveData)
         initFavoriteObserver()
         loadUpcomingNearbyTrains()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        initSwipeRefreshLayout()
         super.expandAppBar(activity)
         expandBottomNavView()
         displayNews(false) // use this switch to turn on/off the news manually
@@ -89,11 +87,20 @@ class HomeFragment : BaseFragment() {
         mViewModel = ViewModelProviders.of(this, mHomeViewModelFactory).get(HomeViewModel::class.java)
     }
 
+    private fun initSwipeRefreshLayout() {
+        binding.homeSwipeRefreshLayout.setOnRefreshListener(object: SwipeRefreshLayout.OnRefreshListener {
+            override fun onRefresh() {
+                loadAdvisories(mViewModel.bsaLiveData)
+                //initFavoriteObserver()
+                loadUpcomingNearbyTrains()
+            }
+        })
+    }
+
     private fun expandBottomNavView() { // todo why?
         val bottomNav = activity?.findViewById<BottomNavigationView>(R.id.main_bottom_navigation)
         HideBottomViewOnScrollBehavior<BottomNavigationView>(activity, null).slideUp(bottomNav)
     }
-
     /*
        A way to provide news that cannot be fetched by the api via webview.
        CardView's visibility is GONE by default
@@ -112,8 +119,8 @@ class HomeFragment : BaseFragment() {
         bsa.observe(this, Observer { bsaXmlResponse ->
             if (bsaXmlResponse != null) {
                 val bsaAdapter = BsaRecyclerAdapter(bsaXmlResponse.bsaList)
-                mDataBinding.homeBsaRecyclerView.adapter = bsaAdapter
-                mDataBinding.homeBsaRecyclerView.layoutManager = LinearLayoutManager(activity)
+                binding.homeBsaRecyclerView.adapter = bsaAdapter
+                binding.homeBsaRecyclerView.layoutManager = LinearLayoutManager(context)
             }
         })
     }
@@ -183,19 +190,22 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun loadUpcomingNearbyTrains() {
-        mViewModel.getLocalEtdMediator().addSource(mViewModel.getNearestStation(mViewModel.userLocation)) { station ->
+
+        mViewModel.getNearestStation(mViewModel.userLocation).observe(this, Observer {station ->
             station?.let {
                 mViewModel.getLocalEtd(station).observe(this, Observer {data ->
                     when(data.status) {
                         LiveDataWrapper.Status.SUCCESS -> {
-                            mViewModel.upcomingNearbyEstimateList = mViewModel.getEstimatesFromEtd(data.data.station.etdList)
+                            mViewModel.upcomingNearbyEstimateList = mViewModel.getEstimatesFromEtd(data.data.station)
                             localEtdAdapter = EstimateRecyclerAdapter(mViewModel.upcomingNearbyEstimateList)
-                            mDataBinding.homeEtdRecyclerView3.visibility = View.VISIBLE
-                            mDataBinding.homeEtdRecyclerView3.adapter = localEtdAdapter
-                            mDataBinding.homeEtdRecyclerView3.layoutManager = LinearLayoutManager(activity)
+                            binding.homeEtdRecyclerView3.visibility = View.VISIBLE
+                            binding.homeEtdRecyclerView3.adapter = localEtdAdapter
+                            binding.homeEtdRecyclerView3.layoutManager = LinearLayoutManager(activity)
+                            binding.homeSwipeRefreshLayout.isRefreshing = false
                         }
                         LiveDataWrapper.Status.ERROR -> {
                             Logger.e(data.msg)
+                            binding.homeSwipeRefreshLayout.isRefreshing = false
                         }
                         LiveDataWrapper.Status.LOADING -> {
                             Logger.i("loading")
@@ -206,7 +216,7 @@ class HomeFragment : BaseFragment() {
                     }
                 })
             }
-        }
+        })
     }
 
     private fun loadCallToAction(isFavoriteAvailable: Boolean) {
@@ -222,9 +232,9 @@ class HomeFragment : BaseFragment() {
                     if (data != null) {
                         mViewModel.mFavoriteEstimateList = mViewModel.getEstimatesFromEtd(favorite, data.data.station.etdList)
                         mEtdAdapter = EstimateRecyclerAdapter(mViewModel.mFavoriteEstimateList)
-                        mDataBinding.homeEtdRecyclerView.visibility = View.VISIBLE
-                        mDataBinding.homeEtdRecyclerView.adapter = mEtdAdapter
-                        mDataBinding.homeEtdRecyclerView.layoutManager = LinearLayoutManager(activity)
+                        binding.homeEtdRecyclerView.visibility = View.VISIBLE
+                        binding.homeEtdRecyclerView.adapter = mEtdAdapter
+                        binding.homeEtdRecyclerView.layoutManager = LinearLayoutManager(activity)
                     }
                 }
                 LiveDataWrapper.Status.ERROR -> {
@@ -245,9 +255,9 @@ class HomeFragment : BaseFragment() {
                 if (data != null) {
                     mViewModel.mInverseEstimateList = mViewModel.getEstimatesFromEtd(inverse, data.data.station.etdList)
                     mEtdInverseAdapter = EstimateRecyclerAdapter(mViewModel.mInverseEstimateList)
-                    mDataBinding.homeEtdRecyclerView2.visibility = View.VISIBLE
-                    mDataBinding.homeEtdRecyclerView2.adapter = mEtdInverseAdapter
-                    mDataBinding.homeEtdRecyclerView2.layoutManager = LinearLayoutManager(activity)
+                    binding.homeEtdRecyclerView2.visibility = View.VISIBLE
+                    binding.homeEtdRecyclerView2.adapter = mEtdInverseAdapter
+                    binding.homeEtdRecyclerView2.layoutManager = LinearLayoutManager(activity)
                 }
             }
             if(data.status == LiveDataWrapper.Status.ERROR) {
@@ -279,7 +289,7 @@ class HomeFragment : BaseFragment() {
 
     //todo abstract to custom view
     private fun displayWeather(weather: WeatherResponse) {
-        var textColor = resources.getColor(R.color.bartYellowLine) //default for daytime
+        var textColor = resources.getColor(R.color.white) //default for daytime
         if(!mViewModel.isDaytime) textColor = resources.getColor(R.color.white)
         if(weather.name != null) { //city
             val nameTv = activity?.findViewById<TextView>(R.id.weather_name_tv)
@@ -314,7 +324,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun updateProgressBar() {
-        mDataBinding.homeEtdProgressBar.visibility = View.GONE
+        binding.homeEtdProgressBar.visibility = View.GONE
     }
 
     //todo: add option for geolocation and to set "COMMUTE ROUTE" - morning/evening geolocation

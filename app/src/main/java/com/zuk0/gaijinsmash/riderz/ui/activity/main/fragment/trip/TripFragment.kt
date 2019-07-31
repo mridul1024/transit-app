@@ -29,6 +29,7 @@ import java.util.Locale
 import java.util.Objects
 
 import androidx.navigation.fragment.NavHostFragment
+import com.orhanobut.logger.Logger
 
 class TripFragment : BaseFragment() {
 
@@ -58,12 +59,16 @@ class TripFragment : BaseFragment() {
         initStationsList()
         initSpinnerAdapter()
         initKeyboardSettings()
-        initDepartingSpinner(mSpinnerAdapter)
-        initArrivingSpinner(mSpinnerAdapter)
         initDatePicker()
         initTimePicker()
         initTextInputEditors()
         initSearchButton()
+        initDepartingSpinner(mSpinnerAdapter)
+        initArrivingSpinner(mSpinnerAdapter)
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
 
     private fun initViewModel() {
@@ -130,21 +135,64 @@ class TripFragment : BaseFragment() {
 
     private fun initDepartingSpinner(adapter: ArrayAdapter<String>?) {
         mDataBinding.tripDepartureAutoCompleteTextView.setDropDownBackgroundResource(R.color.primaryDarkColor)
+        mDataBinding.tripDepartureAutoCompleteTextView.setOnFocusChangeListener { v, hasFocus ->
+            if(hasFocus) {
+                if(mDataBinding.tripDepartureAutoCompleteTextView.text.isNullOrBlank()) {
+                    mDataBinding.tripDepartCloseBtn.visibility =  View.INVISIBLE
+                } else {
+                    View.VISIBLE
+                }
+            }
+        }
+        mDataBinding.tripDepartCloseBtn.setOnClickListener { v ->
+            if(v.visibility == View.VISIBLE) {
+                v.visibility = View.INVISIBLE
+                mDataBinding.tripDepartureAutoCompleteTextView.text.clear()
+            }
+        }
         mDataBinding.stationSpinner1.adapter = adapter
         mDataBinding.stationSpinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
+                Logger.i("position $position")
                 val textView = mDataBinding.stationSpinner1.selectedView as TextView
                 var itemSelected = ""
                 itemSelected = textView.text.toString()
                 mDataBinding.tripDepartureAutoCompleteTextView.setText(itemSelected)
+                mDataBinding.tripDepartCloseBtn.visibility = View.VISIBLE
             }
 
             override fun onNothingSelected(adapterView: AdapterView<*>) {}
         }
     }
 
+    private fun showCloseButton(isDepart: Boolean) {
+        if(isDepart) {
+            mDataBinding.tripDepartCloseBtn.visibility = View.VISIBLE
+        } else {
+            mDataBinding.tripArrivalCloseBtn.visibility = View.VISIBLE
+        }
+    }
+
     private fun initArrivingSpinner(adapter: ArrayAdapter<String>?) {
         mDataBinding.tripArrivalAutoCompleteTextView.setDropDownBackgroundResource(R.color.primaryDarkColor)
+        mDataBinding.tripArrivalAutoCompleteTextView.setOnFocusChangeListener { v, hasFocus ->
+            if(hasFocus) {
+                if(mDataBinding.tripArrivalAutoCompleteTextView.text.isNullOrBlank()) {
+                    mDataBinding.tripArrivalCloseBtn.visibility =  View.INVISIBLE
+                } else {
+                    showCloseButton(true)
+                }
+            }
+        }
+        mDataBinding.tripArrivalCloseBtn.setOnClickListener { v ->
+            v?.let {
+                if(v.visibility == View.VISIBLE) {
+                    v.visibility = View.INVISIBLE
+                    mDataBinding.tripArrivalAutoCompleteTextView.text.clear()
+                }
+            }
+        }
+
         mDataBinding.stationSpinner2.adapter = adapter
         mDataBinding.stationSpinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -152,9 +200,11 @@ class TripFragment : BaseFragment() {
                 var itemSelected = ""
                 itemSelected = textView.text.toString()
                 mDataBinding.tripArrivalAutoCompleteTextView.setText(itemSelected)
+                mDataBinding.tripArrivalCloseBtn.visibility = View.VISIBLE
             }
 
-            override fun onNothingSelected(adapterView: AdapterView<*>) {}
+            override fun onNothingSelected(adapterView: AdapterView<*>) {
+            }
         }
     }
 
@@ -227,14 +277,13 @@ class TripFragment : BaseFragment() {
         mViewModel.originField = mDataBinding.tripDepartureAutoCompleteTextView.text.toString()
         mViewModel.destinationField = mDataBinding.tripArrivalAutoCompleteTextView.text.toString()
 
+        // DATE
+        mViewModel.dateField = Objects.requireNonNull<Editable>(mDataBinding.tripDateEditText.text).toString()
+
         // TIME
         val preformatTime = Objects.requireNonNull<Editable>(mDataBinding.tripTimeEditText.text).toString()
-        mViewModel.dateField = mViewModel.getTimeForTripSearch(preformatTime, mIs24HrTimeOn)
-
-        // DATE
-        mViewModel.timeField = Objects.requireNonNull<Editable>(mDataBinding.tripDateEditText.text).toString()
+        mViewModel.timeField = mViewModel.getTimeForTripSearch(preformatTime, mIs24HrTimeOn)
     }
-
 
     private fun validateUserInput(departingStation: String, arrivingStation: String, departingDate: String, departingTime: String): Boolean {
         // check if all fields are filled

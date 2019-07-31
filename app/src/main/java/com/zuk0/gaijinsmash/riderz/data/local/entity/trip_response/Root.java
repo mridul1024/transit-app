@@ -1,9 +1,12 @@
 package com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response;
 
+import androidx.room.Ignore;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Root {
+
     @SerializedName("@id")
     @Expose
     private String id;
@@ -30,7 +33,7 @@ public class Root {
 
     @SerializedName("message")
     @Expose
-    private Message message;
+    private String message = "";
 
     public String getId() {
         return id;
@@ -80,11 +83,11 @@ public class Root {
         this.schedule = schedule;
     }
 
-    public Message getMessage() {
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(Message message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 }
