@@ -13,9 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="18sp"
-        android:textAlignment="viewEnd"
         android:text="@string/stationInfo_stationCity"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
         android:textStyle="bold"
         tools:ignore="RtlCompat" />
 
@@ -23,29 +23,26 @@
         android:id="@+id/weather_temp_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textAlignment="viewEnd"
         android:text="temp"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/weather_humidity_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textAlignment="viewEnd"
         android:text="humidity"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/weather_wind_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textAlignment="viewEnd"
         android:text="wind"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
         android:textStyle="bold" />
 </LinearLayout>
