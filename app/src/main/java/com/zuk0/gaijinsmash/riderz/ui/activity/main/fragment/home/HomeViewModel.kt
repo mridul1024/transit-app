@@ -114,8 +114,8 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
 
     fun createFavoriteInverse(trips: List<Trip>, favorite: Favorite): Favorite {
         val favoriteInverse = Favorite()
-        favoriteInverse.origin = favorite.destination
-        favoriteInverse.destination = favorite.origin
+        favoriteInverse.a = favorite.b
+        favoriteInverse.b = favorite.a
         setTrainHeaders(trips, favoriteInverse)
         return favoriteInverse
     }
@@ -141,14 +141,15 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
     }
     /*
         For comparisons - make sure all train headers are abbreviated and capitalized
+        For Setting estimates- use the full name of station
      */
     internal fun getEstimatesFromEtd(favorite: Favorite, etds: List<Etd>): List<Estimate> {
         val results = ArrayList<Estimate>()
         for (etd in etds) {
             if (favorite.trainHeaderStations.contains(etd.destinationAbbr.toUpperCase())) {
                 val estimate = etd.estimateList[0]
-                estimate.origin = favorite.origin
-                estimate.destination = favorite.destination
+                estimate.origin = favorite.a.name
+                estimate.destination = favorite.b.name
                 estimate.trainHeaderStation = etd.destination
                 results.add(estimate)
             }
@@ -156,6 +157,9 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
         return results
     }
 
+    /**
+     * get a list of Estimate objects
+     */
     fun getEstimatesFromEtd(station: Station)  : List<Estimate>  {
         val origin = station.name
         val etds = station.etdList

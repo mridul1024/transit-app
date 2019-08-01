@@ -2,5 +2,5 @@
 <bitmap android:src="@drawable/skyline_bg"
     android:tileMode="repeat"
     android:gravity="bottom"
-    android:dither="true"
+    android:dither="false"
     xmlns:android="http://schemas.android.com/apk/res/android" />

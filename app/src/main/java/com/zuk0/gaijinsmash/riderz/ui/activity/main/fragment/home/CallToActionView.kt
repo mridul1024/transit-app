@@ -76,8 +76,8 @@ class CallToActionView: View, LifecycleObserver {
         binding.callToActionButton.setOnClickListener { view ->
             //grab data, pass to viewmodel for handling
             val favorite = Favorite()
-            favorite.origin = origin
-            favorite.destination = destination
+            //todo favorite.a = origin
+           // todo favorite.b = destination
             userSelectedData.postValue(favorite)
         }
     }

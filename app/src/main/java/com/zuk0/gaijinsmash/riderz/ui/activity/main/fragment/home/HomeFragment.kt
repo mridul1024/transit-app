@@ -7,8 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
@@ -153,7 +154,7 @@ class HomeFragment : BaseFragment() {
        WARNING: TRAIN HEADERS should be in ABBREVIATED FORMAT
     */
     private fun loadTripData(favorite: Favorite) {
-        mViewModel.getTripLiveData(favorite.origin, favorite.destination).observe(this, Observer { response ->
+        mViewModel.getTripLiveData(favorite.a.abbr, favorite.b.abbr).observe(this, Observer { response ->
             val trips: List<Trip>
             val status = response.status
 
@@ -172,8 +173,11 @@ class HomeFragment : BaseFragment() {
     }
 
     // Create a favorite object to handle the return trip
+    /**
+     * train headers must be in ABBR format
+     */
     private fun loadInverseTripData(favorite: Favorite) {
-        mViewModel.getTripLiveData(favorite.destination, favorite.origin).observe(this, Observer { response ->
+        mViewModel.getTripLiveData(favorite.b.abbr, favorite.a.abbr).observe(this, Observer { response ->
             val status = response.status
             if(status == LiveDataWrapper.Status.SUCCESS) {
                 if(response.data.root.schedule.request.tripList != null) {
@@ -226,7 +230,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun displayFavoriteEtd(favorite: Favorite) {
-        mViewModel.getEtdLiveData(favorite.origin).observe(this, Observer { data ->
+        mViewModel.getEtdLiveData(favorite.a.abbr).observe(this, Observer { data ->
             when(data.status) {
                 LiveDataWrapper.Status.SUCCESS -> {
                     if (data != null) {
@@ -250,7 +254,7 @@ class HomeFragment : BaseFragment() {
         Fetches an ETD for the opposite direction of the favorite
      */
     private fun displayInverseEtd(inverse: Favorite) {
-        mViewModel.getEtdLiveData(inverse.origin).observe(this, Observer { data ->
+        mViewModel.getEtdLiveData(inverse.a.abbr).observe(this, Observer { data ->
             if(data.status == LiveDataWrapper.Status.SUCCESS) {
                 if (data != null) {
                     mViewModel.mInverseEstimateList = mViewModel.getEstimatesFromEtd(inverse, data.data.station.etdList)

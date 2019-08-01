@@ -9,6 +9,7 @@ import androidx.room.Query;
 import io.reactivex.Maybe;
 
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station;
 
 import java.util.List;
 
@@ -30,12 +31,8 @@ public interface FavoriteDao {
     @Query("SELECT COUNT(*) from favorites")
     int countFavorites();
 
-    @Query("SELECT * from favorites where origin = :origin and destination = :destination")
-    Favorite getFavorite(String origin, String destination);
-
-    @Query("SELECT * from favorites where origin = :origin and destination = :destination " +
-            "OR origin = :destination and destination = :origin")
-    boolean doesFavoriteExist(String origin, String destination);
+    @Query("SELECT * from favorites where a = :a and b = :b")
+    Favorite getFavorite(Station a, Station b);
 
     @Query("SELECT * from favorites where priority = 1")
     Maybe<Favorite> getPriorityFavorite();
@@ -48,8 +45,8 @@ public interface FavoriteDao {
     @Query("Update favorites set priority = 0 where id = :id")
     void removePriorityById(int id);
 
-    @Query("SELECT * from favorites where origin = :origin and destination = :destination OR origin = :destination and destination = :origin")
-    LiveData<Favorite> getLiveDataFavorite(String origin, String  destination);
+    @Query("SELECT * from favorites where a = :a and b = :b OR a = :b and b = :a")
+    LiveData<Favorite> getLiveDataFavorite(Station a, Station b);
 
     @Query("SELECT count(*) from favorites where priority = 1")
     int getPriorityCount();

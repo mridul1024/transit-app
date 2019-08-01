@@ -12,7 +12,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.room.converter.Converters;
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.FavoriteDao;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
 
-@Database(entities = {Favorite.class}, version = 2, exportSchema = false)
+@Database(entities = {Favorite.class}, version = 3, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class FavoriteDatabase extends RoomDatabase {
 
@@ -22,8 +22,8 @@ public abstract class FavoriteDatabase extends RoomDatabase {
     public static FavoriteDatabase getRoomDB(Context context) {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), FavoriteDatabase.class, "favorites")
-                    //.addMigrations(MIGRATION)
-                    .fallbackToDestructiveMigration()
+                    .addMigrations(MIGRATION)
+                    //.fallbackToDestructiveMigration()
                     .build();
         }
         return INSTANCE;
@@ -41,20 +41,24 @@ public abstract class FavoriteDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
 
-            // create a new table
-            database.execSQL("CREATE TABLE favorites_temp (id INTEGER, origin TEXT, destination TEXT," +
-                    " trainHeaderStations TEXT, system TEXT, description TEXT, priority TEXT, colors TEXT, PRIMARY KEY(id))");
-
-            // copy the data
-            database.execSQL("INSERT INTO favorites_temp (id, origin, destination, trainHeaderStations, system, description, priority, colors) "
-                    + "SELECT id, origin, destination, trainHeaderStations, system, description, priority, colors "
-                    + "FROM favorites");
-
             // remove the old table
             database.execSQL("DROP TABLE favorites");
 
+            // create a new table
+            database.execSQL("CREATE TABLE favorites (id INTEGER, a TEXT, b TEXT," +
+                    " trainHeaderStations TEXT, system TEXT, description TEXT, priority INTEGER, colors TEXT, PRIMARY KEY(id))");
+
+            // copy the data
+            /*
+            database.execSQL("INSERT INTO favorites_temp (id, a, b, trainHeaderStations, system, description, priority, colors) "
+                    + "SELECT id, origin, destination, trainHeaderStations, system, description, priority, colors "
+                    + "FROM favorites");
+                    */
+
+
+
             // change the table name to the correct one
-            database.execSQL("ALTER TABLE favorites_temp RENAME TO favorites");
+            //database.execSQL("ALTER TABLE favorites_temp RENAME TO favorites");
         }
     };
 }

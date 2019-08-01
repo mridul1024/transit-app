@@ -10,6 +10,7 @@
         app:cardCornerRadius="@dimen/riderz_cardView_cornerRadius">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -67,34 +68,27 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView16" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/appCompatButton3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:background="@android:drawable/list_selector_background"
-                android:src="@drawable/ic_settings_black_24dp"
-                android:text="A Info"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/appCompatButton2"
+                android:id="@+id/getTripButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="B Info"
-                app:layout_constraintEnd_toStartOf="@+id/appCompatButton"
-                app:layout_constraintStart_toEndOf="@+id/appCompatButton3"
-                app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/appCompatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 android:text="Get Trip"
+                app:layout_constraintBottom_toBottomOf="@+id/settingsButton"
+                app:layout_constraintEnd_toStartOf="@+id/settingsButton"
+                app:layout_constraintTop_toTopOf="@+id/settingsButton" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/settingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_settings_black_24dp"
+                android:text="Get Trip"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
@@ -119,12 +113,67 @@
                 tools:text="@string/bart_result_cashFare" />
 
             <TextView
+                android:id="@+id/cashFare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="0"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textView31"
+                app:layout_constraintStart_toEndOf="@+id/textView31"
+                app:layout_constraintTop_toTopOf="@+id/textView31" />
+
+            <TextView
                 android:id="@+id/textView22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/bart_result_clipperFare"
+                app:layout_constraintBottom_toBottomOf="@+id/cashFare"
+                app:layout_constraintStart_toEndOf="@+id/cashFare"
+                app:layout_constraintTop_toTopOf="@+id/cashFare" />
+
+            <TextView
+                android:id="@+id/clipperFare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="0"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textView22"
+                app:layout_constraintStart_toEndOf="@+id/textView22"
+                app:layout_constraintTop_toTopOf="@+id/textView22" />
+
+            <TextView
+                android:id="@+id/departStation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:text="TextView"
-                tools:layout_editor_absoluteX="127dp"
-                tools:layout_editor_absoluteY="75dp" />
+                app:layout_constraintBottom_toBottomOf="@+id/textView29"
+                app:layout_constraintStart_toEndOf="@+id/textView29"
+                app:layout_constraintTop_toTopOf="@+id/textView29" />
+
+            <TextView
+                android:id="@+id/arriveStation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="@+id/textView30"
+                app:layout_constraintStart_toEndOf="@+id/textView30"
+                app:layout_constraintTop_toTopOf="@+id/textView30" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/switchButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:src="@drawable/ic_reverse"
+                app:layout_constraintBottom_toBottomOf="@+id/getTripButton"
+                app:layout_constraintEnd_toStartOf="@+id/getTripButton"
+                app:layout_constraintTop_toTopOf="@+id/getTripButton" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

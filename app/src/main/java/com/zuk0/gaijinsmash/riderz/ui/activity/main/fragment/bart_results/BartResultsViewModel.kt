@@ -35,6 +35,8 @@ import kotlin.coroutines.CoroutineContext
 class BartResultsViewModel @Inject
 internal constructor(application: Application, private val mTripRepository: TripRepository) : AndroidViewModel(application){
 
+    var originStation: Station? = null
+    var destinationStation: Station? = null
     var origin: String = ""
     var destination: String = ""
     var date: String = "today" // default
@@ -79,12 +81,12 @@ internal constructor(application: Application, private val mTripRepository: Trip
         viewModelScope.launch {
             val originTask = async(Dispatchers.IO) { getStationFromDb(origin) }
             val destinationTask = async(Dispatchers.IO)  { getStationFromDb(destination) }
-            val result1 = originTask.await()
-            val result2 = destinationTask.await()
+            originStation = originTask.await()
+            destinationStation = destinationTask.await()
 
-            if(result1.abbr.isNotBlank() && result2.abbr.isNotBlank()) {
-                Logger.d("Origin:  ${result1.name}, Destination: ${result2.name}")
-                mediator.addSource(mTripRepository.getTrip(originTask.await().abbr, destinationTask.await().abbr, date, time)) { result ->
+            if(originStation?.abbr?.isNotBlank() == true && destinationStation?.abbr?.isNotBlank() == true) {
+                Logger.d("Origin:  ${originStation?.name}, Destination: ${originStation?.name}")
+                mediator.addSource(mTripRepository.getTrip(originStation?.abbr!!, originStation?.abbr!!, date, time)) { result ->
                     mediator.postValue(result)
                 }
             }
@@ -101,11 +103,11 @@ internal constructor(application: Application, private val mTripRepository: Trip
     /****************************************************************
      * Favorites
      */
-    internal fun createFavorite(origin: String?, destination: String?, tripList: List<Trip>?): Favorite? {
+    internal fun createFavorite(origin: Station?, destination: Station?, tripList: List<Trip>?): Favorite? {
         if (origin != null && destination != null && tripList != null) {
             favorite = Favorite()
-            favorite?.origin = origin
-            favorite?.destination = destination
+            favorite?.a = origin
+            favorite?.b = destination
             val trainHeaders = ArrayList<String>()
             for (trip in tripList) {
                 val header = trip.legList[0].trainHeadStation
@@ -123,8 +125,8 @@ internal constructor(application: Application, private val mTripRepository: Trip
         AddOrRemoveFavoriteTask(getApplication(), action, favorite).execute()
     }
 
-    internal fun getFavoriteLiveData(origin: String, destination: String): LiveData<Favorite> {
-        return FavoriteDatabase.getRoomDB(getApplication()).favoriteDAO.getLiveDataFavorite(origin, destination)
+    internal fun getFavoriteLiveData(a: Station, b: Station): LiveData<Favorite> {
+        return FavoriteDatabase.getRoomDB(getApplication()).favoriteDAO.getLiveDataFavorite(a, b)
     }
 
     private fun handleFavoriteTask(context: Context, action: RiderzEnums.FavoritesAction, favorite: Favorite) {
@@ -141,8 +143,8 @@ internal constructor(application: Application, private val mTripRepository: Trip
                 }
                 RiderzEnums.FavoritesAction.DELETE_FAVORITE -> {
                     val dao = db.favoriteDAO
-                    val one = dao.getFavorite(favorite.origin, favorite.destination)
-                    val two = dao.getFavorite(favorite.destination, favorite.origin)
+                    val one = dao.getFavorite(favorite.a, favorite.b)
+                    val two = dao.getFavorite(favorite.b, favorite.a)
                     if(one == null && two == null) {
                         Logger.e("unable to locate favorite object in db: $favorite")
                     }
@@ -175,8 +177,8 @@ internal constructor(application: Application, private val mTripRepository: Trip
                 }
                 RiderzEnums.FavoritesAction.DELETE_FAVORITE -> {
                     val dao = FavoriteDatabase.getRoomDB(mWeakRef.get()).favoriteDAO
-                    val one = dao.getFavorite(mFavorite.origin, mFavorite.destination)
-                    val two = dao.getFavorite(mFavorite.destination, mFavorite.origin)
+                    val one = dao.getFavorite(mFavorite.a, mFavorite.b)
+                    val two = dao.getFavorite(mFavorite.b, mFavorite.a)
                     if (one != null) {
                         dao.delete(one)
                     }

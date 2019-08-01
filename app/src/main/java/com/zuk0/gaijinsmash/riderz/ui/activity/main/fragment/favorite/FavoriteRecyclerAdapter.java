@@ -13,24 +13,28 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.zuk0.gaijinsmash.riderz.R;
 import com.zuk0.gaijinsmash.riderz.data.local.constants.StationList;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.diff_util.FavoriteDiffCallback;
+import com.zuk0.gaijinsmash.riderz.databinding.ListRowFavorites2Binding;
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.trip.TripFragment;
 import com.zuk0.gaijinsmash.riderz.ui.shared.adapter.RecyclerAdapterClickListener;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecyclerAdapter.ViewHolder> implements RecyclerAdapterClickListener {
 
     private List<Favorite> mFavoriteList;
-    private View.OnClickListener listener;
-    private Fragment mParent;
+    private View.OnClickListener listener; //todo  - use this as general listener for all buttons
+    private Fragment mParent; //todo replace with rxjava?
 
     public FavoriteRecyclerAdapter(List<Favorite> favoriteList, Fragment parent) {
         mFavoriteList = favoriteList;
@@ -45,23 +49,23 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row_favorites, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        //holder.itemView.setOnClickListener( v -> listener.onClick(v));
-        return holder;
+        ListRowFavorites2Binding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_row_favorites2, parent, false);
+        return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Favorite favorite = mFavoriteList.get(position);
-        String originAbbr = StationList.getAbbrFromStationName(favorite.getOrigin());
-        String destAbbr = StationList.getAbbrFromStationName(favorite.getDestination());
-        holder.origin.setText(originAbbr.toUpperCase());
-        holder.destination.setText(destAbbr.toUpperCase());
-        holder.optionsButton.setOnClickListener(v -> initPopupMenu(v.getContext(), holder.optionsButton, favorite, position));
+        String stationA = StationList.getAbbrFromStationName(favorite.getA().getName());
+        String stationB = StationList.getAbbrFromStationName(favorite.getB().getName());
+        holder.binding.departStation.setText(stationA);
+        holder.binding.arriveStation.setText(stationB);
+        holder.binding.settingsButton.setOnClickListener(v -> initPopupMenu(v.getContext(), holder.binding.settingsButton, favorite, position));
         if(favorite.getPriority() == Favorite.Priority.ON) {
-            holder.background.setBackgroundColor(holder.origin.getContext().getResources().getColor(R.color.primaryLightColor));
+            holder.binding.background.setBackgroundColor(holder.binding.getRoot().getContext().getResources().getColor(R.color.primaryLightColor));
         }
+        holder.binding.switchButton.setOnClickListener(v -> reverseRoute(holder.binding.departStation, holder.binding.arriveStation));
+        holder.binding.getTripButton.setOnClickListener(v -> initTripSearch(mParent, holder.binding.departStation, holder.binding.arriveStation));
     }
 
     @Override
@@ -98,28 +102,28 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
                 this.notifyItemRemoved(rowPosition);
                 if(getItemCount() == 1) {
                     mFavoriteList.clear();
-                    this.notifyDataSetChanged();
+                    notifyDataSetChanged();
                 }
                 break;
             case R.id.action_favorite_setPriority:
                 //todo: prompt user if he/she wants to remove current priority, and make this the priority
                 FavoritesViewModel.addPriority(context, favorite);
                 menu.dismiss();
-                this.notifyItemChanged(rowPosition);
+                notifyItemChanged(rowPosition);
                 break;
             case R.id.action_favorite_deletePriority:
                 FavoritesViewModel.removePriority(context, favorite);
                 menu.dismiss();
                 Toast.makeText(context, R.string.priority_deleted, Toast.LENGTH_SHORT).show();
-                this.notifyItemChanged(rowPosition);
+                notifyItemRemoved(rowPosition);
                 break;
         }
     }
 
     /*
-    Note: pulls text directly from textviews, which are in Abbreviated format
-    Must get full stations names for sql query in favorites database.
- */
+        Note: pulls text directly from textviews, which are in Abbreviated format
+        Must get full stations names for sql query in favorites database.
+    */
     private void initTripSearch(Fragment parent, TextView origin, TextView destination) {
         String originString = origin.getText().toString();
         String destinationString = destination.getText().toString();
@@ -130,6 +134,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         bundle.putString(TripFragment.TripBundle.DATE.getValue(), "TODAY");
         bundle.putString(TripFragment.TripBundle.TIME.getValue(), "NOW");
         bundle.putBoolean("FAVORITE_RECYCLER_ADAPTER", true);
+
         NavHostFragment.findNavController(parent).navigate(R.id.action_favoritesFragment_to_resultsFragment, bundle, null, null);
     }
 
@@ -139,25 +144,24 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         destination.setText(temp);
     }
 
+    /**
+     * Diff util - updates the recyclerview asynchronously
+     */
+    private void updateList(List<Favorite> newList) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new FavoriteDiffCallback(this.mFavoriteList, newList));
+        diffResult.dispatchUpdatesTo(this);
+    }
+
+    private List<Favorite> getFavoritesFromDb() {
+        return null;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView origin;
-        private TextView destination;
-        private ImageButton searchButton;
-        private ImageButton optionsButton;
-        private ImageButton reverseButton;
-        private LinearLayout background;
+        private ListRowFavorites2Binding binding;
 
-        ViewHolder(View view) {
-            super(view);
-            origin = view.findViewById(R.id.favorite_origin_textView);
-            destination = view.findViewById(R.id.favorite_destination_textView);
-            searchButton = view.findViewById(R.id.favorite_search_ib);
-            optionsButton = view.findViewById(R.id.favorite_options_ib);
-            reverseButton = view.findViewById(R.id.favorite_reverse_ib);
-            background = view.findViewById(R.id.favorite_row_background);
-
-            reverseButton.setOnClickListener(v -> reverseRoute(origin, destination));
-            searchButton.setOnClickListener(v -> initTripSearch(mParent, origin, destination));
+        ViewHolder(ListRowFavorites2Binding binding) {
+            super(binding.getRoot());
+            this.binding  = binding;
         }
     }
 }

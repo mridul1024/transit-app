@@ -26,6 +26,7 @@ import javax.inject.Inject
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.orhanobut.logger.Logger
+import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment
 
 /*
@@ -60,7 +61,12 @@ class BartResultsFragment : BaseFragment() {
 
         initStationsForTripCall(viewModel.origin, viewModel.destination, viewModel.date, viewModel.time)
 
-        initFavoriteIcon(viewModel.origin, viewModel.destination)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initFavoriteIcon(viewModel.originStation, viewModel.destinationStation)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -100,12 +106,11 @@ class BartResultsFragment : BaseFragment() {
     private fun initStationsForTripCall(origin: String, destination: String, date: String, time: String) {
         Logger.i("origin: $origin, destination: $destination, date: $date, time: $time")
 
-        //todo
         viewModel.loadTrip(origin, destination, date, time).observe(this, Observer { result ->
             when(result.status) {
                 LiveDataWrapper.Status.SUCCESS -> {
                     viewModel.mTripList = result.data.root.schedule.request.tripList
-                    initFavoriteObject(viewModel.origin, viewModel.destination, viewModel.mTripList)
+                    initFavoriteObject(viewModel.originStation, viewModel.destinationStation, viewModel.mTripList)
                     initRecyclerView(viewModel.mTripList)
                 }
                 LiveDataWrapper.Status.LOADING -> {
@@ -128,25 +133,14 @@ class BartResultsFragment : BaseFragment() {
         }
     }
 
-    private fun initFavoriteObject(origin: String?, destination: String?, tripList: List<Trip>?) {
-        viewModel.mFavoriteObject = viewModel.createFavorite(origin, destination, tripList)
+    private fun initFavoriteObject(a: Station?, b: Station?, tripList: List<Trip>?) {
+        if(a != null && b != null)
+            viewModel.mFavoriteObject = viewModel.createFavorite(a, b, tripList)
     }
 
-    private fun initFavoriteIcon(origin: String?, destination: String?) {
-        val org: String?
-        val dest: String?
-
-        if (viewModel.isFromRecyclerAdapter) {
-            //convert to full name
-            org = StationList.stationMap[origin!!.toUpperCase()]
-            dest = StationList.stationMap[destination!!.toUpperCase()]
-        } else {
-            org = origin
-            dest = destination
-        }
-
-        if(!org.isNullOrBlank() && !dest.isNullOrBlank()) {
-            viewModel.getFavoriteLiveData(org, dest).observe(this, Observer { data ->
+    private fun initFavoriteIcon(a: Station?, b: Station?) {
+        if(a != null && b != null) {
+            viewModel.getFavoriteLiveData(a, b).observe(this, Observer { data ->
                 if (data != null) {
                     // Current trip is already a Favorite
                     mFavoritedIcon?.isVisible = true
