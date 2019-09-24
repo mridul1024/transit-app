@@ -8,6 +8,7 @@ import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import androidx.room.Room
 import com.orhanobut.logger.Logger
+import com.zuk0.gaijinsmash.riderz.BuildConfig
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse
@@ -54,6 +55,9 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
     var mInverseEstimateList: List<Estimate>? = null //todo refactor - put in viewmodel
     var mFavoriteEstimateList: List<Estimate>? = null //todo refactor - put in viewmodel
     var upcomingNearbyEstimateList: List<Estimate>? = null
+
+    private val defaultStation = Station()
+    private val closestStationLiveData = MutableLiveData<Station>()
 
     val bsaLiveData: LiveData<BsaXmlResponse>
         get() = mBsaRepository.bsa
@@ -146,10 +150,10 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
     internal fun getEstimatesFromEtd(favorite: Favorite, etds: List<Etd>): List<Estimate> {
         val results = ArrayList<Estimate>()
         for (etd in etds) {
-            if (favorite.trainHeaderStations.contains(etd.destinationAbbr.toUpperCase())) {
+            if (favorite.trainHeaderStations?.contains(etd.destinationAbbr.toUpperCase()) == true) {
                 val estimate = etd.estimateList[0]
-                estimate.origin = favorite.a.name
-                estimate.destination = favorite.b.name
+                estimate.origin = favorite.a?.name
+                estimate.destination = favorite.b?.name
                 estimate.trainHeaderStation = etd.destination
                 results.add(estimate)
             }
@@ -164,11 +168,13 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
         val origin = station.name
         val etds = station.etdList
         val results = ArrayList<Estimate>()
-        for (etd in etds) {
-            val estimate = etd.estimateList[0]
-            estimate.origin = origin
-            estimate.destination = etd.destination
-            results.add(estimate)
+        etds?.let {
+            for (etd in etds) {
+                val estimate = etd.estimateList[0]
+                estimate.origin = origin
+                estimate.destination = etd.destination
+                results.add(estimate)
+            }
         }
         return results
     }
@@ -189,13 +195,13 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
         //xmas, nye,
     }
 
-    private val closestStationLiveData = MutableLiveData<Station>()
 
     //get user location, use haversine formula to get nearest station.
     fun getNearestStation(userLocation: Location?) : LiveData<Station> {
 
-        if(userLocation == null)
+        if(userLocation == null) {
             return closestStationLiveData
+        }
 
         viewModelScope.launch(Dispatchers.IO) {
             var closestDistance = 0

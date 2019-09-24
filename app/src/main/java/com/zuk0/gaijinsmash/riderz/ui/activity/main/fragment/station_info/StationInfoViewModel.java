@@ -18,6 +18,10 @@ public class StationInfoViewModel extends ViewModel {
     private StationRepository mRepository;
     private LiveData<StationXmlResponse> mStationLiveData;
 
+    public String mStationAbbr;
+    public Station mStationObject;
+    public Bundle mBundle;
+
     @Inject
     StationInfoViewModel(StationRepository repository) {
         mRepository = repository;
@@ -28,7 +32,10 @@ public class StationInfoViewModel extends ViewModel {
         //todo: initialization logic here
     }
 
-    public LiveData<StationXmlResponse> getStationLiveData() {
+    public LiveData<StationXmlResponse> getStationLiveData(String abbr) {
+        if(mStationLiveData == null) {
+            mStationLiveData = mRepository.getStation(abbr);
+        }
         return mStationLiveData;
     }
 
@@ -52,13 +59,5 @@ public class StationInfoViewModel extends ViewModel {
         bundle.putString(StationInfo.Lat.getValue(), String.valueOf(station.getLatitude()));
         bundle.putString(StationInfo.Long.getValue(), String.valueOf(station.getLongitude()));
         return bundle;
-    }
-
-
-    // NOTE: this must be called first before trying to fetch LiveData object
-    public void initStation(Context context, String abbr) {
-        if(mStationLiveData == null) {
-            mStationLiveData = mRepository.getStation(abbr);
-        }
     }
 }

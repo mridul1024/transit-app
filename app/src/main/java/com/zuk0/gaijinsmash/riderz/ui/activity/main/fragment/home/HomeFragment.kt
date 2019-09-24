@@ -1,17 +1,21 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.orhanobut.logger.Logger
@@ -25,6 +29,8 @@ import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.BsaRecyclerAdapter
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.EstimateRecyclerAdapter
 import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper
+import com.zuk0.gaijinsmash.riderz.utils.GpsUtils
+import com.zuk0.gaijinsmash.riderz.utils.PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableMaybeObserver
 import io.reactivex.schedulers.Schedulers
@@ -65,10 +71,10 @@ class HomeFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        loadWeather()
-        loadAdvisories(mViewModel.bsaLiveData)
+        initWeather()
+        initAdvisories(mViewModel.bsaLiveData)
         initFavoriteObserver()
-        loadUpcomingNearbyTrains()
+        initUserLocation()
         initSwipeRefreshLayout()
         super.expandAppBar(activity)
         expandBottomNavView()
@@ -84,23 +90,41 @@ class HomeFragment : BaseFragment() {
         Log.d("onPause", "timers destroyed")
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when(requestCode) {
+             LOCATION_PERMISSION_REQUEST_CODE -> {
+                 if(permissions.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                     binding.homePermissionContainer.visibility = View.GONE
+                     loadUpcomingNearbyTrains()
+                 }
+                 else
+                     loadPermissionView()
+             }
+            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
+    }
+
+    /*
+        Helper Methods
+     */
+
     private fun initViewModel() {
         mViewModel = ViewModelProviders.of(this, mHomeViewModelFactory).get(HomeViewModel::class.java)
     }
 
     private fun initSwipeRefreshLayout() {
-        binding.homeSwipeRefreshLayout.setOnRefreshListener(object: SwipeRefreshLayout.OnRefreshListener {
-            override fun onRefresh() {
-                loadAdvisories(mViewModel.bsaLiveData)
-                //initFavoriteObserver()
-                loadUpcomingNearbyTrains()
-            }
-        })
+        binding.homeSwipeRefreshLayout.setOnRefreshListener {
+            initAdvisories(mViewModel.bsaLiveData)
+            //initFavoriteObserver()
+            loadUpcomingNearbyTrains()
+        }
     }
 
     private fun expandBottomNavView() { // todo why?
         val bottomNav = activity?.findViewById<BottomNavigationView>(R.id.main_bottom_navigation)
-        HideBottomViewOnScrollBehavior<BottomNavigationView>(activity, null).slideUp(bottomNav)
+        bottomNav?.let {
+            HideBottomViewOnScrollBehavior<BottomNavigationView>(activity, null).slideUp(bottomNav)
+        }
     }
     /*
        A way to provide news that cannot be fetched by the api via webview.
@@ -116,12 +140,15 @@ class HomeFragment : BaseFragment() {
     /*
         Fetches data for BART advisories - i.e. delay reports
     */
-    private fun loadAdvisories(bsa: LiveData<BsaXmlResponse>) {
+    private fun initAdvisories(bsa: LiveData<BsaXmlResponse>) {
         bsa.observe(this, Observer { bsaXmlResponse ->
             if (bsaXmlResponse != null) {
+                binding.homeBsaRecyclerView.visibility = View.VISIBLE
                 val bsaAdapter = BsaRecyclerAdapter(bsaXmlResponse.bsaList)
                 binding.homeBsaRecyclerView.adapter = bsaAdapter
                 binding.homeBsaRecyclerView.layoutManager = LinearLayoutManager(context)
+
+
             }
         })
     }
@@ -143,7 +170,7 @@ class HomeFragment : BaseFragment() {
                     }
 
                     override fun onError(e: Throwable) {
-                        Logger.e(e.localizedMessage)
+                        Logger.e(e.toString())
                         updateProgressBar()
                     }
                 })
@@ -154,30 +181,33 @@ class HomeFragment : BaseFragment() {
        WARNING: TRAIN HEADERS should be in ABBREVIATED FORMAT
     */
     private fun loadTripData(favorite: Favorite) {
-        mViewModel.getTripLiveData(favorite.a.abbr, favorite.b.abbr).observe(this, Observer { response ->
-            val trips: List<Trip>
-            val status = response.status
+        if(favorite.a != null && favorite.b != null) {
+            mViewModel.getTripLiveData(favorite.a?.abbr!!, favorite.b?.abbr!!).observe(this, Observer { response ->
+                val trips: List<Trip>
+                val status = response.status
 
-            if(status == LiveDataWrapper.Status.SUCCESS) {
-                if(response.data.root.schedule.request.tripList != null) {
-                    trips = response.data.root.schedule.request.tripList
-                    mViewModel.setTrainHeaders(trips, favorite)
-                    displayFavoriteEtd(favorite)
+                if(status == LiveDataWrapper.Status.SUCCESS) {
+                    if(response.data.root.schedule.request.tripList != null) {
+                        trips = response.data.root.schedule.request.tripList
+                        mViewModel.setTrainHeaders(trips, favorite)
+                        displayFavoriteEtd(favorite)
+                    }
                 }
-            }
 
-            if(status == LiveDataWrapper.Status.ERROR) {
-                updateProgressBar()
-            }
-        })
+                if(status == LiveDataWrapper.Status.ERROR) {
+                    updateProgressBar()
+                }
+            })
+        }
+
     }
 
-    // Create a favorite object to handle the return trip
     /**
+     * Create a favorite object to handle the return trip
      * train headers must be in ABBR format
      */
     private fun loadInverseTripData(favorite: Favorite) {
-        mViewModel.getTripLiveData(favorite.b.abbr, favorite.a.abbr).observe(this, Observer { response ->
+        mViewModel.getTripLiveData(favorite.b?.abbr!!, favorite.a?.abbr!!).observe(this, Observer { response ->
             val status = response.status
             if(status == LiveDataWrapper.Status.SUCCESS) {
                 if(response.data.root.schedule.request.tripList != null) {
@@ -193,8 +223,27 @@ class HomeFragment : BaseFragment() {
         })
     }
 
-    private fun loadUpcomingNearbyTrains() {
 
+    private fun initUserLocation() {
+        if (GpsUtils.checkLocationPermission(context)) {
+            loadUpcomingNearbyTrains()
+        } else {
+            if(GpsUtils.checkIfExplanationIsNeeded(activity)) {
+                //show explanation if user has denied request before
+                GpsUtils.showExplanationToUser(context)
+            } else {
+                //request permission
+                activity?.let {
+                    ActivityCompat.requestPermissions(
+                            it,
+                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                            LOCATION_PERMISSION_REQUEST_CODE)
+                }
+            }
+        }
+    }
+
+    private fun loadUpcomingNearbyTrains() {
         mViewModel.getNearestStation(mViewModel.userLocation).observe(this, Observer {station ->
             station?.let {
                 mViewModel.getLocalEtd(station).observe(this, Observer {data ->
@@ -223,6 +272,23 @@ class HomeFragment : BaseFragment() {
         })
     }
 
+    /**
+     * Display permission cardView when Location Permissions is off.
+     */
+    private fun loadPermissionView() {
+        binding.homePermissionContainer.visibility = View.VISIBLE
+
+        binding.enablePermissionButton.setOnClickListener { v ->
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, android.net.Uri.parse("package:" + activity?.packageName))
+            intent.addCategory(Intent.CATEGORY_DEFAULT)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            activity?.startActivityForResult(intent, LOCATION_PERMISSION_REQUEST_CODE)
+        }
+        binding.disablePermissionButton.setOnClickListener {
+            binding.homePermissionContainer.visibility = View.GONE
+        }
+    }
+
     private fun loadCallToAction(isFavoriteAvailable: Boolean) {
         if(!isFavoriteAvailable) {
            // todo
@@ -230,7 +296,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun displayFavoriteEtd(favorite: Favorite) {
-        mViewModel.getEtdLiveData(favorite.a.abbr).observe(this, Observer { data ->
+        mViewModel.getEtdLiveData(favorite.a?.abbr!!).observe(this, Observer { data ->
             when(data.status) {
                 LiveDataWrapper.Status.SUCCESS -> {
                     if (data != null) {
@@ -254,7 +320,7 @@ class HomeFragment : BaseFragment() {
         Fetches an ETD for the opposite direction of the favorite
      */
     private fun displayInverseEtd(inverse: Favorite) {
-        mViewModel.getEtdLiveData(inverse.a.abbr).observe(this, Observer { data ->
+        mViewModel.getEtdLiveData(inverse.a?.abbr!!).observe(this, Observer { data ->
             if(data.status == LiveDataWrapper.Status.SUCCESS) {
                 if (data != null) {
                     mViewModel.mInverseEstimateList = mViewModel.getEstimatesFromEtd(inverse, data.data.station.etdList)
@@ -272,7 +338,7 @@ class HomeFragment : BaseFragment() {
         })
     }
 
-    private fun loadWeather() {
+    private fun initWeather() {
         Logger.i("loading weather")
 
         mViewModel.getWeather().observe(this, Observer { response ->

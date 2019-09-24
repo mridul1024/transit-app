@@ -46,6 +46,7 @@ import com.zuk0.gaijinsmash.riderz.databinding.FragmentGoogleMapBinding;
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment;
 import com.zuk0.gaijinsmash.riderz.utils.AlertDialogUtils;
 import com.zuk0.gaijinsmash.riderz.utils.GpsUtils;
+import com.zuk0.gaijinsmash.riderz.utils.ImageUtils;
 import com.zuk0.gaijinsmash.riderz.utils.NetworkUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +55,8 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
+
+import static com.zuk0.gaijinsmash.riderz.utils.PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE;
 
 
 //todo: implement search widget in toolbar?
@@ -80,8 +83,6 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
     private int AXIS_Y_MAX = 10;
     private RectF mCurrentViewport =
             new RectF(AXIS_X_MIN, AXIS_Y_MIN, AXIS_X_MAX, AXIS_Y_MAX);
-
-    private static final int LOCATION_PERMISSON_REQUEST_CODE = 101;
 
     //---------------------------------------------------------------------------------------------
     // MapView must be used for Fragments to prevent nested fragments.
@@ -140,7 +141,6 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
         super.onPause();
         if (mMapView != null)
             mMapView.onPause();
-        //todo: close snackbars
     }
 
     @Override
@@ -148,6 +148,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
         super.onStop();
         if (mMapView != null)
             mMapView.onStop();
+        //todo: close snackbars
     }
 
     @Override
@@ -280,7 +281,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
                         ActivityCompat.requestPermissions(
                                 getActivity(),
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                LOCATION_PERMISSON_REQUEST_CODE);
+                                LOCATION_PERMISSION_REQUEST_CODE);
                     }
                 })
                 .setActionTextColor(Color.RED)
@@ -320,7 +321,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
         mViewModel.initMapSettings(map);
     }
 
-    private void initUserLocation(Context context, GoogleMap map) {
+        private void initUserLocation(Context context, GoogleMap map) {
         GpsUtils gps;
         Location loc = null;
         try {
@@ -333,7 +334,7 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
             } else {
                 requestPermissions(
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        LOCATION_PERMISSON_REQUEST_CODE);
+                        LOCATION_PERMISSION_REQUEST_CODE);
             }
         } catch(SecurityException e) {
             Logger.e(e.getMessage());
@@ -361,7 +362,8 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
                             .position(latLng)
                             .title(station.getName())
                             .snippet(station.getAddress())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_train)));
+                            .icon(ImageUtils.INSTANCE.bitmapDescriptorFromVector(getContext(), R.drawable.ic_train_24dp)));
+                            //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_train)));
                             //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                 }
             }
@@ -383,15 +385,12 @@ public class GoogleMapFragment extends BaseFragment implements OnMapReadyCallbac
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.i("onRequestPermission", String.valueOf(requestCode));
-        switch(requestCode) {
-            case LOCATION_PERMISSON_REQUEST_CODE: {
-                Log.i("permission result", "101");
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    initUserLocation(getActivity(),mGoogleMap);
-                } else{
-                    Log.wtf("permission result", "failed");
-                }
-                break;
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            Log.i("permission result", "101");
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                initUserLocation(getActivity(), mGoogleMap);
+            } else {
+                Log.wtf("permission result", "failed");
             }
         }
     }

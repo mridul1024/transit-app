@@ -1,0 +1,1 @@
+This is a Beta version of the Riderz App - a transit app that provides up-to-date information on BART stations and routes. Potential bugs may still arise, so if you have time please take a moment to report the bug. It would be greatly appreciated!

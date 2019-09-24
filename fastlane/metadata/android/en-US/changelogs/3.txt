@@ -1,0 +1,5 @@
+1.2-beta release
+
+-updated Google Maps
+-updated Trip Fragment
+-Time conversion on Home screen is working properly now

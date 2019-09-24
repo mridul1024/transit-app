@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.zuk0.gaijinsmash.riderz.R;
+import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.Bsa;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Estimate;
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Etd;
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecyclerAdapter.ViewHolder>{
@@ -26,6 +28,7 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
         private TextView minutes;
         private TextView line;
         private TextView length;
+        private TextView directionTitle;
         private TextView trainHeader;
 
         ViewHolder(View view) {
@@ -35,6 +38,7 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
             minutes = view.findViewById(R.id.etd_minutesTv);
             line = view.findViewById(R.id.etd_colored_line);
             length = view.findViewById(R.id.etd_car_tv);
+            directionTitle = view.findViewById(R.id.directionTitle);
             trainHeader = view.findViewById(R.id.etd_trainHeader);
         }
     }
@@ -58,7 +62,12 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Estimate estimate = mEstimateList.get(position);
         holder.origin.setText(estimate.getOrigin());
-        holder.trainHeader.setText(estimate.getTrainHeaderStation());
+        if(estimate.getTrainHeaderStation() == null)  {
+            holder.trainHeader.setVisibility(View.GONE);
+            holder.directionTitle.setVisibility(View.GONE);
+        }  else {
+            holder.trainHeader.setText(estimate.getTrainHeaderStation());
+        }
         holder.destination.setText(estimate.getDestination());
 
         String minutes = estimate.getMinutes();
@@ -67,7 +76,7 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
         } else {
             holder.minutes.setText(R.string.leaving);
         }
-        String sb = String.valueOf(estimate.getLength())
+        String sb = estimate.getLength()
                 + " "
                 + "car";
         holder.length.setText(sb);
@@ -92,6 +101,13 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
         return mEstimateList.size();
     }
 
+    public void update(List<Estimate> newData) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new EstimateRecyclerAdapter.EstimateDiffCallback(mEstimateList, newData));
+        mEstimateList.clear();
+        mEstimateList.addAll(newData);
+        diffResult.dispatchUpdatesTo(this);
+    }
+
     public void destroyTimers() {
         for(CountDownTimer timer: timers) {
             timer.cancel();
@@ -106,14 +122,52 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
 
             @Override
             public void onTick(long millisUntilFinished) {
-                String remainingTime = String.valueOf(millisUntilFinished / 60000)+ " " + minutes;
+                String remainingTime = millisUntilFinished / 60000 + " " + minutes;
                 textView.setText(remainingTime);
             }
 
             @Override
             public void onFinish() {
                 textView.setText(textView.getContext().getResources().getString(R.string.leaving));
+                //todo show swipe to dismiss and/or button
+                textView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                }, 1000);
             }
         }.start();
+    }
+
+    class EstimateDiffCallback extends DiffUtil.Callback {
+
+        private List<Estimate> oldList;
+        private List<Estimate> newList;
+
+        EstimateDiffCallback(List<Estimate> oldList, List<Estimate> newList) {
+            this.oldList = oldList;
+            this.newList = newList;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldList.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newList.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldList.get(oldItemPosition).getDestination().equals(newList.get(newItemPosition).getDestination());
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
+        }
     }
 }

@@ -21,11 +21,14 @@ before_script:
   - set +o pipefail
   - yes | android-sdk-linux/tools/bin/sdkmanager --licenses
   - set -o pipefail
+  - gem install bundler
+  - bundle install
 
 # There are 4 possible stages that can be assigned - build, test, release, deploy
 stages:
   - build
   - test
+  - test_flight
 
 lintDebug:
   stage: build
@@ -45,4 +48,19 @@ debugTests:
   stage: test
   script:
     - ./gradlew -Pci --console=plain :app:testDebug
+
+test_flight_build:
+  stage: test_flight
+  artifacts:
+    paths:
+      - fastlane/screenshots
+      - fastlane/logs
+  script:
+    - fastlane beta
+  tags:
+    - android
+  only:
+    - /^release-.*$/
+    - master
+
 

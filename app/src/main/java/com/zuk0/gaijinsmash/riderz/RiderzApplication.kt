@@ -5,21 +5,26 @@ import android.app.Application
 import android.os.Parcelable
 import android.util.Log
 import com.crashlytics.android.Crashlytics
+import com.orhanobut.logger.AndroidLogAdapter
 
 import com.orhanobut.logger.Logger
 import com.squareup.leakcanary.LeakCanary
 import com.zuk0.gaijinsmash.riderz.di.component.DaggerAppComponent
+import dagger.android.AndroidInjector
 
 import javax.inject.Inject
 
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
+import dagger.android.HasAndroidInjector
 import io.fabric.sdk.android.Fabric
 
-class RiderzApplication : Application(), HasActivityInjector {
+class RiderzApplication : Application(), HasAndroidInjector {
 
-    @Inject
-    lateinit var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+    @Inject lateinit var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Any>
+
+    override fun androidInjector(): AndroidInjector<Any> {
+        return activityDispatchingAndroidInjector
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -28,13 +33,14 @@ class RiderzApplication : Application(), HasActivityInjector {
                 .application(this)
                 .build()
                 .inject(this)
-        Logger.i( "app component initialized")
+        initLogger()
         initLeakCanary()
         initCrashlytics()
+        Logger.addLogAdapter(AndroidLogAdapter())
     }
 
-    override fun activityInjector(): DispatchingAndroidInjector<Activity>? {
-        return activityDispatchingAndroidInjector
+    private fun initLogger() {
+        Logger.i( "app component initialized")
     }
 
     private fun initLeakCanary() {

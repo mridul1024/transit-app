@@ -22,8 +22,8 @@ public abstract class FavoriteDatabase extends RoomDatabase {
     public static FavoriteDatabase getRoomDB(Context context) {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), FavoriteDatabase.class, "favorites")
-                    .addMigrations(MIGRATION)
-                    //.fallbackToDestructiveMigration()
+                    //.addMigrations(MIGRATION)
+                    .fallbackToDestructiveMigration() //destroy db on upgrade
                     .build();
         }
         return INSTANCE;
@@ -41,11 +41,9 @@ public abstract class FavoriteDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
 
-            // remove the old table
-            database.execSQL("DROP TABLE favorites");
 
             // create a new table
-            database.execSQL("CREATE TABLE favorites (id INTEGER, a TEXT, b TEXT," +
+            database.execSQL("CREATE TABLE favorites_temp (id INTEGER, a TEXT, b TEXT," +
                     " trainHeaderStations TEXT, system TEXT, description TEXT, priority INTEGER, colors TEXT, PRIMARY KEY(id))");
 
             // copy the data
@@ -55,10 +53,12 @@ public abstract class FavoriteDatabase extends RoomDatabase {
                     + "FROM favorites");
                     */
 
+            // remove the old table
+            database.execSQL("DROP TABLE favorites");
 
 
             // change the table name to the correct one
-            //database.execSQL("ALTER TABLE favorites_temp RENAME TO favorites");
+            database.execSQL("ALTER TABLE favorites_temp RENAME TO favorites");
         }
     };
 }

@@ -1,18 +1,18 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_results
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.constraintlayout.solver.widgets.ConstraintWidget.VISIBLE
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip
-import com.zuk0.gaijinsmash.riderz.databinding.ListRowTripBinding
 import com.zuk0.gaijinsmash.riderz.databinding.ListRowTripContainerBinding
-import com.zuk0.gaijinsmash.riderz.databinding.ListRowTripContentBinding
+import com.zuk0.gaijinsmash.riderz.databinding.ListRowTripLegBinding
 import com.zuk0.gaijinsmash.riderz.utils.BartRoutesUtils
+import com.zuk0.gaijinsmash.riderz.utils.ShareUtils
 
 class TripRecyclerAdapter2(val tripList: List<Trip>) : RecyclerView.Adapter<TripRecyclerAdapter2.ViewHolder>() {
 
@@ -65,14 +65,14 @@ class TripRecyclerAdapter2(val tripList: List<Trip>) : RecyclerView.Adapter<Trip
         val numOfLegs = trip.legList.size
         for(i in 0 until numOfLegs) {
             //create a new leg
-            val legBinding = DataBindingUtil.inflate<ListRowTripContentBinding>(LayoutInflater.from(holder.binding.root.context), R.layout.list_row_trip_content, null, false)
+            val legBinding = DataBindingUtil.inflate<ListRowTripLegBinding>(LayoutInflater.from(holder.binding.root.context), R.layout.list_row_trip_leg, null, false)
 
             //bind color
             BartRoutesUtils.setLineBarByRoute(holder.binding.root.context, trip.legList[i].line, legBinding.tripLegLine)
 
             //inflate transfer view if need be
             if(i > 0) {
-                legBinding.listRowTransferStub.visibility = VISIBLE
+                legBinding.listRowTransferStub.visibility = View.VISIBLE
             }
 
             //depart time and station
@@ -85,6 +85,10 @@ class TripRecyclerAdapter2(val tripList: List<Trip>) : RecyclerView.Adapter<Trip
 
             //add binding to linearlayout
             containerBinding.tripLegContainer.addView(legBinding.root)
+        }
+
+        containerBinding.tripShareButton.setOnClickListener { view ->
+            ShareUtils.shareTrip(view.context, view)
         }
     }
 

@@ -9,6 +9,7 @@ import com.zuk0.gaijinsmash.riderz.BuildConfig;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.ApiKeyInterceptor;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.BartService;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.BartRetrofitClient;
+import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.RetrofitConverterFactory;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.WeatherRetrofitClient;
 import com.zuk0.gaijinsmash.riderz.data.remote.retrofit.WeatherService;
 
@@ -57,15 +58,21 @@ public class NetModule {
 
     @Singleton
     @Provides
-    GsonConverterFactory provideGsonConverterFactory() {
-        return GsonConverterFactory.create();
+    GsonConverterFactory provideGsonConverterFactory(Gson gson) {
+        return GsonConverterFactory.create(gson);
+    }
+
+    @Singleton
+    @Provides
+    RetrofitConverterFactory provideRetrofitConverterFactory() {
+        return new RetrofitConverterFactory();
     }
 
     @Named("bart")
     @Provides
     @Singleton
     Retrofit provideBartRetrofit() {
-        return BartRetrofitClient.getClient(BART_BASE_URL, new ApiKeyInterceptor("key", BART_API_KEY));
+        return BartRetrofitClient.INSTANCE.getClient(BART_BASE_URL, new ApiKeyInterceptor("key", BART_API_KEY));
     }
 
     @Named("weather")

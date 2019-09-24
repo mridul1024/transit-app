@@ -1,0 +1,5 @@
+1.1-beta
+
+-Updates to the way schedules are viewed
+-Fixed bitmap issues with home screen
+-Fixed issues with time formats

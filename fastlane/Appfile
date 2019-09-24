@@ -1,0 +1,2 @@
+json_key_file(".//api-7760094231047216557-826838-ecb468f6c136.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("com.zuk0.gaijinsmash.riderz") # e.g. com.krausefx.app

@@ -30,6 +30,7 @@ import java.util.Objects
 
 import androidx.navigation.fragment.NavHostFragment
 import com.orhanobut.logger.Logger
+import com.zuk0.gaijinsmash.riderz.utils.KeyboardUtils
 
 class TripFragment : BaseFragment() {
 
@@ -95,6 +96,7 @@ class TripFragment : BaseFragment() {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
                 if(keyCode == KeyEvent.KEYCODE_ENTER) {
                     mDataBinding.tripArrivalAutoCompleteTextView.requestFocus()
+                    KeyboardUtils.openKeyboard(context)
                     return true
                 }
                 return false
@@ -158,10 +160,13 @@ class TripFragment : BaseFragment() {
                 var itemSelected = ""
                 itemSelected = textView.text.toString()
                 mDataBinding.tripDepartureAutoCompleteTextView.setText(itemSelected)
-                mDataBinding.tripDepartCloseBtn.visibility = View.VISIBLE
+                if(itemSelected.isNotBlank())
+                    mDataBinding.tripDepartCloseBtn.visibility = View.VISIBLE
             }
 
-            override fun onNothingSelected(adapterView: AdapterView<*>) {}
+            override fun onNothingSelected(adapterView: AdapterView<*>) {
+                Logger.e("todo")
+            }
         }
     }
 
@@ -189,7 +194,8 @@ class TripFragment : BaseFragment() {
                 if(v.visibility == View.VISIBLE) {
                     v.visibility = View.INVISIBLE
                     mDataBinding.tripArrivalAutoCompleteTextView.text.clear()
-                }
+                } else
+                    v.visibility = View.VISIBLE
             }
         }
 
@@ -200,10 +206,12 @@ class TripFragment : BaseFragment() {
                 var itemSelected = ""
                 itemSelected = textView.text.toString()
                 mDataBinding.tripArrivalAutoCompleteTextView.setText(itemSelected)
-                mDataBinding.tripArrivalCloseBtn.visibility = View.VISIBLE
+                if(itemSelected.isNotBlank())
+                    mDataBinding.tripArrivalCloseBtn.visibility = View.VISIBLE
             }
 
             override fun onNothingSelected(adapterView: AdapterView<*>) {
+                Logger.e("todo")
             }
         }
     }

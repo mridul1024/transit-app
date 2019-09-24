@@ -21,6 +21,8 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
+import static com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.station_info.StationInfoFragment.STATION_INFO_EXTRA;
+
 public class StationsFragment extends Fragment {
 
     @Inject
@@ -65,7 +67,7 @@ public class StationsFragment extends Fragment {
     private Bundle initBundle(View view) {
         String stationAbbr = ((TextView) view.findViewById(R.id.stationAbbr_textView)).getText().toString();
         Bundle bundle = new Bundle();
-        bundle.putString("StationAbbr", stationAbbr); //todo: convert StationAbbr to enum
+        bundle.putString(STATION_INFO_EXTRA, stationAbbr); //todo: convert StationAbbr to enum
         return bundle;
     }
 

@@ -47,7 +47,8 @@ class BartResultsFragment : BaseFragment() {
         setHasOptionsMenu(true)
         initViewModel()
         viewModel.handleIntentExtras(arguments)
-        viewModel.restoreState(savedInstanceState)
+        if(savedInstanceState != null)
+            viewModel.restoreState(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -58,7 +59,6 @@ class BartResultsFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         initStationsForTripCall(viewModel.origin, viewModel.destination, viewModel.date, viewModel.time)
 
     }
@@ -67,6 +67,15 @@ class BartResultsFragment : BaseFragment() {
         super.onResume()
         initFavoriteIcon(viewModel.originStation, viewModel.destinationStation)
 
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        //todo - add caching
+        super.onSaveInstanceState(outState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -91,11 +100,6 @@ class BartResultsFragment : BaseFragment() {
         return false
     }
 
-    override fun onStop() {
-        super.onStop()
-        //todo - add caching
-    }
-
     private fun initViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(BartResultsViewModel::class.java)
     }
@@ -114,7 +118,7 @@ class BartResultsFragment : BaseFragment() {
                     initRecyclerView(viewModel.mTripList)
                 }
                 LiveDataWrapper.Status.LOADING -> {
-
+                    Logger.i("Loading Trip")
                 }
                 LiveDataWrapper.Status.ERROR -> {
                     Logger.e(result.msg)

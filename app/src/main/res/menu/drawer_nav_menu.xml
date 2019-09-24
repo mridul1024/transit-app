@@ -17,13 +17,17 @@
             android:icon="@drawable/ic_menu_schedule"
             android:title="@string/navigation_drawer_schedule" />
         <item
-            android:id="@+id/stationsFragment"
-            android:icon="@drawable/ic_menu_station"
-            android:title="@string/navigation_drawer_stations" />
+            android:id="@+id/favoritesFragment"
+            android:icon="@drawable/ic_menu_favorite"
+            android:title="@string/navigation_drawer_favorites" />
     </group>
 
     <item android:title="@string/navigation_drawer_misc">
         <menu>
+            <item
+                android:id="@+id/stationsFragment"
+                android:icon="@drawable/ic_menu_station"
+                android:title="@string/navigation_drawer_stations" />
             <item
                 android:id="@+id/phoneLinesFragment"
                 android:icon="@drawable/ic_menu_phone"

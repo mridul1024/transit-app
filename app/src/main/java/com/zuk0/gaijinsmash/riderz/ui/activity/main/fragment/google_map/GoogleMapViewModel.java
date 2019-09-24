@@ -45,6 +45,7 @@ import javax.inject.Singleton;
 @Singleton
 class GoogleMapViewModel extends AndroidViewModel {
 
+    // Map Constraints
     private static LatLng SOUTH_WEST_BOUNDS = new LatLng(37.2982, -121.5363);
     private static LatLng NORTH_EAST_BOUNDS = new LatLng(38.0694, -121.7438);
     private static LatLng DEFAULT_LOCATION = new LatLng(37.73659478, -122.19683306);
@@ -67,7 +68,7 @@ class GoogleMapViewModel extends AndroidViewModel {
         map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.getUiSettings().setZoomGesturesEnabled(true);
-        map.setMinZoomPreference(11f);
+        map.setMinZoomPreference(10f);
     }
 
     void initBartMap(Context context, ImageView imageView) {
@@ -116,7 +117,7 @@ class GoogleMapViewModel extends AndroidViewModel {
             }
             // if user is already near destination station, alert user
             if(destinationStation.equalsIgnoreCase(Objects.requireNonNull(closestStation).getName())) {
-                Log.i("closesstStation", "USER IS ALREADY THERE");
+                Log.i("closestStation", "USER IS ALREADY THERE");
                 return null;
             }
         } else {
@@ -130,7 +131,7 @@ class GoogleMapViewModel extends AndroidViewModel {
         if(bundle != null) {
             String stationTitle = bundle.getString("StationTitle");
             LatLng latLng = new LatLng(Double.valueOf(Objects.requireNonNull(bundle.getString("StationLat"))), Double.valueOf(Objects.requireNonNull(bundle.getString("StationLong"))));
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(14).build();
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(12).build();
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title(stationTitle));
             marker.showInfoWindow();

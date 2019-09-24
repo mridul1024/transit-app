@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Splash -->
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+
+        <!-- specify enter and exit transitions
+        <item name="android:windowEnterTransition">@transition/</item>
+        <item name="android:windowExitTransition">@transition/explode</item>-->
+
+        <!-- Customize your theme here. -->
+        <item name="colorPrimaryVariant">@color/primaryColor</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/bartDefault</item>
+        <item name="colorSecondaryVariant">@color/bartOrangeLine</item>
+        <item name="colorOnSecondary">@color/bartDefault</item>
+
+        <item name="colorOnBackground">@color/secondaryColor</item>
+        <item name="colorOnError">@color/bartRedLine</item>
+
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="scrimBackground">@color/primaryColor</item>
+
+        <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+</resources>

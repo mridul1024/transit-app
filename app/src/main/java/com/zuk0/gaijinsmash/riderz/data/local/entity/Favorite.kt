@@ -22,19 +22,19 @@ class Favorite {
 
     @TypeConverters(Converters::class)
     @ColumnInfo(name = "a")
-    lateinit var a: Station
+    var a: Station? = null
 
     @TypeConverters(Converters::class)
     @ColumnInfo(name = "b")
-    lateinit var b: Station
+    var b: Station? = null
 
     @TypeConverters(Converters::class)
     @ColumnInfo(name = "trainHeaderStations") //abbreviated
-    lateinit var trainHeaderStations: ArrayList<String>
+    var trainHeaderStations: ArrayList<String>? = null
 
     // todo: convert to enum: System = BART, MUNI, etc.
     @ColumnInfo(name = "system")
-    lateinit var system: String
+    var system: String? = null
 
     @ColumnInfo(name = "description")
     var description: String? = ""

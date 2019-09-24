@@ -4,36 +4,36 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
-import com.orhanobut.logger.AndroidLogAdapter
-import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.databinding.MainActivityBinding
 import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import kotlinx.android.synthetic.main.main_activity.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, HasSupportFragmentInjector{
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, HasAndroidInjector {
 
-    @Inject
-    lateinit var fragmentInjector : DispatchingAndroidInjector<Fragment>
+    @Inject lateinit var fragmentInjector : DispatchingAndroidInjector<Any>
 
-    override fun supportFragmentInjector(): DispatchingAndroidInjector<Fragment>? {
+    override fun androidInjector(): AndroidInjector<Any> {
         return fragmentInjector
     }
 
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         AndroidInjection.inject(this)
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity)
-        Logger.addLogAdapter(AndroidLogAdapter())
+
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -62,14 +62,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .build()
         setupWithNavController(toolbar, navController, mAppBarConfiguration)
 
-        if(savedInstanceState == null) {
-            //todo: add logic
+        if(savedInstanceState != null) {
+            mViewModel.restoreState(savedInstanceState)
         }
-        initPic()
+        initCityBackground()
     }
 
-    private fun initPic() {
-        mViewModel.initPic(this, mViewModel.getHour(), binding)
+    private fun initCityBackground() {
+        Glide.with(this)
+                .load(R.drawable.sf_skyline)
+                .into(binding.mainBannerImageView)
+
+        binding.imageBackground.background = mViewModel.getBackgroundDrawable(this, mViewModel.hour)
+        binding.mainCollapsingToolbar.setExpandedTitleColor(mViewModel.getColorScheme(this, mViewModel.hour))
+        binding.mainCollapsingToolbar.setCollapsedTitleTextColor(mViewModel.getColorScheme(this, mViewModel.hour))
+        binding.widgetWeather.findViewById<TextView>(R.id.weather_name_tv)?.setTextColor(mViewModel.getColorScheme(this, mViewModel.hour))
+        binding.widgetWeather.findViewById<TextView>(R.id.weather_humidity_tv).setTextColor(mViewModel.getColorScheme(this, mViewModel.hour))
+        binding.widgetWeather.findViewById<TextView>(R.id.weather_temp_tv).setTextColor(mViewModel.getColorScheme(this, mViewModel.hour))
+        binding.widgetWeather.findViewById<TextView>(R.id.weather_wind_tv).setTextColor(mViewModel.getColorScheme(this, mViewModel.hour))
     }
 
     override fun onSupportNavigateUp() : Boolean {
@@ -96,12 +106,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun handleBottomNavViewBehaviour() {
         HideBottomViewOnScrollBehavior<BottomNavigationView>(this, null).slideUp(main_bottom_navigation)
-    }
-
-    private fun initFab() {
-        binding.mainFab.setOnClickListener {
-            //todo - wtf / camera / map
-        }
     }
 
     // ---------------------------------------------------------------------------------------------

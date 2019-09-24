@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.data.remote
+package com.zuk0.gaijinsmash.riderz.data.remote.repository
 
 import android.content.Context
 import android.location.Location

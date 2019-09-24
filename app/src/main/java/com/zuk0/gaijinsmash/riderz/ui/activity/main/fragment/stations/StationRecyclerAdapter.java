@@ -48,7 +48,7 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Station station = mStationList.get(i);
         String name = station.getName();
-        String modifiedName = name.replaceAll("International", "Int'l");
+        String modifiedName = name.replaceAll("International", "Int'l") + " " + viewHolder.name.getContext().getString(R.string.station);
         viewHolder.name.setText(modifiedName);
         viewHolder.address.setText(station.getAddress());
         viewHolder.city.setText(station.getCity());

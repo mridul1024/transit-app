@@ -28,6 +28,9 @@ public interface FavoriteDao {
     @Query("SELECT * from favorites")
     LiveData<List<Favorite>> getAllFavoritesLiveData();
 
+    @Query("SELECT * from favorites")
+    List<Favorite> getList();
+
     @Query("SELECT COUNT(*) from favorites")
     int countFavorites();
 

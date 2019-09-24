@@ -30,15 +30,15 @@ public class StationInfoFragment extends BaseFragment {
     @Inject
     StationInfoViewModelFactory mStationInfoViewModelFactory;
 
+    public static String STATION_INFO_EXTRA = "STATION_INFO_EXTRA";
+
     private FragmentStationInfoBinding mDataBinding;
     private StationInfoViewModel mViewModel;
-    private String mStationAbbr;
-    private Station mStationObject;
-    private Bundle mBundle;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initViewModel();
         getBundleArgs();
     }
 
@@ -52,15 +52,7 @@ public class StationInfoFragment extends BaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.initViewModel();
-
-
         mDataBinding.stationInfoMapBtn.setOnClickListener(v -> handleMapButtonClick());
-
-        if(mBundle != null) {
-            mViewModel.initStation(getActivity(), mStationAbbr);
-            initStationDetails(mViewModel.getStationLiveData());
-        }
     }
 
     private void initViewModel() {
@@ -68,19 +60,20 @@ public class StationInfoFragment extends BaseFragment {
     }
 
     private void handleMapButtonClick() {
-        Bundle bundle = mViewModel.getBundle(mStationObject);
+        Bundle bundle = mViewModel.getBundle(mViewModel.mStationObject);
         NavHostFragment.findNavController(this).navigate(R.id.action_stationInfoFragment_to_googleMapFragment, bundle, null,null);
     }
 
     private void getBundleArgs() {
-        mBundle = getArguments();
-        if(mBundle != null) {
-            mStationAbbr = mBundle.getString("StationAbbr");
+        Bundle extras = getArguments();
+        if(extras != null) {
+            mViewModel.mStationAbbr = extras.getString(STATION_INFO_EXTRA);
+            initStationDetails();
         }
     }
 
-    private void initStationDetails(LiveData<StationXmlResponse> data) {
-        data.observe(this, stationObject -> {
+    private void initStationDetails() {
+        mViewModel.getStationLiveData(mViewModel.mStationAbbr).observe(this, stationObject -> {
             mDataBinding.stationInfoProgressBar.setVisibility(View.GONE);
 
             //update the ui
@@ -90,7 +83,7 @@ public class StationInfoFragment extends BaseFragment {
             }
             if(station1 != null) {
                 // build station object for map button
-                mStationObject = station1;
+                mViewModel.mStationObject = station1;
 
                 //update ui
                 mDataBinding.stationInfoTitleTextView.setText(station1.getName());

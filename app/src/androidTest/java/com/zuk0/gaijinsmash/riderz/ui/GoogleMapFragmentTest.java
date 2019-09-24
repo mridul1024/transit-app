@@ -37,6 +37,5 @@ public class GoogleMapFragmentTest {
     @Test
     public void TestFavoritesFragment() {
         onView(withId(R.id.googleMap_mapView)).check(matches((isDisplayed())));
-        onView(withId(R.id.googleMap_btn)).check(matches((isDisplayed())));
     }
 }

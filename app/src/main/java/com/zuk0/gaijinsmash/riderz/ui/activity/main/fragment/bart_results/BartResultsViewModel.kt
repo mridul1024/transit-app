@@ -21,6 +21,7 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.results.TripDataResult
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.trip.TripFragment
 import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper
+import com.zuk0.gaijinsmash.riderz.utils.StationUtils
 import kotlinx.coroutines.*
 import org.simpleframework.xml.transform.Transform
 
@@ -49,14 +50,17 @@ internal constructor(application: Application, private val mTripRepository: Trip
         private set
 
     fun handleIntentExtras(arguments: Bundle?) {
-        val bundle = arguments
-        if (bundle != null) {
-            origin = bundle.getString(TripFragment.TripBundle.ORIGIN.value) ?: ""
-            destination = bundle.getString(TripFragment.TripBundle.DESTINATION.value) ?: ""
-            date = bundle.getString(TripFragment.TripBundle.DATE.value) as String
-            time = bundle.getString(TripFragment.TripBundle.TIME.value) as String
-            isFromRecyclerAdapter = bundle.getBoolean("FAVORITE_RECYCLER_ADAPTER") // todo create const
+        if (arguments != null) {
+            origin = arguments.getString(TripFragment.TripBundle.ORIGIN.value) ?: ""
+            destination = arguments.getString(TripFragment.TripBundle.DESTINATION.value) ?: ""
+            date = arguments.getString(TripFragment.TripBundle.DATE.value) as String
+            time = arguments.getString(TripFragment.TripBundle.TIME.value) as String
+            isFromRecyclerAdapter = arguments.getBoolean("FAVORITE_RECYCLER_ADAPTER") // todo create const
         }
+    }
+
+    private fun getStationAbbr(stationName: String) : String {
+        return StationUtils.getAbbrFromStationName(stationName)
     }
 
     fun saveState(outState: Bundle) {
@@ -78,6 +82,7 @@ internal constructor(application: Application, private val mTripRepository: Trip
     private val mediator = MediatorLiveData<LiveDataWrapper<TripJsonResponse>>()
 
     fun loadTrip(origin: String, destination: String, date: String, time: String): LiveData<LiveDataWrapper<TripJsonResponse>>  {
+
         viewModelScope.launch {
             val originTask = async(Dispatchers.IO) { getStationFromDb(origin) }
             val destinationTask = async(Dispatchers.IO)  { getStationFromDb(destination) }
@@ -85,8 +90,8 @@ internal constructor(application: Application, private val mTripRepository: Trip
             destinationStation = destinationTask.await()
 
             if(originStation?.abbr?.isNotBlank() == true && destinationStation?.abbr?.isNotBlank() == true) {
-                Logger.d("Origin:  ${originStation?.name}, Destination: ${originStation?.name}")
-                mediator.addSource(mTripRepository.getTrip(originStation?.abbr!!, originStation?.abbr!!, date, time)) { result ->
+                Logger.d("Origin:  ${originStation?.name}, Destination: ${destinationStation?.name}")
+                mediator.addSource(mTripRepository.getTrip(originStation?.abbr as String, destinationStation?.abbr as String, date, time)) { result ->
                     mediator.postValue(result)
                 }
             }

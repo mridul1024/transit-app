@@ -1,0 +1,5 @@
+A transit application that provides users with a wide-array of information on BART stations and route schedules. 
+
+- Get a route schedule for BART
+- Save your favorite routes for easier access
+- Get information on Stations, such as address, geo-location, phone numbers, etc.

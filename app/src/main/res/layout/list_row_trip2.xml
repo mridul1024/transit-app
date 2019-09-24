@@ -17,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
             <ImageView
                 android:id="@+id/trip_depart_icon"
                 android:layout_width="wrap_content"
@@ -195,7 +194,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Get Real-Time"
+                android:text="Get Real-Time Estimate"
                 app:layout_constraintBottom_toBottomOf="@+id/imageButton"
                 app:layout_constraintEnd_toStartOf="@+id/imageButton"
                 app:layout_constraintTop_toTopOf="@+id/imageButton" />

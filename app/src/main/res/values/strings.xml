@@ -21,6 +21,7 @@
     <string name="navigation_drawer_home">Home</string>
     <string name="navigation_drawer_schedule">BART Schedule</string>
     <string name="navigation_drawer_stations">BART Station Info</string>
+    <string name="navigation_drawer_favorites">Favorites</string>
     <string name="navigation_drawer_bart_map">Map</string>
     <string name="navigation_drawer_phoneLines">Call Lines</string>
     <string name="navigation_drawer_misc">Misc</string>
@@ -169,6 +170,7 @@
     <string name="etd_timeImage_description">Time</string>
 
     <!-- Errors -->
+    <string name="error_field_incomplete">This field cannot be blank.</string>
     <string name="error_form_completion">Please input all fields</string>
     <string name="error_form_completion2">You\'re going nowhere! Please try again.</string>
     <string name="error_try_again">Sorry! Something went wrong. Please try again.</string>
@@ -254,4 +256,7 @@
     <string name="button_next">Next</string>
     <string name="button_search">Search</string>
     <string name="dismiss">Dismiss</string>
+    <string name="explanation_location">We would like to use your current location to provide updates of nearby stations.</string>
+    <string name="station">Station</string>
+    <string name="enable_permission">Enable Permission</string>
 </resources>

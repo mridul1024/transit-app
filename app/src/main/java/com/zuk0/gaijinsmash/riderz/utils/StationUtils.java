@@ -20,4 +20,8 @@ public class StationUtils {
         }
         return result;
     }
+
+    public static boolean validateStationName(String name) {
+        return StationList.stationMap.containsValue(name);
+    }
 }

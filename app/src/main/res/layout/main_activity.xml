@@ -2,45 +2,46 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:openDrawer="start">
+        tools:openDrawer="start"
+        tools:visibility="visible">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/main_coordinatorLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:fitsSystemWindows="true"
-            tools:context=".ui.activity.main.MainActivity">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/main_app_bar_layout"
-                tools:context=".ui.activity.main.MainActivity"
-                android:fitsSystemWindows="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:theme="@style/AppTheme.AppBarOverlay">
+                android:fitsSystemWindows="true"
+                android:background="?attr/selectableItemBackground">
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:id="@+id/main_collapsing_toolbar"
-                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-                    app:contentScrim="?attr/colorPrimary"
-                    android:layout_gravity="top"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    app:contentScrim="?attr/colorPrimary"
+                    android:fitsSystemWindows="true"
+                    app:expandedTitleGravity="top"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/image_background"
-                        app:layout_collapseMode="parallax"
-                        android:fitsSystemWindows="true"
-                        android:paddingTop="50dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:paddingTop="50dp"
+                        app:layout_collapseMode="parallax">
 
+                        <!--
                         <FrameLayout
                             android:id="@+id/repeating_background"
                             android:background="@drawable/banner_bg"
@@ -48,18 +49,17 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
                             android:layout_width="match_parent"
-                            android:layout_height="15dp" />
+                            android:layout_height="15dp" /> -->
 
                         <ImageView
                             android:id="@+id/main_banner_imageView"
                             android:layout_width="175dp"
                             android:layout_height="90dp"
                             android:background="?android:selectableItemBackground"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
+                            android:contentDescription="@string/banner"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            android:contentDescription="@string/banner" />
-
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
 
                         <!--
                         <com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.weather.WeatherView
@@ -72,6 +72,7 @@
                             app:state="sunny" /> -->
 
                         <include
+                            android:id="@+id/widget_weather"
                             layout="@layout/widget_weather"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -85,58 +86,37 @@
                     <androidx.appcompat.widget.Toolbar
                         android:id="@+id/toolbar"
                         android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        app:layout_collapseMode="pin"
-                        app:popupTheme="@style/AppTheme.PopupOverlay" />
+                        android:layout_height="?android:attr/actionBarSize"
+                        app:layout_collapseMode="pin" />
 
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
             </com.google.android.material.appbar.AppBarLayout>
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/main_nested_scrollView"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+            <fragment
+                android:id="@+id/nav_host_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                android:fillViewport="true"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:background="@color/primaryDarkColor"
-                android:scrollbars="none">
-                <fragment
-                    android:id="@+id/nav_host_fragment"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    android:name="androidx.navigation.fragment.NavHostFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:defaultNavHost="true"
-                    android:background="@color/primaryDarkColor"
-                    tools:context=".ui.activity.main.MainActivity"
-                    app:navGraph="@navigation/nav_graph" />
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/nav_graph"
+                tools:context=".ui.activity.main.MainActivity" />
 
-            </androidx.core.widget.NestedScrollView>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                style="@style/Widget.MaterialComponents.FloatingActionButton"
-                android:id="@+id/main_fab"
-                android:src="@drawable/ic_train_24dp"
-                app:rippleColor="@color/secondaryColor"
-                android:layout_gravity="center|bottom"
-                android:layout_marginBottom="80dp"
-                android:layout_marginEnd="0dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/main_bottom_navigation"
-                style="@style/Widget.MaterialComponents.BottomNavigationView"
-                app:labelVisibilityMode="labeled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
                 android:background="@color/white"
+                app:tint="@color/bartGreenLine"
                 app:itemIconTint="@drawable/nav_item_color_state"
                 app:itemTextColor="@drawable/nav_item_color_state"
+                app:labelVisibilityMode="labeled"
                 app:menu="@menu/bottom_nav_menu" />
-
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -147,7 +127,7 @@
             android:layout_gravity="start"
             app:headerLayout="@layout/main_nav_header"
             app:menu="@menu/drawer_nav_menu"
-            tools:visibility="invisible" />
+            tools:visibility="visible" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

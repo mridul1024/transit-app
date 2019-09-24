@@ -1,6 +1,8 @@
 package com.zuk0.gaijinsmash.riderz.utils
 
 import android.Manifest
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Criteria
@@ -13,18 +15,38 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleObserver
 
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.OnLifecycleEvent
 import com.orhanobut.logger.Logger
+import com.zuk0.gaijinsmash.riderz.R
 
-/*
-    TODO: add lifecycle handling
- */
 class GpsUtils(context: Context) : LocationListener, LifecycleObserver {
 
-    private val TAG = "GpsUtils"
-    val location: Location?
+    var location: Location?
     private var mLatitude: Double = 0.toDouble()
     private var mLongitude: Double = 0.toDouble()
-    val locationProvider: String
+    private val locationProvider: String
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun onCreate() {
+        //todo
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    fun onStop() {
+        //cache location
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume() {
+
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy() {
+        location = null
+    }
 
     init {
         val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -89,9 +111,23 @@ class GpsUtils(context: Context) : LocationListener, LifecycleObserver {
     }
 
     companion object {
-
-        fun checkLocationPermission(context: Context): Boolean {
+        private const val TAG = "GpsUtils"
+        fun checkLocationPermission(context: Context?): Boolean {
+            if(context == null)
+                return false
             return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        }
+        fun checkIfExplanationIsNeeded(activity: Activity?) : Boolean {
+            if(activity == null)
+                return false
+
+            return ActivityCompat.shouldShowRequestPermissionRationale(activity,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+        fun showExplanationToUser(context: Context?) {
+            val alert = AlertDialog.Builder(context)
+            alert.setTitle(context?.getString(R.string.explanation_location))
+            //alert.setPositiveButton(1, 1, 2, 3)
         }
     }
 } // End of Class

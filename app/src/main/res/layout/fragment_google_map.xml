@@ -1,52 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto">
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:fitsSystemWindows="true"
-            android:layout_marginBottom="60dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/googleMap_btn"
-                android:visibility="invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|top"
-                android:text="@string/bart_map_button" />
-
             <ProgressBar
                 android:id="@+id/googleMap_progress_bar"
-                android:layout_gravity="center_horizontal|center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"/>
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:visibility="visible"
+                map:layout_constraintBottom_toBottomOf="parent"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toStartOf="@+id/googleMap_mapView"
+                map:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
             <com.google.android.gms.maps.MapView
                 android:id="@+id/googleMap_mapView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
                 android:clickable="true"
-                map:uiZoomControls="true"
-                map:uiCompass="true"
+                android:fitsSystemWindows="true"
+                android:focusable="true"
                 android:paddingBottom="50dp"
-                android:focusable="true" />
+                map:layout_constraintBottom_toBottomOf="parent"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toTopOf="parent"
+                map:uiCompass="true"
+                map:uiZoomControls="true" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
-                map:fabSize="auto"
-                map:borderWidth="2dp"
-                android:layout_marginTop="2dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
-                map:rippleColor="@color/white"
-                android:tint="@color/secondaryColor"
                 android:src="@drawable/ic_menu_station"
-                map:backgroundTint="@color/primaryTextColor" />
+                android:tint="@color/secondaryColor"
+                map:borderWidth="2dp"
+                map:fabSize="auto"
+                map:layout_constraintBottom_toBottomOf="@+id/googleMap_mapView"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toStartOf="parent"
+                map:rippleColor="@color/white" />
 
-        </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
