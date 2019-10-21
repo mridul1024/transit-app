@@ -60,9 +60,13 @@ public class BsaRecyclerAdapter extends RecyclerView.Adapter<BsaRecyclerAdapter.
         holder.mAdvisoryBinding.container.setAnimation(AnimationUtils.loadAnimation(holder.mAdvisoryBinding.getRoot().getContext(), R.anim.slide_in_left));
 
         holder.mAdvisoryBinding.bsaDismissBtn.setOnClickListener(view -> {
-            if(mAdvisoryList.size() == 1) {
-                holder.mAdvisoryBinding.container.animate()
-                        .alpha(0f)
+            if(mAdvisoryList.size() == 1) { //todo - animate individual item
+
+                holder.mAdvisoryBinding.container
+
+                        .animate()
+                        .translationX(0)
+                        .translationXBy(-500) //todo
                         .setDuration(500)
                         .setListener(new AnimatorListenerAdapter() {
                             @Override

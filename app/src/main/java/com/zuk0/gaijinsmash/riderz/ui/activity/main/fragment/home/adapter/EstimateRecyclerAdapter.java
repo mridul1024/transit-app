@@ -133,9 +133,11 @@ public class EstimateRecyclerAdapter extends RecyclerView.Adapter<EstimateRecycl
                 textView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+                        List<Estimate> newList = new ArrayList<>(mEstimateList);
+                        newList.remove(position);
+                        update(newList);
                     }
-                }, 1000);
+                }, 5000);
             }
         }.start();
     }

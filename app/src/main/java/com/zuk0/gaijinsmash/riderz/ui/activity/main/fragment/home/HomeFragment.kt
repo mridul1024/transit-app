@@ -1,16 +1,20 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home
 
 import android.Manifest
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -18,22 +22,16 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
-import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse
-import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip
-import com.zuk0.gaijinsmash.riderz.data.local.entity.weather_response.WeatherResponse
 import com.zuk0.gaijinsmash.riderz.databinding.FragmentHomeBinding
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.BsaRecyclerAdapter
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.EstimateRecyclerAdapter
-import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.presenter.HomeWeatherPresenter
 import com.zuk0.gaijinsmash.riderz.utils.GpsUtils
+import com.zuk0.gaijinsmash.riderz.utils.PermissionUtils
 import com.zuk0.gaijinsmash.riderz.utils.PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableMaybeObserver
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import kotlin.math.roundToLong
 
@@ -52,12 +50,6 @@ class HomeFragment : BaseFragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var mViewModel: HomeViewModel
 
-    private var mEtdAdapter: EstimateRecyclerAdapter? = null
-    private var mEtdInverseAdapter: EstimateRecyclerAdapter? = null
-    private var localEtdAdapter: EstimateRecyclerAdapter? = null
-
-    private lateinit var mCallToAction: CallToActionView //stubView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.initViewModel()
@@ -69,25 +61,32 @@ class HomeFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        initWeather()
-        initAdvisories(mViewModel.bsaLiveData)
-        initFavoriteObserver()
-        initUserLocation()
-        initSwipeRefreshLayout()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         super.expandAppBar(activity)
+        initAdvisories(mViewModel.bsaLiveData)
+        initUserLocation(context)
         expandBottomNavView()
-        displayNews(false) // use this switch to turn on/off the news manually
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        if (mEtdAdapter != null && mEtdInverseAdapter != null) {
-            mEtdAdapter!!.destroyTimers()
-            mEtdInverseAdapter!!.destroyTimers()
-        }
-        Log.d("onPause", "timers destroyed")
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -95,7 +94,7 @@ class HomeFragment : BaseFragment() {
              LOCATION_PERMISSION_REQUEST_CODE -> {
                  if(permissions.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                      binding.homePermissionContainer.visibility = View.GONE
-                     loadUpcomingNearbyTrains()
+                     mViewModel.isLocationPermissionEnabledLD.postValue(true)
                  }
                  else
                      loadPermissionView()
@@ -112,28 +111,10 @@ class HomeFragment : BaseFragment() {
         mViewModel = ViewModelProviders.of(this, mHomeViewModelFactory).get(HomeViewModel::class.java)
     }
 
-    private fun initSwipeRefreshLayout() {
-        binding.homeSwipeRefreshLayout.setOnRefreshListener {
-            initAdvisories(mViewModel.bsaLiveData)
-            //initFavoriteObserver()
-            loadUpcomingNearbyTrains()
-        }
-    }
-
     private fun expandBottomNavView() { // todo why?
         val bottomNav = activity?.findViewById<BottomNavigationView>(R.id.main_bottom_navigation)
         bottomNav?.let {
             HideBottomViewOnScrollBehavior<BottomNavigationView>(activity, null).slideUp(bottomNav)
-        }
-    }
-    /*
-       A way to provide news that cannot be fetched by the api via webview.
-       CardView's visibility is GONE by default
-     */
-    private fun displayNews(isActive: Boolean) {
-        if(isActive) {
-            //todo: update
-            //if(SharedPreferencesUtils.getDevUpdatePreference(activity)) AlertDialogUtils.launchNotificationDialog(activity, title, msg)
         }
     }
 
@@ -147,129 +128,27 @@ class HomeFragment : BaseFragment() {
                 val bsaAdapter = BsaRecyclerAdapter(bsaXmlResponse.bsaList)
                 binding.homeBsaRecyclerView.adapter = bsaAdapter
                 binding.homeBsaRecyclerView.layoutManager = LinearLayoutManager(context)
-
-
             }
         })
     }
 
-    private fun initFavoriteObserver() {
-        mViewModel.maybeFavorite
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object: DisposableMaybeObserver<Favorite>() {
-                    override fun onSuccess(fav: Favorite) {
-                        mViewModel.isFavoriteAvailable = true
-                        loadTripData(fav)
-                        loadInverseTripData(fav)
-                    }
-
-                    override fun onComplete() {
-                        updateProgressBar()
-                        loadCallToAction(mViewModel.isFavoriteAvailable)
-                    }
-
-                    override fun onError(e: Throwable) {
-                        Logger.e(e.toString())
-                        updateProgressBar()
-                    }
-                })
-    }
-
-    /*
-       Fetches an ETD list for the user's favorite.priority route
-       WARNING: TRAIN HEADERS should be in ABBREVIATED FORMAT
-    */
-    private fun loadTripData(favorite: Favorite) {
-        if(favorite.a != null && favorite.b != null) {
-            mViewModel.getTripLiveData(favorite.a?.abbr!!, favorite.b?.abbr!!).observe(this, Observer { response ->
-                val trips: List<Trip>
-                val status = response.status
-
-                if(status == LiveDataWrapper.Status.SUCCESS) {
-                    if(response.data.root.schedule.request.tripList != null) {
-                        trips = response.data.root.schedule.request.tripList
-                        mViewModel.setTrainHeaders(trips, favorite)
-                        displayFavoriteEtd(favorite)
-                    }
-                }
-
-                if(status == LiveDataWrapper.Status.ERROR) {
-                    updateProgressBar()
-                }
-            })
-        }
-
-    }
-
-    /**
-     * Create a favorite object to handle the return trip
-     * train headers must be in ABBR format
-     */
-    private fun loadInverseTripData(favorite: Favorite) {
-        mViewModel.getTripLiveData(favorite.b?.abbr!!, favorite.a?.abbr!!).observe(this, Observer { response ->
-            val status = response.status
-            if(status == LiveDataWrapper.Status.SUCCESS) {
-                if(response.data.root.schedule.request.tripList != null) {
-                    val trips: List<Trip> = response.data.root.schedule.request.tripList
-                    val inverse = mViewModel.createFavoriteInverse(trips, favorite)
-                    displayInverseEtd(inverse)
-                }
-            }
-
-            if(status == LiveDataWrapper.Status.ERROR) {
-                updateProgressBar()
-            }
-        })
-    }
-
-
-    private fun initUserLocation() {
-        if (GpsUtils.checkLocationPermission(context)) {
-            loadUpcomingNearbyTrains()
+    private fun initUserLocation(context: Context?) {
+        if (ContextCompat.checkSelfPermission(context as Context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mViewModel.isLocationPermissionEnabledLD.postValue(true)
         } else {
             if(GpsUtils.checkIfExplanationIsNeeded(activity)) {
                 //show explanation if user has denied request before
-                GpsUtils.showExplanationToUser(context)
+                showExplanationToUser()
             } else {
                 //request permission
                 activity?.let {
                     ActivityCompat.requestPermissions(
                             it,
                             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                            LOCATION_PERMISSION_REQUEST_CODE)
+                            PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE)
                 }
             }
         }
-    }
-
-    private fun loadUpcomingNearbyTrains() {
-        mViewModel.getNearestStation(mViewModel.userLocation).observe(this, Observer {station ->
-            station?.let {
-                mViewModel.getLocalEtd(station).observe(this, Observer {data ->
-                    when(data.status) {
-                        LiveDataWrapper.Status.SUCCESS -> {
-                            mViewModel.upcomingNearbyEstimateList = mViewModel.getEstimatesFromEtd(data.data.station)
-                            localEtdAdapter = EstimateRecyclerAdapter(mViewModel.upcomingNearbyEstimateList)
-                            binding.homeEtdRecyclerView3.visibility = View.VISIBLE
-                            binding.homeEtdRecyclerView3.adapter = localEtdAdapter
-                            binding.homeEtdRecyclerView3.layoutManager = LinearLayoutManager(activity)
-                            binding.homeSwipeRefreshLayout.isRefreshing = false
-                        }
-                        LiveDataWrapper.Status.ERROR -> {
-                            Logger.e(data.msg)
-                            binding.homeSwipeRefreshLayout.isRefreshing = false
-                        }
-                        LiveDataWrapper.Status.LOADING -> {
-                            Logger.i("loading")
-                        }
-                        else -> {
-
-                        }
-                    }
-                })
-            }
-        })
     }
 
     /**
@@ -289,114 +168,26 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun loadCallToAction(isFavoriteAvailable: Boolean) {
-        if(!isFavoriteAvailable) {
-           // todo
-        }
-    }
-
-    private fun displayFavoriteEtd(favorite: Favorite) {
-        mViewModel.getEtdLiveData(favorite.a?.abbr!!).observe(this, Observer { data ->
-            when(data.status) {
-                LiveDataWrapper.Status.SUCCESS -> {
-                    if (data != null) {
-                        mViewModel.mFavoriteEstimateList = mViewModel.getEstimatesFromEtd(favorite, data.data.station.etdList)
-                        mEtdAdapter = EstimateRecyclerAdapter(mViewModel.mFavoriteEstimateList)
-                        binding.homeEtdRecyclerView.visibility = View.VISIBLE
-                        binding.homeEtdRecyclerView.adapter = mEtdAdapter
-                        binding.homeEtdRecyclerView.layoutManager = LinearLayoutManager(activity)
-                    }
-                }
-                LiveDataWrapper.Status.ERROR -> {
-                    //todo
-                }
-                else  -> {}
-            }
-
-        })
-    }
-
-    /*
-        Fetches an ETD for the opposite direction of the favorite
+    /**
+     * Permission Dialog
      */
-    private fun displayInverseEtd(inverse: Favorite) {
-        mViewModel.getEtdLiveData(inverse.a?.abbr!!).observe(this, Observer { data ->
-            if(data.status == LiveDataWrapper.Status.SUCCESS) {
-                if (data != null) {
-                    mViewModel.mInverseEstimateList = mViewModel.getEstimatesFromEtd(inverse, data.data.station.etdList)
-                    mEtdInverseAdapter = EstimateRecyclerAdapter(mViewModel.mInverseEstimateList)
-                    binding.homeEtdRecyclerView2.visibility = View.VISIBLE
-                    binding.homeEtdRecyclerView2.adapter = mEtdInverseAdapter
-                    binding.homeEtdRecyclerView2.layoutManager = LinearLayoutManager(activity)
-                }
-            }
-            if(data.status == LiveDataWrapper.Status.ERROR) {
-                //todo:
-            }
-
-            updateProgressBar()
-        })
-    }
-
-    private fun initWeather() {
-        Logger.i("loading weather")
-
-        mViewModel.getWeather().observe(this, Observer { response ->
-            when(response.status) {
-                LiveDataWrapper.Status.SUCCESS -> {
-                    Logger.i("success")
-                    displayWeather(response.data)
-                }
-                LiveDataWrapper.Status.ERROR -> {
-                    Logger.e(response.msg)
-                }
-                else -> {
-                    Logger.e( "WEATHER ERROR")
-                }
-            }
-        })
-    }
-
-    //todo abstract to custom view
-    private fun displayWeather(weather: WeatherResponse) {
-        var textColor = resources.getColor(R.color.white) //default for daytime
-        if(!mViewModel.isDaytime) textColor = resources.getColor(R.color.white)
-        if(weather.name != null) { //city
-            val nameTv = activity?.findViewById<TextView>(R.id.weather_name_tv)
-            nameTv?.text = weather.name
-            nameTv?.setTextColor(textColor)
+    private fun showExplanationToUser() {
+        val alert = AlertDialog.Builder(context)
+        alert.setTitle(context?.getString(R.string.title_permission_location))
+        alert.setMessage(context?.getString(R.string.explanation_location))
+        alert.setPositiveButton(DialogInterface.BUTTON_POSITIVE) { dialog, _ ->
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.fromParts("package", context?.packageName, null))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+            this.startActivityForResult(intent, GpsUtils.LOCATION_REQUEST_CODE)
+            dialog.dismiss()
         }
-
-        if(weather.main != null) {
-            if(weather.main?.temp != null) {
-                val tempTv = activity?.findViewById<TextView>(R.id.weather_temp_tv)
-                //° F = 9/5 (K - 273) + 32
-                val imperialTemp = mViewModel.kelvinToFahrenheit(weather.main?.temp!!).roundToLong().toString()
-                val temp = imperialTemp + resources.getString(R.string.weather_temp_imperial)
-                tempTv?.text = temp
-                tempTv?.setTextColor(textColor) //abstract
-            }
+        alert.setCancelable(true)
+        alert.setNegativeButton(DialogInterface.BUTTON_NEGATIVE) { dialog, which ->
+            dialog.dismiss()
         }
-
-        if(weather.main?.humidity != null) {
-            val humidtyTv = activity?.findViewById<TextView>(R.id.weather_humidity_tv)
-            val humidity = "${weather.main?.humidity}%"
-            humidtyTv?.text = humidity //todo use string resource
-            humidtyTv?.setTextColor(textColor)
-        }
-
-        if(weather.wind != null) {
-            val windTv = activity?.findViewById<TextView>(R.id.weather_wind_tv)
-            val wind = "${weather.wind?.speed?.toString()}mph"
-            windTv?.text = wind
-            windTv?.setTextColor(textColor)
-        }
+        alert.show()
     }
-
-    private fun updateProgressBar() {
-        binding.homeEtdProgressBar.visibility = View.GONE
-    }
-
-    //todo: add option for geolocation and to set "COMMUTE ROUTE" - morning/evening geolocation
-    //https://openweathermap.org/current
 }

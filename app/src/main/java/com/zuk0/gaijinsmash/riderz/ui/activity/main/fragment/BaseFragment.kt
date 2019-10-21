@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.AppBarLayout
 import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
+import com.zuk0.gaijinsmash.riderz.di.component.FragmentComponent
 import dagger.android.support.AndroidSupportInjection
 
 abstract class BaseFragment : Fragment() {
@@ -27,6 +28,7 @@ abstract class BaseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.d("onCreate()")
+        //
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -97,7 +99,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     fun enableNestedScrolling(enable: Boolean) {
-        val nestedScrollView = activity?.findViewById<NestedScrollView>(R.id.main_nested_scrollView)
-        nestedScrollView?.isNestedScrollingEnabled = enable
+        //val nestedScrollView = activity?.findViewById<NestedScrollView>(R.id.main_nested_scrollView)
+        //nestedScrollView?.isNestedScrollingEnabled = enable
     }
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme.Base" parent="Theme.MaterialComponents.DayNight">
+        <!-- Universal Text style -->
+        <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- Splash -->
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+</resources>

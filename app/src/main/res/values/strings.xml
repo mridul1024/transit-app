@@ -259,4 +259,6 @@
     <string name="explanation_location">We would like to use your current location to provide updates of nearby stations.</string>
     <string name="station">Station</string>
     <string name="enable_permission">Enable Permission</string>
+    <string name="title_permission_location">Location Permission</string>
+    <string name="description_train">Train Icon</string>
 </resources>

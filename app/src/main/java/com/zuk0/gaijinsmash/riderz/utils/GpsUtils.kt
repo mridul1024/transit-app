@@ -4,13 +4,17 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.location.LocationProvider
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleObserver
 
@@ -112,6 +116,8 @@ class GpsUtils(context: Context) : LocationListener, LifecycleObserver {
 
     companion object {
         private const val TAG = "GpsUtils"
+
+        const val LOCATION_REQUEST_CODE = 121
         fun checkLocationPermission(context: Context?): Boolean {
             if(context == null)
                 return false
@@ -123,11 +129,6 @@ class GpsUtils(context: Context) : LocationListener, LifecycleObserver {
 
             return ActivityCompat.shouldShowRequestPermissionRationale(activity,
                     Manifest.permission.ACCESS_FINE_LOCATION)
-        }
-        fun showExplanationToUser(context: Context?) {
-            val alert = AlertDialog.Builder(context)
-            alert.setTitle(context?.getString(R.string.explanation_location))
-            //alert.setPositiveButton(1, 1, 2, 3)
         }
     }
 } // End of Class

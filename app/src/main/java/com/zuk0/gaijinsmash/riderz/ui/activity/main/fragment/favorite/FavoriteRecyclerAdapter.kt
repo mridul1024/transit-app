@@ -30,10 +30,7 @@ class FavoriteRecyclerAdapter(val mFavoriteList: MutableList<Favorite>, private 
 
     override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
         val favorite = mFavoriteList[position]
-        val stationA = StationList.getAbbrFromStationName(favorite.a?.name)
-        val stationB = StationList.getAbbrFromStationName(favorite.b?.name)
-        holder.binding.departStation.text = stationA
-        holder.binding.arriveStation.text = stationB
+        holder.bind(favorite)
     }
 
     override fun getItemCount(): Int {

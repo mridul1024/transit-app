@@ -19,8 +19,12 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite
 import com.zuk0.gaijinsmash.riderz.data.local.entity.event.EventLaunchFragment
 import com.zuk0.gaijinsmash.riderz.data.local.room.dao.FavoriteDao
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.FavoriteDatabase
+import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase
 import com.zuk0.gaijinsmash.riderz.databinding.ListRowFavorites2Binding
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.trip.TripFragment
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -28,19 +32,31 @@ import org.greenrobot.eventbus.EventBus
  */
 class FavoriteViewHolder(val binding: ListRowFavorites2Binding, val adapter: FavoriteRecyclerAdapter) : RecyclerView.ViewHolder(binding.root) {
 
-    init {
-        val favorite = adapter.mFavoriteList.get(adapterPosition)
-        binding.settingsButton.setOnClickListener { v -> displayPopupMenu(v.context, binding.settingsButton, favorite, adapterPosition) }
-        if (favorite.priority === Favorite.Priority.ON) {
+    lateinit var favorite: Favorite
+
+    /**
+     * Bind data object to viewHolder
+     * @param Favorite
+     */
+    fun bind(favorite: Favorite) {
+        this.favorite  = favorite
+        initLayout()
+        initButtonListeners()
+    }
+
+    private fun initLayout() {
+        binding.departStation.text = favorite.a?.name
+        binding.arriveStation.text = favorite.b?.name
+        if (favorite.priority == Favorite.Priority.ON) {
             binding.background.setBackgroundColor(binding.root.context.resources.getColor(R.color.primaryLightColor))
         }
+    }
+
+    private fun initButtonListeners() {
+        binding.settingsButton.setOnClickListener { v -> displayPopupMenu(v.context, binding.settingsButton, favorite, adapterPosition) }
         binding.switchButton.setOnClickListener { v -> reverseRoute(binding.departStation, binding.arriveStation) }
         binding.getTripButton.setOnClickListener { v -> initTripSearch(binding.departStation, binding.arriveStation) }
     }
-
-    /*
-
-     */
 
     private fun displayPopupMenu(context: Context, ib: ImageButton, favorite: Favorite?, rowPosition: Int) {
         val popupMenu = PopupMenu(context, ib)
@@ -113,6 +129,9 @@ class FavoriteViewHolder(val binding: ListRowFavorites2Binding, val adapter: Fav
         destination.text = temp
     }
 
+    /**
+     * Todo: background
+     */
     private fun getNewList() : MutableList<Favorite> {
         val db = FavoriteDatabase.getRoomDB(binding.root.context)
         val list = db.favoriteDAO.list

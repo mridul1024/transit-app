@@ -67,7 +67,7 @@ public class StationsFragment extends Fragment {
     private Bundle initBundle(View view) {
         String stationAbbr = ((TextView) view.findViewById(R.id.stationAbbr_textView)).getText().toString();
         Bundle bundle = new Bundle();
-        bundle.putString(STATION_INFO_EXTRA, stationAbbr); //todo: convert StationAbbr to enum
+        bundle.putString(Companion.getSTATION_INFO_EXTRA(), stationAbbr); //todo: convert StationAbbr to enum
         return bundle;
     }
 

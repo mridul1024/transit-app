@@ -51,9 +51,12 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
         gps.location
     }
 
+    // Communication Bridges
+    val isLocationPermissionEnabledLD = MutableLiveData<Boolean>()
+
     // List
-    var mInverseEstimateList: List<Estimate>? = null //todo refactor - put in viewmodel
-    var mFavoriteEstimateList: List<Estimate>? = null //todo refactor - put in viewmodel
+    var mInverseEstimateList: List<Estimate>? = null
+    var mFavoriteEstimateList: List<Estimate>? = null
     var upcomingNearbyEstimateList: List<Estimate>? = null
 
     private val defaultStation = Station()
@@ -69,8 +72,7 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
     /*
         TODO grab user input from the CREATE view and automatically refresh the homepage.
      */
-    internal val isDaytime: Boolean
-        get() = TimeDateUtils.isDaytime()
+
 
     init {
         initDb() // todo
@@ -179,16 +181,6 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
         return results
     }
 
-    //F = 9/5 (K - 273) + 32
-    internal fun kelvinToFahrenheit(temp: Double): Double {
-        return 9f / 5f * (temp - 273) + 32
-    }
-
-    //C = K - 273
-    internal fun kelvinToCelcius(temp: Double): Double {
-        return temp - 273
-    }
-
     internal fun checkHolidaySchedule() {
         //TODO: push news to home fragment if it's a holiday
         //https://www.bart.gov/guide/holidays
@@ -235,12 +227,6 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
        return StationDatabase.getRoomDB(mApplication).stationDAO.allStations
     }
 
-    internal fun getWeather(): LiveData<LiveDataWrapper<WeatherResponse>> {
-        userLocation?.let {
-            return mWeatherRepository.getWeatherByGeoloc(it.latitude, it.longitude)
-        }
-        return mWeatherRepository.getWeatherByZipcode(94108) //default if userLocation is unavailable
-    }
 
     override fun onCleared() {
         super.onCleared()

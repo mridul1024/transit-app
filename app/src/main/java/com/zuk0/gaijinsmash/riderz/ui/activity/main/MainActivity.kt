@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
@@ -22,6 +23,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.databinding.MainActivityBinding
+import com.zuk0.gaijinsmash.riderz.di.factory.RiderzViewModelFactory
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.presenter.HomeWeatherPresenter
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -33,6 +36,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     @Inject lateinit var fragmentInjector : DispatchingAndroidInjector<Any>
 
+    @Inject lateinit var weatherPresenter: HomeWeatherPresenter
+
     override fun androidInjector(): AndroidInjector<Any> {
         return fragmentInjector
     }
@@ -40,14 +45,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var binding: MainActivityBinding
     private lateinit var mAppBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
-    private val mViewModel by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java)}
+
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    private lateinit var viewModel : MainViewModel
 
     // ---------------------------------------------------------------------------------------------
     // Lifecycle Events
     // ---------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         AndroidInjection.inject(this)
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity)
 
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
@@ -63,23 +71,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setupWithNavController(toolbar, navController, mAppBarConfiguration)
 
         if(savedInstanceState != null) {
-            mViewModel.restoreState(savedInstanceState)
+            viewModel.restoreState(savedInstanceState)
         }
         initCityBackground()
+        initWeather()
     }
 
-    private fun initCityBackground() {
-        Glide.with(this)
-                .load(R.drawable.sf_skyline)
-                .into(binding.mainBannerImageView)
+    override fun onResume() {
+        super.onResume()
+    }
 
-        binding.imageBackground.background = mViewModel.getBackgroundDrawable(this, mViewModel.hour)
-        binding.mainCollapsingToolbar.setExpandedTitleColor(mViewModel.getColorScheme(this, mViewModel.hour))
-        binding.mainCollapsingToolbar.setCollapsedTitleTextColor(mViewModel.getColorScheme(this, mViewModel.hour))
-        binding.widgetWeather.findViewById<TextView>(R.id.weather_name_tv)?.setTextColor(mViewModel.getColorScheme(this, mViewModel.hour))
-        binding.widgetWeather.findViewById<TextView>(R.id.weather_humidity_tv).setTextColor(mViewModel.getColorScheme(this, mViewModel.hour))
-        binding.widgetWeather.findViewById<TextView>(R.id.weather_temp_tv).setTextColor(mViewModel.getColorScheme(this, mViewModel.hour))
-        binding.widgetWeather.findViewById<TextView>(R.id.weather_wind_tv).setTextColor(mViewModel.getColorScheme(this, mViewModel.hour))
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
     }
 
     override fun onSupportNavigateUp() : Boolean {
@@ -97,11 +104,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        viewModel.saveState(outState)
         super.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
     }
 
     private fun handleBottomNavViewBehaviour() {
@@ -131,6 +135,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     //TODO check if bottom nav is hidden, and show on new transitions
+    /**
+     * Helpers
+     */
+    private fun initCityBackground() {
+        Glide.with(this)
+                .load(R.drawable.sf_skyline)
+                .into(binding.mainBannerImageView)
+
+        binding.imageBackground.background = viewModel.getBackgroundDrawable(this, viewModel.hour)
+        binding.mainCollapsingToolbar.setExpandedTitleColor(viewModel.getColorScheme(this, viewModel.hour))
+        binding.mainCollapsingToolbar.setCollapsedTitleTextColor(viewModel.getColorScheme(this, viewModel.hour))
+        binding.widgetWeather.findViewById<TextView>(R.id.weather_name_tv)?.setTextColor(viewModel.getColorScheme(this, viewModel.hour))
+        binding.widgetWeather.findViewById<TextView>(R.id.weather_humidity_tv)?.setTextColor(viewModel.getColorScheme(this, viewModel.hour))
+        binding.widgetWeather.findViewById<TextView>(R.id.weather_temp_tv)?.setTextColor(viewModel.getColorScheme(this, viewModel.hour))
+        binding.widgetWeather.findViewById<TextView>(R.id.weather_wind_tv)?.setTextColor(viewModel.getColorScheme(this, viewModel.hour))
+    }
+    private fun initWeather() {
+        weatherPresenter.viewModel = viewModel
+        lifecycle.addObserver(weatherPresenter)
+    }
 }
 
 

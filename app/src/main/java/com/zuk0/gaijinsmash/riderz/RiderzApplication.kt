@@ -9,6 +9,9 @@ import com.orhanobut.logger.AndroidLogAdapter
 
 import com.orhanobut.logger.Logger
 import com.squareup.leakcanary.LeakCanary
+import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite
+import com.zuk0.gaijinsmash.riderz.data.local.room.database.FavoriteDatabase
+import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase
 import com.zuk0.gaijinsmash.riderz.di.component.DaggerAppComponent
 import dagger.android.AndroidInjector
 
@@ -28,7 +31,6 @@ class RiderzApplication : Application(), HasAndroidInjector {
 
     override fun onCreate() {
         super.onCreate()
-
         DaggerAppComponent.builder()
                 .application(this)
                 .build()
@@ -36,11 +38,11 @@ class RiderzApplication : Application(), HasAndroidInjector {
         initLogger()
         initLeakCanary()
         initCrashlytics()
-        Logger.addLogAdapter(AndroidLogAdapter())
+        //initMockData()
     }
 
     private fun initLogger() {
-        Logger.i( "app component initialized")
+        Logger.addLogAdapter(AndroidLogAdapter())
     }
 
     private fun initLeakCanary() {
@@ -59,8 +61,17 @@ class RiderzApplication : Application(), HasAndroidInjector {
             Fabric.with(this, Crashlytics())
     }
 
-    private fun initData() {
-        //todo
+    private fun initMockData() {
+        val favoriteDb = FavoriteDatabase.getRoomDB(this)
+        val stationDb = StationDatabase.getRoomDB(this)
+        val a = stationDb.stationDAO.getStationByName("Ashby")
+        val b  = stationDb.stationDAO.getStationByName("Montgomery")
+        val favorite = Favorite()
+
+        favorite.a = a
+        favorite.b = b
+        favorite.priority = Favorite.Priority.ON
+        favoriteDb.favoriteDAO.save(Favorite())
     }
 
     companion object {

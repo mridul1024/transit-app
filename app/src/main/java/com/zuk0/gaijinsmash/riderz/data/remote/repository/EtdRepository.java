@@ -45,10 +45,6 @@ public class EtdRepository {
                 Logger.i(response.message());
                 LiveDataWrapper<EtdXmlResponse> res = LiveDataWrapper.success(response.body());
                 data.postValue(res);
-
-                if(response.code() == 502) {
-                    //todo handle bat gateway request
-                }
             }
 
             @Override

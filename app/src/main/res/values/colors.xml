@@ -2,7 +2,12 @@
 <resources>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+
     <!-- Logo Background color -->
+
+    <!-- Icon -->
+    <color name="darkCompatIcon">?attr/colorControlNormal</color>
 
     <!-- Background -->
     <color name="ic_launcher_background">#000000</color>
@@ -10,6 +15,9 @@
 
     <!-- Text -->
     <color name="colorTextAlert">#ff0000</color>
+    <color name="darkCompatText">?android:attr/textColorPrimary</color>
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#ffffff</color>
 
     <!-- MaterialPallete.com -->
     <color name="primaryColor">#bbdefb</color>
@@ -20,12 +28,22 @@
     <color name="secondaryLightColor">#ffbb93</color>
     <color name="secondaryDarkColor">#c75b39</color>
 
-    <color name="primaryTextColor">#ffffff</color>
-    <color name="secondaryTextColor">#ffffff</color>
-    <color name="colorSurface">#CFD8DC</color>
+    <!-- Light Mode -->>
+    <color name="colorPrimary">#bbdefb</color>   <!--  primary(predominant) color -->
+    <color name="colorPrimaryVariant">#eeffff</color> <!-- lighter/darker variant of primary-->
+    <color name="colorOnPrimary">#8aacc8</color> <!-- used for elements displayed  on top of primary -->
+    <color name="colorSecondary">#E14185</color> <!-- used mostly for accenting -->
+    <color name="colorSecondaryVariant">#B4346A</color> <!--TODO lighter/darker variant  of secondary -->
+    <color name="colorOnSecondary">#FFFFFF</color> <!-- used for elements displaye don top of secondary colors-->
+    <color name="colorBackground">#FFFFFF</color>  <!--color begin all other screen content -->
+    <color name="colorOnBackground">#000000</color> <!--elements displayed on top of colorBackground -->
+    <color name="colorSurface">#CFD8DC</color> <!-- TODO used for surfaces (i.e. Material Sheets, etc) -->
+    <color name="colorOnSurface">#FFFFFF</color> <!-- used for elements displayed on top of surface -->
+    <color name="colorError">#F50057</color> <!-- error color -->
+    <color name="colorOnError">#FFFFFF</color> <!-- used for elements displayed on top of colorError -->
 
     <!-- BART Line Colors -->
-    <color name="bartRedLine">#ff0000</color>
+    <color name="bartRedLine">#FF0000</color>
     <color name="bartYellowLine">#FFFF33</color>
     <color name="bartGreenLine">#339933</color>
     <color name="bartBlueLine">#0099CC</color>

@@ -22,6 +22,7 @@ import dagger.Module;
 import dagger.Provides;
 /*
     This module will provide the dependencies for the overall application level
+    @Singleton is application scope
  */
 @Module
 public class AppModule {
@@ -32,51 +33,4 @@ public class AppModule {
         return application;
     }
 
-    @Provides
-    @Singleton
-    ViewModelProvider.Factory provideViewModelFactory() {
-        return new ViewModelProvider.NewInstanceFactory();
-    }
-
-    @Provides
-    @Singleton
-    BsaDatabase provideBsaDatabase(Context context) {
-        return BsaDatabase.getRoomDb(context);
-    }
-
-    @Provides
-    @Singleton
-    BsaDao provideBsaDao(BsaDatabase db) {
-        return db.getBsaDAO();
-    }
-
-    @Provides
-    @Singleton
-    Executor provideExecutor() {
-        return Executors.newSingleThreadExecutor();
-    }
-
-    @Provides
-    @Singleton
-    StationDatabase provideStationDatabase(Context context) { return StationDatabase.getRoomDB(context); }
-
-    @Provides
-    @Singleton
-    StationDao provideStationDao(StationDatabase db) { return db.getStationDAO(); }
-
-    @Provides
-    @Singleton
-    EtdDatabase provideEtdDatabase(Context context) { return EtdDatabase.getRoomDb(context); }
-
-    @Provides
-    @Singleton
-    EtdDao provideEtdDao(EtdDatabase db) { return db.getEtdDao(); }
-
-    @Provides
-    @Singleton
-    TripDatabase provideTripDatabase(Context context) { return TripDatabase.getRoomDB(context); }
-
-    @Provides
-    @Singleton
-    TripDao provideTripDao(TripDatabase db) { return db.getTripDao(); }
 }

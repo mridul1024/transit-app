@@ -23,6 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
+                android:elevation="10dp"
                 android:background="?attr/selectableItemBackground">
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -31,6 +32,9 @@
                     android:layout_height="match_parent"
                     app:contentScrim="?attr/colorPrimary"
                     android:fitsSystemWindows="true"
+                    android:clipToPadding="false"
+                    android:paddingBottom="5dp"
+                    app:titleEnabled="false"
                     app:expandedTitleGravity="top"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
@@ -62,6 +66,7 @@
                             app:layout_constraintStart_toStartOf="parent" />
 
                         <!--
+                        TODO
                         <com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.weather.WeatherView
                             android:id="@+id/main_weatherView"
                             android:background="?android:selectableItemBackground"
@@ -71,9 +76,8 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:state="sunny" /> -->
 
-                        <include
+                        <FrameLayout
                             android:id="@+id/widget_weather"
-                            layout="@layout/widget_weather"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="15dp"
@@ -87,6 +91,7 @@
                         android:id="@+id/toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/actionBarSize"
+                        android:elevation="10dp"
                         app:layout_collapseMode="pin" />
 
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -97,22 +102,20 @@
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_marginBottom="?attr/actionBarSize"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:background="@color/primaryDarkColor"
                 app:defaultNavHost="true"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:navGraph="@navigation/nav_graph"
                 tools:context=".ui.activity.main.MainActivity" />
-
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/main_bottom_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="@color/white"
-                app:tint="@color/bartGreenLine"
+                android:elevation="10dp"
                 app:itemIconTint="@drawable/nav_item_color_state"
                 app:itemTextColor="@drawable/nav_item_color_state"
                 app:labelVisibilityMode="labeled"
@@ -122,6 +125,7 @@
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"
+            style="@style/PrimaryDayNightStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"

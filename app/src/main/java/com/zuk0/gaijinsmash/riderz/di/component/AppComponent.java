@@ -6,7 +6,10 @@ import android.app.Application;
 import com.zuk0.gaijinsmash.riderz.RiderzApplication;
 import com.zuk0.gaijinsmash.riderz.di.module.ActivityBuilder;
 import com.zuk0.gaijinsmash.riderz.di.module.AppModule;
+import com.zuk0.gaijinsmash.riderz.di.module.FragmentBuilder;
+import com.zuk0.gaijinsmash.riderz.di.module.FragmentModule;
 import com.zuk0.gaijinsmash.riderz.di.module.NetModule;
+import com.zuk0.gaijinsmash.riderz.di.module.ViewModelModule;
 
 import javax.inject.Singleton;
 
@@ -24,6 +27,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         AndroidSupportInjectionModule.class,
         AndroidInjectionModule.class,
         ActivityBuilder.class,
+        FragmentBuilder.class,
         AppModule.class,
         NetModule.class
 })
