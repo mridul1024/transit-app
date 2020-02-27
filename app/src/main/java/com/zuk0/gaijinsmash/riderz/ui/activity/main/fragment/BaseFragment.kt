@@ -12,7 +12,11 @@ import com.google.android.material.appbar.AppBarLayout
 import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.di.component.FragmentComponent
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
+import javax.inject.Inject
 
 abstract class BaseFragment : Fragment() {
 
@@ -21,14 +25,13 @@ abstract class BaseFragment : Fragment() {
     // ---------------------------------------------------------------------------------------------
 
     override fun onAttach(context: Context) {
+        initDagger() // this must go before the super method
         super.onAttach(context)
-        initDagger()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.d("onCreate()")
-        //
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,6 +42,11 @@ abstract class BaseFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Logger.d("onActivityCreated()")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Logger.d("onStart()")
     }
 
     override fun onResume() {
@@ -57,23 +65,23 @@ abstract class BaseFragment : Fragment() {
     }
 
     override fun onPause() {
-        super.onPause()
         Logger.d("onPause()")
+        super.onPause()
     }
 
     override fun onStop() {
-        super.onStop()
         Logger.d("onStop()")
+        super.onStop()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         Logger.d("onDestroy()")
+        super.onDestroy()
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         Logger.d("onDestroyView()")
+        super.onDestroyView()
     }
 
     // ---------------------------------------------------------------------------------------------

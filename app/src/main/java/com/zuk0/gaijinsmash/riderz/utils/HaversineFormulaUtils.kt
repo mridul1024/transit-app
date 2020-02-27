@@ -1,12 +1,10 @@
 package com.zuk0.gaijinsmash.riderz.utils
 
 import android.content.Context
-import android.location.Location
 import android.util.Log
 
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.LatLng
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station
+import com.zuk0.gaijinsmash.riderz.data.local.manager.LocationManager
 import java.util.Objects
 
 /*
@@ -27,7 +25,7 @@ object HaversineFormulaUtils {
     internal fun findNearestStation(context: Context, destinationStation: String,
                                     list: List<Station>): Station? {
         // get user location
-        val gps = GpsUtils(context)
+        val gps = LocationManager(context)
         val userLocation = gps.location
 
         // keep track of closest station

@@ -59,7 +59,7 @@ internal constructor(application: Application, private val mTripRepository: Trip
         }
     }
 
-    private fun getStationAbbr(stationName: String) : String {
+    private fun getStationAbbr(stationName: String) : String? {
         return StationUtils.getAbbrFromStationName(stationName)
     }
 
@@ -102,8 +102,8 @@ internal constructor(application: Application, private val mTripRepository: Trip
     /**
      * Fetches a station by name from the db
      */
-    internal fun getStationFromDb(name:  String): Station {
-        return StationDatabase.getRoomDB(getApplication()).stationDAO.getStationByName(name);
+    internal fun getStationFromDb(name:  String): Station? {
+        return StationDatabase.getRoomDB(getApplication())?.stationDao()?.getStationByName(name)
     }
     /****************************************************************
      * Favorites
@@ -115,9 +115,9 @@ internal constructor(application: Application, private val mTripRepository: Trip
             favorite?.b = destination
             val trainHeaders = ArrayList<String>()
             for (trip in tripList) {
-                val header = trip.legList[0].trainHeadStation
+                val header = trip.legList?.get(0)?.trainHeadStation
                 if (!trainHeaders.contains(header)) {
-                    trainHeaders.add(header) // add a unique train header
+                    trainHeaders.add(header!!) // add a unique train header
                     Log.i("HEADER", header)
                 }
             }
@@ -131,7 +131,7 @@ internal constructor(application: Application, private val mTripRepository: Trip
     }
 
     internal fun getFavoriteLiveData(a: Station, b: Station): LiveData<Favorite> {
-        return FavoriteDatabase.getRoomDB(getApplication()).favoriteDAO.getLiveDataFavorite(a, b)
+        return FavoriteDatabase.getRoomDB(getApplication())?.favoriteDAO()?.getLiveDataFavorite(a, b)!! //todo
     }
 
     private fun handleFavoriteTask(context: Context, action: RiderzEnums.FavoritesAction, favorite: Favorite) {
@@ -139,17 +139,17 @@ internal constructor(application: Application, private val mTripRepository: Trip
             val db = FavoriteDatabase.getRoomDB(context)
             when (action) {
                 RiderzEnums.FavoritesAction.ADD_FAVORITE -> {
-                    if (db.favoriteDAO.priorityCount == 0) {
+                    if (db?.favoriteDAO()?.priorityCount == 0) {
                         favorite.priority = Favorite.Priority.ON
                     } else {
                         favorite.priority = Favorite.Priority.OFF
                     }
-                    db.favoriteDAO.save(favorite)
+                    db?.favoriteDAO()?.save(favorite)
                 }
                 RiderzEnums.FavoritesAction.DELETE_FAVORITE -> {
-                    val dao = db.favoriteDAO
-                    val one = dao.getFavorite(favorite.a, favorite.b)
-                    val two = dao.getFavorite(favorite.b, favorite.a)
+                    val dao = db?.favoriteDAO()
+                    val one = dao?.getFavorite(favorite.a, favorite.b)
+                    val two = dao?.getFavorite(favorite.b, favorite.a)
                     if(one == null && two == null) {
                         Logger.e("unable to locate favorite object in db: $favorite")
                     }
@@ -173,17 +173,17 @@ internal constructor(application: Application, private val mTripRepository: Trip
         override fun doInBackground(vararg voids: Void): Void? {
             when (mAction) {
                 RiderzEnums.FavoritesAction.ADD_FAVORITE -> {
-                    if (FavoriteDatabase.getRoomDB(mWeakRef.get()).favoriteDAO.priorityCount == 0) {
+                    if (FavoriteDatabase.getRoomDB(mWeakRef.get()!!)?.favoriteDAO()?.priorityCount == 0) {
                         mFavorite.priority = Favorite.Priority.ON
                     } else {
                         mFavorite.priority = Favorite.Priority.OFF
                     }
-                    FavoriteDatabase.getRoomDB(mWeakRef.get()).favoriteDAO.save(mFavorite)
+                    FavoriteDatabase.getRoomDB(mWeakRef.get()!!)?.favoriteDAO()?.save(mFavorite)
                 }
                 RiderzEnums.FavoritesAction.DELETE_FAVORITE -> {
-                    val dao = FavoriteDatabase.getRoomDB(mWeakRef.get()).favoriteDAO
-                    val one = dao.getFavorite(mFavorite.a, mFavorite.b)
-                    val two = dao.getFavorite(mFavorite.b, mFavorite.a)
+                    val dao = FavoriteDatabase.getRoomDB(mWeakRef.get()!!)?.favoriteDAO()
+                    val one = dao?.getFavorite(mFavorite.a, mFavorite.b)
+                    val two = dao?.getFavorite(mFavorite.b, mFavorite.a)
                     if (one != null) {
                         dao.delete(one)
                     }

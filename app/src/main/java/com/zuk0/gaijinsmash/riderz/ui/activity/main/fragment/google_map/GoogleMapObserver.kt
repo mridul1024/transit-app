@@ -4,11 +4,15 @@ import android.location.Location
 
 import androidx.lifecycle.LifecycleObserver
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.zuk0.gaijinsmash.riderz.ui.shared.lifecycle.LifeCycleObserverContract
 
 //OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener
 class GoogleMapObserver : LifeCycleObserverContract, OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
+    private var mapView: MapView? = null
+    private var googleMap: GoogleMap? = null
+
     override fun onResume() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

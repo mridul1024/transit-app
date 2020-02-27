@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/custom_dropdown_itemTv"
+            style="?android:attr/dropDownItemStyle"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/listPreferredItemHeight"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+            android:textColor="@color/secondaryDarkColor"
+            tools:text="Station Name" />
+
+        <View
+            android:id="@+id/custom_dropdown_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+    </LinearLayout>
+
+</layout>

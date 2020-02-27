@@ -55,8 +55,10 @@ class StationInfoFragment : BaseFragment() {
     }
 
     private fun handleMapButtonClick() {
-        val bundle = viewModel.getBundle(viewModel.mStationObject)
-        NavHostFragment.findNavController(this).navigate(R.id.action_stationInfoFragment_to_googleMapFragment, bundle, null, null)
+        viewModel.mStationObject?.let {
+            val bundle = viewModel.getBundle(it)
+            NavHostFragment.findNavController(this).navigate(R.id.action_stationInfoFragment_to_googleMapFragment, bundle, null, null)
+        }
     }
 
     private fun getBundleArgs() {
@@ -69,13 +71,13 @@ class StationInfoFragment : BaseFragment() {
 
     private fun initStationDetails() {
         
-        viewModel.getStationLiveData(viewModel.mStationAbbr)?.observe(this, Observer { stationObject ->
+        viewModel.getStationLiveData(viewModel.mStationAbbr!!)?.observe(this, Observer { stationObject ->
             dataBinding.stationInfoProgressBar.visibility = View.GONE
 
             //update the ui
             var station1: Station? = null
             if (stationObject != null) {
-                station1 = stationObject.getStationList().get(0)
+                station1 = stationObject.stationList?.get(0)
             }
             if (station1 != null) {
                 // build station object for map button

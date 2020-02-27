@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.databinding.FragmentFavoritesBinding
@@ -22,19 +23,18 @@ import dagger.android.support.AndroidSupportInjection
 class FavoritesFragment : Fragment() {
 
     @Inject
-    lateinit var mFavoritesViewModelFactory: FavoritesViewModelFactory
+    lateinit var mFavoritesViewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var mDataBinding: FragmentFavoritesBinding
-    private var mViewModel: FavoritesViewModel? = null
+    private lateinit var binding: FragmentFavoritesBinding
+    private lateinit var viewModel: FavoritesViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        mDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorites, container, false)
-        return mDataBinding.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorites, container, false)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initDagger()
         initViewModel()
         initFavorites()
@@ -46,47 +46,47 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        mViewModel = ViewModelProviders.of(this, mFavoritesViewModelFactory).get(FavoritesViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, mFavoritesViewModelFactory).get(FavoritesViewModel::class.java)
     }
 
     private fun initFavorites() {
-        mViewModel?.favorites?.observe(this, Observer{ data ->
+        viewModel.favorites?.observe(this, Observer{ data ->
             if (data.isNotEmpty()) {
-                mDataBinding.bartFavoritesCardView.visibility = View.GONE
+                binding.bartFavoritesCardView.visibility = View.GONE
                 val adapter = FavoriteRecyclerAdapter(data, this)
-                mDataBinding.bartFavoritesRecyclerView.adapter = adapter
-                mDataBinding.bartFavoritesRecyclerView.layoutManager = LinearLayoutManager(activity)
+                binding.bartFavoritesRecyclerView.adapter = adapter
+                binding.bartFavoritesRecyclerView.layoutManager = LinearLayoutManager(activity)
             }
         })
     }
 
     private fun handleCardView() {
-        mDataBinding.favoriteDepartAutoCompleteTextView
-        mDataBinding.favoriteArrivalAutoCompleteTextView
-        mDataBinding.button.setOnClickListener { v ->
+        binding.favoriteDepartAutoCompleteTextView
+        binding.favoriteArrivalAutoCompleteTextView
+        binding.button.setOnClickListener { v ->
             validate()
         }
     }
 
     private fun validate() {
-        val depart = mDataBinding.favoriteDepartAutoCompleteTextView.text.toString()
-        val arrive = mDataBinding.favoriteArrivalAutoCompleteTextView.text.toString()
+        val depart = binding.favoriteDepartAutoCompleteTextView.text.toString()
+        val arrive = binding.favoriteArrivalAutoCompleteTextView.text.toString()
         if(depart.isBlank()) {
-            mDataBinding.favoriteDepartAutoCompleteTextView.error = resources.getString(R.string.error_field_incomplete)
+            binding.favoriteDepartAutoCompleteTextView.error = resources.getString(R.string.error_field_incomplete)
             return
         }
         if(arrive.isBlank()) {
-            mDataBinding.favoriteArrivalAutoCompleteTextView.error = resources.getString(R.string.error_field_incomplete)
+            binding.favoriteArrivalAutoCompleteTextView.error = resources.getString(R.string.error_field_incomplete)
             return
         }
         if(!StationUtils.validateStationName(depart)) {
-            mDataBinding.favoriteDepartAutoCompleteTextView.error = resources.getString(R.string.error_station_not_found)
+            binding.favoriteDepartAutoCompleteTextView.error = resources.getString(R.string.error_station_not_found)
             return
         }
         if(!StationUtils.validateStationName(arrive)) {
-            mDataBinding.favoriteArrivalAutoCompleteTextView.error = resources.getString(R.string.error_station_not_found)
+            binding.favoriteArrivalAutoCompleteTextView.error = resources.getString(R.string.error_station_not_found)
             return
         }
-        mViewModel?.saveFavorite(depart, arrive)
+        viewModel.saveFavorite(depart, arrive)
     }
 }

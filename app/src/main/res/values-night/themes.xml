@@ -2,21 +2,21 @@
 <resources>
     <style name="AppTheme" parent="AppTheme.Base">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorOnPrimary">@color/white</item>
 
-        <item name="colorSecondary">@color/bartDefault</item>
-        <item name="colorSecondaryVariant">@color/bartOrangeLine</item>
-        <item name="colorOnSecondary">@color/bartDefault</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/black</item>
+        <item name="colorOnSecondary">@color/white</item>
 
         <item name="android:colorBackground">@color/colorBackground</item>
-        <item name="colorOnBackground">@color/secondaryColor</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
 
         <item name="colorError">@color/colorError</item>
-        <item name="colorOnError">@color/bartRedLine</item>
+        <item name="colorOnError">@color/colorOnError</item>
 
         <item name="colorSurface">@color/colorSurface</item>
-        <item name="colorOnSurface">@color/black</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
         <item name="scrimBackground">@color/primaryColor</item>
     </style>
 

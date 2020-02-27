@@ -6,11 +6,12 @@ import androidx.lifecycle.ViewModel
 import com.zuk0.gaijinsmash.riderz.R
 
 import com.zuk0.gaijinsmash.riderz.utils.TimeDateUtils
+import javax.inject.Inject
 
 import javax.inject.Singleton
 
-@Singleton
-class TripViewModel : ViewModel() {
+class TripViewModel
+@Inject constructor(): ViewModel() {
 
     //STATE
     lateinit var stationsList: Array<String>

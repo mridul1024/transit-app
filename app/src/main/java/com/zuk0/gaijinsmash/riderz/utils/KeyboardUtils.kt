@@ -2,10 +2,16 @@ package com.zuk0.gaijinsmash.riderz.utils
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 
 object KeyboardUtils {
+
+    enum class State { OPEN, CLOSED }
+
+    private const val TAG = "KeyboardUtils"
+
 
     /**
      * Request to open the Keyboard,
@@ -24,4 +30,6 @@ object KeyboardUtils {
         val view = activity?.findViewById<View>(android.R.id.content)?.rootView
         imm?.hideSoftInputFromWindow(view?.windowToken, 0)
     }
+
+
 }

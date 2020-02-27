@@ -19,7 +19,7 @@ class FavoriteRecyclerAdapter(val mFavoriteList: MutableList<Favorite>, private 
 
     private var listener: View.OnClickListener? = null //todo  - use this as general listener for all buttons
 
-    override fun setClickListener(listener: View.OnClickListener) {
+    override fun setClickListener(listener: View.OnClickListener?) {
         this.listener = listener
     }
 
@@ -41,8 +41,9 @@ class FavoriteRecyclerAdapter(val mFavoriteList: MutableList<Favorite>, private 
      * Public Method
      * Diff util - updates the recyclerview asynchronously
      */
-    fun updateList(newList: MutableList<Favorite>) {
-        val diffResult = DiffUtil.calculateDiff(FavoriteDiffCallback(this.mFavoriteList, newList))
+    fun updateList(newList: MutableList<Favorite>?) {
+
+        val diffResult = DiffUtil.calculateDiff(FavoriteDiffCallback(this.mFavoriteList, newList ?: mutableListOf()))
         diffResult.dispatchUpdatesTo(this)
 
         if(itemCount == 0) {

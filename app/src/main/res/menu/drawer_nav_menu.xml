@@ -41,6 +41,10 @@
                 android:id="@+id/aboutFragment"
                 android:icon="@drawable/ic_menu_about"
                 android:title="@string/navigation_drawer_about" />
+            <item
+                android:id="@+id/settingsFragment"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="@string/navigation_drawer_settings" />
         </menu>
     </item>
 

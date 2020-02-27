@@ -62,13 +62,13 @@ class TripRecyclerAdapter2(val tripList: List<Trip>) : RecyclerView.Adapter<Trip
         }
 
         //load legs of  trip
-        val numOfLegs = trip.legList.size
-        for(i in 0 until numOfLegs) {
+        val numOfLegs = trip.legList?.size
+        for(i in 0 until numOfLegs!!) {
             //create a new leg
-            val legBinding = DataBindingUtil.inflate<ListRowTripLegBinding>(LayoutInflater.from(holder.binding.root.context), R.layout.list_row_trip_leg, null, false)
+            val legBinding = ListRowTripLegBinding.inflate(LayoutInflater.from(holder.binding.root.context))
 
             //bind color
-            BartRoutesUtils.setLineBarByRoute(holder.binding.root.context, trip.legList[i].line, legBinding.tripLegLine)
+            BartRoutesUtils.setLineBarByRoute(holder.binding.root.context, trip.legList?.get(i)?.line, legBinding.tripLegLine)
 
             //inflate transfer view if need be
             if(i > 0) {
@@ -76,12 +76,12 @@ class TripRecyclerAdapter2(val tripList: List<Trip>) : RecyclerView.Adapter<Trip
             }
 
             //depart time and station
-            legBinding.tripLegDepartStation.text = trip.legList[i].origin
-            legBinding.tripLegDepartTime.text = trip.legList[i].origTimeMin
+            legBinding.tripLegDepartStation.text = trip.legList?.get(i)?.origin
+            legBinding.tripLegDepartTime.text = trip.legList?.get(i)?.origTimeMin
 
             //arrival time and station
-            legBinding.tripLegArrivalStation.text = trip.legList[i].destination
-            legBinding.tripLegArrivalTime.text = trip.legList[i].destTimeMin
+            legBinding.tripLegArrivalStation.text = trip.legList?.get(i)?.destination
+            legBinding.tripLegArrivalTime.text = trip.legList?.get(i)?.destTimeMin
 
             //add binding to linearlayout
             containerBinding.tripLegContainer.addView(legBinding.root)

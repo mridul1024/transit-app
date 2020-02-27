@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,22 +17,21 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
+import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaJsonResponse
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse
 import com.zuk0.gaijinsmash.riderz.databinding.FragmentHomeBinding
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.BsaRecyclerAdapter
-import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.EstimateRecyclerAdapter
-import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.presenter.HomeWeatherPresenter
-import com.zuk0.gaijinsmash.riderz.utils.GpsUtils
-import com.zuk0.gaijinsmash.riderz.utils.PermissionUtils
-import com.zuk0.gaijinsmash.riderz.utils.PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.presenter.HomeEtdPresenter
+import com.zuk0.gaijinsmash.riderz.ui.shared.permission.PermissionPresenter
+import com.zuk0.gaijinsmash.riderz.data.local.manager.LocationManager
+import com.zuk0.gaijinsmash.riderz.data.local.manager.LocationManager.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import javax.inject.Inject
-import kotlin.math.roundToLong
 
 //TODO add Trip Schedule for Favorites instead of ETDS
 //show ETDS for only the local station.
@@ -45,10 +43,13 @@ import kotlin.math.roundToLong
 class HomeFragment : BaseFragment() {
 
     @Inject
-    lateinit var mHomeViewModelFactory: HomeViewModelFactory
+    lateinit var homeViewModelFactory: ViewModelProvider.Factory
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var mViewModel: HomeViewModel
+    private lateinit var viewModel: HomeViewModel
+    private lateinit var permissionPresenter: PermissionPresenter
+    private lateinit var estimatePresenter: HomeEtdPresenter
+    private lateinit var locationManager: LocationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,10 +64,10 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        super.expandAppBar(activity)
-        initAdvisories(mViewModel.bsaLiveData)
+        super.expandAppBar(activity!!)
+        initAdvisories(viewModel.bsaLiveData)
         initUserLocation(context)
-        expandBottomNavView()
+        initLocationHandler(viewModel.isLocationPermissionEnabledLD)
     }
 
     override fun onStart() {
@@ -93,11 +94,8 @@ class HomeFragment : BaseFragment() {
         when(requestCode) {
              LOCATION_PERMISSION_REQUEST_CODE -> {
                  if(permissions.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                     binding.homePermissionContainer.visibility = View.GONE
-                     mViewModel.isLocationPermissionEnabledLD.postValue(true)
+                     viewModel.isLocationPermissionEnabledLD.postValue(true)
                  }
-                 else
-                     loadPermissionView()
              }
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
@@ -106,38 +104,38 @@ class HomeFragment : BaseFragment() {
     /*
         Helper Methods
      */
-
     private fun initViewModel() {
-        mViewModel = ViewModelProviders.of(this, mHomeViewModelFactory).get(HomeViewModel::class.java)
-    }
-
-    private fun expandBottomNavView() { // todo why?
-        val bottomNav = activity?.findViewById<BottomNavigationView>(R.id.main_bottom_navigation)
-        bottomNav?.let {
-            HideBottomViewOnScrollBehavior<BottomNavigationView>(activity, null).slideUp(bottomNav)
-        }
+        viewModel = ViewModelProviders.of(this, homeViewModelFactory).get(HomeViewModel::class.java)
     }
 
     /*
         Fetches data for BART advisories - i.e. delay reports
     */
     private fun initAdvisories(bsa: LiveData<BsaXmlResponse>) {
-        bsa.observe(this, Observer { bsaXmlResponse ->
+        bsa.observe(viewLifecycleOwner, Observer { bsaXmlResponse ->
             if (bsaXmlResponse != null) {
                 binding.homeBsaRecyclerView.visibility = View.VISIBLE
-                val bsaAdapter = BsaRecyclerAdapter(bsaXmlResponse.bsaList)
+                val bsaAdapter = BsaRecyclerAdapter(bsaXmlResponse.bsaList ?: mutableListOf())
                 binding.homeBsaRecyclerView.adapter = bsaAdapter
                 binding.homeBsaRecyclerView.layoutManager = LinearLayoutManager(context)
             }
         })
+        /*viewModel.getBsaJson().observe(viewLifecycleOwner, Observer<BsaJsonResponse> {data ->
+            binding.homeBsaRecyclerView.visibility = View.VISIBLE
+            val size = data.root?.bsaList?.size
+            val bsaAdapter = BsaRecyclerAdapter(data.root?.bsaList ?: mutableListOf())
+            binding.homeBsaRecyclerView.adapter = bsaAdapter
+            binding.homeBsaRecyclerView.layoutManager = LinearLayoutManager(context)
+
+            Logger.i("size: $size")
+        })*/
     }
 
     private fun initUserLocation(context: Context?) {
         if (ContextCompat.checkSelfPermission(context as Context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mViewModel.isLocationPermissionEnabledLD.postValue(true)
+            viewModel.isLocationPermissionEnabledLD.postValue(true)
         } else {
-            if(GpsUtils.checkIfExplanationIsNeeded(activity)) {
-                //show explanation if user has denied request before
+            if(LocationManager.checkIfExplanationIsNeeded(activity)) {
                 showExplanationToUser()
             } else {
                 //request permission
@@ -145,27 +143,39 @@ class HomeFragment : BaseFragment() {
                     ActivityCompat.requestPermissions(
                             it,
                             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                            PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE)
+                            LOCATION_PERMISSION_REQUEST_CODE)
                 }
             }
         }
     }
 
+    private fun initLocationHandler(permissionLiveData: LiveData<Boolean>) {
+        permissionLiveData.observe(viewLifecycleOwner, Observer { result ->
+            if(result) {
+                context?.let{
+                    locationManager = LocationManager(it)
+                    initEstimatesPresenter(activity)
+                }
+            } else {
+                Logger.d("Permission Denied for Location")
+                // use default todo
+                //estimatePresenter
+            }
+        })
+    }
+
+    private fun initEstimatesPresenter(context: Context?) {
+        estimatePresenter = HomeEtdPresenter(context, binding.estimatePresenterLayout, viewModel)
+        lifecycle.addObserver(estimatePresenter)
+    }
+
     /**
      * Display permission cardView when Location Permissions is off.
+     * Check
      */
     private fun loadPermissionView() {
-        binding.homePermissionContainer.visibility = View.VISIBLE
-
-        binding.enablePermissionButton.setOnClickListener { v ->
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, android.net.Uri.parse("package:" + activity?.packageName))
-            intent.addCategory(Intent.CATEGORY_DEFAULT)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            activity?.startActivityForResult(intent, LOCATION_PERMISSION_REQUEST_CODE)
-        }
-        binding.disablePermissionButton.setOnClickListener {
-            binding.homePermissionContainer.visibility = View.GONE
-        }
+        permissionPresenter = PermissionPresenter(activity, viewModel)
+        permissionPresenter.showDialog()
     }
 
     /**
@@ -181,7 +191,7 @@ class HomeFragment : BaseFragment() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-            this.startActivityForResult(intent, GpsUtils.LOCATION_REQUEST_CODE)
+            this.startActivityForResult(intent, LOCATION_PERMISSION_REQUEST_CODE)
             dialog.dismiss()
         }
         alert.setCancelable(true)
@@ -189,5 +199,9 @@ class HomeFragment : BaseFragment() {
             dialog.dismiss()
         }
         alert.show()
+    }
+
+    companion object {
+        const val TAG = "HomeFragment"
     }
 }

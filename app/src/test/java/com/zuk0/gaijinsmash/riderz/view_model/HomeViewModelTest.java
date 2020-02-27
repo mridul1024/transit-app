@@ -6,7 +6,6 @@ import com.zuk0.gaijinsmash.riderz.data.remote.repository.BsaRepository;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.EtdRepository;
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository;
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.HomeViewModel;
-import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.HomeViewModelFactory;
 
 import org.junit.Before;
 import org.junit.Test;

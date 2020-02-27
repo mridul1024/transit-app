@@ -96,7 +96,7 @@ constructor(context: Context?, attrs: AttributeSet): View(context, attrs), Lifec
         //drawBackground(canvas)
     }
 
-    private fun handleWeatherResponse() {
+    private fun handleWeatherResponse(response: WeatherResponse) {
         //todo use when case to choose
     }
 

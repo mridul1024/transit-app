@@ -19,10 +19,10 @@
     <!-- Nav Drawer Menu -->>
     <string name="navigation_drawer_help">Help</string>
     <string name="navigation_drawer_home">Home</string>
-    <string name="navigation_drawer_schedule">BART Schedule</string>
+    <string name="navigation_drawer_schedule">BART Trip</string>
     <string name="navigation_drawer_stations">BART Station Info</string>
     <string name="navigation_drawer_favorites">Favorites</string>
-    <string name="navigation_drawer_bart_map">Map</string>
+    <string name="navigation_drawer_bart_map">Google Map</string>
     <string name="navigation_drawer_phoneLines">Call Lines</string>
     <string name="navigation_drawer_misc">Misc</string>
     <string name="navigation_drawer_about">About</string>
@@ -212,7 +212,7 @@
     <string name="favorite_reverse">Reverse</string>
     <string name="create_favorite">Create Favorite</string>
     <string name="menu_favorites">Favorites</string>
-    <string name="menu_trip">Schedule</string>
+    <string name="menu_trip">Trip</string>
     <string name="menu_map">Map</string>
     <string name="menu_home">Home</string>
 
@@ -261,4 +261,22 @@
     <string name="enable_permission">Enable Permission</string>
     <string name="title_permission_location">Location Permission</string>
     <string name="description_train">Train Icon</string>
+    <string name="last_stop">Last Stop:</string>
+    <string name="description_info">Information icon</string>
+    <string name="platform">Platform</string>
+    <string name="ic_menu_more">More</string>
+    <string name="action_map">View map of BART</string>
+    <string name="action_camera">Send a picture to BART Police</string>
+    <string name="action_report">Send a suggestion or complaint to BART</string>
+    <string name="bottomsheet_title">More Options</string>
+    <string name="title_platform">Platform</string>
+    <string name="tooltip_more_options">More options here</string>
+    <string name="tooltip_favorites">Manage your favorite routes here.</string>
+    <string name="tooltip_trip">Plan a trip.</string>
+    <string name="description_camera_shutter">Camera shutter to take picture.</string>
+    <string name="description_camera_library">Button to open photo library.</string>
+    <string name="description_camera_switch_front">Button to switch to front camera.</string>
+    <string name="description_camera_switch_rear">Button to switch to rear camera.</string>
+    <string name="navigation_drawer_settings">Settings</string>
+
 </resources>

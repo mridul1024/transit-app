@@ -18,17 +18,19 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 import java.lang.ref.WeakReference
+import javax.inject.Inject
 
 import javax.inject.Singleton
 
 @Singleton
-class FavoritesViewModel internal constructor(application: Application) : AndroidViewModel(application) {
+class FavoritesViewModel
+@Inject constructor(application: Application) : AndroidViewModel(application) {
 
     val db = FavoriteDatabase.getRoomDB(getApplication())
     val stationsDb = StationDatabase.getRoomDB(getApplication())
 
-    internal val favorites: LiveData<MutableList<Favorite>>
-        get() = db.favoriteDAO.allFavoritesLiveData
+    val favorites: LiveData<MutableList<Favorite>>?
+        get() = db?.favoriteDAO()?.allFavoritesLiveData
 
     private enum class FavoriteAction {
         DeleteFavorite, SetAsPriority, DeletePriority
@@ -38,14 +40,14 @@ class FavoritesViewModel internal constructor(application: Application) : Androi
         viewModelScope.launch(Dispatchers.IO) {
             val fav = Favorite()
             val taskA = async {
-                stationsDb.stationDAO.getStationByName(depart)
+                stationsDb?.stationDao()?.getStationByName(depart)
             }
             val taskB = async {
-                stationsDb.stationDAO.getStationByName(arrive)
+                stationsDb?.stationDao()?.getStationByName(arrive)
             }
             fav.a = taskA.await()
             fav.b = taskB.await()
-            db.favoriteDAO.save(fav)
+            db?.favoriteDAO()?.save(fav)
         }
     }
 
@@ -62,21 +64,21 @@ class FavoritesViewModel internal constructor(application: Application) : Androi
         override fun doInBackground(vararg voids: Void): Boolean? {
             when (mAction) {
                 RiderzEnums.FavoritesAction.ADD_PRIORITY -> {
-                    if (FavoriteDatabase.getRoomDB(mWeakRef.get()).favoriteDAO.priorityCount > 0) {
+                    if (FavoriteDatabase.getRoomDB(mWeakRef.get()!!)?.favoriteDAO()?.priorityCount!! > 0) {
                         return false
                     }
-                    if (FavoriteDatabase.getRoomDB(mWeakRef.get()).favoriteDAO.priorityCount == 0) {
-                        FavoriteDatabase.getRoomDB(mWeakRef.get()).favoriteDAO.updatePriorityById(mFavorite.id)
+                    if (FavoriteDatabase.getRoomDB(mWeakRef.get()!!)?.favoriteDAO()?.priorityCount == 0) {
+                        FavoriteDatabase.getRoomDB(mWeakRef.get()!!)?.favoriteDAO()?.updatePriorityById(mFavorite.id)
                         return true
                     }
                     return false
                 }
                 RiderzEnums.FavoritesAction.DELETE_PRIORITY -> {
-                    FavoriteDatabase.getRoomDB(mWeakRef.get()).favoriteDAO.removePriorityById(mFavorite.id)
+                    FavoriteDatabase.getRoomDB(mWeakRef.get()!!)?.favoriteDAO()?.removePriorityById(mFavorite.id)
                     return true
                 }
                 RiderzEnums.FavoritesAction.DELETE_FAVORITE -> {
-                    FavoriteDatabase.getRoomDB(mWeakRef.get()).favoriteDAO.delete(mFavorite)
+                    FavoriteDatabase.getRoomDB(mWeakRef.get()!!)?.favoriteDAO()?.delete(mFavorite)
                     return true
                 }
             }
@@ -104,8 +106,8 @@ class FavoritesViewModel internal constructor(application: Application) : Androi
 
     override fun onCleared() {
         super.onCleared()
-        db.close()
-        stationsDb.close()
+        db?.close()
+        stationsDb?.close()
     }
 
     companion object {

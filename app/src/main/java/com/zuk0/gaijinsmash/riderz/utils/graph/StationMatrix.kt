@@ -8,9 +8,12 @@ import androidx.room.Room
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase
 
+/**
+ * todo, create a graph of stations with X,Y coordinates - use them as reference points to find the closest station.
+ */
 class StationMatrix(context: Context) : LifecycleObserver {
 
-    var adjacencyList = mutableListOf<StationNode>()
+   /* var adjacencyList = mutableListOf<StationNode>()
 
     //grab all stations
     var stations: List<Station>
@@ -25,9 +28,8 @@ class StationMatrix(context: Context) : LifecycleObserver {
         return list
     }
 
-
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
         db.close()
-    }
+    }*/
 }

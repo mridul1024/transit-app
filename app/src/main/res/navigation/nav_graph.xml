@@ -13,7 +13,9 @@
         android:id="@+id/resultsFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_results.BartResultsFragment"
         android:label="Results"
-        tools:layout="@layout/fragment_results" />
+        tools:layout="@layout/fragment_results" >
+
+    </fragment>
     <fragment
         android:id="@+id/tripFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.trip.TripFragment"
@@ -22,6 +24,9 @@
         <action
             android:id="@+id/action_tripFragment_to_resultsFragment"
             app:destination="@id/resultsFragment" />
+        <action
+            android:id="@+id/action_tripFragment_to_actionBottomDialogFragment"
+            app:destination="@id/actionBottomDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/stationInfoFragment"
@@ -31,12 +36,15 @@
         <action
             android:id="@+id/action_stationInfoFragment_to_googleMapFragment"
             app:destination="@id/googleMapFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.about.AboutFragment"
         android:label="About"
-        tools:layout="@layout/fragment_about" />
+        tools:layout="@layout/fragment_about" >
+
+    </fragment>
     <fragment
         android:id="@+id/bartMapFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_map.BartMapFragment"
@@ -62,6 +70,7 @@
         <action
             android:id="@+id/action_googleMapFragment_to_resultsFragment"
             app:destination="@id/resultsFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/stationsFragment"
@@ -71,26 +80,31 @@
         <action
             android:id="@+id/action_stationsFragment_to_stationInfoFragment"
             app:destination="@id/stationInfoFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/helpFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.help.HelpFragment"
         android:label="Help"
-        tools:layout="@layout/fragment_help" />
+        tools:layout="@layout/fragment_help" >
+
+    </fragment>
     <fragment
         android:id="@+id/phoneLinesFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.phone_lines.PhoneLinesFragment"
         android:label="Bart Lines"
-        tools:layout="@layout/fragment_phone_lines" />
+        tools:layout="@layout/fragment_phone_lines" >
+
+    </fragment>
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" >
-        <action
+        <!--<action
             android:id="@+id/action_homeFragment_self"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment" />-->
         <action
             android:id="@+id/action_homeFragment_to_tripFragment"
             app:destination="@id/tripFragment" />
@@ -121,10 +135,37 @@
         <action
             android:id="@+id/action_homeFragment_to_newsFragment"
             app:destination="@id/newsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_actionBottomDialogFragment"
+            app:destination="@id/actionBottomDialogFragment" />
 
     </fragment>
     <fragment
         android:id="@+id/newsFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.news.NewsFragment"
-        android:label="NewsFragment" />
+        android:label="NewsFragment" >
+    </fragment>
+    <dialog
+        android:id="@+id/actionBottomDialogFragment"
+        tools:layout="@layout/bottom_sheet_layout"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bottom_sheet.ActionBottomDialogFragment"
+        android:label="ActionBottomDialogFragment">
+        <action
+            android:id="@+id/action_actionBottomDialogFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+        <action
+            android:id="@+id/action_actionBottomDialogFragment_to_reportFragment"
+            app:destination="@id/reportFragment" />
+        <action
+            android:id="@+id/action_actionBottomDialogFragment_to_bartMapFragment"
+            app:destination="@id/bartMapFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.camera.CameraFragment"
+        android:label="CameraFragment" />
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.report.ReportFragment"
+        android:label="ReportFragment" />
 </navigation>

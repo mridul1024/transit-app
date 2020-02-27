@@ -1,6 +1,11 @@
 <resources>
 
     <!-- Font -->
+    <style name="RiderzTitleStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textSize">15sp</item>
+        <item name="android:padding">5dp</item>
+    </style>
+
     <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
@@ -17,8 +22,13 @@
     <!-- Rainy Theme -->
     <!-- Night Theme -->
 
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="FabStyle" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="android:layout_marginEnd">20dp</item>
+    </style>
 
     <!-- Preference -->
     <style name="PreferenceTheme" parent="PreferenceThemeOverlay">
@@ -26,8 +36,7 @@
     </style>
 
     <!-- Button Styles -->
-    <style name="ButtonAppTheme">
-        <item name="android:background">@color/secondaryColor</item>
+    <style name="ButtonAppTheme" parent="Widget.AppCompat.Button.Borderless.Colored">
         <item name="android:padding">5dp</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:elevation">2dp</item>
@@ -76,6 +85,12 @@
     <style name="CardViewRiderz">
         <item name="android:layout_margin">10dp</item>
         <item name="android:elevation">3dp</item>
+        <item name="android:background">@color/colorSurface</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
+
+    <style name="EtdCardView">
+        <item name="android:elevation">2dp</item>
         <item name="android:background">@color/colorSurface</item>
         <item name="android:textColor">@color/colorOnSurface</item>
     </style>

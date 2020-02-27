@@ -64,14 +64,14 @@ class RiderzApplication : Application(), HasAndroidInjector {
     private fun initMockData() {
         val favoriteDb = FavoriteDatabase.getRoomDB(this)
         val stationDb = StationDatabase.getRoomDB(this)
-        val a = stationDb.stationDAO.getStationByName("Ashby")
-        val b  = stationDb.stationDAO.getStationByName("Montgomery")
+        val a = stationDb?.stationDao()?.getStationByName("Ashby")
+        val b  = stationDb?.stationDao()?.getStationByName("Montgomery")
         val favorite = Favorite()
 
         favorite.a = a
         favorite.b = b
         favorite.priority = Favorite.Priority.ON
-        favoriteDb.favoriteDAO.save(Favorite())
+        favoriteDb?.favoriteDAO()?.save(Favorite())
     }
 
     companion object {

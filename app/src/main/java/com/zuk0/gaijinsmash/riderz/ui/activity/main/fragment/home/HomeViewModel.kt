@@ -5,12 +5,10 @@ import android.content.Context
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.lifecycle.Observer
 import androidx.room.Room
 import com.orhanobut.logger.Logger
-import com.zuk0.gaijinsmash.riderz.BuildConfig
-import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite
+import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaJsonResponse
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Estimate
 import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Etd
@@ -18,69 +16,77 @@ import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.EtdXmlResponse
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.Trip
 import com.zuk0.gaijinsmash.riderz.data.local.entity.trip_response.TripJsonResponse
-import com.zuk0.gaijinsmash.riderz.data.local.entity.weather_response.WeatherResponse
+import com.zuk0.gaijinsmash.riderz.data.local.manager.LocationManager
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.FavoriteDatabase
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.BsaRepository
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.EtdRepository
+import com.zuk0.gaijinsmash.riderz.data.remote.repository.StationRepository
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository
-import com.zuk0.gaijinsmash.riderz.data.remote.repository.WeatherRepository
 import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper
 import com.zuk0.gaijinsmash.riderz.utils.*
 import io.reactivex.Maybe
 import kotlinx.coroutines.*
 import java.util.*
+import java.util.Observer
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 class HomeViewModel @Inject
-constructor(private val mApplication: Application, //FIXME - use androidviewmodel
+constructor(application: Application,
             private val mTripRepository: TripRepository,
             private val mBsaRepository: BsaRepository,
-            private val mEtdRepository: EtdRepository,
-            private val mWeatherRepository: WeatherRepository) : ViewModel() {
+            private val mEtdRepository: EtdRepository) : AndroidViewModel(application) {
 
     private var db: FavoriteDatabase? = null
+    private var stationDB: StationDatabase? = null
 
-    // STATE
+    // Fragment STATE
     var isFavoriteAvailable = false
     var closestStation: Station? = null
-    val userLocation: Location? by lazy {
-        val gps = GpsUtils(mApplication)
-        gps.location
+
+    // EtdPresenter State
+    var selectedStation: Station? = null
+    var upcomingNearbyEstimateList: MutableList<Estimate>? = null
+    var mInverseEstimateList: MutableList<Estimate>? = null
+    var mFavoriteEstimateList: MutableList<Estimate>? = null
+
+    private var userLocation: Location? = null
+    var isLocationPermissionEnabled = false
+
+    fun getLocation() : Location? {
+        if(userLocation == null) {
+            val gps = LocationManager(getApplication())
+            return gps.location
+        }
+        return userLocation
     }
 
     // Communication Bridges
     val isLocationPermissionEnabledLD = MutableLiveData<Boolean>()
-
-    // List
-    var mInverseEstimateList: List<Estimate>? = null
-    var mFavoriteEstimateList: List<Estimate>? = null
-    var upcomingNearbyEstimateList: List<Estimate>? = null
-
-    private val defaultStation = Station()
     private val closestStationLiveData = MutableLiveData<Station>()
 
     val bsaLiveData: LiveData<BsaXmlResponse>
-        get() = mBsaRepository.bsa
+        get() = mBsaRepository.getBsa(getApplication())
 
     //todo db calls should be abstracted to a repository class
     val maybeFavorite: Maybe<Favorite>
-        get() = db!!.favoriteDAO.priorityFavorite
+        get() = db?.favoriteDAO()?.priorityFavorite as Maybe<Favorite>
 
     /*
         TODO grab user input from the CREATE view and automatically refresh the homepage.
      */
-
-
     init {
         initDb() // todo
     }
 
+    fun getBsaJson() : LiveData<BsaJsonResponse> {
+        return mBsaRepository.getBsaJson(getApplication())
+    }
     private fun initDb() {
-        db = Room.databaseBuilder(Objects.requireNonNull(mApplication.applicationContext), FavoriteDatabase::class.java,
+        db = Room.databaseBuilder(getApplication(), FavoriteDatabase::class.java,
                 "favorites").build()
+        stationDB = Room.databaseBuilder(getApplication(), StationDatabase::class.java, "stations").build()
     }
 
     fun is24HrTimeOn(context: Context): Boolean {
@@ -97,11 +103,7 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
         return result
     }
 
-    internal fun initMessage(context: Context, is24HrTimeOn: Boolean, time: String): String {
-        return context.resources.getString(R.string.last_update) + " " + initTime(is24HrTimeOn, time)
-    }
-
-    internal fun getEtdLiveData(origin: String): LiveData<LiveDataWrapper<EtdXmlResponse>> {
+    fun getEtdLiveData(origin: String): LiveData<LiveDataWrapper<EtdXmlResponse>> {
         val originAbbr = StationUtils.getAbbrFromStationName(origin)
         return mEtdRepository.getEtd(originAbbr)
     }
@@ -109,8 +111,8 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
     fun setTrainHeaders(trips: List<Trip>, favorite: Favorite) {
         val trainHeaders = ArrayList<String>()
         for (trip in trips) {
-            val header = StationUtils.getAbbrFromStationName(trip.legList[0].trainHeadStation).toUpperCase()
-            if (!trainHeaders.contains(header)) {
+            val header = StationUtils.getAbbrFromStationName(trip.legList?.get(0)?.trainHeadStation)?.toUpperCase()
+            if (!trainHeaders.contains(header) && header != null) {
                 trainHeaders.add(header)
                 Log.i("HEADER", header)
             }
@@ -131,33 +133,31 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
                 StationUtils.getAbbrFromStationName(destination), "TODAY", "NOW")
     }
 
-    private val mediatorLiveData = MediatorLiveData<LiveDataWrapper<EtdXmlResponse>>()
+    /*
+    map is useful when you want to make changes to the value before dispatching it to the UI.
+    switchMap is useful when you want to return different LiveData based upon the value of the first one.
+     */
 
-    fun getLocalEtdMediator(): MediatorLiveData<LiveDataWrapper<EtdXmlResponse>> {
-        val source = getNearestStation(userLocation)
-        mediatorLiveData.removeSource(source)
-        mediatorLiveData.addSource(source) { station ->
-            Transformations.map(mEtdRepository.getEtd(station.abbr)) { mediatorLiveData.postValue(it) }
-        }
-        return mediatorLiveData
-    }
-
-    fun getLocalEtd(station: Station) : LiveData<LiveDataWrapper<EtdXmlResponse>> {
+    //get station, then post value of
+    fun getEstimatesLiveData(station: Station): LiveData<LiveDataWrapper<EtdXmlResponse>> {
         return mEtdRepository.getEtd(station.abbr)
     }
+
     /*
         For comparisons - make sure all train headers are abbreviated and capitalized
         For Setting estimates- use the full name of station
      */
-    internal fun getEstimatesFromEtd(favorite: Favorite, etds: List<Etd>): List<Estimate> {
+    internal fun getEstimatesFromEtd(favorite: Favorite, etds: List<Etd>): MutableList<Estimate> {
         val results = ArrayList<Estimate>()
         for (etd in etds) {
-            if (favorite.trainHeaderStations?.contains(etd.destinationAbbr.toUpperCase()) == true) {
-                val estimate = etd.estimateList[0]
-                estimate.origin = favorite.a?.name
-                estimate.destination = favorite.b?.name
-                estimate.trainHeaderStation = etd.destination
-                results.add(estimate)
+            if (favorite.trainHeaderStations?.contains(etd.destinationAbbr?.toUpperCase()) == true) {
+                val estimate = etd.estimateList?.get(0)
+                estimate?.let{
+                    estimate.origin = favorite.a?.name
+                    estimate.destination = favorite.b?.name
+                    estimate.trainHeaderStation = etd.destination
+                    results.add(estimate)
+                }
             }
         }
         return results
@@ -166,16 +166,18 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
     /**
      * get a list of Estimate objects
      */
-    fun getEstimatesFromEtd(station: Station)  : List<Estimate>  {
+    fun getEstimatesFromEtd(station: Station) : MutableList<Estimate>  {
         val origin = station.name
         val etds = station.etdList
         val results = ArrayList<Estimate>()
         etds?.let {
             for (etd in etds) {
-                val estimate = etd.estimateList[0]
-                estimate.origin = origin
-                estimate.destination = etd.destination
-                results.add(estimate)
+                val estimate = etd.estimateList?.get(0)
+                estimate?.let {
+                    estimate.origin = origin
+                    estimate.destination = etd.destination
+                    results.add(estimate)
+                }
             }
         }
         return results
@@ -187,6 +189,16 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
         //xmas, nye,
     }
 
+    private val mediatorLiveData = MediatorLiveData<LiveDataWrapper<EtdXmlResponse>>()
+
+    private val calculateDistances = FloatArray(2)
+
+    /**
+     * important!
+     */
+    private fun calculateDistanceBetween(endLat: Double, endLong: Double, startLat: Double, startLong: Double) {
+        Location.distanceBetween(endLat, endLong, startLat, startLong, calculateDistances)
+    }
 
     //get user location, use haversine formula to get nearest station.
     fun getNearestStation(userLocation: Location?) : LiveData<Station> {
@@ -219,23 +231,51 @@ constructor(private val mApplication: Application, //FIXME - use androidviewmode
             Logger.i("closest station: ${closestStation?.name}")
             closestStationLiveData.postValue(closestStation)
         }
-
         return closestStationLiveData
     }
 
-    private fun getStationsFromDb() : List<Station> {
-       return StationDatabase.getRoomDB(mApplication).stationDAO.allStations
+    fun getStationsFromDb() : List<Station> {
+       return StationDatabase.getRoomDB(getApplication())?.stationDao()?.allStations ?: emptyList()
     }
 
+    fun getFavoritesList(favorite: Favorite) {
+        //todo update
+    }
+
+    val platform1 = mutableListOf<Etd>()
+    val platform2 = mutableListOf<Etd>()
+
+
+    //for each destination has its own destination
+    fun createEstimateListsByPlatform(list: MutableList<Etd>?) {
+        list?.let {
+            platform1.clear()
+            platform2.clear()
+
+            for(i in list) {
+                if(i.estimateList?.get(0)?.platform == 1) {
+                    platform1.add(i)
+                } else {
+                    platform2.add(i)
+                }
+            }
+        }
+    }
+
+    fun getPlatformTitle(list: List<Etd>) : String {
+        if(list.isNotEmpty())
+            return list[0].estimateList?.get(0)?.platform.toString()
+        return ""
+    }
 
     override fun onCleared() {
         super.onCleared()
         Log.i(TAG, "onCleared()")
         db?.close()
+        stationDB?.close()
     }
 
     companion object {
         private val TAG = "HomeViewModel"
-        private const val LOCATION_PERMISSON_REQUEST_CODE = 101
     }
 }

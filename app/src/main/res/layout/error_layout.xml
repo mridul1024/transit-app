@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/CardViewRiderz"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/error_title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:elevation="5dp"
+            android:gravity="center"
+            android:text="Error" />
+
+        <ImageView
+            android:id="@+id/error_icon_iv"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            app:srcCompat="@drawable/ic_error_outline_black_24dp" />
+
+        <TextView
+            android:id="@+id/error_explanation_tv"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="We are unable to connect to with BART's system. Please try again later." />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

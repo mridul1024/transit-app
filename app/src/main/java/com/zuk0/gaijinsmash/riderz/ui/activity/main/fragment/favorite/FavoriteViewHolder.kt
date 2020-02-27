@@ -132,10 +132,10 @@ class FavoriteViewHolder(val binding: ListRowFavorites2Binding, val adapter: Fav
     /**
      * Todo: background
      */
-    private fun getNewList() : MutableList<Favorite> {
+    private fun getNewList() : MutableList<Favorite>? {
         val db = FavoriteDatabase.getRoomDB(binding.root.context)
-        val list = db.favoriteDAO.list
-        db.close()
+        val list = db?.favoriteDAO()?.list
+        db?.close()
         return list
     }
 }

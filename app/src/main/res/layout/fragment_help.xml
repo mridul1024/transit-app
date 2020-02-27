@@ -60,14 +60,14 @@
                         android:text="@string/help_a2" />
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/camera_btn"
                         style="@style/TextViewRiderz"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/help_q3" />
 
                     <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/map_btn"
                         style="@style/TextViewRiderz"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -6,6 +6,7 @@
 
     <!-- Logo Background color -->
 
+    <!-- ?android:attr/textColorPrimary -->
     <!-- Icon -->
     <color name="darkCompatIcon">?attr/colorControlNormal</color>
 
@@ -29,18 +30,21 @@
     <color name="secondaryDarkColor">#c75b39</color>
 
     <!-- Light Mode -->>
-    <color name="colorPrimary">#bbdefb</color>   <!--  primary(predominant) color -->
-    <color name="colorPrimaryVariant">#eeffff</color> <!-- lighter/darker variant of primary-->
-    <color name="colorOnPrimary">#8aacc8</color> <!-- used for elements displayed  on top of primary -->
-    <color name="colorSecondary">#E14185</color> <!-- used mostly for accenting -->
-    <color name="colorSecondaryVariant">#B4346A</color> <!--TODO lighter/darker variant  of secondary -->
-    <color name="colorOnSecondary">#FFFFFF</color> <!-- used for elements displaye don top of secondary colors-->
-    <color name="colorBackground">#FFFFFF</color>  <!--color begin all other screen content -->
-    <color name="colorOnBackground">#000000</color> <!--elements displayed on top of colorBackground -->
-    <color name="colorSurface">#CFD8DC</color> <!-- TODO used for surfaces (i.e. Material Sheets, etc) -->
-    <color name="colorOnSurface">#FFFFFF</color> <!-- used for elements displayed on top of surface -->
+    <color name="colorPrimary">#01579b</color>   <!--  primary(predominant) color -->
+    <color name="colorPrimaryVariant">#002f6c</color> <!-- lighter/darker variant of primary-->
+    <color name="colorOnPrimary">#fff</color> <!-- used for elements displayed  on top of primary -->
+    <color name="colorSecondary">#d84315</color> <!-- used mostly for accenting -->
+    <color name="colorSecondaryVariant">#9f0000</color> <!--TODO lighter/darker variant  of secondary -->
+    <color name="colorOnSecondary">#000</color> <!-- used for elements displaye don top of secondary colors-->
+    <color name="colorBackground">#fafafa</color>  <!--color begin all other screen content -->
+    <color name="colorOnBackground">#A3A0A0</color> <!--elements displayed on top of colorBackground -->
+    <color name="colorSurface">#E6E6E6</color> <!-- TODO used for surfaces (i.e. Material Sheets, etc) -->
+    <color name="colorOnSurface">#FDFDFD</color> <!-- used for elements displayed on top of surface -->
     <color name="colorError">#F50057</color> <!-- error color -->
     <color name="colorOnError">#FFFFFF</color> <!-- used for elements displayed on top of colorError -->
+
+    <color name="dark_gray">#555555</color>
+    <color name="light_gray">#A5A3A3</color>
 
     <!-- BART Line Colors -->
     <color name="bartRedLine">#FF0000</color>
@@ -66,4 +70,9 @@
     <color name="nighttime_light">#534bae</color>
     <color name="nighttime_dark">#000051</color>
 
+
+    <color name="icon_color">@color/colorOnSurface</color>
+    <color name="text_input_bg">@color/colorSurface</color>
+
 </resources>
+

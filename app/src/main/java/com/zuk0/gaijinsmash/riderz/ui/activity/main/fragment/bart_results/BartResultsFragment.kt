@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.data.local.constants.RiderzEnums
@@ -34,8 +35,7 @@ import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment
  */
 class BartResultsFragment : BaseFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: BartResultsViewModelFactory
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var binding: FragmentResultsBinding
     private lateinit var viewModel: BartResultsViewModel
 
@@ -66,7 +66,6 @@ class BartResultsFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         initFavoriteIcon(viewModel.originStation, viewModel.destinationStation)
-
     }
 
     override fun onStop() {
@@ -110,10 +109,10 @@ class BartResultsFragment : BaseFragment() {
     private fun initStationsForTripCall(origin: String, destination: String, date: String, time: String) {
         Logger.i("origin: $origin, destination: $destination, date: $date, time: $time")
 
-        viewModel.loadTrip(origin, destination, date, time).observe(this, Observer { result ->
+        viewModel.loadTrip(origin, destination, date, time).observe(viewLifecycleOwner, Observer { result ->
             when(result.status) {
                 LiveDataWrapper.Status.SUCCESS -> {
-                    viewModel.mTripList = result.data.root.schedule.request.tripList
+                    viewModel.mTripList = result.data.root?.schedule?.request?.tripList
                     initFavoriteObject(viewModel.originStation, viewModel.destinationStation, viewModel.mTripList)
                     initRecyclerView(viewModel.mTripList)
                 }
@@ -121,7 +120,7 @@ class BartResultsFragment : BaseFragment() {
                     Logger.i("Loading Trip")
                 }
                 LiveDataWrapper.Status.ERROR -> {
-                    Logger.e(result.msg)
+                    result.msg?.let { Logger.e(it) }
                 }
                 else -> { Logger.wtf("unknown error") }
             }

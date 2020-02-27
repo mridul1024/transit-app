@@ -13,7 +13,7 @@
         android:id="@+id/container"
         android:background="@color/white"
         app:cardCornerRadius="@dimen/riderz_cardView_cornerRadius"
-        app:cardElevation="10dp"
+        app:cardElevation="@dimen/riderz_cardView_elevation"
         android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -47,9 +47,11 @@
                 android:text="@{bsa.station.toString()}"
                 android:textAlignment="center"
                 android:textColor="@color/white"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/bsa_type_textView"
@@ -63,12 +65,14 @@
                 android:text="@{bsa.type.toString()}"
                 android:textAlignment="center"
                 android:textColor="@color/colorTextAlert"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/bsa_description_textView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bsa_station_textView"
-                tools:text="Delay" />
+                tools:text="Delay"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/bsa_description_textView"

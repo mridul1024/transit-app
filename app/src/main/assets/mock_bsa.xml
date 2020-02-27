@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <uri>
+        <![CDATA[http://api.bart.gov/api/bsa.aspx?cmd=bsa&appid=f819deff72341e3b1daaba2cabe16880]]>
+    </uri>
+    <date>01/23/2020</date>
+    <time>18:42:00 PM PST</time>
+    <bsa id="199124">
+        <station>BART</station>
+        <type>DELAY</type>
+        <description>
+            <![CDATA[BART is recovering from an earlier problem. There is a 10-minute delay at West Oakland in the East Bay direction due to an earlier equipment problem on a train.]]>
+        </description>
+        <sms_text>
+            <![CDATA[BART recovering: 10 min delay at WOAK in East Bay dir due to an earlier equipment prob on a train.]]>
+        </sms_text>
+        <posted>Thu Jan 23 2020 06:17 PM PST</posted>
+        <expires>Thu Dec 31 2037 11:59 PM PST</expires>
+    </bsa>
+    <message/>
+</root>

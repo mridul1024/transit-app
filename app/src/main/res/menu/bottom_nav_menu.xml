@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/homeFragment"
-        android:title="@string/menu_home"
-        android:icon="@drawable/ic_menu_home" />
-
     <item android:id="@+id/googleMapFragment"
         android:title="@string/menu_map"
         android:icon="@drawable/ic_menu_map" />
 
     <item android:id="@+id/tripFragment"
         android:title="@string/menu_trip"
+        android:tooltipText="@string/tooltip_trip"
         android:icon="@drawable/ic_menu_schedule" />
+
+    <item android:id="@+id/homeFragment"
+        android:title="@string/menu_home"
+        android:icon="@drawable/ic_menu_home" />
 
     <item android:id="@+id/favoritesFragment"
         android:title="@string/menu_favorites"
+        android:tooltipText="@string/tooltip_favorites"
         android:icon="@drawable/ic_menu_favorite" />
 </menu>

@@ -27,10 +27,10 @@ class WeatherRepository
 
     fun getWeatherByGeoloc(lat: Double, long: Double) : LiveData<LiveDataWrapper<WeatherResponse>> {
         val data = MutableLiveData<LiveDataWrapper<WeatherResponse>>()
-        service.getWeatherByGeoloc(lat, long).enqueue(object: Callback<WeatherResponse> {
+        service?.getWeatherByGeoloc(lat, long)?.enqueue(object: Callback<WeatherResponse> {
 
             override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
-                val res = LiveDataWrapper.success<WeatherResponse>(response.body()) as LiveDataWrapper<WeatherResponse>
+                val res = LiveDataWrapper.success<WeatherResponse>(response.body()!!) as LiveDataWrapper<WeatherResponse>
                 data.postValue(res)
                 if(response.code() == 502) {
                     //todo do something
@@ -48,10 +48,10 @@ class WeatherRepository
 
     fun getWeatherByZipcode(zipcode: Int) : LiveData<LiveDataWrapper<WeatherResponse>> {
         val data = MutableLiveData<LiveDataWrapper<WeatherResponse>>()
-        service.getWeatherByZipCode(zipcode).enqueue(object: Callback<WeatherResponse> {
+        service?.getWeatherByZipCode(zipcode)?.enqueue(object: Callback<WeatherResponse> {
 
             override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
-                val res = LiveDataWrapper.success<WeatherResponse>(response.body()) as LiveDataWrapper<WeatherResponse>
+                val res = LiveDataWrapper.success<WeatherResponse>(response.body()!!) as LiveDataWrapper<WeatherResponse>
                 data.postValue(res)
                 if(response.code() == 502) {
                     //todo do something

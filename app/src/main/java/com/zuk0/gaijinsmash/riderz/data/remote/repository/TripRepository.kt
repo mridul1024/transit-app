@@ -22,12 +22,9 @@ import retrofit2.Response
 
 @Singleton
 class TripRepository
-        @Inject constructor(
-        private val service: BartService,
-        private val tripDao: TripDao,
-        private val executor: Executor) {
+@Inject constructor(val service: BartService, val tripDao: TripDao, val executor: Executor) {
 
-    fun getTrip(origin: String, destination: String, date: String, time: String): LiveData<LiveDataWrapper<TripJsonResponse>> {
+    fun getTrip(origin: String?, destination: String?, date: String?, time: String?): LiveData<LiveDataWrapper<TripJsonResponse>> {
         val data = MutableLiveData<LiveDataWrapper<TripJsonResponse>>()
 
         service.getTripJson(origin, destination, date, time).enqueue(object : Callback<TripJsonResponse> {

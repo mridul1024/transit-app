@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/searchviewz/searchviewz.iml" filepath="$PROJECT_DIR$/searchviewz/searchviewz.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/transit-app.iml" filepath="$PROJECT_DIR$/.idea/transit-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="transit-app/app" />
+      <module fileurl="file://$PROJECT_DIR$/searchviewz/searchviewz.iml" filepath="$PROJECT_DIR$/searchviewz/searchviewz.iml" group="transit-app/searchviewz" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/transit-app.iml" filepath="$PROJECT_DIR$/.idea/transit-app.iml" group="transit-app" />
     </modules>
   </component>
 </project>
