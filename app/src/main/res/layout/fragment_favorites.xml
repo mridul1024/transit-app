@@ -13,6 +13,10 @@
                 android:layout_height="wrap_content" />
 
         </com.google.android.material.tabs.TabLayout>-->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,8 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-
-                android:text="Favorites"
+                android:text="@string/favorites"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -37,25 +40,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:nestedScrollingEnabled="false"
                 android:paddingBottom="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/favoritesTitle_tv"
-                tools:visibility="gone">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-            <!-- Section Title -->
-            <TextView
-                android:id="@+id/otherTitle_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center_horizontal"
-                android:text="Commute"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bartFavorites_recyclerView" />
+                tools:listitem="@layout/list_row_favorites2"
+                tools:itemCount="3"
+                tools:visibility="visible"/>
 
             <!-- TODO Stub this -->
             <androidx.cardview.widget.CardView
@@ -63,11 +55,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:background="@color/white"
                 app:cardCornerRadius="@dimen/riderz_cardView_cornerRadius"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/favoritesTitle_tv">
+                app:layout_constraintTop_toBottomOf="@+id/bartFavorites_recyclerView">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -81,7 +72,6 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="8dp"
                         android:text="@string/bart_favorites_empty"
-                        android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/empty_favorite_icon" />
@@ -92,7 +82,6 @@
                         android:layout_height="40dp"
                         android:layout_marginTop="32dp"
                         android:layout_marginBottom="8dp"
-                        android:tint="@color/primaryDarkColor"
                         app:layout_constraintBottom_toTopOf="@+id/bartFavorites_error_tV"
                         app:layout_constraintEnd_toEndOf="@+id/bartFavorites_error_tV"
                         app:layout_constraintHorizontal_bias="0.495"
@@ -103,7 +92,7 @@
                     <!-- Create a Favorite Route -->
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:layout_margin="5dp"
+                        android:layout_margin="8dp"
                         android:id="@+id/textInputLayout5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -121,15 +110,14 @@
                             android:inputType="text"
                             android:maxLines="1"
                             android:padding="10dp"
-                            android:singleLine="true"
-                            android:textColor="@color/secondaryDarkColor" />
+                            android:singleLine="true" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputLayout6"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_margin="8dp"
                         android:layout_marginTop="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -144,8 +132,7 @@
                             android:inputType="text"
                             android:maxLines="1"
                             android:padding="10dp"
-                            android:singleLine="true"
-                            android:textColor="@color/secondaryDarkColor" />
+                            android:singleLine="true" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button
@@ -159,7 +146,6 @@
                         android:background="?attr/selectableItemBackground"
                         android:elevation="1dp"
                         android:text="Create Route"
-                        android:textColor="@color/colorTextAlert"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textInputLayout6" />
@@ -169,5 +155,7 @@
             </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </layout>

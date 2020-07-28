@@ -1,10 +1,8 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.splash
 
-import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProvider
 
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity
@@ -22,16 +20,17 @@ class SplashActivity : AppCompatActivity(), HasAndroidInjector {
     @Inject lateinit var fragmentInjector : DispatchingAndroidInjector<Any>
 
     //@Inject lateinit var splashViewModelFactory: ViewModelProvider.AndroidViewModelFactory
-    private lateinit var mViewModel: SplashViewModel
+    private lateinit var vm: SplashViewModel
 
     override fun androidInjector(): AndroidInjector<Any> {
         return fragmentInjector
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //initDagger()
+        initDagger()
         super.onCreate(savedInstanceState)
         initViewModel()
+        vm.initDayNightTheme()
         initStations()
         launchMainActivity()
     }
@@ -41,12 +40,12 @@ class SplashActivity : AppCompatActivity(), HasAndroidInjector {
     }
 
     private fun initViewModel() {
-        mViewModel = ViewModelProviders.of(this).get(SplashViewModel::class.java)
+        vm = ViewModelProvider(this).get(SplashViewModel::class.java)
     }
 
     //todo: need to move this to application
     private fun initStations() {
-        mViewModel.initStationsData()
+        vm.initStationsData()
     }
 
     private fun launchMainActivity() {

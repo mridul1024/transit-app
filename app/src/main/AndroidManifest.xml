@@ -16,6 +16,9 @@
         android:glEsVersion="0x00020000"
         android:required="true" />
 
+    <uses-feature android:name="android.hardware.camera.any" />
+
+
     <application
         android:name="com.zuk0.gaijinsmash.riderz.RiderzApplication"
         android:hardwareAccelerated="true"
@@ -27,6 +30,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="m">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.riderz.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <!-- ressource file to create -->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths">
+            </meta-data>
+        </provider>
 
         <!-- Requirement for API 28+ -->
         <uses-library android:name="org.apache.http.legacy" android:required="false" />
@@ -70,5 +85,6 @@
         </activity>
 
         <activity android:name=".ui.activity.test.TestActivity" />
+        <activity android:name=".ui.activity.permission.PermissionActivity" />
     </application>
 </manifest>

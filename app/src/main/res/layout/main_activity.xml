@@ -39,13 +39,13 @@
                     app:expandedTitleMarginEnd="10dp"
                     app:expandedTitleMarginBottom="20dp"
                     app:expandedTitleGravity="bottom|start"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/image_background"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="50dp"
+                        android:paddingTop="20dp"
                         app:layout_collapseMode="parallax">
 
                         <ImageView
@@ -56,14 +56,13 @@
                             android:contentDescription="@string/banner"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.65"
                             app:layout_constraintStart_toStartOf="parent" />
 
                         <FrameLayout
                             android:id="@+id/widget_weather_container"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginBottom="8dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -101,6 +100,8 @@
                 app:itemIconTint="@drawable/nav_item_color_state"
                 app:itemTextColor="@drawable/nav_item_color_state"
                 app:labelVisibilityMode="labeled"
+                app:itemTextAppearanceActive="@color/bartGreenLine"
+                app:itemTextAppearanceInactive="@color/black"
                 app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
                 app:menu="@menu/bottom_nav_menu" />
 
@@ -112,6 +113,7 @@
                 android:layout_marginBottom="80dp"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_add_white_24dp"
+                android:tint="@color/fab_color"
                 app:fabSize="auto"
                 android:elevation="10dp"
                 app:elevation="10dp"
@@ -127,10 +129,20 @@
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_add_white_24dp"
                 app:fabSize="auto"
+                android:tint="@color/fab_color"
                 android:elevation="10dp"
                 app:elevation="10dp"
                 android:visibility="invisible"
                 tools:visibility="visible" />
+
+            <FrameLayout
+                android:id="@+id/main_shadow_overlay"
+                android:visibility="gone"
+                android:background="@color/black"
+                android:alpha=".6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:visibility="visible"/>
 
             <com.google.android.material.circularreveal.CircularRevealFrameLayout
                  android:id="@+id/fab_circular_reveal_layout"
@@ -146,55 +158,72 @@
                 android:id="@+id/fab_extended_view"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:visibility="invisible"
-                android:layout_gravity="bottom|end|center_vertical"
+                android:visibility="gone"
+                android:layout_gravity="bottom|end|center_horizontal"
                 android:layout_marginBottom="140dp"
                 android:layout_marginEnd="20dp"
+                android:elevation="2dp"
                 app:layout_behavior="com.google.android.material.transformation.FabTransformationScrimBehavior" >
                 <!-- Insert child views here -->
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/fab_complain"
-                    android:src="@drawable/ic_feedback_white_24dp"
-                    android:layout_gravity="center"
+                    app:icon="@drawable/ic_feedback_white_24dp"
+                    android:layout_gravity="end"
+                    android:gravity="center_horizontal"
                     android:layout_marginBottom="10dp"
                     app:fabSize="auto"
+                    app:fabCustomSize="40dp"
+                    android:drawableTint="@color/white"
+                    android:tooltipText="@string/fab_complain_text"
+                    android:text="@string/fab_complain_text"
+                    android:translationZ="10dp"
+                    android:textColor="@color/fab_color"
+                    app:iconTint="@color/fab_color"
                     android:visibility="invisible"
                     android:scaleType="centerInside"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fab_camera"
-                    android:src="@drawable/ic_camera_alt_black_24dp"
-                    android:tint="@color/white"
-                    android:layout_marginBottom="10dp"
-                    android:layout_gravity="center"
-                    app:fabSize="auto"
-                    android:visibility="invisible"
-                    android:scaleType="centerInside"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fab_map"
-                    android:src="@drawable/ic_map_black_24dp"
-                    android:layout_marginBottom="10dp"
-                    android:tint="@color/white"
 
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/fab_camera"
+                    app:icon="@drawable/ic_camera_alt_black_24dp"
+                    android:tint="@color/white"
+                    android:tooltipText="@string/fab_camera_text"
+                    android:drawableTint="@color/white"
+                    android:text="@string/fab_camera_text"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="end"
+                    android:gravity="center_horizontal"
                     app:fabSize="auto"
+                    app:fabCustomSize="40dp"
+                    android:textColor="@color/fab_color"
+                    app:iconTint="@color/fab_color"
+                    android:visibility="invisible"
+                    android:scaleType="centerInside"
+                    android:translationZ="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/fab_map"
+                    app:icon="@drawable/ic_map_black_24dp"
+                    android:layout_gravity="end"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/fab_map_text"
+                    android:tooltipText="@string/fab_map_text"
+                    android:tint="@color/fab_color"
+                    android:drawableTint="@color/white"
+                    android:textColor="@color/fab_color"
+                    app:iconTint="@color/fab_color"
+                    app:fabSize="auto"
+                    app:fabCustomSize="40dp"
+                    android:translationZ="10dp"
                     android:visibility="invisible"
                     android:scaleType="centerInside"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
-
-            <FrameLayout
-                android:id="@+id/main_shadow_overlay"
-                android:visibility="gone"
-                android:background="@color/black"
-                android:alpha=".5"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:visibility="visible"/>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.navigation.NavigationView
@@ -204,8 +233,8 @@
             android:layout_gravity="start"
             app:headerLayout="@layout/main_nav_header"
             app:menu="@menu/drawer_nav_menu"
-            app:itemIconTint="@color/black"
-            app:itemTextColor="@color/black"
+            app:itemIconTint="@color/colorOnSurface"
+            app:itemTextColor="@color/colorOnSurface"
             tools:visibility="visible" />
 
     </androidx.drawerlayout.widget.DrawerLayout>

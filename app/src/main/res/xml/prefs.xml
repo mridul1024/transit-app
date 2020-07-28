@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="title">
+
+        <CheckBoxPreference
+            android:key="TIME_KEY"
+            android:title="@string/preference_time_title"
+            android:summary="@string/preference_time_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Measurement System">
+        <CheckBoxPreference
+            android:key="METRIC_KEY"
+            android:title="Enable Metric System?"
+            android:summary="Default is Imperial"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:title="Location Settings">
+        <CheckBoxPreference
+            android:key="USER_LOC_KEY"
+            android:title="Use your location?"
+            android:summary="Weather and train information is based on your location."
+            android:defaultValue="false" />
+    </PreferenceCategory>
+    <PreferenceCategory>
+        <Preference
+            android:key="RESET_KEY"
+            android:title="Reset to Default Settings"
+            android:icon="@drawable/ic_refresh_black_24dp" />
+    </PreferenceCategory>
+</PreferenceScreen>

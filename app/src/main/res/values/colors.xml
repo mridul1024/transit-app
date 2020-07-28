@@ -3,7 +3,6 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
 
-
     <!-- Logo Background color -->
 
     <!-- ?android:attr/textColorPrimary -->
@@ -36,10 +35,10 @@
     <color name="colorSecondary">#d84315</color> <!-- used mostly for accenting -->
     <color name="colorSecondaryVariant">#9f0000</color> <!--TODO lighter/darker variant  of secondary -->
     <color name="colorOnSecondary">#000</color> <!-- used for elements displaye don top of secondary colors-->
-    <color name="colorBackground">#fafafa</color>  <!--color begin all other screen content -->
+    <color name="colorBackground">#ffffff</color>  <!--color begin all other screen content -->
     <color name="colorOnBackground">#A3A0A0</color> <!--elements displayed on top of colorBackground -->
     <color name="colorSurface">#E6E6E6</color> <!-- TODO used for surfaces (i.e. Material Sheets, etc) -->
-    <color name="colorOnSurface">#FDFDFD</color> <!-- used for elements displayed on top of surface -->
+    <color name="colorOnSurface">#000000</color> <!-- used for elements displayed on top of surface -->
     <color name="colorError">#F50057</color> <!-- error color -->
     <color name="colorOnError">#FFFFFF</color> <!-- used for elements displayed on top of colorError -->
 
@@ -74,5 +73,13 @@
     <color name="icon_color">@color/colorOnSurface</color>
     <color name="text_input_bg">@color/colorSurface</color>
 
+    <color name="fab_color">@color/white</color>
+
+    <color name="menu_item_active">@color/colorSecondary</color>
+    <color name="menu_item_inactive">@color/colorOnSurface</color>
+
+    <color name="splash_bg">@color/colorPrimary</color>
+
+    <color name="secondary_or_white">@color/colorSecondary</color>
 </resources>
 

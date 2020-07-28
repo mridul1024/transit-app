@@ -88,7 +88,10 @@ class TripRecyclerAdapter2(val tripList: List<Trip>) : RecyclerView.Adapter<Trip
         }
 
         containerBinding.tripShareButton.setOnClickListener { view ->
-            ShareUtils.shareTrip(view.context, view)
+            containerBinding.root.rootView.isDrawingCacheEnabled = true
+            containerBinding.root.rootView.buildDrawingCache()
+            val bitmap = containerBinding.root.rootView.drawingCache
+            ShareUtils.shareTrip(view.context, bitmap)
         }
     }
 

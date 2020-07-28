@@ -16,6 +16,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.databinding.FragmentTripBinding
@@ -56,6 +57,7 @@ class TripFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         super.collapseAppBar(activity)
+        super.setTitle(activity, getString(R.string.trip_title))
         initTimePreference(activity)
         initStationsList()
         initSpinnerAdapter()
@@ -73,7 +75,7 @@ class TripFragment : BaseFragment() {
     }
 
     private fun initViewModel() {
-        mViewModel = ViewModelProviders.of(this).get(TripViewModel::class.java)
+        mViewModel = ViewModelProvider(this).get(TripViewModel::class.java)
     }
 
     private fun initTimePreference(context: Context?) {
@@ -86,7 +88,7 @@ class TripFragment : BaseFragment() {
     }
 
     private fun initSpinnerAdapter() {
-        mSpinnerAdapter = ArrayAdapter(Objects.requireNonNull<FragmentActivity>(activity), R.layout.custom_dropdown_item, mViewModel.stationsList)
+        mSpinnerAdapter = ArrayAdapter(requireContext(), R.layout.custom_dropdown_item, mViewModel.stationsList)
         mSpinnerAdapter?.setDropDownViewResource(R.layout.custom_dropdown_item)
     }
 
@@ -154,14 +156,16 @@ class TripFragment : BaseFragment() {
         }
         mDataBinding.stationSpinner1.adapter = adapter
         mDataBinding.stationSpinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 Logger.i("position $position")
-                val textView = mDataBinding.stationSpinner1.selectedView as TextView
-                var itemSelected = ""
-                itemSelected = textView.text.toString()
-                mDataBinding.tripDepartureAutoCompleteTextView.setText(itemSelected)
-                if(itemSelected.isNotBlank())
-                    mDataBinding.tripDepartCloseBtn.visibility = View.VISIBLE
+                mDataBinding.stationSpinner1.selectedView?.let {
+                    val textView = mDataBinding.stationSpinner1.selectedView as TextView
+                    var itemSelected = ""
+                    itemSelected = textView.text.toString()
+                    mDataBinding.tripDepartureAutoCompleteTextView.setText(itemSelected)
+                    if(itemSelected.isNotBlank())
+                        mDataBinding.tripDepartCloseBtn.visibility = View.VISIBLE
+                }
             }
 
             override fun onNothingSelected(adapterView: AdapterView<*>) {
@@ -170,8 +174,8 @@ class TripFragment : BaseFragment() {
         }
     }
 
-    private fun showCloseButton(isDepart: Boolean) {
-        if(isDepart) {
+    private fun showCloseButton(isDeparting: Boolean) {
+        if(isDeparting) {
             mDataBinding.tripDepartCloseBtn.visibility = View.VISIBLE
         } else {
             mDataBinding.tripArrivalCloseBtn.visibility = View.VISIBLE
@@ -201,13 +205,15 @@ class TripFragment : BaseFragment() {
 
         mDataBinding.stationSpinner2.adapter = adapter
         mDataBinding.stationSpinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
-                val textView = mDataBinding.stationSpinner2.selectedView as TextView
-                var itemSelected = ""
-                itemSelected = textView.text.toString()
-                mDataBinding.tripArrivalAutoCompleteTextView.setText(itemSelected)
-                if(itemSelected.isNotBlank())
-                    mDataBinding.tripArrivalCloseBtn.visibility = View.VISIBLE
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                mDataBinding.stationSpinner2.selectedView?.let {
+                    val textView = mDataBinding.stationSpinner2.selectedView as TextView
+                    var itemSelected = ""
+                    itemSelected = textView.text?.toString() ?: ""
+                    mDataBinding.tripArrivalAutoCompleteTextView.setText(itemSelected)
+                    if(itemSelected.isNotBlank())
+                        mDataBinding.tripArrivalCloseBtn.visibility = View.VISIBLE
+                }
             }
 
             override fun onNothingSelected(adapterView: AdapterView<*>) {
@@ -220,15 +226,17 @@ class TripFragment : BaseFragment() {
         mDataBinding.tripDateEditText.setText(getText(R.string.currentDate))
         mDataBinding.tripDateEditText.inputType = InputType.TYPE_NULL
         mDataBinding.tripDateEditText.requestFocus()
-        mDataBinding.tripDateEditText.setOnClickListener { view1 ->
+        mDataBinding.tripDateEditText.setOnClickListener { _ ->
             val newCalendar = Calendar.getInstance()
-            mDatePickerDialog = DatePickerDialog(Objects.requireNonNull<FragmentActivity>(activity), { view11, year, month, day ->
-                val newDate = Calendar.getInstance()
-                newDate.set(year, month, day)
-                mSimpleDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.US)
-                mDataBinding.tripDateEditText.setText(mSimpleDateFormat!!.format(newDate.time))
-            }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH))
-            mDatePickerDialog?.show()
+            context?.let {
+                mDatePickerDialog = DatePickerDialog(it, { _, year, month, day ->
+                    val newDate = Calendar.getInstance()
+                    newDate.set(year, month, day)
+                    mSimpleDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+                    mDataBinding.tripDateEditText.setText(mSimpleDateFormat!!.format(newDate.time))
+                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH))
+                mDatePickerDialog?.show()
+            }
         }
     }
 
@@ -259,8 +267,7 @@ class TripFragment : BaseFragment() {
     }
 
     private fun initTextInputEditors() {
-        val textViewAdapter = ArrayAdapter(Objects.requireNonNull<FragmentActivity>(activity), android.R.layout.simple_selectable_list_item, mViewModel.stationsList)
-
+        val textViewAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_selectable_list_item, mViewModel.stationsList)
         mDataBinding.tripDepartureAutoCompleteTextView.threshold = 1 // will start working from first character
         mDataBinding.tripDepartureAutoCompleteTextView.setAdapter(textViewAdapter)
         mDataBinding.tripDepartureAutoCompleteTextView.requestFocus()

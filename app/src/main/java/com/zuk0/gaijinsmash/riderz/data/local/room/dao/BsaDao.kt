@@ -13,8 +13,11 @@ interface BsaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(bsa: BsaXmlResponse?)
 
-    @Query("SELECT * FROM advisories order by timestamp desc limit 1")
-    fun load(): LiveData<BsaXmlResponse?>?
+    @Query("SELECT * FROM advisories order by id desc limit 1")
+    fun getLatest(): BsaXmlResponse?
+
+    @Query("SELECT * FROM advisories order by id desc limit 1")
+    fun getLatestLiveData(): LiveData<BsaXmlResponse?>?
 
     @Query("SELECT * FROM advisories where timestamp >= :past OR timestamp <= :now ")
     fun bsaExists(past: Timestamp?, now: Timestamp?): Boolean

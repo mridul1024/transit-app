@@ -1,43 +1,36 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.main
 
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.ColorFilter
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.NavHost
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.bumptech.glide.Glide
-import com.google.android.material.animation.AnimationUtils
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.navigation.NavigationView
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.data.local.entity.event.EventToggleMap
+import com.zuk0.gaijinsmash.riderz.databinding.BartmapAlertDialogBinding
 import com.zuk0.gaijinsmash.riderz.databinding.MainActivityBinding
-import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bottom_sheet.ActionBottomDialogFragment
-import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.camera.CameraFragment.Companion.KEY_EVENT_ACTION
-import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.camera.CameraFragment.Companion.KEY_EVENT_EXTRA
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
-import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -54,12 +47,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var binding: MainActivityBinding
     private lateinit var mAppBarConfiguration: AppBarConfiguration
-    private lateinit var navController: NavController
+    lateinit var navController: NavController
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel : MainViewModel
 
-    private lateinit var weatherPresenter: MainWeatherPresenter
+    private lateinit var weatherPresenter: WeatherPresenter
 
     // Train map view
     private var scaleGestureDetector: ScaleGestureDetector? = null
@@ -73,21 +66,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity)
 
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         navController = findNavController(this, R.id.nav_host_fragment)
-        setupWithNavController(main_bottom_navigation, navController)
-        setupWithNavController(nav_view, navController)
+        setupWithNavController(binding.mainBottomNavigation, navController)
+        setupWithNavController(binding.navView, navController)
         mAppBarConfiguration = AppBarConfiguration.Builder(setOf(R.id.homeFragment, R.id.googleMapFragment, R.id.tripFragment, R.id.favoritesFragment))
-                .setDrawerLayout(drawer_layout)
+                .setDrawerLayout(binding.drawerLayout)
                 .build()
 
-        setupWithNavController(toolbar, navController, mAppBarConfiguration)
+        setupWithNavController(binding.toolbar, navController, mAppBarConfiguration)
 
         if(savedInstanceState != null) {
             viewModel.restoreState(savedInstanceState)
@@ -116,14 +109,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onStop()
     }
 
+    override fun onNavigateUp(): Boolean {
+        return navController.navigateUp()
+    }
+
     override fun onSupportNavigateUp() : Boolean {
-        onBackPressed()
-        return true
+        return navController.navigateUp()
     }
 
     override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             showBottomNavigation(true)
             navController.navigateUp()
@@ -144,8 +140,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         return when (keyCode) {
             KeyEvent.KEYCODE_VOLUME_DOWN -> {
-                val intent = Intent(KEY_EVENT_ACTION).apply { putExtra(KEY_EVENT_EXTRA, keyCode) }
-                LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+                //val intent = Intent(KEY_EVENT_ACTION).apply { putExtra(KEY_EVENT_EXTRA, keyCode) }
+                //LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
                 true
             }
             else -> super.onKeyDown(keyCode, event)
@@ -154,9 +150,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun showBottomNavigation(enable: Boolean) {
         if(enable)
-            HideBottomViewOnScrollBehavior<BottomNavigationView>(this, null).slideUp(main_bottom_navigation)
+            HideBottomViewOnScrollBehavior<BottomNavigationView>(this, null).slideUp(binding.mainBottomNavigation)
         else
-            HideBottomViewOnScrollBehavior<BottomNavigationView>(this, null).slideDown(main_bottom_navigation)
+            HideBottomViewOnScrollBehavior<BottomNavigationView>(this, null).slideDown(binding.mainBottomNavigation)
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -184,15 +180,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun initFab() {
         binding.fabOpen.visibility = View.VISIBLE
         binding.fabOpen.setOnClickListener {
-            binding.fabOpen.isExpanded = !fabOpen.isExpanded
-            animateFAB(fabOpen.isExpanded)
-            //todo set background alpha
+            binding.fabOpen.isExpanded = !binding.fabOpen.isExpanded
+            animateFAB(binding.fabOpen.isExpanded)
             binding.mainShadowOverlay.visibility = View.VISIBLE
         }
         binding.fabClose.setOnClickListener {
-            binding.fabOpen.isExpanded = !fabOpen.isExpanded
-            animateFAB(fabOpen.isExpanded)
+            binding.fabOpen.isExpanded = !binding.fabOpen.isExpanded
+            animateFAB(binding.fabOpen.isExpanded)
             binding.mainShadowOverlay.visibility = View.GONE
+        }
+        binding.fabMap.setOnClickListener {
+            showBartMapDialog(EventToggleMap(TAG))
+            binding.fabClose.performClick()
+        }
+        binding.fabComplain.setOnClickListener {
+            binding.fabClose.performClick()
+            showComplainDialog()
+        }
+        binding.fabCamera.setOnClickListener {
+            binding.fabClose.performClick()
+            //deselect bottom nav
+            binding.mainBottomNavigation.menu
+            showBartPoliceDialog()
+
         }
     }
 
@@ -201,18 +211,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             binding.fabOpen.animation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.rotate_forward)
             binding.fabClose.visibility = View.VISIBLE
             binding.fabClose.animation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.rotate_forward)
+
             binding.fabCamera.animation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fab_open)
             binding.fabComplain.animation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fab_open)
             binding.fabMap.animation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fab_open)
+
+            lifecycleScope.launch {
+                binding.fabCamera.extend()
+                binding.fabMap.extend()
+                binding.fabComplain.extend()
+                delay(2000)
+                binding.fabCamera.shrink()
+                binding.fabMap.shrink()
+                binding.fabComplain.shrink()
+            }
         } else {
             binding.fabClose.animation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.rotate_backward)
             binding.fabClose.visibility = View.INVISIBLE
             binding.fabOpen.animation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.rotate_backward)
-            binding.fabCamera.animation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fab_close)
-            binding.fabComplain.animation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fab_close)
-            binding.fabMap.animation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fab_close)
+
+            binding.fabCamera.visibility = View.INVISIBLE
+            binding.fabComplain.visibility = View.INVISIBLE
+            binding.fabMap.visibility = View.INVISIBLE
         }
     }
+
     //TODO check if bottom nav is hidden, and show on new transitions
     /**
      * Helpers
@@ -235,12 +258,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
         //todo set hamburger button color
-        //binding.toolbar.navigationIcon?.colorFilter = ColorFilter()
         //todo set color of options menu
     }
 
     private fun initWeather() {
-        weatherPresenter = MainWeatherPresenter(this, viewModel, binding)
+        weatherPresenter = WeatherPresenter(this, viewModel, binding)
         lifecycle.addObserver(weatherPresenter)
     }
 
@@ -257,20 +279,55 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun showBartMapDialog(event: EventToggleMap) {
         val builder = AlertDialog.Builder(this)
-        val view2 = layoutInflater.inflate(R.layout.bartmap_alert_dialog, null)
-        trainMapIv = view2.findViewById(R.id.bartMap_custom_imageView)
-        trainMapIv?.let {
-            //todo: warning for accessibility users
-            trainMapIv?.setOnTouchListener { view1, event ->
-                scaleGestureDetector?.onTouchEvent(event)
-                true
-            }
-
-            viewModel.initBartMap(this, trainMapIv)
-            builder.setView(view2)
-            val dialog = builder.create()
-            dialog.show()
+        val dialogBinding = BartmapAlertDialogBinding.inflate(layoutInflater)
+        trainMapIv = dialogBinding.bartMapCustomImageView
+        trainMapIv?.setOnTouchListener { _, e ->
+            scaleGestureDetector?.onTouchEvent(e)
+            true
         }
+        viewModel.initBartMap(this, trainMapIv)
+        builder.setView(dialogBinding.root)
+        val dialog = builder.create()
+        dialogBinding.mapCloseFab.setOnClickListener { fab ->
+            fab.animation = android.view.animation.AnimationUtils.loadAnimation(this, R.anim.fab_spin)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun showComplainDialog() {
+        val dialog = AlertDialog.Builder(this).create()
+        dialog.setTitle(getString(R.string.alert_dialog_complain_title))
+        dialog.setMessage(getString(R.string.alert_dialog_complain_msg))
+        val customView = layoutInflater.inflate(R.layout.wtf_bart_dialog, null, false)
+        //set custom view
+        dialog.setView(customView)
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.alert_dialog_cancel)) { d, _ ->
+            d.cancel()
+        }
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.alert_dialog_continue)) { d, _ ->
+            val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                    "mailto","ryanjsuzuki@gmail.com", null)) //TODO remove test email
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "subject")
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "body")
+            startActivity(Intent.createChooser(emailIntent, getString(R.string.send_report_by_email)))
+            d.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun showBartPoliceDialog() {
+        //anavController.navigate(R.id.cameraFragment)
+        val dialog = AlertDialog.Builder(this).create()
+        //dialog.setTitle(getString(R.string.alert_dialog_report_title))
+        //dialog.setMessage(getString(R.string.alert_dialog_report_message))
+        val customView = layoutInflater.inflate(R.layout.bart_police_dialog, null, false)
+        //set custom view
+        dialog.setView(customView)
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.alert_dialog_cancel)) { d, _ ->
+            d.cancel()
+        }
+        dialog.show()
     }
 
     companion object {

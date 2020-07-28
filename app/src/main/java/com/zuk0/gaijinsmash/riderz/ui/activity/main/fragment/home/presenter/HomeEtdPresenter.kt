@@ -2,28 +2,23 @@ package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.presenter
 
 import android.content.Context
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.data.local.entity.Favorite
-import com.zuk0.gaijinsmash.riderz.data.local.entity.etd_response.Etd
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station
 import com.zuk0.gaijinsmash.riderz.databinding.PresenterEstimateBinding
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.HomeViewModel
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.CustomSpinnerAdapter
-import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.EstimateRecyclerAdapter
-import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.EtdRecyclerAdapter
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.etd.EstimateRecyclerAdapter
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.etd.PlatformReyclerAdapter
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.station_info.StationInfoFragment
 import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper
 import com.zuk0.gaijinsmash.riderz.utils.TimeDateUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -33,9 +28,6 @@ import kotlinx.coroutines.*
 
 class HomeEtdPresenter(val context: Context?, val etdBinding: PresenterEstimateBinding, val viewModel: HomeViewModel) : LifecycleObserver, CoroutineScope by MainScope(){
 
-    private lateinit var localEtdAdapter: EstimateRecyclerAdapter
-    private lateinit var favoriteEtdAdapter: EstimateRecyclerAdapter
-
     init {
         Log.d(TAG, "init")
     }
@@ -43,28 +35,29 @@ class HomeEtdPresenter(val context: Context?, val etdBinding: PresenterEstimateB
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         Log.d(TAG,"onCreate")
+        initStationInfoButton()
         initSpinner()
-        initSwipeRefreshLayout()
+        initRefreshButton()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onStart() {
         Log.d(TAG,"onStart")
-
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
         Log.d(TAG,"onResume")
-
         //restore state if available - from viewmodel
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onPause() {
         Log.d(TAG,"onPause")
-
         //save to viewmodel and push to savedInstanceState for caching.
+        //todo pause timers.
+        //save time in millis  of paused time
+        //then calculate difference of resumed time.
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
@@ -76,16 +69,26 @@ class HomeEtdPresenter(val context: Context?, val etdBinding: PresenterEstimateB
     fun onDestroy() {
         Log.d(TAG,"onDestroy")
 
-        /*
-         if (mEtdAdapter != null && mEtdInverseAdapter != null) {
+     /*    if (mEtdAdapter != null && mEtdInverseAdapter != null) {
              mEtdAdapter!!.destroyTimers()
              mEtdInverseAdapter!!.destroyTimers()
-         }
-         */
+         }*/
     }
 
-    private fun initSwipeRefreshLayout() {
-        etdBinding.homeSwipeRefreshLayout.setOnRefreshListener {
+    private fun initStationInfoButton() {
+        etdBinding.etdStationInfoIcon.setOnClickListener {
+            //get station
+            viewModel.selectedStation?.name?.let {
+                viewModel.navigationLiveData.postValue(StationInfoFragment.TAG)
+            }
+        }
+    }
+
+    private fun initRefreshButton() {
+        /*etdBinding.homeSwipeRefreshLayout.setOnRefreshListener {
+            refreshLists()
+        }*/
+        etdBinding.etdRefreshButton.setOnClickListener {
             refreshLists()
         }
     }
@@ -93,7 +96,7 @@ class HomeEtdPresenter(val context: Context?, val etdBinding: PresenterEstimateB
     //TODO - automatic refresh cycles every 5 minutes - do not track all trips.
     private fun refreshLists() {
         //todo refresh lists with diffutil
-        initEstimateLists()
+        initEstimateListsByPlatform()
     }
 
     private fun initSpinner() {
@@ -116,7 +119,7 @@ class HomeEtdPresenter(val context: Context?, val etdBinding: PresenterEstimateB
 
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     Log.d(TAG, "onItemSelected()")
-                    etdBinding.homeSwipeRefreshLayout.isRefreshing = true
+                    //etdBinding.homeSwipeRefreshLayout.isRefreshing = true
                     viewModel.selectedStation = etdBinding.etdSpinner.selectedItem as Station
                     viewModel.selectedStation?.let {
                         etdBinding.etdStationButton.text = viewModel.selectedStation?.name
@@ -142,49 +145,32 @@ class HomeEtdPresenter(val context: Context?, val etdBinding: PresenterEstimateB
         }
     }
 
-    private fun initEstimateLists() {
+    private fun initEstimateListsByPlatform() {
         //get station from spinner - default is walnut creek
-        if(viewModel.selectedStation == null)
-            etdBinding.homeSwipeRefreshLayout.isRefreshing = false
-
+        //if(viewModel.selectedStation == null)
+        //etdBinding.homeSwipeRefreshLayout.isRefreshing = false
         viewModel.selectedStation?.let { station ->
             viewModel.getEstimatesLiveData(station).observeForever { data ->
-
                 when(data.status) {
                     LiveDataWrapper.Status.SUCCESS -> {
                         if(data.data.station?.etdList != null) {
-                            viewModel.createEstimateListsByPlatform(data.data.station?.etdList)
-
-                            //platform1
-                            etdBinding.homeEtdPlatform1Title.text = etdBinding.root.context.resources.getString(R.string.platform) + " 1"
-                            etdBinding.homeEtdPlatform1Rv.visibility = View.VISIBLE
-                            etdBinding.homeEtdPlatform1Rv.setHasFixedSize(true)
-                            //etdBinding.homeEtdPlatform1Rv.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-                            etdBinding.homeEtdPlatform1Rv.layoutManager = LinearLayoutManager(etdBinding.etdContainer.context)
-                            etdBinding.homeEtdPlatform1Rv.adapter = EtdRecyclerAdapter(viewModel.platform1)
-
-                            //platform2
-                            etdBinding.homeEtdPlatform2Title.text = etdBinding.root.context.resources.getString(R.string.platform)  + " 2"
-                            etdBinding.homeEtdPlatform2Rv.visibility = View.VISIBLE
-                            etdBinding.homeEtdPlatform2Rv.setHasFixedSize(true)
-                            //etdBinding.homeEtdPlatform2Rv.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-                            etdBinding.homeEtdPlatform2Rv.layoutManager = LinearLayoutManager(etdBinding.etdContainer.context)
-                            etdBinding.homeEtdPlatform2Rv.adapter = EtdRecyclerAdapter(viewModel.platform2)
-
+                            val map = viewModel.createEstimateListsByPlatform2(data.data.station?.etdList)
+                            val list = viewModel.sortMapIntoList(map)
+                            etdBinding.homeEtdRv.layoutManager = LinearLayoutManager(context)
+                            etdBinding.homeEtdRv.adapter = PlatformReyclerAdapter(list, viewModel)
                         } else if (TimeDateUtils.isAfterHours) {
                             showAfterHoursLayout()
                         }
-                        etdBinding.homeSwipeRefreshLayout.isRefreshing = false
+                        //etdBinding.homeSwipeRefreshLayout.isRefreshing = false
                     }
                     LiveDataWrapper.Status.ERROR -> {
                         data.msg?.let { Logger.e(it) }
-                        etdBinding.homeSwipeRefreshLayout.isRefreshing = false
+                        //etdBinding.homeSwipeRefreshLayout.isRefreshing = false
                         showErrorLayout()
                     }
                     LiveDataWrapper.Status.LOADING -> {
                         Logger.i("loading")
                     }
-                    else -> Log.wtf(TAG, "unknown state")
                 }
             }
         }
@@ -312,12 +298,12 @@ class HomeEtdPresenter(val context: Context?, val etdBinding: PresenterEstimateB
 
     private fun showAfterHoursLayout() {
         //if between 0100 and 0600 and etd == null or empty
-        etdBinding.homeSwipeRefreshLayout.visibility = View.GONE
+        etdBinding.etdRecyclerContainer.visibility = View.GONE
         etdBinding.afterHoursLayout.visibility = View.VISIBLE
     }
 
     private fun showErrorLayout() {
-        etdBinding.homeSwipeRefreshLayout.visibility = View.GONE
+        //etdBinding.homeSwipeRefreshLayout.visibility = View.GONE
         etdBinding.errorLayout.visibility = View.VISIBLE
     }
 

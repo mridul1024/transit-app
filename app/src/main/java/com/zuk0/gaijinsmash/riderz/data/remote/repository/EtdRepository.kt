@@ -38,6 +38,12 @@ class EtdRepository
         return data
     }
 
+
+
+    fun getCache() {
+
+    }
+
     fun refreshEtd(origin: String?) { //todo: insert logic
     }
 

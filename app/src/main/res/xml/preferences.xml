@@ -1,45 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="@string/root_title">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:backgroundTint="#00CF0808"
-        android:title="@string/preference_category_title">
+        android:title="@string/preference_category_theme_title">
+        <Preference
+            android:key="@string/preference_theme_key"
+            android:title="@string/preference_theme_title"
+            android:icon="@drawable/ic_invert_colors_24"
+            android:summary="Weather and train information will provide a better experience with your location enabled." />
+    </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/preference_category_time_title">
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="TIME_KEY"
-            android:summary="@string/preference_checkbox_time_summary"
-            android:title="@string/preference_checkbox_title" />
+            android:key="@string/preference_time_key"
+            android:title="@string/preference_time_title"
+            android:summary="@string/preference_time_summary"
+            android:icon="@drawable/ic_menu_schedule"
+            android:defaultValue="false" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Measurement System">
+        android:title="@string/preference_category_metric_title">
         <CheckBoxPreference
-            android:key="METRIC_KEY"
-            android:title="Enable Metric System?"
-            android:summary="Default is Imperial"
+            android:key="@string/preference_metric_key"
+            android:title="@string/preference_metric_title"
+            android:icon="@drawable/ic_weather_celcius"
+            android:summary="@string/preference_metric_summary"
             android:defaultValue="false" />
     </PreferenceCategory>
 
     <PreferenceCategory
-
-        android:title="Weather Settings">
-        <CheckBoxPreference
-            android:key="USER_LOC_KEY"
-            android:title="Use your location?"
-            android:summary="Default is yes. If you set a commute route, the "
-            android:defaultValue="false" />
+        android:title="Location Settings">
+        <Preference
+            android:key="@string/preference_location_key"
+            android:title="@string/preference_location_title"
+            android:icon="@drawable/ic_location_24"
+            android:summary="@string/preference_location_summary" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="User Settings">
-        <SwitchPreference
-            android:key="USER_HAND_KEY"
-            android:title="Left or Right Handed?"
-            android:summary="Certain UI elements will be adjusted according to your preferred hand.">
 
-        </SwitchPreference>
+    <PreferenceCategory>
+        <Preference
+            android:key="RESET_KEY"
+            android:title="Reset to Default Settings"
+            android:icon="@drawable/ic_refresh_black_24dp" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentManager
 import com.crashlytics.android.Crashlytics
 import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.BuildConfig
-import io.fabric.sdk.android.Fabric
 import java.io.PrintWriter
 import java.io.StringWriter
 
@@ -21,10 +20,8 @@ object CrashLogUtil {
      * @param msg : String
      */
     fun log(logType: Int?, tag: String?, msg: String) {
-        if (Fabric.isInitialized()) {
-            if (logType != null && !tag.isNullOrBlank())
-                Crashlytics.log(logType, tag, msg)
-        }
+        if (logType != null && !tag.isNullOrBlank())
+            Crashlytics.log(logType, tag, msg)
     }
 
     /**
@@ -32,10 +29,10 @@ object CrashLogUtil {
      * @param msg : String
      */
     fun log(msg: String?) {
-        if (Fabric.isInitialized() && !msg.isNullOrEmpty())
+        if (!msg.isNullOrEmpty())
             Crashlytics.log(msg)
         if(BuildConfig.DEBUG)
-            Logger.d(msg)
+                Logger.d(msg)
     }
 
     /**
@@ -43,7 +40,8 @@ object CrashLogUtil {
      * @param t : Throwable
      */
     fun logException(t: Throwable) {
-        if (Fabric.isInitialized()) Crashlytics.logException(t)
+        if(BuildConfig.DEBUG) Logger.e(t.toString())
+        Crashlytics.logException(t)
     }
 
     /**
@@ -52,7 +50,7 @@ object CrashLogUtil {
      */
     fun logEvent(msg: String) {
         if (ENABLE) {
-            if (Fabric.isInitialized()) Crashlytics.logException(Exception(msg))
+            Crashlytics.logException(Exception(msg))
             Logger.d(msg)
         }
     }
@@ -66,12 +64,12 @@ object CrashLogUtil {
             val count = fragmentManager.backStackEntryCount
             val msg1 = "BackStack Entry Count : $count"
             Logger.d(msg1)
-            if (Fabric.isInitialized()) Crashlytics.logException(Exception(msg1))
+            Crashlytics.logException(Exception(msg1))
 
             val writer = StringWriter()
             fragmentManager.dump("", null, PrintWriter(writer, true), null)
             Logger.d(writer)
-            if (Fabric.isInitialized()) Crashlytics.logException(java.lang.Exception(writer.toString()))
+            Crashlytics.logException(java.lang.Exception(writer.toString()))
         }
     }
 }

@@ -3,6 +3,8 @@ package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home
 import android.app.Application
 import android.content.Context
 import android.location.Location
+import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.*
 import androidx.room.Room
@@ -21,16 +23,15 @@ import com.zuk0.gaijinsmash.riderz.data.local.room.database.FavoriteDatabase
 import com.zuk0.gaijinsmash.riderz.data.local.room.database.StationDatabase
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.BsaRepository
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.EtdRepository
-import com.zuk0.gaijinsmash.riderz.data.remote.repository.StationRepository
 import com.zuk0.gaijinsmash.riderz.data.remote.repository.TripRepository
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.etd.EtdRecyclerAdapter
 import com.zuk0.gaijinsmash.riderz.ui.shared.livedata.LiveDataWrapper
 import com.zuk0.gaijinsmash.riderz.utils.*
 import io.reactivex.Maybe
 import kotlinx.coroutines.*
 import java.util.*
-import java.util.Observer
 import javax.inject.Inject
-import javax.inject.Singleton
+import kotlin.collections.HashMap
 
 class HomeViewModel @Inject
 constructor(application: Application,
@@ -54,6 +55,13 @@ constructor(application: Application,
     private var userLocation: Location? = null
     var isLocationPermissionEnabled = false
 
+    // Estimates
+    val timePassedLiveData = MutableLiveData<Long>()
+    var timer: TrainTimer = TrainTimer()
+
+    var adapter1: EtdRecyclerAdapter? = null
+    var adapter2: EtdRecyclerAdapter? = null
+
     fun getLocation() : Location? {
         if(userLocation == null) {
             val gps = LocationManager(getApplication())
@@ -65,9 +73,13 @@ constructor(application: Application,
     // Communication Bridges
     val isLocationPermissionEnabledLD = MutableLiveData<Boolean>()
     private val closestStationLiveData = MutableLiveData<Station>()
+    val navigationLiveData = MutableLiveData<String>()
+
+    val platform1 = mutableListOf<Etd>()
+    val platform2 = mutableListOf<Etd>()
 
     val bsaLiveData: LiveData<BsaXmlResponse>
-        get() = mBsaRepository.getBsa(getApplication())
+        get() = mBsaRepository.getBsa()
 
     //todo db calls should be abstracted to a repository class
     val maybeFavorite: Maybe<Favorite>
@@ -242,15 +254,10 @@ constructor(application: Application,
         //todo update
     }
 
-    val platform1 = mutableListOf<Etd>()
-    val platform2 = mutableListOf<Etd>()
-
-
     //for each destination has its own destination
     fun createEstimateListsByPlatform(list: MutableList<Etd>?) {
         list?.let {
-            platform1.clear()
-            platform2.clear()
+            val platformList = mutableListOf<MutableList<Etd>?>()
 
             for(i in list) {
                 if(i.estimateList?.get(0)?.platform == 1) {
@@ -262,10 +269,49 @@ constructor(application: Application,
         }
     }
 
+    fun createEstimateListsByPlatform2(list: MutableList<Etd>?) : HashMap<Int, MutableList<Etd>> {
+        val estimateHashMap = HashMap<Int, MutableList<Etd>>()
+        list?.let { etdList ->
+            etdList.forEach { etd ->
+                val platform = etd.estimateList?.get(0)?.platform
+                if(platform != null) {
+                    val currentList = estimateHashMap[platform]
+                    if(currentList.isNullOrEmpty()) {
+                        val newList = mutableListOf<Etd>()
+                        newList.add(etd)
+                        estimateHashMap[platform] = newList
+                    } else {
+                        currentList.add(etd)
+                        estimateHashMap[platform] = currentList
+                    }
+                }
+            }
+        }
+        return estimateHashMap
+    }
+
+    fun sortMapIntoList(map: HashMap<Int, MutableList<Etd>>) : MutableList<MutableList<Etd>?> {
+        val list = mutableListOf<MutableList<Etd>?>()
+        for(i in 0 until map.size) {
+           if(map.containsKey(i + 1)) {
+               list.add(map.get(i + 1))
+           }
+        }
+        return list
+    }
+
     fun getPlatformTitle(list: List<Etd>) : String {
         if(list.isNotEmpty())
             return list[0].estimateList?.get(0)?.platform.toString()
         return ""
+    }
+
+    fun saveState(outState: Bundle) {
+        timer?.saveState(outState)
+    }
+
+    fun restoreState(savedInstanceState: Bundle) {
+        timer?.create(savedInstanceState)
     }
 
     override fun onCleared() {

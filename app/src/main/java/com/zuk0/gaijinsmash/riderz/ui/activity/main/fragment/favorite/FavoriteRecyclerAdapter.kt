@@ -24,7 +24,7 @@ class FavoriteRecyclerAdapter(val mFavoriteList: MutableList<Favorite>, private 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
-        val binding = DataBindingUtil.inflate<ListRowFavorites2Binding>(LayoutInflater.from(parent.context), R.layout.list_row_favorites2, parent, false)
+        val binding = ListRowFavorites2Binding.inflate(LayoutInflater.from(parent.context))
         return FavoriteViewHolder(binding, this)
     }
 

@@ -26,7 +26,7 @@
     <string name="navigation_drawer_phoneLines">Call Lines</string>
     <string name="navigation_drawer_misc">Misc</string>
     <string name="navigation_drawer_about">About</string>
-    <string name="about_textView">Made by Ryan J Suzuki. All Rights Reserved.</string>
+    <string name="about_textView">Copyright RJS. All Rights Reserved.</string>
     <string name="logo_description">Application Logo</string>
     <string name="help_view_title">FAQ</string>
 
@@ -63,6 +63,7 @@
     <string name="help_report_button">Report an Issue</string>
     <string name="help_intent_title">Send Email</string>
     <string name="help_intent_text">Please input your message here.</string>
+    <string name="help_title">Help</string>
 
     <!-- Home Fragment -->
     <string name="home_alerts">Welcome, fellow Rider!</string>
@@ -73,13 +74,25 @@
     <string name="phonesLines_bartComplaints">Comments and Complaints:</string>
     <string name="phoneLines_bartPolice">Police:</string>
     <string name="phoneLines_bartLink">For a complete list of BART phone lines, please click the link below.</string>
-    <string name="phoneLines_title">Phone Lines For BART</string>
-    <string name="phoneLines_911">For Emergencies Please Dial 911</string>
+    <string name="phoneLines_title">BART</string>
+    <string name="phoneLines_911">For Emergencies, Please Dial 911</string>
     <string name="phoneLines_police_number">877–679–7000</string>
     <string name="phoneLines_bartComplaints_number">510–464–7134</string>
     <string name="phoneLines_bartLostFound_number">510–464–7090</string>
     <string name="phoneLines_bartWebsite">https://bart.gov/siteinfo/contact</string>
 
+    <string-array name="police_crime_types">
+        <item></item>
+        <item>Crime in Progress</item>
+        <item>Violent or Disruptive Behavior</item>
+        <item>Illicit Drugs</item>
+        <item>Robbery or Theft</item>
+        <item>Sexual Assault or Lewd Behavior</item>
+        <item>Vandalism</item>
+        <item>Aggressive Panhandling</item>
+        <item>Suspicious Activity</item>
+        <item>Other</item>
+    </string-array>
     <!-- Station Fragment -->
     <string-array name="stations_list">
         <!-- Leave first item empty so the menu defaults to empty -->
@@ -134,7 +147,10 @@
         <item>West Oakland</item>
     </string-array>
 
+    <string name="stations_title">Stations Directory</string>
+
     <!-- Station Info Fragment -->
+    <string name="station_info_title">Info</string>
     <string name="stationInfo_oops">Oops!</string>
     <string name="stationInfo_error">Sorry, but there was a network error. Please go back and try again.</string>
     <string name="stationInfo_attractionTitle">Attractions</string>
@@ -177,11 +193,19 @@
     <string name="error_station_not_found">The station you selected was not found. Please try again.</string>
 
     <!-- Preference Screen -->
-    <string name="preference_checkbox_title">24 Hour Format</string>
-    <string name="preference_category_title">Time Setting</string>
+    <string name="preference_category_time_title">Time Setting</string>
+    <string name="preference_time_title">24 Hour Format</string>
+    <string name="preference_time_summary">View time in 12 or 24 hour format</string>
+    <string name="preference_time_key">TIME_KEY</string>
+
+    <string name="preference_category_metric_title">Measurement System</string>
+    <string name="preference_metric_title">Enable Metric System?</string>
+    <string name="preference_metric_summary">Default is Imperial</string>
+    <string name="preference_metric_key">METRIC_KEY</string>
+
 
     <string name="help_q1">Q: Will there be features added in the future?</string>
-    <string name="help_a1">A: Looking into it!</string>
+    <string name="help_a1">A: Contact us about feature requests!</string>
     <string name="help_q2">Q: Will this app be on iOS soon?</string>
     <string name="help_a2">A: Unfortunately not at the moment, but it will be considered if demand is high enough.</string>
     <string name="help_q3">Q: Is this app open source?</string>
@@ -202,7 +226,6 @@
     <string name="now">now</string>
     <string name="minutes">min</string>
     <string name="root_title">Settings</string>
-    <string name="preference_checkbox_time_summary">View time in 12 or 24 hour format</string>
 
     <string name="gps_permission_alert">Location services is not enabled. Do you want to turn it on?</string>
 
@@ -278,5 +301,54 @@
     <string name="description_camera_switch_front">Button to switch to front camera.</string>
     <string name="description_camera_switch_rear">Button to switch to rear camera.</string>
     <string name="navigation_drawer_settings">Settings</string>
+    <string name="etd_current_station">Current Station</string>
+    <string name="fab_complain_text">Send a message to BART</string>
+    <string name="fab_camera_text">Report a crime to BART Police</string>
+    <string name="fab_map_text">View BART Map</string>
+    <string name="fab_favorites_text">Favorites</string>
+    <string name="etd_refresh_text">Refresh</string>
+    <string name="alert_dialog_complain_title">Contact BART</string>
+    <string name="alert_dialog_complain_msg">Please fill out your message and email contact to reply to</string>
+    <string name="user_rating_title">Like what you see? Rate it now!</string>
+    <string name="bart_is_closed_explanation">In the mean time, you can check the upcoming schedules by clicking on the Trip icon below.</string>
+    <string name="bart_is_sleeping">BART is sleeping…</string>
+    <string name="bart_police_add_photo">Add a Photo</string>
+    <string name="bart_police_subtitle">Camera Flash is Off by default</string>
+    <string name="bart_police_add_photo_desc">Press Camera icon to add an Image</string>
+    <string name="send_report">Send Report</string>
+    <string name="send_report_explanation">Note: Continuing will forward the provided information to an email app of your choice</string>
+    <string name="send_report_by_email">Send report by email</string>
+    <string name="alert_dialog_report_title">Create a Report</string>
+    <string name="location">Location</string>
+    <string name="report_type">Report Type</string>
+    <string name="report_message">Describe what happened here.</string>
+    <string name="favorites">Favorites</string>
+    <string name="commute">Commute</string>
+    <string name="tooltip_googlemap">Google Maps</string>
+    <string name="tooltip_home">Home Screen</string>
+    <string name="acknowledgments">Acknowledgments</string>
+    <string name="about_summary">Created for the benefit of any person who owns an Android device and must rely on BART as a means of transportation in the San Francisco Bay Area. Ride well. Ride safe. Ride on.</string>
+    <string name="rate_later">Not today, sir.</string>
+    <string name="rate_now">Send It!</string>
+    <string name="user_rating_title2">Don\'t forget to rate the app!</string>
+    <string name="user_rating_forgot">I\'ll do it now</string>
+    <string name="user_rating_already_done">It\'s already done!</string>
+    <string name="trip_title">Trip</string>
+    <string name="preference_reset_dialog_message">This will reset all default settings of the app. Are you sure you want to continue?</string>
+    <string name="preference_reset_dialog_title">Confirmation Required</string>
+    <string name="preference_category_theme_title">Theme Settings</string>
+    <string name="preference_location_key">LOCATION_KEY</string>
+    <string name="preference_theme_key">THEME_KEY</string>
+    <string name="preference_location_title">Use your location?</string>
+    <string name="preference_location_summary">Weather and train information will provide a better experience with your location enabled.</string>
+    <string name="preference_theme_title">Manage the color behavior of the app.</string>
+    <string name="alert_dialog_theme_title">Edit Theme</string>
+
+    <string-array name="theme_options">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>System Default</item>
+    </string-array>
+
 
 </resources>

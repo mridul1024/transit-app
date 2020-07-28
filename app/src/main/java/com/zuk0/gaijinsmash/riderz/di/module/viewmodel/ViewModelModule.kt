@@ -6,9 +6,11 @@ import com.zuk0.gaijinsmash.riderz.di.annotation.ViewModelKey
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainViewModel
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_map.BartMapViewModel
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_results.BartResultsViewModel
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.camera.CameraViewModel
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.favorite.FavoritesViewModel
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.google_map.GoogleMapViewModel
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.HomeViewModel
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.phone_lines.PhoneLinesViewModel
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.station_info.StationInfoViewModel
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.stations.StationsViewModel
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.trip.TripViewModel
@@ -19,6 +21,16 @@ import dagger.multibindings.IntoMap
 
 @Module
 interface ViewModelModule {
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CameraViewModel::class)
+    fun provideCameraViewModel(cameraViewModel: CameraViewModel) : ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PhoneLinesViewModel::class)
+    fun providePhoneLinesViewModel(phoneLinesViewModel: PhoneLinesViewModel) : ViewModel
 
     @Binds
     @IntoMap

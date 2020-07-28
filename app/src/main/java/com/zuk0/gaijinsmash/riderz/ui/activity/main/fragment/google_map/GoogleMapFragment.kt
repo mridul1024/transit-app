@@ -96,6 +96,7 @@ class GoogleMapFragment : BaseFragment(), OnMapReadyCallback, GoogleMap.OnMyLoca
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.collapseAppBar(activity)
+        super.setTitle(activity, getString(R.string.menu_map))
         super.enableNestedScrolling(false)
         initMapView(savedInstanceState)
         initFab(view)

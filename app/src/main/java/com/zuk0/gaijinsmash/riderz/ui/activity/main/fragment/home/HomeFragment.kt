@@ -19,18 +19,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
-import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaJsonResponse
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse
 import com.zuk0.gaijinsmash.riderz.databinding.FragmentHomeBinding
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment
-import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.BsaRecyclerAdapter
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.adapter.bsa.BsaRecyclerAdapter
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.presenter.HomeEtdPresenter
 import com.zuk0.gaijinsmash.riderz.ui.shared.permission.PermissionPresenter
 import com.zuk0.gaijinsmash.riderz.data.local.manager.LocationManager
 import com.zuk0.gaijinsmash.riderz.data.local.manager.LocationManager.Companion.LOCATION_PERMISSION_REQUEST_CODE
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.MainActivity
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.station_info.StationInfoFragment
 import javax.inject.Inject
 
 //TODO add Trip Schedule for Favorites instead of ETDS
@@ -54,6 +57,7 @@ class HomeFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.initViewModel()
+        savedInstanceState?.let{ viewModel.restoreState(savedInstanceState) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -64,10 +68,12 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        super.expandAppBar(activity!!)
+        super.expandAppBar(activity)
+        super.setTitle(activity, getString(R.string.app_name))
         initAdvisories(viewModel.bsaLiveData)
         initUserLocation(context)
         initLocationHandler(viewModel.isLocationPermissionEnabledLD)
+        initNavigationObserver()
     }
 
     override fun onStart() {
@@ -90,6 +96,11 @@ class HomeFragment : BaseFragment() {
         super.onDestroy()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+
+        super.onSaveInstanceState(outState)
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when(requestCode) {
              LOCATION_PERMISSION_REQUEST_CODE -> {
@@ -105,7 +116,7 @@ class HomeFragment : BaseFragment() {
         Helper Methods
      */
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(this, homeViewModelFactory).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
     }
 
     /*
@@ -115,7 +126,8 @@ class HomeFragment : BaseFragment() {
         bsa.observe(viewLifecycleOwner, Observer { bsaXmlResponse ->
             if (bsaXmlResponse != null) {
                 binding.homeBsaRecyclerView.visibility = View.VISIBLE
-                val bsaAdapter = BsaRecyclerAdapter(bsaXmlResponse.bsaList ?: mutableListOf())
+                val bsaAdapter = BsaRecyclerAdapter(bsaXmlResponse.bsaList
+                        ?: mutableListOf())
                 binding.homeBsaRecyclerView.adapter = bsaAdapter
                 binding.homeBsaRecyclerView.layoutManager = LinearLayoutManager(context)
             }
@@ -158,8 +170,6 @@ class HomeFragment : BaseFragment() {
                 }
             } else {
                 Logger.d("Permission Denied for Location")
-                // use default todo
-                //estimatePresenter
             }
         })
     }
@@ -199,6 +209,24 @@ class HomeFragment : BaseFragment() {
             dialog.dismiss()
         }
         alert.show()
+    }
+
+    private fun initNavigationObserver() {
+        viewModel.navigationLiveData.observe(viewLifecycleOwner, Observer { tag ->
+            when(tag) {
+                StationInfoFragment.TAG -> {
+                    viewModel.navigationLiveData.postValue("")
+                    val args = Bundle()
+                    args.putString(StationInfoFragment.STATION_INFO_EXTRA, viewModel.closestStation?.abbr)
+                    NavHostFragment.findNavController(this).navigate(
+                            R.id.action_homeFragment_to_stationInfoFragment,
+                            args, null, null
+                    )
+
+                }
+                else -> Logger.e("unhandled tag: $tag")
+            }
+        })
     }
 
     companion object {

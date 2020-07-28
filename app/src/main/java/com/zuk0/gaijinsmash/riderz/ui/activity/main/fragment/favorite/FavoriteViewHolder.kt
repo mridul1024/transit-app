@@ -48,7 +48,7 @@ class FavoriteViewHolder(val binding: ListRowFavorites2Binding, val adapter: Fav
         binding.departStation.text = favorite.a?.name
         binding.arriveStation.text = favorite.b?.name
         if (favorite.priority == Favorite.Priority.ON) {
-            binding.background.setBackgroundColor(binding.root.context.resources.getColor(R.color.primaryLightColor))
+            //binding.background.setBackgroundColor(binding.root.context.resources.getColor(R.color.primaryLightColor))
         }
     }
 

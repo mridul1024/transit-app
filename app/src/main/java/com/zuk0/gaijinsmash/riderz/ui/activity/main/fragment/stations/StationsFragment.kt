@@ -13,9 +13,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.appbar.AppBarLayout
 
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.databinding.FragmentStationsBinding
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.station_info.StationInfoFragment
 
 import javax.inject.Inject
@@ -24,7 +26,7 @@ import dagger.android.support.AndroidSupportInjection
 
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.station_info.StationInfoFragment.Companion.STATION_INFO_EXTRA
 
-class StationsFragment : Fragment() {
+class StationsFragment : BaseFragment() {
 
     @Inject lateinit var mStationsViewModelFactory: ViewModelProvider.Factory
 
@@ -46,6 +48,8 @@ class StationsFragment : Fragment() {
         initDagger()
         initViewModel()
         initStationList()
+        super.collapseAppBar(activity)
+        super.setTitle(activity, getString(R.string.stations_title))
     }
 
     private fun initDagger() {
@@ -76,7 +80,7 @@ class StationsFragment : Fragment() {
     }
 
     private fun initStationList() {
-        viewModel.getListFromDb(activity)?.observe(this, Observer { stations ->
+        viewModel.getListFromDb(activity)?.observe(viewLifecycleOwner, Observer { stations ->
             //update the ui
             if (stations != null) {
                 val adapter = StationRecyclerAdapter(stations)
@@ -87,7 +91,7 @@ class StationsFragment : Fragment() {
                 })
             } else {
                 viewModel.listFromRepo
-                        .observe(this, Observer { data ->
+                        .observe(viewLifecycleOwner, Observer { data ->
                             val adapter: StationRecyclerAdapter
                             if (data != null) {
                                 adapter = StationRecyclerAdapter(data.stationList)

@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<HorizontalScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/bartMap_custom_imageView"
-        android:contentDescription="@string/bart_lines_map_description"
-        android:scaleType="centerCrop"
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-</HorizontalScrollView>
+            <ImageView
+                android:id="@+id/bartMap_custom_imageView"
+                android:contentDescription="@string/bart_lines_map_description"
+                android:scaleType="centerCrop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </HorizontalScrollView>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/map_close_fab"
+            android:src="@drawable/ic_close_white_24dp"
+            app:fabSize="mini"
+            android:scaleType="centerInside"
+            android:translationZ="@dimen/fab_pressed_translation"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+</layout>

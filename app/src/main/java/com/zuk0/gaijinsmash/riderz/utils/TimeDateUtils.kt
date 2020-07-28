@@ -1,9 +1,13 @@
 package com.zuk0.gaijinsmash.riderz.utils
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.zuk0.gaijinsmash.riderz.data.local.entity.bsa_response.BsaXmlResponse
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.Instant
 import java.util.*
 
 object TimeDateUtils {
@@ -143,5 +147,24 @@ object TimeDateUtils {
         } else {
             convertTo12Hr(bsa.time)
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun durationOfDaysBetweenDates(start: Instant, end: Instant) : Long {
+        val duration = Duration.between(start, end)
+        val days = duration.toDays()
+        return days
+    }
+
+    fun durationOfDaysBetweenDates(start: Date, end: Date) : Int {
+        val timeDifference = end.time - start.time
+        val days = timeDifference /  (1000 * 60 * 60 * 24)
+        return days.toInt()
+    }
+
+    fun durationOfMinutesBetweenDates(start: Date, end: Date) : Int {
+        val timeDifference = end.time - start.time
+        val minutes = timeDifference /  (1000 * 60)
+        return minutes.toInt()
     }
 }

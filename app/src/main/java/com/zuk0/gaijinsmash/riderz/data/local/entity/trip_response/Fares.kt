@@ -9,6 +9,6 @@ class Fares {
     var level: String? = null
     @SerializedName("fare")
     @Expose
-    var fare: Fare? = null
+    var fare: List<Fare>? = null
 
 }

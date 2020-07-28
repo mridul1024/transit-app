@@ -1,4 +1,4 @@
-package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.permissions
+package com.zuk0.gaijinsmash.riderz.ui.activity.permission.permissions
 
 import android.Manifest
 import android.app.AlertDialog

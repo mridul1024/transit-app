@@ -1,30 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="vm"
             type="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.HomeViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
-        app:cardCornerRadius="@dimen/riderz_cardView_cornerRadius"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="@dimen/riderz_cardView_cornerRadius">
+
         <LinearLayout
             android:id="@+id/etd_container"
-            android:orientation="vertical"
-            android:background="@color/colorBackground"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/etd_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorSurface">
+                android:background="@color/colorBackground">
 
                 <TextView
                     android:id="@+id/etd_currentStation_tv"
@@ -32,12 +35,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="Current Station"
+                    android:text="@string/etd_current_station"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/etd_station_button"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/etd_station_infoIcon"
+                    app:layout_constraintStart_toEndOf="@+id/etd_station_infoIcon"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <!-- android:entries="@array/stations_list"-->
@@ -50,37 +52,41 @@
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@+id/etd_station_button"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/etd_station_button"
                     app:layout_constraintTop_toTopOf="@+id/etd_station_button" />
 
                 <ImageButton
                     android:id="@+id/etd_station_infoIcon"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="?attr/selectableItemBackground"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/description_info"
-                    app:layout_constraintBottom_toBottomOf="@+id/etd_info_tv"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/etd_info_tv"
+                    android:src="@drawable/ic_info_outline_black_24dp"
+                    android:tint="@color/colorOnSurface"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_info_outline_black_24dp" />
 
                 <TextView
                     android:id="@+id/etd_info_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
                     android:text="Station Info"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/etd_currentStation_tv"
                     app:layout_constraintEnd_toStartOf="@+id/etd_station_infoIcon"
-                    app:layout_constraintTop_toTopOf="@+id/etd_currentStation_tv" />
+                    app:layout_constraintTop_toTopOf="@+id/etd_currentStation_tv"
+                    tools:visibility="gone" />
 
                 <Button
                     android:id="@+id/etd_station_button"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
                     android:layout_marginTop="4dp"
-                    android:layout_marginEnd="8dp"
                     android:text="Walnut Creek"
                     android:textColor="@color/colorOnSurface"
                     android:textSize="20sp"
@@ -88,106 +94,73 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/etd_currentStation_tv" />
 
+                <TextView
+                    android:id="@+id/etd_refresh_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/etd_refresh_text"
+                    app:layout_constraintBottom_toBottomOf="@+id/etd_currentStation_tv"
+                    app:layout_constraintEnd_toStartOf="@+id/etd_refresh_button"
+                    app:layout_constraintTop_toTopOf="@+id/etd_currentStation_tv" />
+
+                <ImageButton
+                    android:id="@+id/etd_refresh_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_refresh_black_24dp"
+                    android:tint="@color/colorOnSurface"
+                    app:layout_constraintBottom_toBottomOf="@+id/etd_refresh_tv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/etd_refresh_tv" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/home_swipeRefreshLayout"
+            <LinearLayout
+                android:id="@+id/etd_recycler_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:visibility="visible"
                 tools:visibility="visible">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/home_etd_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="7dp"
+                    android:background="@color/primaryLightColor"
+                    android:elevation="1dp"
+                    android:gravity="center_horizontal"
+                    android:padding="10dp"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/home_etd_rv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:nestedScrollingEnabled="false"
+                    android:text="@string/title_platform"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/list_row_platform" />
 
-                    <TextView
-                        android:id="@+id/home_etd_error"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="7dp"
-                        android:background="@color/primaryLightColor"
-                        android:elevation="1dp"
-                        android:gravity="center_horizontal"
-                        android:padding="10dp"
-                        android:visibility="gone" />
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/home_etd_platform1_title"
-                            style="@style/RiderzTitleStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/title_platform"
-                            android:textColor="@color/black"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:layout_marginStart="4dp"
-                            tools:text="Platform 1" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/home_etd_platform1_rv"
-                            style="@style/RiderzTitleStyle"
-                            android:text="@string/title_platform"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/home_etd_platform1_title"
-                            tools:itemCount="3"
-                            tools:listitem="@layout/list_row_etd" />
-
-                        <TextView
-                            android:id="@+id/home_etd_platform2_title"
-                            style="@style/RiderzTitleStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/title_platform"
-                            android:textColor="@color/black"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:layout_marginStart="4dp"
-                            tools:text="Platform 2" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/home_etd_platform2_rv"
-                            style="@style/RiderzTitleStyle"
-                            android:text="@string/title_platform"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/home_etd_platform2_title"
-                            tools:itemCount="3"
-                            tools:listitem="@layout/list_row_etd" />
-                    </LinearLayout>
-
-                </LinearLayout>
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            </LinearLayout>
 
             <include
                 android:id="@+id/after_hours_layout"
                 layout="@layout/after_hours_layout"
                 android:visibility="gone"
-                tools:visibility="visible"/>
+                tools:visibility="visible" />
 
             <include
                 android:id="@+id/error_layout"
                 layout="@layout/error_layout"
                 android:visibility="gone"
-                tools:visibility="visible"/>
+                tools:visibility="visible" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
+    </androidx.cardview.widget.CardView>
 </layout>

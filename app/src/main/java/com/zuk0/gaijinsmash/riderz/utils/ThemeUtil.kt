@@ -3,20 +3,17 @@ package com.zuk0.gaijinsmash.riderz.utils
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
+import android.os.Build
+import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import com.zuk0.gaijinsmash.riderz.R
 
 object ThemeUtil {
 
-    const val SHARED_PREFS_KEY_DAY_NIGHT_THEME = "KEY_DAY_NIGHT_THEME"
+    private const val SHARED_PREFS_KEY_DAY_NIGHT_THEME = "SHARED_PREFS_KEY_DAY_NIGHT_THEME"
 
-    enum class ThemeOption { LIGHT, DARK, BATTERY_SAVER, SYSTEM_DEFAULT, AUTO }
-
-    /**
-     * Checks App's settings first, then system settings
-     * https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
-     */
     fun isDarkThemeOn(context: Context?): Boolean {
         if (context == null)
             return false
@@ -48,9 +45,7 @@ object ThemeUtil {
         if (context == null)
             return false
 
-        //return false  //kill switch
-        val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        return when (currentNightMode) {
+        return when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_MASK -> true
             Configuration.UI_MODE_NIGHT_YES -> true
             else -> false
@@ -59,10 +54,6 @@ object ThemeUtil {
 
     private fun getAppThemeMode(): Int {
         return AppCompatDelegate.getDefaultNightMode()
-    }
-
-    private fun getSystemThemeMode(context: Context): Int {
-        return context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
     }
 
     fun getColorTheme(context: Context) : Drawable? {
@@ -81,4 +72,43 @@ object ThemeUtil {
         return bg
     }
 
+    private fun getSystemThemeMode(context: Context): Int {
+        return context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+    }
+
+    fun getSavedThemePreference(context: Context?): Int {
+        context?.let {
+            val defaultValue = AppCompatDelegate.MODE_NIGHT_UNSPECIFIED
+            return PreferenceManager.getDefaultSharedPreferences(context).getInt(SHARED_PREFS_KEY_DAY_NIGHT_THEME, defaultValue)
+        }
+        return -1
+    }
+
+    fun setThemePreference(context: Context?, choice: Int) {
+        context?.let {
+            val mode: Int
+            when(choice) {
+                0 -> { //Light
+                    mode = AppCompatDelegate.MODE_NIGHT_NO
+                }
+                1 -> { //Dark
+                    mode = AppCompatDelegate.MODE_NIGHT_YES
+                }
+                2 -> { //System
+                    mode = if(Build.VERSION.SDK_INT < Build.VERSION_CODES.P)
+                        AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+                    else
+                        AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                }
+                else -> {
+                    mode = AppCompatDelegate.MODE_NIGHT_UNSPECIFIED
+                }
+            }
+            PreferenceManager.getDefaultSharedPreferences(context)
+                    .edit()
+                    .putInt(SHARED_PREFS_KEY_DAY_NIGHT_THEME, mode)
+                    .apply()
+            AppCompatDelegate.setDefaultNightMode(mode)
+        }
+    }
 }

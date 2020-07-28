@@ -11,14 +11,14 @@
             style="@style/EtdCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
+            android:layout_margin="1dp"
             android:padding="2dp"
             app:cardCornerRadius="@dimen/riderz_cardView_cornerRadius">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="65dp">
 
                 <TextView
                     android:id="@+id/etd_destinationTv2"
@@ -45,13 +45,14 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_begin="135dp" />
+                    app:layout_constraintGuide_end="200dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/estimate_result_recyclerView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:orientation="horizontal"
+                    android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -63,11 +64,8 @@
                     tools:listitem="@layout/list_col_estimate"
                     tools:visibility="visible" />
 
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </com.google.android.material.card.MaterialCardView>
-    </RelativeLayout>
 
+    </RelativeLayout>
 </layout>

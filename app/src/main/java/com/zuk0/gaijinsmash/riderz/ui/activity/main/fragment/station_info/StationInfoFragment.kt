@@ -1,7 +1,5 @@
 package com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.station_info
 
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
 import androidx.databinding.DataBindingUtil
 import android.os.Build
@@ -16,20 +14,17 @@ import androidx.lifecycle.ViewModelProvider
 
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.Station
-import com.zuk0.gaijinsmash.riderz.data.local.entity.station_response.StationXmlResponse
 import com.zuk0.gaijinsmash.riderz.databinding.FragmentStationInfoBinding
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment
 
 import javax.inject.Inject
 
 import androidx.navigation.fragment.NavHostFragment
-import dagger.android.support.AndroidSupportInjection
 
 class StationInfoFragment : BaseFragment() {
 
     @Inject
-    lateinit var mStationInfoViewModelFactory: ViewModelProvider.Factory
-
+    lateinit var vmFactory: ViewModelProvider.Factory
     private lateinit var dataBinding: FragmentStationInfoBinding
     private lateinit var viewModel: StationInfoViewModel
 
@@ -41,17 +36,19 @@ class StationInfoFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_station_info, container, false)
+        dataBinding = FragmentStationInfoBinding.inflate(inflater)
         return dataBinding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         dataBinding.stationInfoMapBtn.setOnClickListener { v -> handleMapButtonClick() }
+        super.collapseAppBar(activity)
+        super.setTitle(activity, getString(R.string.station_info_title))
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(this, mStationInfoViewModelFactory).get(StationInfoViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, vmFactory).get(StationInfoViewModel::class.java)
     }
 
     private fun handleMapButtonClick() {
@@ -71,7 +68,7 @@ class StationInfoFragment : BaseFragment() {
 
     private fun initStationDetails() {
         
-        viewModel.getStationLiveData(viewModel.mStationAbbr!!)?.observe(this, Observer { stationObject ->
+        viewModel.getStationLiveData(viewModel.mStationAbbr)?.observe(this, Observer { stationObject ->
             dataBinding.stationInfoProgressBar.visibility = View.GONE
 
             //update the ui
@@ -85,7 +82,7 @@ class StationInfoFragment : BaseFragment() {
 
                 //update ui
                 dataBinding.stationInfoTitleTextView.text = station1.name
-                Log.i("name", station1.name)
+                Log.i("name", station1?.name ?: "null")
                 dataBinding.stationInfoAddressTextView.text = station1.address
                 dataBinding.stationInfoCityTextView.text = station1.city
                 dataBinding.stationInfoCrossStreetTextView.text = station1.crossStreet
@@ -116,7 +113,7 @@ class StationInfoFragment : BaseFragment() {
     }
 
     companion object {
-
+        const val TAG = "StationInfoFragment"
         var STATION_INFO_EXTRA = "STATION_INFO_EXTRA"
     }
 }

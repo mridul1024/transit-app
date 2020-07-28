@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Font -->
     <style name="RiderzTitleStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
         <item name="android:textSize">15sp</item>
@@ -14,6 +13,9 @@
         <item name="android:fontFamily">@font/krona_one</item>
     </style>
 
+    <style name="UbuntuTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/ubuntu</item>
+    </style>
 
     <!--Day Theme-->
     <!--Evening Theme -->
@@ -21,7 +23,6 @@
     <!-- Cold Theme -->
     <!-- Rainy Theme -->
     <!-- Night Theme -->
-
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -36,18 +37,18 @@
     </style>
 
     <!-- Button Styles -->
-    <style name="ButtonAppTheme" parent="Widget.AppCompat.Button.Borderless.Colored">
+    <style name="ButtonAppTheme" parent="Widget.AppCompat.Button">
         <item name="android:padding">5dp</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:elevation">2dp</item>
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
     </style>
 
     <style name="ButtonAppTheme2">
         <item name="android:padding">5dp</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:elevation">1dp</item>
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
     </style>
 
     <style name="ButtonAppTheme3">
@@ -83,8 +84,10 @@
     </style>
 
     <style name="CardViewRiderz">
-        <item name="android:layout_margin">10dp</item>
-        <item name="android:elevation">3dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:elevation">2dp</item>
         <item name="android:background">@color/colorSurface</item>
         <item name="android:textColor">@color/colorOnSurface</item>
     </style>

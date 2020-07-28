@@ -20,16 +20,17 @@ class StationInfoViewModel
     private fun initData() { //todo: initialization logic here
     }
 
-    fun getStationLiveData(abbr: String): LiveData<StationXmlResponse>? {
+    fun getStationLiveData(abbr: String?): LiveData<StationXmlResponse>? {
         if (mStationLiveData == null) {
-            mStationLiveData = mRepository.getStation(abbr)
+            abbr?.let {
+                mStationLiveData = mRepository.getStation(abbr)
+            }
         }
         return mStationLiveData
     }
 
     internal enum class StationInfo(val value: String) {
         Name("StationName"), Lat("StationLat"), Long("StationLong");
-
     }
 
     fun getBundle(station: Station): Bundle {

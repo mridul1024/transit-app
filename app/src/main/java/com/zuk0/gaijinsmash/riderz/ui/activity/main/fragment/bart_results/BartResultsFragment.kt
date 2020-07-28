@@ -53,23 +53,19 @@ class BartResultsFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_results, container, false)
+        binding = FragmentResultsBinding.inflate(inflater)
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initStationsForTripCall(viewModel.origin, viewModel.destination, viewModel.date, viewModel.time)
-
+        super.collapseAppBar(activity)
     }
 
     override fun onResume() {
         super.onResume()
         initFavoriteIcon(viewModel.originStation, viewModel.destinationStation)
-    }
-
-    override fun onStop() {
-        super.onStop()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -100,7 +96,7 @@ class BartResultsFragment : BaseFragment() {
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(BartResultsViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(BartResultsViewModel::class.java)
     }
 
     /**
@@ -143,7 +139,7 @@ class BartResultsFragment : BaseFragment() {
 
     private fun initFavoriteIcon(a: Station?, b: Station?) {
         if(a != null && b != null) {
-            viewModel.getFavoriteLiveData(a, b).observe(this, Observer { data ->
+            viewModel.getFavoriteLiveData(a, b)?.observe(this, Observer { data ->
                 if (data != null) {
                     // Current trip is already a Favorite
                     mFavoritedIcon?.isVisible = true
@@ -170,8 +166,8 @@ class BartResultsFragment : BaseFragment() {
         alertDialog.setPositiveButton(resources.getString(R.string.alert_dialog_yes)
         ) { dialog, which ->
             viewModel.handleFavoritesIcon(RiderzEnums.FavoritesAction.DELETE_FAVORITE, viewModel.mFavoriteObject!!)
-            mFavoritedIcon!!.isVisible = false
-            mFavoriteIcon!!.isVisible = true
+            mFavoritedIcon?.isVisible = false
+            mFavoriteIcon?.isVisible = true
         }
         alertDialog.setNegativeButton(resources.getString(R.string.alert_dialog_no)) { dialog, which -> dialog.cancel() }
         alertDialog.show()

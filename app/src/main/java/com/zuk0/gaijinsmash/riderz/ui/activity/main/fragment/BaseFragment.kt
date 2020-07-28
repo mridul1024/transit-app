@@ -6,9 +6,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.orhanobut.logger.Logger
 import com.zuk0.gaijinsmash.riderz.R
 import com.zuk0.gaijinsmash.riderz.di.component.FragmentComponent
@@ -51,6 +57,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        expandBottomNav()
         Logger.d("onResume()")
     }
 
@@ -106,8 +113,27 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
+    //todo - deprecate
     fun enableNestedScrolling(enable: Boolean) {
         //val nestedScrollView = activity?.findViewById<NestedScrollView>(R.id.main_nested_scrollView)
         //nestedScrollView?.isNestedScrollingEnabled = enable
+    }
+
+    fun expandBottomNav() {
+        activity?.let {
+            val bottomNav: BottomNavigationView = it.findViewById(R.id.main_bottom_navigation)
+            //bottomNav.isVisible
+            //val behavior = HideBottomViewOnScrollBehavior.getTag(bottomNav) as HideBottomViewOnScrollBehavior<BottomNavigationView>
+            val behavior = HideBottomViewOnScrollBehavior<BottomNavigationView>()
+            behavior.slideUp(bottomNav)
+
+        }
+    }
+
+    fun setTitle(activity: Activity?, title: String) {
+        activity?.let {
+            val collapsingToolbarLayout: CollapsingToolbarLayout = activity.findViewById(R.id.main_collapsing_toolbar)
+            collapsingToolbarLayout.title = title
+        }
     }
 }

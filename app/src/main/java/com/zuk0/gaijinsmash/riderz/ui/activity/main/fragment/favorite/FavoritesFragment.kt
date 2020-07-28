@@ -17,10 +17,11 @@ import com.zuk0.gaijinsmash.riderz.databinding.FragmentFavoritesBinding
 import javax.inject.Inject
 
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.BaseFragment
 import com.zuk0.gaijinsmash.riderz.utils.StationUtils
 import dagger.android.support.AndroidSupportInjection
 
-class FavoritesFragment : Fragment() {
+class FavoritesFragment : BaseFragment() {
 
     @Inject
     lateinit var mFavoritesViewModelFactory: ViewModelProvider.Factory
@@ -28,29 +29,31 @@ class FavoritesFragment : Fragment() {
     private lateinit var binding: FragmentFavoritesBinding
     private lateinit var viewModel: FavoritesViewModel
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initViewModel()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorites, container, false)
+        binding = FragmentFavoritesBinding.inflate(inflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initDagger()
-        initViewModel()
         initFavorites()
         handleCardView()
-    }
-
-    private fun initDagger() {
-        AndroidSupportInjection.inject(this)
+        super.collapseAppBar(activity)
+        super.setTitle(activity, getString(R.string.favorites))
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(this, mFavoritesViewModelFactory).get(FavoritesViewModel::class.java)
+        viewModel = ViewModelProvider(this, mFavoritesViewModelFactory).get(FavoritesViewModel::class.java)
     }
 
     private fun initFavorites() {
-        viewModel.favorites?.observe(this, Observer{ data ->
+        viewModel.favorites?.observe(viewLifecycleOwner, Observer{ data ->
             if (data.isNotEmpty()) {
                 binding.bartFavoritesCardView.visibility = View.GONE
                 val adapter = FavoriteRecyclerAdapter(data, this)

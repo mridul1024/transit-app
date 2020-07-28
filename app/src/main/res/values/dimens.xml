@@ -2,4 +2,5 @@
 <resources>
     <dimen name="fab_custom_size">50dp</dimen>
     <dimen name="bottom_nav_elevation">10dp</dimen>
+    <dimen name="fab_pressed_translation">10dp</dimen>
 </resources>

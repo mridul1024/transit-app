@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme.Base" parent="Theme.MaterialComponents.DayNight">
         <!-- Universal Text style -->
-        <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
+        <item name="android:textViewStyle">@style/UbuntuTextViewStyle</item>
         <!-- enable window content transitions -->
         <item name="android:windowActivityTransitions">true</item>
         <item name="windowActionBar">false</item>

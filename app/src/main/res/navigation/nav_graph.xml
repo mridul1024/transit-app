@@ -13,14 +13,13 @@
         android:id="@+id/resultsFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_results.BartResultsFragment"
         android:label="Results"
-        tools:layout="@layout/fragment_results" >
-
+        tools:layout="@layout/fragment_results">
     </fragment>
     <fragment
         android:id="@+id/tripFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.trip.TripFragment"
         android:label="Find your trip"
-        tools:layout="@layout/fragment_trip" >
+        tools:layout="@layout/fragment_trip">
         <action
             android:id="@+id/action_tripFragment_to_resultsFragment"
             app:destination="@id/resultsFragment" />
@@ -28,21 +27,25 @@
             android:id="@+id/action_tripFragment_to_actionBottomDialogFragment"
             app:destination="@id/actionBottomDialogFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/stationInfoFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.station_info.StationInfoFragment"
         android:label="Station Info"
-        tools:layout="@layout/fragment_station_info" >
+        tools:layout="@layout/fragment_station_info">
         <action
             android:id="@+id/action_stationInfoFragment_to_googleMapFragment"
             app:destination="@id/googleMapFragment" />
+        <action
+            android:id="@+id/action_stationInfoFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
 
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.about.AboutFragment"
         android:label="About"
-        tools:layout="@layout/fragment_about" >
+        tools:layout="@layout/fragment_about">
 
     </fragment>
     <fragment
@@ -102,11 +105,10 @@
         android:name="com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" >
-        <!--<action
-            android:id="@+id/action_homeFragment_self"
-            app:destination="@id/homeFragment" />-->
         <action
             android:id="@+id/action_homeFragment_to_tripFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
             app:destination="@id/tripFragment" />
         <action
             android:id="@+id/action_homeFragment_to_googleMapFragment"
@@ -116,21 +118,33 @@
             app:destination="@id/bartMapFragment" />
         <action
             android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
             app:destination="@id/settingsFragment" />
         <action
             android:id="@+id/action_homeFragment_to_favoritesFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
             app:destination="@id/favoritesFragment" />
         <action
             android:id="@+id/action_homeFragment_to_aboutFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
             app:destination="@id/aboutFragment" />
         <action
             android:id="@+id/action_homeFragment_to_helpFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
             app:destination="@id/helpFragment" />
         <action
             android:id="@+id/action_homeFragment_to_phoneLinesFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
             app:destination="@id/phoneLinesFragment" />
         <action
             android:id="@+id/action_homeFragment_to_stationsFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
             app:destination="@id/stationsFragment" />
         <action
             android:id="@+id/action_homeFragment_to_newsFragment"
@@ -138,6 +152,9 @@
         <action
             android:id="@+id/action_homeFragment_to_actionBottomDialogFragment"
             app:destination="@id/actionBottomDialogFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_stationInfoFragment"
+            app:destination="@id/stationInfoFragment" />
 
     </fragment>
     <fragment

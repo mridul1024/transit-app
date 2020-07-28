@@ -4,11 +4,15 @@ import com.zuk0.gaijinsmash.riderz.di.annotation.FragmentScope
 import com.zuk0.gaijinsmash.riderz.di.module.activity.fragment.home.HomeFragmentModule
 import com.zuk0.gaijinsmash.riderz.di.module.activity.fragment.stations.StationsModule
 import com.zuk0.gaijinsmash.riderz.di.module.viewmodel.ViewModelModule
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.about.AboutFragment
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_map.BartMapFragment
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.bart_results.BartResultsFragment
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.camera.CameraFragment
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.favorite.FavoritesFragment
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.google_map.GoogleMapFragment
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.help.HelpFragment
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.home.HomeFragment
+import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.phone_lines.PhoneLinesFragment
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.station_info.StationInfoFragment
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.stations.StationsFragment
 import com.zuk0.gaijinsmash.riderz.ui.activity.main.fragment.trip.TripFragment
@@ -17,6 +21,14 @@ import dagger.android.ContributesAndroidInjector
 
 @Module
 interface FragmentBuilder {
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    fun contributeHelpFragment() : HelpFragment
+    
+    @FragmentScope
+    @ContributesAndroidInjector
+    fun contributeAboutFragment() : AboutFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = [HomeFragmentModule::class])
@@ -49,4 +61,12 @@ interface FragmentBuilder {
     @FragmentScope
     @ContributesAndroidInjector
     fun contributeFavoritesFragmentt() : FavoritesFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    fun contributePhoneLinesFragment() : PhoneLinesFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    fun contributeCameraFragment() : CameraFragment
 }

@@ -1,50 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
-        android:layout_margin="10dp"
-        android:padding="5dp"
-        android:layout_gravity="end|bottom"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/weather_name_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/stationInfo_stationCity"
-            android:textAlignment="textEnd"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            tools:ignore="RtlCompat" />
+        <ImageView
+            android:id="@+id/weather_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="80dp"
+            android:src="@drawable/ic_weather_sun"
+            android:tint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/weather_temp_tv"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="temp"
-            android:textAlignment="textEnd"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="end"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weather_icon">
 
-        <TextView
-            android:id="@+id/weather_humidity_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="humidity"
-            android:textAlignment="textEnd"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/weather_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/stationInfo_stationCity"
+                android:textAlignment="textEnd"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:ignore="RtlCompat" />
 
-        <TextView
-            android:id="@+id/weather_wind_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="wind"
-            android:textAlignment="textEnd"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/weather_temp_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="temp"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/weather_temp_icon"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center_vertical"
+                    android:tint="@color/icon_color"
+                    app:srcCompat="@drawable/ic_weather_celcius" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/weather_humidity_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="humidity"
+                tools:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/weather_wind_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="wind"
+                tools:visibility="invisible" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

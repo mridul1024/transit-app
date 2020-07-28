@@ -1,111 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/phone_lines_container">
-
-        <androidx.cardview.widget.CardView
-            style="@style/CardViewRiderz"
+        android:layout_height="wrap_content">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:id="@+id/phone_lines_container">
 
-            <LinearLayout
-                android:orientation="vertical"
+            <androidx.cardview.widget.CardView
+                style="@style/CardViewRiderz"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="2dp"
-                android:background="@color/primaryLightColor">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    style="@style/ViewTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/phoneLines_title" />
-
-                <TextView
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/phoneLines_911"
-                    android:layout_marginBottom="5dp"/>
-
-                <RelativeLayout
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="25dp">
-                    <TextView
-                        android:id="@+id/bart_lines_police_tv"
-                        style="@style/TextViewRiderz"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:text="@string/phoneLines_bartPolice"/>
+                    android:padding="2dp">
 
                     <TextView
-                        style="@style/TextViewRiderz"
+                        style="@style/ViewTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:autoLink="phone"
-                        android:text="@string/phoneLines_police_number" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="25dp">
-                    <TextView
-                        android:id="@+id/bart_lines_comments_tv"
-                        style="@style/TextViewRiderz"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/phonesLines_bartComplaints"/>
+                        android:text="@string/phoneLines_title" />
 
                     <TextView
                         style="@style/TextViewRiderz"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:autoLink="phone"
-                        android:text="@string/phoneLines_bartComplaints_number" />
-                </RelativeLayout>
+                        android:text="@string/phoneLines_911"
+                        android:layout_marginBottom="5dp"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="25dp">
+                        <TextView
+                            android:id="@+id/bart_lines_police_tv"
+                            style="@style/TextViewRiderz"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:text="@string/phoneLines_bartPolice"/>
+
+                        <Button
+                            android:id="@+id/bart_police_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:autoLink="phone"
+                            android:text="@string/phoneLines_police_number" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="25dp">
+                        <TextView
+                            android:id="@+id/bart_lines_comments_tv"
+                            style="@style/TextViewRiderz"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/phonesLines_bartComplaints"/>
+
+                        <Button
+                            android:id="@+id/bart_complaints_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:autoLink="phone"
+                            android:text="@string/phoneLines_bartComplaints_number" />
+                    </RelativeLayout>
 
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="25dp">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="25dp">
+                        <TextView
+                            style="@style/TextViewRiderz"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/phonesLines_lostFound"/>
+
+                        <Button
+                            android:id="@+id/lost_and_found_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:autoLink="phone"
+                            android:text="@string/phoneLines_bartLostFound_number" />
+                    </RelativeLayout>
+
                     <TextView
                         style="@style/TextViewRiderz"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/phonesLines_lostFound"/>
+                        android:text="@string/phoneLines_bartLink"/>
 
                     <TextView
                         style="@style/TextViewRiderz"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:autoLink="phone"
-                        android:text="@string/phoneLines_bartLostFound_number" />
-                </RelativeLayout>
+                        android:autoLink="web"
+                        android:text="@string/phoneLines_bartWebsite"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
-                <TextView
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/phoneLines_bartLink"/>
-
-                <TextView
-                    style="@style/TextViewRiderz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:autoLink="web"
-                    android:text="@string/phoneLines_bartWebsite"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </layout>
